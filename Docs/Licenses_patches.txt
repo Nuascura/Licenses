@@ -1,0 +1,17 @@
+Load Order:
+
+[.ESMs]
+[.ESPs]
+Licenses.esp
+[.ESPs]
+[Conflicting Patches]
+[Licenses' Patches]
+
+---
+
+**LPO Patch Index and Priority (THIS IS NOT A LOAD ORDER):
+**(Low to High in increasing overwriting priority)
+
+00 Licenses - UBE Tattoo Patch
+01 Licenses - Dialogue Patch
+02 Licenses - Bruma Patch

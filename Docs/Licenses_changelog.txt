@@ -1,0 +1,673 @@
+1.19.0
+Primary
+- Adjustment: Item Retrieval dialogue now only appears if the Confiscate parent toggle is enabled.
+- Adjustment: Item Retrieval now only works one-way via Gift Menu rather than two-way via Container Menu.
+- Fixed "missing dependencies" notification showing under unnecessary circumstances.
+- Fixed false positive warning for 1.5.97 game version's PapyrusUtil detection.
+
+Secondary
+- Updated dialogue patch.
+- Updated Bruma patch.
+- Updated localization files.
+- Added a new localizable Item Unequipped message object.
+- Implemented a new equipment verification logic.
+- Implemented a new equipment force-unequip process.
+- Removed bikini item detection via MCM.
+- Removed equipment slot filtering.
+
+
+
+1.18.3
+Primary
+- Adjustment: Curfew detection now runs regardless of location.
+- Adjustment: Log Notifications are now disabled by default.
+- Fixed immediate Travel Violation flag if moved from Tamriel Worldspace directly to interior cell due to newer location detection logic.
+- Fixed cached current location failing to update last location property if player moves directly from one settlement location to another. Thanks for the report, @Andb.
+- Fixed confiscation logic ignoring insurance status for single item confiscations (when not confiscating inventory items). Thanks for the report, @Andb.
+- (Regression) Fixed Curfew state cancelling itself, erroneously preventing Curfew Violations when player is in a habitation.
+
+Secondary
+- Added new localizable Curfew and Item Confiscation message objects.
+- Added additional MCM script safeguards against missing plugins.
+- Added API documentation PDF.
+- Optimized Curfew cycle conditions.
+- Optimized single item confiscation process.
+- Optimized location tracking.
+- Mitigated potential player marker and player location desyncing. 
+- Increased Curfew check rate to 30secs.
+
+
+
+1.18.2
+Primary
+- Fixed Insurance validity erroneously overriding confiscation setting even if the Insurance feature itself is disabled.
+- Moved Debug Functions MCM section from right-side to above Advanced Settings section.
+- Updated option descriptions with clarifying details.
+- Updated localization files.
+
+
+
+1.18.1
+Primary
+- Restructured MCM with additional system details for easier debugging and improved accessibility.
+- Adjustment: Curfew detection only runs if player is not in an interior AND is not in location with keyword LocTypeHabitation.
+- Adjustment: Workbench detection now runs on exclusion rather than inclusion conditional logic, reducing pressure on native Spell polling. Spell excludes furniture objects on sit states and then checks for crafting menu rather than solely check for valid workbench furniture.
+- Adjustment: Log Notifications are now solely for debug notifications and are clearly differentiated from Game Messages.
+- Adjustment: Life Insurance now overrides your setting and prevents item confiscations. This adds more value to the Insurance feature and distinguishes it from being just a secondary taxation.
+
+Secondary
+- Added message items for Curfew, Crafting, and Water state detections to improve localization convenience.
+- Updated localization files.
+- Fixed errored return value if GameMessage() function is passed a none-object as parameter 1.
+- Fixed scripts with outdated references to hasInsurance rather than isInsured.
+- Reduced Curfew detection polling to once every 120 seconds.
+- Allowed Curfew Violation to persist, much like Travel Violation does. When paired with lower Curfew Violation polling, the new violation tracking method should help increase papyrus performance and fair gameplay leniency.
+
+
+
+1.18.0
+Primary
+- Added OStim support.
+- New feature: Confiscated items are now sent to an LPO-specific chest instead of the confronting enforcer's crime faction evidence chest.
+- New feature: Confiscated items now retain player ownership and can be retrieved from guards in settlement locations.
+- New feature: Guards will now move the player to an inn or exterior location center marker for first time violations, if applicable and possible.
+- Adjustment: Curfew detection will now wait 10 seconds before actually flagging violation for bounty consideration, incidentally fixing a soft lock where the player is continuously jailed for Curfew Violations without the necessary gold to pay their fine.
+- Adjustment: Settings.json now health checks against "Licenses - Player Oppression" verbatim.
+- Adjustment: Config Warn setting will now automatically enable on both mod shutdown and startup events.
+- Adjustment: Valid Armor Licenses will no longer change Clothing and Bikini license statuses, visually apparent on the MCM splash screen, so to reduce potential variable change conflict. AL will still provide CL and BL immunity.
+- Adjustment: Global license immunity from Thaneships will no longer affect license Boolean values, instead directly halting bounty start at the end of each violation check cycle.
+- Adjustment: Insurance immunity from Thaneships will no longer affect license Boolean value to guard against potential interference from isThane variable.
+- Adjustment: Active Tattoos are now cached to allow greater flexibility and adjustment while applied.
+- Adjustment: Curfew and Workbench detection now obeys LOS and standard violation check sequence.
+- Improved license purchase conversation branch with options to refuse purchase and exit dialogue.
+- Improved MCM accessibility by reducing calls to ForcePageReset(), instead adjusting individual option flags immediately after toggles where possible.
+- Changed MCM Mod Name to "Licenses - Player Oppression".
+
+Secondary
+- Added debug storage cell, coc BM_Licenses_ItemStorageCell.
+- Added additional safeguards against failed quest starts.
+- Added FormList BM_LicensesIgnoreWorldspace.
+- Changed Thaneship checker to validate against quest alias fill. This change reduces the need for hard-coded script properties and offloads the majority of related papyrus processing to the game engine.
+- Changed Worldspace checker to validate against interior load door destinations rather than estimate based on last registered space. 
+- Changed Insurance validity to check against isInsured full property rather than hasInsurance Boolean auto property directly.
+- Increased bounty alias termination distance from 2500 to 5000 units.
+- Tweaked dialogue flags and list priority.
+- Fixed none object error if SexLab.esm is not detected in load order.
+- Fixed stored worldspace value persisting after mod deactivation.
+- Fixed Refresh Features debug function sometimes enabling license Booleans when cooldowns are active.
+- Fixed Travel Violation detection module processing none object when player location doesn't exist if after a previous location had been marked down for savedLoc.
+- Fixed fomod UBE texture install location.
+- Fixed Travel Permit quick buy dialogue not appearing in Bruma.
+- Fixed missing walkaway topic when player is caught outside a settlement with a Travel Violation, allowing players to exit dialogue without consequences.
+- Fixed Travel Violation arrest dialogue not satisfying conditions for arrest if another non-arrest violation dialogue overwrites in priority.
+- Fixed Violation Check flagging Travel Violation if player is moved from a Tamriel Worldspace cell directly to an interior cell in a city worldspace.
+- Fixed erroneous variable instantiations when mod is restarted on an existing playthrough due to outdated data. This issue could be overcome with a manual Refresh Status call. LPO now automatically calls the related function on startup.
+- Fixed Curfew Violation sometimes persisting even when player has escaped violating conditions.
+- Fixed MCM isBikini flag not updating until config menu is entirely re-opened.
+- Optimized license book item add/remove event sequence.
+- Optimized bounty enforcer alias fill conditions.
+- Optimized quest start sequences.
+- Moved curfew, workbench, and water detection magic effects to DetectState spell umbrella.
+- Removed isCurseActive auto property in favor of directly checking for presence of Nullify Magicka magic effect.
+- Removed Thaneship check functions and variables under ProximityActors quest.
+- Renamed ProximityActors quest as ProximityCheck.
+- Bumped PyramidUtils dependency check.
+- Updated localization files.
+- Updated Bruma patch.
+- Updated dialogue patch.
+
+
+
+1.17.4
+Primary
+- Added magic effect for Follower checking to improve check accuracy and reactivity.
+- Detached Follower-conferred immunity from Travel Permit variable to avoid conflicting changes. Travel Permit immunity will no longer show as valid permit on MCM splash screen.
+- Moved BM_ME_DetectStateJail from DetectLoc to new DetectState spell umbrella.
+- Removed license refunds on mod deactivation, incidentally fixing a gold loophole where conferred immunity refunds the player gold that they never used toward a respective license.
+- Updated Bruma Patch.
+
+
+
+1.17.3
+Primary
+- Added feature: The limited device whitelist will now restrict LPO to a single collar type across its entire DD API interface, where valid.
+- Fixed erroneous worldspace detection flagging Travel Violations while the player remains inside valid spaces.
+- Fixed rare situations of erroneous Travel Permit rule immunity when exiting city worldspaces.
+- Fixed location verification process occasionally lagging after player forfeits Travel Permit.
+- Fixed Nullify Magicka curse not applying during normal magic violations, outside jail, when a source is given but Active Curse Enforcement is disabled.
+- Fixed Magic Violation check behavior inconsistency depending on whether license or insurance exists on-hand.
+
+Secondary
+- Optimized location caching.
+- Optimized Magic Violation check conditions.
+- Updated localization files.
+- Improved License Reporter responsiveness when exiting city worldspaces.
+- Removed unused global updates.
+- Removed unnecessary functions and events.
+
+
+
+1.17.2
+Primary
+- Added feature: guard can send the player character to a nearby inn if they are violating curfew.
+- Fixed BM_IsInJail flag erroneously changing to False when player enters jails without the LocTypeJail keyword.
+- Fixed rare situations where BM_IsInJail fails to update after Skyrim loses track of player jail state around Cidhna Mine. Resolution: Piggyback on GetDaysInJail value.
+- Fixed curse removal dialogue not appearing for Cyrodiil guards when the Bruma patch is installed.
+
+Secondary
+- Reduced redundancies in exception state checking.
+- Updated dialogue.
+- Updated dialogue patch.
+- Updated Bruma patch.
+- Updated localization files.
+- Optimized startup process.
+- Regenerated SEQ.
+
+
+
+1.17.1
+Primary
+- Added additional API Function: ClearViolations().
+- Fixed erroneous location detection behavior.
+- Renamed function BM_PurchaseInsurance() as BM_PurchaseLifeInsurance().
+- Renamed function BM_ExpireInsurance() as BM_ExpireLifeInsurance().
+- Removed Moderator OnCellLoad() event due to unreliability.
+
+
+
+1.17.0
+Primary
+- Added UBE textures by @normal24yearoldstudent for Nullify Magicka tattoos. Patch is available via the FOMOD installer.
+- Fixed Magic Violation logic hole flagging missing curse even if player has a magic license.
+
+Secondary
+- Added additional papyrus trace for active drawn weapon/spell detection.
+- Added additional mod events: ViolationCheck, ViolationFound, BountyStart, BountyEnd.
+- Added additional API functions: GetModVersion(), GetLicenseID().
+- Changed FlagViolation violation index.
+- Changed mod event prefixes to "BM-LPO_". Event registers should probably use "LPO_" if mod authors want to follow current LPO conventions.
+- Renamed function OnJailed() as PlayerJailed() for function name consistency.
+
+
+
+1.16.2
+Primary
+- Implemented option to disable license enforcers separately from disabling mod.
+- Implemented secondary validation layer for dynamic weapon detection.
+- Fixed dynamic weapon detection behavior erroneously flagging fists for weapon violation. This issue only affected users of some perk or combat mods, which stretched CK native conditions beyond intended range.
+- Fixed occasional cases where magic violations don't flag uninsured violations due to Weapon module logic hole.
+
+Secondary
+- Added new registerable mod events.
+- Segmented CheckLicenseStatus function sequence.
+- Reduced license check condition redundancy in ViolationCheck armor, magic, and weapon modules.
+- Moved enchanted weapon check from ViolationCheck_Weapon module to ViolationCheck_Magic module.
+- Regression: Additional dialogue tweaks to remove grammatical redundancy.
+- Updated Bruma patch.
+- Updated localization files.
+
+
+
+1.16.1
+Primary
+- Increased plugin file headers to 1.71.
+- Added skip condition to spell checks if player is not in weapon drawn state.
+- Added option to disable ammo checks under Weapon License section.
+- Added option to disable update message box warnings.
+- Added options to separately restrict Armor and Clothing under Bikini License.
+- Added dynamic checking of weapon and magic unsheathed states for potential violations.
+- Simplified some option names.
+- Fixed sub-license item settings not promptly updating confiscation keyword arrays.
+- Fixed jail confiscation function ignoring Bikini License settings.
+- Fixed Prison Alternative state not showing inside MCM.
+- Changed some notification wordings.
+- Updated NPC dialogue.
+
+Secondary
+- Added additional PurchaseLicense, ExpireLicense, and RemoveLicense API calls.
+- Changed FlagViolation function to immediately call for bounty quest rather than check for other possible violations on push.
+- Improved internal spell functions to account for scroll spells.
+- Improved logic efficiency for OnSpellCast event, which may help limit the need for FormList patches.
+- Migrated spell checks to OnAnimationEvent.
+- Limited workbench checker to city and town locations.
+- Updated dialogue patch.
+- Updated localization files.
+- Cleaned unused script property from Workbench and Curfew detector scripts.
+- Differentiated internal mod name from MCM mod name string.
+- Regression: Changed Curfew and Workbench detector scripts to directly call violations rather than use common function.
+
+
+
+1.16.0
+Primary
+- Added guard actor dialogue to remove curse outside usual license purchase events.
+- Added License Renewal feature.
+- Added a whitespace after MCM name string: Workaround for Licenses MCM capitalization.
+- Fixed Active Curse Enforcement erroneously activating Deplete Magicka curse due to insufficient check priority of isMagicViolation boolean.
+- Fixed Bounty Quest validity logic hole which may cause violations to erroneously persist if violation existed but bounty quest couldn't later pass a validation check. Resolved by applying a same priority check to both conditions and clearing violations, parameter 0, if AND condition fails.
+- Reworked license purchase dialogue.
+
+Secondary
+- Added register for Devious Interests Served Time event.
+- Added API call to manually flag violations.
+- Added additional papyrus traces to Travel Permit Violation Checker.
+- Adjusted Travel Permit behavior to flush saved location and saved worldspace values immediately after flagged violation.
+- Changed trace prefix from "BMLE" to "BM-LPO".
+- Fixed incorrect debug log prints under Moderator Alias.
+- Consolidated Workbench and Curfew violation calls under common utility function.
+- Disabled Workbench violation checker if player is in location with LocTypePlayerHouse keyword.
+- Updated dialogue patch.
+- Updated Bruma patch.
+- Updated localization files.
+- Updated NPC dialogue branches.
+
+
+
+1.15.2
+Primary
+- Added an optional parameter to purchase license without subtracting player gold.
+
+
+
+1.15.1
+Primary
+- Renamed "Refresh Timers" function as "Refresh Status".
+- Bikini License no longer confers Clothing Violation immunity.
+- Fixed enchanted items being filtered out by bikini keywords.
+- Fixed Travel Permit privileges being conferred by follower presence even if relevant setting is disabled.
+- Fixed KeywordConfiscation array fill logic to consider bikini license feature.
+- Added a small delay to story Jail event to guard against improper device equips.
+- Added exception state checking to Refresh Status function.
+- Adjusted jail approximation method to always run unless prison mod is installed. This change may better guard against other scenarios where the BM_IsInJail value gets stuck, such as when escaping from Cidhna Mine.
+- Updated localization files.
+
+
+
+1.15.0
+Primary
+- Added support for Prison Alternative events.
+- Added Whore Violation bounty dialogue. These won't appear unless flagged by an external mod.
+- Fixed Uninsured Violation erroneous condition setup.
+- Fixed Collar Exemption game message warning erroneously using cooldown timer instead of expiration timer to calculate time remaining.
+- Fixed DHLP event reception function name.
+- Fixed spells not being dispelled from player's hands if Confiscate Inventory option is enabled.
+- Fixed bounty validation not processing curfew violations.
+- Fixed bounty quest tagging combat actors for alias.
+- Fixed Travel Permit forfeit dialogue topic not showing for Bulwark guards.
+- Patched edge case of bounty guard in dialogue with player: alias script is unregistered from update, yet bounty dialogue didn't activate during the conversation, so bounty quest has no chance to stop whether from walkaway or otherwise.
+- Patched edge case of bounty guard reserving alias despite not running quest-invoked forcegreet package during unrelated quest scene.
+- Allowed guard forcegreet if player is on horse.
+- Updated Bruma patch to properly allocate dialogue and bounty aliases.
+
+Secondary
+- Adjusted MCM layout.
+- Adjusted jail immunity removal logic.
+- Relocated violation checks to individual scripts under BM_Licenses_ViolationCheck quest.
+- Relocated license status-related inventory events and immunity-checks to dedicated Moderator quest.
+- Merged Follower and Thaneship scanners.
+- Increased polling interval for workbench and curfew violations to reduce violation flag frequency.
+- Improved MCM debug function feedback.
+- Added additional safeguards against bounty quest papyrus stacks.
+- Added additional safeguards to barter alias item events.
+- Added condition check IsScenePackageRunning to prevent bounty quest from tagging scene aliases.
+- Added Allow Reserved flag for bounty aliases.
+- Bounty quest now terminates after valid fast travel event.
+- Simplified countValidLicenses().
+- Inventory filters for license books are now added and removed from purchase and expire functions, respectively.
+- Reduced log spam from CountActiveLicenses().
+- Updated localization files.
+
+
+
+1.14.0
+Primary
+- Added support for Prison Overhaul Patched events.
+- Added option for DDFilter limited list.
+- Added support for DHLP events.
+- Added support for SS events.
+- Added dedicated function for checking Uninsured Violations.
+- Added Trading Violation bounty dialogue.
+- Removed Trading Violation block features.
+- Removed Trading Violation message box items.
+- Fixed player dialogue's punctuation for consistency. NPC dialogue hasn't changed.
+- Fixed condition setup for License Limit dialogue.
+- Fixed guards initiating dialogue again during the same bounty cycle that the player has already completed.
+- Fixed LOS erroneous detection due to uncleared isDetected variable.
+- Fixed bounty quest erroneously stopping if called multiple times in quick succession.
+- Fixed Uninsured Violation erroneously being flagged when player has yet to purchase an associated primary license.
+- Fixed LOS detection quest tagging non-playable races for aliases.
+- Fixed Bounty quest rare inability to clear aliases when requested due to missing alias array.
+- Fixed violations not clearing after Bounty quest time-out.
+- Fixed violations not clearing after Bounty quest invalid alias setup.
+- Fixed GetFine() function erroneously using Trading License cost to calculate Travel Violation fine. 
+- Fixed items equipment being unequipped or confiscated even though they didn't flag any violation during the pre-confrontation violation checker.
+
+Secondary
+- Bounty quest aliases are now linked to their own scripts and terminate via said script rather than from the quest's polling script.
+- Individual license book items now send for individual inventory event filters.
+- Added BM_LicensesIgnoreSpell for ignoring custom spells.
+- Added Magic Effect location checking for LocTypePlayerHouse keyword.
+- Removed dependency on isDetected variable.
+- Removed isHome script variable for BM_IsInPlayerHome global variable.
+- Removed isPrisoner script variable for BM_IsInJail global variable.
+- Updated dialogue patch.
+- Switched to use of PO3E AddAllEquippedItemsToArray() for equipped item scanner.
+- UnlockCursedTattoos() function regression to pre-1.13 logic.
+
+
+
+1.13.1
+Primary
+- FinishConfrontation() function regression to partial pre-1.13 logic.
+- Fixed misnamed variable under Nullify Magicka magic effect scripts.
+- Fixed misnamed function under WalkAway papyrus fragments.
+- Fixed possible case of repeated guard confrontation from script's inability to curse the player due to missing Magic Violation. Resolution: Consider Active Curse Enforcement boolean in OR logic.
+- Added additional call to stop bounty quest when resetting violations post-confrontation. This may help stop erroneous bounty starts during short lapses in player's immunity from said start calls, such as when entering jail as a prisoner.
+
+
+
+1.13.0
+Primary
+- Added location checking for Helgen location where valid. This provides soft compatibility with Alternate Perspective and other mods that maintain pre-MQ Helgen.
+- Added option to disable Nullify Magicka active curse enforcement. If this option is disabled, curse will no longer be a decider for violation but rather a deterrant that the player can remove without fear of punishment.
+- Added First Time Violation dialogue.
+- Added Refresh Tattoos function.
+- Added option to reduce tattoo slot usage.
+- Added Curse Violation-specific dialogue. This dialogue branch takes priority over base Magic Violation dialogue and allows the player to be cursed without incurring a fine.
+- Increased height of thigh tattoo.
+- Improved Dragonborn Solstheim compatibility with the following changes:
+    - Removed Skaal Village from BM_Towns form list.
+    - Allowed Adril Arano as possible license seller under Steward designation.
+    - Allowed Raven Rock Bulwark Faction guards, or Redoran guards, to sell licenses under Guard designation.
+    - Allowed Redoran guards to enforce license rules.
+- Guards will now disenchant player's collar if they purchase a Magic License but lack a Collar Exemption.
+- Guards will no longer dispell player's Nullify Magicka curse unless they have both Magic License and Life Insurance on-hand, where applicable.
+- Mod deactivation function will now attempt to remove Nullify Magicka curse.
+
+Secondary
+- Implemented magic effect method for checking location form lists. This should improve performance, increase worldspace check accuracy for 'open-world' cities like Solstheim, and reduce unnecessary checks.
+- Implemented alias checking and conditional cycle restart for LOS detection quest.
+- Removed Collar Violation Pay Fine unique dialogue.
+- Moved tattoo lock and unlock calls to Magic Effect script.
+- Moved tattoo verification function to utility script.
+- Fixed LOS detection quest erroneous conditional setup.
+- Fixed missing logic to exclude bikini-flagged items under inventory confiscation function.
+- Fixed incorrect BHUNP tattoo texture file paths.
+- Fixed missing dialogue link in dialogue patch. Resolution: Forwarded Curfew Violation kinky dialogue record to dialogue patch.
+- Fixed logic issue where curse is removed from purchasing Magic License but re-applied via Insurance Violation.
+- Fixed incorrect conversation branches due to missing conditions under Collar PayFine Topic Info.
+- Fixed bounty dialogue erroneously diverting to arrest via Licenses enforcer when Add Fine to Bounty is enabled. Jail events from lack of gold should've been handled via vanilla guard arrest events with this setting enabled.
+- Fixed mismatched ResetViolations() function call under player alias script.
+- Fixed Travel Permit quick purchase topic appearing under conversation menu due to insufficient condition checks.
+- Fixed erroneous flagging of player as prisoner when jail SME quest nodes are disabled.
+- Fixed cursed tattoo array not repopulating when relevant body-part options are toggled.
+- Fixed collar removal logic attached to Collar Exemption purchase function.
+- Fixed bounty being added from walkaway topic when multiple guards confront the player at the same time.
+- Adjusted Travel Violation checker logic.
+- Adjusted tattoo apply and removal logic.
+- Adjusted item checker logic to be based around Pyramid Utils' functions by retrieving inventory snapshot rather than checking dynamically at mid-function call runtime. This change more closely aligns checker with confiscator logic to guard against edge cases on either side, such as where violating items aren't removed or non-violating items are removed. This change also better guards against soft-locks from cases where users persist to use this mod without its hard dependencies.
+- Improved robustness of license expire functions.
+- Updated dialogue patch.
+- Updated Bruma patch.
+- Updated localization files.
+- Minor script optimizations and migrations.
+
+
+
+1.12.4
+Primary
+- Fixed bounty quest hang when aliases are too far away.
+- Fixed dialogue issue where bounty conversation erroneously and prematurely exits due to needsArrest boolean.
+- Fixed missing dialogue link for Curfew Violation kinky dialogue, which may cause conversation to exit if player has insufficient gold.
+- Fixed Travel Forfeit script fragment mislinked function.
+- Fixed cases where location doesn't refresh in time after activating Licenses, leading to a premature and sometimes erroneous Travel Violation.
+- Fixed unlinked script fragments under dialogue patch's walkaway record.
+- Fixed Travel Violation variable resetting erroneously when it should persist after being set as True.
+- Added a message warning against mod reset function to prevent accidental presses.
+- Improved debug trace clarity for Fine generation function.
+- Optimized violation checker.
+- Optimized shutdown process.
+- Updated dialogue patch.
+- Updated localization files.
+- Additional minor script changes and unifications for shared function calls.
+
+
+
+1.12.3
+Primary
+- Fixed a rare issue that may cause the periodic checker to skip its daily license validation cycle if the player somehow skips directly from one midnight to the next, thus disallowing the spell from re-checking its conditions. Resolution: Detached logic of underlying spell from game CurrentTime condition.
+- Added "BM_LicensesIgnoreItem" keyword.
+- Added additional localization tokens that were missing in previous versions.
+- Floored generated cooldown time values.
+- Adjusted item checks to ignore items with "BM_LicensesIgnoreItem" keyword.
+- Adjusted MCM layout.
+- Improved MCM function feedbacks and perceived responsiveness.
+- Changed wording of Curfew Warning notification.
+
+
+
+1.12.2
+Primary
+- Fixed issue where LOS aliases, specifically, fill with non-actor references, causing a stall in the violation checker script. Resolution: Adjusted LOS quest aliases to check for actor type.
+- Fixed cases of erroneously missing LOS enforcers. Resolution: Changed LOS quest aliases to allow reserved references.
+- Fixed regression causing bounty quest to erroneously stop during bounty dialogue. Resolution: Exchanged native Find() for PapyrusUtil CountActors().
+- Fixed bounty quest stalling when player moves to a cell that prohibits previously-tagged actors from following. Resolution: Call for validity check on cell or loc change.
+- Fixed MCM Cooldown Time notification's mismatched localization token.
+- Added a Refresh Timers debug function.
+- Reimplemented distance-based bounty alias validity checks.
+
+Secondary
+- Adjusted Magic Effect OR CK conditions to correct OR logic format.
+- Adjusted Bounty quest aliases to check against reference dead state and actor type.
+- Adjusted Bounty quest periodic checker logic.
+- Floored generated expiration time values. Negative values should hereon only denote errored expiration times.
+- Removed unused FirstTimeSetup property from MCM script.
+- Disabled page reset when LOS setting is toggled.
+- Improved description clarity for Enforcer Count setting.
+- Stored mod name as in-script explicit property.
+
+
+
+1.12.1
+Primary
+- Increased bounty guard maximum from one to five.
+- Fixed duplicate remove item notifications.
+- Fixed missing Devious Devices punishments on jail arrest node.
+- Fixed rare case of detection quest failure: Applied "optional" tag to LOS detection quest aliases so that not all five aliases have to be filled. 
+- Fixed cases where expired Travel Permit doesn't appropriately update saved location.
+- Fixed location checker not whitelisting home locations.
+
+Secondary
+- Added array method for bounty alias validity checking.
+- Added array method for detection alias validity checking.
+- Reduced complexity of bounty quest auto-expiry logic.
+- Removed some unnecessary behaviors under forcegreet package.
+- Changed jail node inventory scan to operate per enabled license features. This change should incidentally improve compatibility with other mods that affect jail inventory items.
+- Filtered ally NPCs from being tagged as general Enforcer aliases.
+- Assigned forcegreet dialogue to only come from tagged guard actors. This fixes a rare issue where, for example, a female guard provides arrest dialogue via player-invoked communication even as only male enforcing guards were enabled.
+- Updated dialogue patch.
+- Updated MCM.
+- Minor function migrations.
+
+
+
+1.12.0
+Primary
+- Added a dedicated function for checking location validity in utility script.
+- Added whitelist keyword for Zaz devices.
+- Added PyramidUtils as hard dependency.
+- Added SlaveTats as soft dependency.
+- Added MCM checks for hard dependency validity.
+- Added Nullify Magicka magic effect as spell.
+- Added Cursed Tattoos as alternative to Cursed Collar. Thanks to Alpia for the textures.
+- Added a dedicated TopicInfo segment for bounty goodbye dialogues. This fixes an issue where guards continue chasing the player after they've already paid the fine. Issue was caused because quest cannot stop before PayFine() function has finished running.
+- Added VendorItemBook keyword to license book items. This should allow the items to be stolen via some 'Defeat mod' robbery events.
+- Added an option to curse the player with Nullify Magicka without depending on Devious Devices' collar item.
+- Renamed plugin as "Licenses".
+- Improved dialogue lines.
+
+Secondary
+- Redirected bounty failure sequences to violation reset. This should fix erroneously persisting violations.
+- Improved inventory confiscation with Pyramid Utils functions.
+- Improved NPC merchant check with Pyramid Utils function.
+- Changed Weapon License to allow for Staffs.
+- Changed central mod functions to start as inactive. BMLE will no longer start its primary license enforcement quests until the mod is enabled via the MCM.
+- Edited localization tokens.
+- Updated lang files.
+- Updated dialogue patch.
+- Tweaked MCM layout.
+- Fixed Fine calculation not considering Magic Violation fine.
+- Fixed Insurance cost and Curfew Exemption cost erroneously affecting fine calculation during Magic Violations.
+- A whole bunch of other stuff that I can't remember.
+
+
+
+1.11.0
+Primary
+- Added an option to disable Game Messages.
+- Added a dedicated function within utility script to control Message property displays.
+- Added function to remove Cursed Collar after purchasing Magic License or Collar Exemption if the player has sufficient permissions.
+- Fixed License Limit variable erroneously flagged and persisting as True on new games until the setting is manually changed at least once. 
+- Moved CheckActivationLimit() function from licenses central to utility script.
+- Overhauled License book item contents.
+- Improved MCM setting descriptions.
+
+
+
+1.10.1
+Primary
+- Separated female-oriented kinky dialogue from main plugin into its own dialogue patch.
+- Edited base kinky dialogue to be gender neutral and less provocative.
+- Fixed GetFine() miscalls in walkaway scenarios.
+- Tweaked GetFine() function.
+
+
+
+1.10.0
+Primary
+- Reduced duplicate calls to MCM load game functions, which may cause MCM initialization errors on some setups due to SkyUI script lag.
+- Added Keywords to license book items.
+- Added the following two options: Fine Base; Fine Percentage.
+- Changed Fine calculations: License violation fines now calculate using Base first. Afterwards, a defined percentage of each license's cost is added to the Base, resulting in a Total. The Total is the new Fine Amount.
+- Changed BM_Player OnUpdate() event to check ViolationExists() bool instead of CountViolations() integer. Minimally improves performance.
+- Moved fine calculation from post-arrest to pre-arrest.
+- Fixed possible duplicate item removal call where an enchanted armor item is first removed under Armor Violation and again removed under Magic Violation.
+- Fixed incorrect Fine calculations for dialogue conditionals.
+- Fixed Curfew, Travel, and Bikini license expiration warnings incorrectly flagged as messageboxes.
+- Removed unknown skill attached to Curfew Exemption book item.
+- Optimized script: Pre-violation equipment checks will no longer run if violation exists from an earlier step in the same update cycle.
+- Optimized script: Avoid renewing Cursed Collar if player is still recognized as cursed.
+
+
+
+1.9.2
+Primary
+- Added some changelog historical entries.
+- Fixed FOMOD installer script source folder destination.
+
+
+
+1.9.1
+Primary
+- Changed equipment checks to run only if a corresponding license feature is enabled per-condition. This allows the pre-1.9 method to not prematurely exit sequence.
+- Regression: Re-enabled equipment per-condition checks.
+
+
+
+1.9.0
+Primary
+- Added language files.
+- Added option to disable equipment trade validation outside of Trading License restrictions.
+- Added Reset MCM message box prompt when updating BMLE mid-playthrough.
+- Added startup functions for config script to renew cached global variables.
+- Fixed activation limit boolean comparison when license limit feature is disabled.
+- Fixed incorrect tally of active licenses due to incorrect script processing order.
+- Fixed guard dialogue offering empty, cut-off license purchase dialogue branch when license limit feature is enabled.
+- Fixed bounty quest not correctly validating against locational filters.
+- Fixed MCM potentially not restarting after reset function is called.
+- Fixed potential script stall if MCM quest isn't running at load game.
+- Fixed soft dependency check sometimes not refreshing on new character saves until a save is reloaded.
+- Changed equipment checks to run through all possible checks in sequence unless violation is flagged mid-sequence.
+- Changed Barter Menu exit behavior.
+- Transferred most notifications from Debug to Message objects.
+
+Secondary
+- Minor dialogue changes to return player option from Prompt to TopicInfo.
+- Minor changes to barter/trade failed validation event.
+- Minor script changes for debug notification generation.
+- Minor changes to version update process.
+- Minor changes to MCM layout.
+
+
+
+1.8.2
+Primary
+- Removed Insurance conditions for barter checks.
+- Added additional NPC notification feedback to differentiate the type of illegal trade.
+
+
+
+1.8.1
+Primary
+- Improved config version conflict checker.
+- Added option to consider Enchanted Weaponry for Magic Violation.
+- Fixed erroneous magic violation calls.
+- Fixed magic violation checker not running for equipped staffs.
+
+
+
+1.8.0
+Primary
+- Implemented MCM auto-update.
+- Moved Configuration File location from /Data/Interface/BMLE to /Data/Interface/Licenses.
+- Added ability to purchase Travel Permit from Guards when Steward is set as the primary license seller faction.
+- Added user-accessible debug functions in the MCM.
+- Added text box input method to declare valid equipment slots for violation checking.
+- Added text box input method to declare valid Bikini Armor keywords.
+- Added option to limit license enforcement within Walled City world spaces.
+- Added options to consider Enchanted Armor and Enchanted Jewelry for Magic Violation.
+- Added options to control game notifications and debug traces.
+- Fixed Collar Exemption purchase dialogue not showing for non-kinky dialogue.
+- Fixed arrest event erroneously firing for Travel Violation when player is confronted inside a settlement.
+- Adjusted Curfew End time slider start value from 1:00 to 0:00.
+- Improved keyword whitelist robustness to prevent removing quest items.
+
+Secondary
+- Added additional Session Modified flags to some MCM actions.
+- Removed Equipment Slot toggles.
+- Optimized some conditional functions.
+- Optimized License Book array use.
+- Adjusted MCM option displays.
+
+
+
+1.7.1
+Primary
+- Added form validation for item selling.
+- Fixed Insurance Popularity Modifier starting at 0.0x instead of 1.0x.
+- Adjusted MCM.
+- Disabled bounty quest calls during SexLab animation scenes.
+- Regression: Permitted violation checkers during SexLab animation scenes.
+
+
+
+1.7.0
+Primary
+- Added Devious Followers resistance loss feature. Events fire when purchasing license or when paying license violation fine.
+- Fixed Followers not populating CheckAccompanied quest alias when in SexLab scene due to said mod's reservation of reference alias.
+
+
+
+1.6.6
+Primary
+- Fixed issue where Collar Exemption creates Armor License cooldown instead of Collar Exemption cooldown.
+- Fixed issue where OnSpellCast event calls for violation bounty quest despite player wearing cursed collar.
+- Optimized bounty quest validation.
+- Improved robustness of OnSpellCast event spell validator.
+- Improved script property verifications and setup on game save load.
+- Filtered OnSpellCast event spells to only consider magic spells, shouts, and scroll spells for violation.
+- Disabled license violation checker when player is in SexLab animation.
+- Removed SexLab as hard dependency; Changed to soft dependency.
+
+Secondary
+- Updated Bruma patch.
