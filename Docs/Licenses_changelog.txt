@@ -4,6 +4,7 @@ Primary
 - Adjustment: Item Retrieval now only works one-way via Gift Menu rather than two-way via Container Menu.
 - Fixed "missing dependencies" notification showing under unnecessary circumstances.
 - Fixed false positive warning for 1.5.97 game version's PapyrusUtil detection.
+- Fixed missing stop call for Violation Check quest on mod shutdown, which may cause the quest to erroneously persist and hang LPO functions.
 
 Secondary
 - Updated dialogue patch.

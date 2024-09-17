@@ -259,7 +259,6 @@ Function ResetViolations(int type = 0)
     isTradingViolation = false
     isWhoreViolation = false
 
-    bmlUtility.refreshLOSFeature()
     bmlUtility.BM_FineAmount.SetValue(0.0)
 EndFunction
 

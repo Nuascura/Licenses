@@ -791,7 +791,7 @@ state isCheckLOSFeatureEnabledST
 	event OnSelectST()
 		isCheckLOSFeatureEnabled = !isCheckLOSFeatureEnabled
 		SetToggleOptionValueST(isCheckLOSFeatureEnabled)
-        bmlUtility.refreshLOSFeature()
+        bmlUtility.licenseDetectionQuest.stop()
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$isCheckLOSFeatureEnabledHighlight")
@@ -808,7 +808,7 @@ state LicenseEnforcerCountST
 	event OnSliderAcceptST(float value)
 		LicenseEnforcerCount = value as int
 		SetSliderOptionValueST(LicenseEnforcerCount)
-        bmlUtility.refreshLOSFeature()
+        bmlUtility.licenseDetectionQuest.stop()
 	endEvent
 	event OnDefaultST()
 		LicenseEnforcerCount = 3.0

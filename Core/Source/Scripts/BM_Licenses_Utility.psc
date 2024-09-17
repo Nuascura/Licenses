@@ -355,6 +355,7 @@ Function Shutdown()
 
     ; Stop Quests
     licenses.stop()
+    licenseViolationCheckQuest.stop()
     licenseProximityCheckQuest.stop()
     licenseThaneshipCheckQuest.stop()
     licenseWorldspaceCheckQuest.stop()
@@ -725,9 +726,10 @@ EndFunction
 
 ; ---------- Violation Check Sequence ----------
 Function startDetectionQuest()
-    LogTrace("Started Detection Quest.")
+    LogTrace("Attempting to start Detection Quest.")
     licenseDetectionQuest.stop()
     if licenseDetectionQuest.start()
+        LogTrace("Started Detection Quest.")
         bmlDetection.Setup()
     else
         LogTrace("Detection Quest failed to start.")
@@ -769,7 +771,8 @@ Function AggregateViolations()
     elseIf !licenseBountyQuest.IsRunning()
         licenses.ResetViolations(-1)
     endIf
-    refreshLOSFeature()
+    licenseDetectionQuest.stop()
+    licenseViolationCheckQuest.stop()
     BM_PotentialViolations.Revert()
     BM_PotentialViolations_Ench.Revert()
 Endfunction
@@ -1446,7 +1449,7 @@ EndFunction
 ; Refresh Features
 Function RefreshFeatures()
     refreshIntervalCheckFeature()
-	refreshLOSFeature()
+	refreshRoutineCalls()
 	refreshPopularityModifier()
 	refreshLicenseSeller()
     refreshLicenseFeatures()
@@ -1581,8 +1584,12 @@ Function refreshIntervalCheckFeature()
 	endIf
 EndFunction
 
-Function refreshLOSFeature()
+Function refreshRoutineCalls()
 	licenseDetectionQuest.stop()
+    licenseViolationCheckQuest.stop()
+    licenseProximityCheckQuest.stop()
+    licenseThaneshipCheckQuest.stop()
+    licenseWorldspaceCheckQuest.stop()
 EndFunction
 
 Function refreshLicenseSeller()
