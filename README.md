@@ -13,11 +13,12 @@ SFW Applications: [Nexus Mods](https://www.nexusmods.com/skyrimspecialedition/mo
 NSFW Applications: [LoversLab](https://www.loverslab.com/files/file/29357-licenses-player-oppression/)
 
 Papyrus source scripts from the following dependencies must be installed to compile this project's scripts.
-1. [PapyrusExtenderSSE](https://github.com/powerof3/PapyrusExtenderSSE)
-2. [PapyrusUtil](https://github.com/eeveelo/PapyrusUtil)
-3. [PyramidUtils](https://github.com/ponzipyramid/PyramidUtils)
-4. Devious Devices
-5. SlaveTats
+1. [SkyUI](https://github.com/schlangster/skyui)
+2. [PapyrusExtenderSSE](https://github.com/powerof3/PapyrusExtenderSSE)
+3. [PapyrusUtil](https://github.com/eeveelo/PapyrusUtil)
+4. [PyramidUtils](https://github.com/ponzipyramid/PyramidUtils)
+5. Devious Devices
+6. SlaveTats
 
 Thank you to the following primary and non-current contributors:
 1. Alpia, for the tattoo textures.
