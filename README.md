@@ -12,7 +12,7 @@ If you are a general user, peruse one of the following pages instead as relevant
 SFW Applications: [Nexus Mods](https://www.nexusmods.com/skyrimspecialedition/mods/110418)<br />
 NSFW Applications: [LoversLab](https://www.loverslab.com/files/file/29357-licenses-player-oppression/)
 
-Source files from the following dependencies must be installed to compile this project's scripts.
+Papyrus source scripts from the following dependencies must be installed to compile this project's scripts.
 1. [PapyrusExtenderSSE](https://github.com/powerof3/PapyrusExtenderSSE)
 2. [PapyrusUtil](https://github.com/eeveelo/PapyrusUtil)
 3. [PyramidUtils](https://github.com/ponzipyramid/PyramidUtils)
