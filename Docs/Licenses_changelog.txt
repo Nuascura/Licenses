@@ -11,10 +11,12 @@ Secondary
 - Updated Bruma patch.
 - Updated localization files.
 - Added a new localizable Item Unequipped message object.
+- Added API function: GetLicenseTimeLeft().
 - Implemented a new equipment verification logic.
 - Implemented a new equipment force-unequip process.
 - Removed bikini item detection via MCM.
 - Removed equipment slot filtering.
+- Moved SlaveTats functions to separate script interface.
 
 
 

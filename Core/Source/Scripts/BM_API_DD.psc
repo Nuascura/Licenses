@@ -3,7 +3,7 @@ Scriptname BM_API_DD
 Function equipRestraint(actor player, int ddEquipChance, int ddFilter) global
     zadLibs libs = (Game.GetFormFromFile(0x00F624, "Devious Devices - Integration.esm") as Quest) as zadLibs
     zadDeviceLists DeviceLists = (Game.GetFormFromFile(0x00CA01, "Devious Devices - Expansion.esm") as Quest) as zadDeviceLists
-    BM_Licenses_Utility bmlUtility = (Game.GetFormFromFile(0x00091B, "Licenses.esp") as Quest) as BM_Licenses_Utility
+    BM_Licenses_Utility bmlUtility = Quest.GetQuest("BM_Licenses_Utility") as BM_Licenses_Utility
     int random = 0
     int randomDeviceList = 0
     armor randomDevice = None

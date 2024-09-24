@@ -8,7 +8,7 @@ Message Property MessageVoice  Auto
 Event OnEffectStart(Actor akTarget, Actor akCaster)
 	if akTarget == licenses.playerRef.GetActorRef()
 		if licenses.bmlmcm.SlaveTats_State && licenses.bmlmcm.ShowCurseTattoos
-			licenses.LockCursedTattoos(akTarget)
+			licenses.CursedTattoosActive = BM_API_ST.LockCursedTattoos(akTarget, licenses.CursedTattoos)
 		endIf
 	endIf
 	akCursed = akTarget
@@ -31,7 +31,7 @@ EndEvent
 Event OnEffectFinish(Actor akTarget, Actor akCaster)
 	if akTarget == licenses.playerRef.GetActorRef()
 		if licenses.bmlmcm.SlaveTats_State
-			licenses.UnlockCursedTattoos(akTarget)
+			licenses.CursedTattoosActive = BM_API_ST.UnlockCursedTattoos(akTarget, licenses.CursedTattoosActive)
 		endIf
 	endIf
 EndEvent

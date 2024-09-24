@@ -71,6 +71,43 @@ int Function GetLicenseID(string LicensePrefix)
     return -1
 EndFunction
 
+; Get - License Time left
+; Parameter 1 asks for a license or violation prefix as string.
+; This function returns a remaining time per in-game hours.
+; If function returns a negative value, the subject license cycle is inactive.
+; If function returns 0, either the subject license cycle is waiting for a refresh or function was given an invalid input.
+Float Function GetLicenseTimeLeft(int LicenseType)
+    float currentTime = GameDaysPassed.GetValue()
+    if LicenseType == 1
+        return licenses.armorLicenseExpirationTime - currentTime
+    elseIf LicenseType == 2
+        return licenses.bikiniLicenseExpirationTime - currentTime
+    elseIf LicenseType == 3
+        return licenses.clothingLicenseExpirationTime - currentTime
+    elseIf LicenseType == 4
+        return licenses.magicLicenseExpirationTime - currentTime
+    elseIf LicenseType == 5
+        return licenses.weaponLicenseExpirationTime - currentTime
+    elseIf LicenseType == 6
+        return licenses.craftingLicenseExpirationTime - currentTime
+    elseIf LicenseType == 7
+        return licenses.travelPermitExpirationTime - currentTime
+    elseIf LicenseType == 8
+        return licenses.collarExemptionExpirationTime - currentTime
+    elseIf LicenseType == 9
+        return licenses.insuranceExpirationTime - currentTime
+    elseIf LicenseType == 10
+        return licenses.curfewExemptionExpirationTime - currentTime
+    elseIf LicenseType == 11
+        return licenses.tradingLicenseExpirationTime - currentTime
+    elseIf LicenseType == 12
+        return licenses.whoreLicenseExpirationTime - currentTime
+    else
+        LogTrace("GetLicenseTimeLeft(): Invalid parameter(1)")
+        return 0
+    endIf
+EndFunction
+
 ; Flag Violation
 ; Parameter 1 asks for an integer corresponding to a violation type. 
 ; Parameter 2 asks if you want to push to aggregate violations and invoke the bounty quest. If manually flagging multiple violations in succession, pass true only with the last FlagViolation call.
@@ -1437,11 +1474,9 @@ EndFunction
 Function RefreshTattoos()
     Actor player = licenses.playerRef.GetActorRef()
     if bmlmcm.SlaveTats_State
-        licenses.UnlockCursedTattoos(player)
+        licenses.CursedTattoosActive = BM_API_ST.UnlockCursedTattoos(player, licenses.CursedTattoosActive)
         if licenses.CheckNullifyMagickaCurse(player) == 1 && bmlmcm.ShowCurseTattoos
-            licenses.LockCursedTattoos(player)
-        else
-            licenses.UnlockCursedTattoos(player)
+            licenses.CursedTattoosActive = BM_API_ST.LockCursedTattoos(player, licenses.CursedTattoos)
         endIf
     endIf
 EndFunction

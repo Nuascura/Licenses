@@ -181,7 +181,6 @@ string config = "../../../Interface/Licenses/Settings.json"
 string[] ModVersionCache
 
 import JsonUtil
-import PO3_SKSEFunctions
 
 string Function GetModName(bool cache = true)
 	if cache
