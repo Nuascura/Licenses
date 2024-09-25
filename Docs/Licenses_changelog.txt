@@ -5,6 +5,7 @@ Primary
 - Fixed "missing dependencies" notification showing under unnecessary circumstances.
 - Fixed false positive warning for 1.5.97 game version's PapyrusUtil detection.
 - Fixed missing stop call for Violation Check quest on mod shutdown, which may cause the quest to erroneously persist and hang LPO functions.
+- Fixed an issue where moderator setup sequence is skipped and never run if the game is loaded while Licenses is disabled.
 
 Secondary
 - Updated dialogue patch.
@@ -12,6 +13,7 @@ Secondary
 - Updated localization files.
 - Added a new localizable Item Unequipped message object.
 - Added API function: GetLicenseTimeLeft().
+- Added mod events: BM-LPO_LicenseAdded, BM-LPO_LicenseRemoved, BM-LPO_LicensePurchased, BM-LPO_LicenseExpired.
 - Implemented a new equipment verification logic.
 - Implemented a new equipment force-unequip process.
 - Removed bikini item detection via MCM.
