@@ -35,7 +35,7 @@ EndFunction
 Function FinishConfrontation(Actor akEnforcer, int type = 0)
     ; walkaway = -1, arrest = 0, normal = 1, lenient = 2
     bmlUtility.LogTrace("FinishConfrontation Type: " + type)
-    bmlUtility.SendConfrontationEndEvent(type)
+    bmlUtility.SendCustomEvent_SingleInt("BM-LPO_ConfrontationEnd", type)
     Faction crimeFaction = akEnforcer.GetCrimeFaction()
     if type == -1
         PlayerWalkaway(akEnforcer, crimeFaction)
@@ -62,7 +62,6 @@ EndFunction
 
 Function PayFine(Faction crimeFaction = none)
     Actor player = playerRef.GetActorRef()
-    bmlUtility.DF_AdjustResistance("CaughtViolation")
     if (bmlmcm.fineAddsToBounty && crimeFaction)
         ApplyCrimeGold(crimeFaction)
     else
