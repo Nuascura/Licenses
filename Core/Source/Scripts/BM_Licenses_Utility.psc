@@ -1838,10 +1838,10 @@ EndFunction
 ; ------------------------------
 
 ; ---------- Custom Events ----------
-Function SendCustomEvent_SingleInt(string EventName, int afArg1 = 0)
+Function SendCustomEvent_SingleInt(string EventName, int aiArg1 = 0)
     int handle = ModEvent.Create(EventName)
     if (handle)
-        ModEvent.PushInt(handle, afArg1)
+        ModEvent.PushInt(handle, aiArg1)
         if ModEvent.Send(handle)
             LogTrace("Sent " + EventName)
             return
