@@ -303,7 +303,7 @@ Event OnPageReset(string page)
 		AddHeaderOption("")
 		AddTextOption("$ModVersion", GetModVersion(), OPTION_FLAG_DISABLED)
 		AddTextOption("$Version", GetVersion(), OPTION_FLAG_DISABLED)
-		AddTextOption("$CacheIndexDiff1Int2", (PapyrusUtil.StringSplit(GetModVersion(), ".")[1] as int - ModVersionCache[1] as int) + "," + ModVersionCache[2] as int, OPTION_FLAG_DISABLED)
+		AddTextOption("$CacheIndexDiff1Int2", (PapyrusUtil.StringSplit(GetModVersion(), ".")[1] as int - ModVersionCache[1] as int) + "," + PapyrusUtil.StringSplit(GetModVersion(), ".")[2] as int, OPTION_FLAG_DISABLED)
 		if checkHardDependencies()
 			AddTextOption("$DependencyCheck", "$Safe", OPTION_FLAG_DISABLED)
 		else

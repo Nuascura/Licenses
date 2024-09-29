@@ -19,6 +19,7 @@ Secondary
 - Removed bikini item detection via MCM.
 - Removed equipment slot filtering.
 - Moved SlaveTats functions to separate script interface.
+- Tweaked Curfew notification wordings.
 
 
 
