@@ -6,6 +6,7 @@ Primary
 - Fixed false positive warning for 1.5.97 game version's PapyrusUtil detection.
 - Fixed missing stop call for Violation Check quest on mod shutdown, which may cause the quest to erroneously persist and hang LPO functions.
 - Fixed an issue where moderator setup sequence is skipped and never run if the game is loaded while Licenses is disabled.
+- Reduced repetitive calls from Curfew and Workbench detection scripts.
 
 Secondary
 - Updated dialogue patch.

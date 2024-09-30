@@ -13,7 +13,7 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 EndEvent
 
 Function CheckFurnitureViolation()
-    if !licenses.hasCraftingLicense
+    if !(licenses.hasCraftingLicense || licenses.isCraftingViolation)
 		licenses.isCraftingViolation = true
 		bmlUtility.ConsiderViolationCheck()
     EndIf

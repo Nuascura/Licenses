@@ -21,7 +21,7 @@ Event OnEffectFinish(Actor akTarget, Actor akCaster)
 EndEvent
 
 Function CheckCurfewViolation()
-    if !licenses.hasCurfewExemption
+    if !(licenses.hasCurfewExemption || licenses.isCurfewViolation)
 		bmlUtility.GameMessage(BM_Licenses_MessageCurfewWarn)
         licenses.isCurfewViolation = true
 		bmlUtility.bmPlayer.CheckViolations()
