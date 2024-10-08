@@ -545,6 +545,22 @@ Form[] Function ScanEquippedItems_Base(Actor playerActor)
     Form[] PotentialForms = PO3_SKSEFunctions.AddAllEquippedItemsToArray(playerActor)
 
     PotentialForms = PyramidUtils.FilterFormsByKeyword(PotentialForms, licenses.KeywordConfiscation, false, false)
+
+    ; LogTrace("Pre-filter: " + PotentialForms)
+    ; int[] slotArray = new int[10]
+    ; slotArray[0] = 30
+    ; slotArray[1] = 31
+    ; slotArray[2] = 32
+    ; slotArray[3] = 33
+    ; slotArray[4] = 34
+    ; slotArray[5] = 35
+    ; slotArray[6] = 36
+    ; slotArray[7] = 37
+    ; slotArray[8] = 38
+    ; slotArray[9] = 39
+    ; PotentialForms = PyramidUtils.FilterByEquippedSlot(PotentialForms, slotArray)
+    ; LogTrace("Post-filter: " + PotentialForms)
+
     PotentialForms = ScanInventory_CommonFilter(PotentialForms)
     if (licenses.hasBikiniLicense && licenses.isInsured)
         PotentialForms = PyramidUtils.FilterFormsByKeyword(PotentialForms, licenses.KeywordBikiniItem, false, true)
@@ -554,7 +570,6 @@ EndFunction
 
 Form[] Function ScanEquippedItems_Ench(Actor playerActor)
     Form[] PotentialFormsEnch = PO3_SKSEFunctions.AddAllEquippedItemsToArray(playerActor)
-
     PotentialFormsEnch = PyramidUtils.FilterFormsByKeyword(PotentialFormsEnch, licenses.KeywordConfiscationEnch, false, false)
     PotentialFormsEnch = PyramidUtils.FilterByEnchanted(playerActor, PotentialFormsEnch, true)
     PotentialFormsEnch = ScanInventory_CommonFilter(PotentialFormsEnch)
@@ -1890,8 +1905,9 @@ Quest Property licenseBountyQuest auto
 Quest Property licenseBarterQuest auto
 Quest Property licenseModeratorQuest auto
 
+; -- Vanilla
 GlobalVariable Property GameDaysPassed auto
-
+; -- License Vars
 GlobalVariable Property BM_ALCost Auto
 GlobalVariable Property BM_ALDuration Auto
 GlobalVariable Property BM_BLCost Auto
@@ -1916,7 +1932,6 @@ GlobalVariable Property BM_WhLCost Auto
 GlobalVariable Property BM_WhLDuration Auto
 GlobalVariable Property BM_CECost Auto
 GlobalVariable Property BM_CEDuration Auto
-
 ; -- Exception State
 GlobalVariable Property BM_IsInSSLV Auto
 GlobalVariable Property BM_IsInDHLPEvent Auto

@@ -7,8 +7,6 @@ Function Fragment_0(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
 licenses.BM_ItemConfiscationChest.RemoveAllItems(ItemRetrievalActor, false, true)
-Form[] ValidatedForms = PapyrusUtil.MergeFormArray(licenses.bmlUtility.ScanInventory_Base(ItemRetrievalActor), licenses.bmlUtility.ScanInventory_Ench(ItemRetrievalActor), true)
-PyramidUtils.RemoveForms(ItemRetrievalActor, ValidatedForms, licenses.BM_ItemConfiscationChest)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -17,6 +15,8 @@ EndFunction
 Function Fragment_1(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
+Form[] ValidatedForms = PapyrusUtil.MergeFormArray(licenses.bmlUtility.ScanInventory_Base(ItemRetrievalActor), licenses.bmlUtility.ScanInventory_Ench(ItemRetrievalActor), true)
+PyramidUtils.RemoveForms(ItemRetrievalActor, ValidatedForms, licenses.BM_ItemConfiscationChest)
 ItemRetrievalActor.ShowGiftMenu(false, none, true, false)
 ;END CODE
 EndFunction

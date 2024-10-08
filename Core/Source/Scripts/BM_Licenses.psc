@@ -448,8 +448,9 @@ EndFunction
 Function PopulateKeywordBikiniItemArray()
 	String[] BikiniKeyword = PapyrusUtil.StringSplit(bmlmcm.bikiniKeywordString, ", ")
     BikiniKeyword = PapyrusUtil.ClearEmpty(BikiniKeyword)
-    KeywordBikiniItem = new Keyword[15] ; limit to 15 for performance
-    int i = 0
+    KeywordBikiniItem = new Keyword[32] ; limit to 32 for performance
+    KeywordBikiniItem[0] = Keyword.GetKeyword("BM_LicensesBikiniItem")
+    int i = 1
     while i < BikiniKeyword.length
         if BikiniKeyword[i]
             KeywordBikiniItem[i] = Keyword.GetKeyword(BikiniKeyword[i])
@@ -513,7 +514,7 @@ bool Property isHjaalmarchThane auto
 bool Property isHaafingarThane auto
 bool Property isFalkreathThane auto
 bool Property isEastmarchThane auto
-
+; ---
 bool Property isLicenseLimit = false auto conditional
 
 ; if expiration time == -1.0 -> not purchased yet
