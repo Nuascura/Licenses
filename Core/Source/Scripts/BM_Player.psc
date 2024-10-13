@@ -59,7 +59,9 @@ Event OnObjectUnEquipped(Form item, ObjectReference akReference)
 endEvent
 
 Event OnLocationChange(Location akOldLoc, Location akNewLoc)
-    CheckViolations()
+    if akOldLoc || akNewLoc
+        CheckViolations()
+    endIf
 EndEvent
 
 Function CheckViolations()

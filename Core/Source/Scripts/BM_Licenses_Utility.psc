@@ -655,6 +655,12 @@ Function CheckLicenseStatus()
     ModeratorUpdater()
 EndFunction
 
+Function ModeratorMaintanence()
+    CheckProximity()
+    CheckThaneship()
+    ModeratorUpdater()
+EndFunction
+
 Function ModeratorUpdater()
     refreshActivationLimit()
     licenses.PopulateKeywordConfiscationArray()

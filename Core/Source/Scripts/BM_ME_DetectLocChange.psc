@@ -16,7 +16,7 @@ Event OnLocationChange(Location akOldLoc, Location akNewLoc)
     BM_PlayerMarker.DisableNoWait()
     if akTarget.IsInInterior()
         BM_PlayerMarker.MoveTo(akTarget, -75.0 * Math.Sin(akTarget.GetAngleZ()), -75.0 * Math.Cos(akTarget.GetAngleZ())) ; move marker 75 units behind the player to improve possible load door detection
-    else ;elseif akNewLoc
+    else
         BM_PlayerMarker.MoveTo(akTarget)
     endIf
     BM_PlayerMarker.EnableNoWait()
@@ -26,6 +26,7 @@ Event OnLocationChange(Location akOldLoc, Location akNewLoc)
     BM_CurrentLocation.AddForm(bmlUtility.currLoc)
     BM_CurrentWorldspace.Revert()
     BM_CurrentWorldspace.AddForm(bmlUtility.currSpace)
+    bmlUtility.ModeratorMaintanence()
 EndEvent
 
 ; This script runs under the following primary conditions:

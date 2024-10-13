@@ -113,12 +113,6 @@ Event OnItemRemoved(Form item, int count, ObjectReference itemRef, ObjectReferen
     endif
 endEvent
 
-Event OnLocationChange(Location akOldLoc, Location akNewLoc)
-    bmlUtility.CheckProximity()
-    bmlUtility.CheckThaneship()
-    RefreshLicenseValidity()
-EndEvent
-
 Function RefreshLicenseValidity()
     RegisterForSingleUpdate(1.0)
 EndFunction
