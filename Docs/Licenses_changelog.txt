@@ -5,7 +5,7 @@ Primary
 - Adjusted item retrieval processing burden to better guard against heavy script load.
 - Changed cell name (BM_Licenses_ItemStorageCell -> LPOItemStorageCell). Left editor ID as is.
 - Added additional safeguards against erroneously populated FormLists pre-check.
-- Optimized location change conditions for curfew state detection, reducing papyrus impact in locations where no guard can confront the player for breaking curfew.
+- Optimized OnLocationChange event calls for increased papyrus performance and efficacy.
 - Improved robustness of curfew violation detection.
 
 
