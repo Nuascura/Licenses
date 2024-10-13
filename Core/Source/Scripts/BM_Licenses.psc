@@ -228,6 +228,7 @@ Function ConfiscateItems(Bool Confiscate = false, bool ConfiscateInventory = fal
         endIf
     else
         bmlUtility.GameMessage(MessageItemCheck)
+        bmlUtility.BM_PotentialViolations.Revert()
         bmlUtility.BM_PotentialViolations.AddForms(PapyrusUtil.MergeFormArray(bmlUtility.ScanEquippedItems_Base(playerActor), bmlUtility.ScanEquippedItems_Ench(playerActor), true))
 
         if bmlUtility.BM_PotentialViolations.GetAt(0)

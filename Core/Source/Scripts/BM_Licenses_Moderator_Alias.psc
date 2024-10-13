@@ -256,14 +256,14 @@ Function TrackInternalStatus_LPO() ; Licenses
     RegisterForModEvent("BM-LPO_LicensePurchased", "LPO_OnLicensePurchased")
 EndFunction
 
-Event LPO_OnConfrontationEnd(int afArg1)
+Event LPO_OnConfrontationEnd(int aiArg1)
     bmlUtility.LogTrace("LPO_OnConfrontationEnd")
-    if afArg1 == 1
+    if aiArg1 == 1
         bmlUtility.DF_AdjustResistance(8.0 * (1.0 + (bmlUtility.CountActiveViolations() / bmlUtility.CountValidLicenses())))
     endIf
 EndEvent
 
-Event LPO_OnLicensePurchased(int afArg1)
+Event LPO_OnLicensePurchased(int aiArg1)
     bmlUtility.LogTrace("LPO_OnLicensePurchased")
     bmlUtility.DF_AdjustResistance(2.0 * bmlUtility.CountActiveLicenses())
 EndEvent
