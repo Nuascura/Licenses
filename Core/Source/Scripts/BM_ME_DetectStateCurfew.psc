@@ -22,7 +22,6 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 		RegisterForSingleUpdate(10.0)
 		if !akTarget.IsInInterior()
 			BM_IsViolatingCurfew.SetValue(1.0)
-			licenses.isCurfewViolation = true
 		endIf
 	endIf
 EndEvent
