@@ -1,9 +1,11 @@
 1.19.1
 Primary
 - Added keyword BM_LicensesBikiniItem.
+- Added color codes to Licenses MCM.
 - Increased internal Bikini keyword array limit from 15 to 32.
 - Adjusted item retrieval processing burden to better guard against heavy script load.
-- Changed cell name (BM_Licenses_ItemStorageCell -> LPOItemStorageCell). Left editor ID as is.
+- Adjusted DD filter array order.
+- Changed debug cell name (BM_Licenses_ItemStorageCell -> LPOItemStorageCell). Left editor ID as is.
 - Added additional safeguards against erroneously populated FormLists pre-check.
 - Optimized OnLocationChange event calls for increased papyrus performance and efficacy.
 - Improved robustness of curfew violation detection.

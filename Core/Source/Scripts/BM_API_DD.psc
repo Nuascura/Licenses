@@ -9,11 +9,13 @@ Function equipRestraint(actor player, int ddEquipChance, int ddFilter) global
     armor randomDevice = None
     LeveledItem selectedDeviceList = None
 
-    ; ddFilter: 0 = Limited, 1 = Standard, 2 = Standard + Restrictive, 3 = No Filter (use LeveledItem DeviceLists.zad_dev_all)
+    ; ddFilter: 0 = Disabled, 1 = Limited, 2 = Standard, 3 = Standard + Restrictive
 
     random = Utility.RandomInt(1,100)
     if (random <= ddEquipChance)
-        if ddFilter < 1
+        if ddFilter <= 0
+            randomDevice = DeviceLists.GetRandomDevice(DeviceLists.zad_dev_all)
+        elseIf ddFilter == 1
             Armor[] devices = new Armor[8]
             devices[0] = libs.cuffsPaddedArms
             devices[1] = libs.cuffsPaddedLegs
@@ -24,9 +26,9 @@ Function equipRestraint(actor player, int ddEquipChance, int ddFilter) global
             devices[6] = libs.plugInflatableAn
             devices[7] = libs.cuffsPaddedCollar
             randomDevice = devices[Utility.RandomInt(0, devices.Length - 1)]
-        elseIf ddFilter < 3 ; Get random device type
+        else ; Get random device type
             random = Utility.RandomInt(1,2)
-            if random == 2 && ddFilter == 2
+            if random == 2 && ddFilter == 3
                 LeveledItem[] restrictive = new LeveledItem[11]
                 restrictive[0] = DeviceLists.zad_dev_ankleshackles
                 restrictive[1] = DeviceLists.zad_dev_armbinders
@@ -56,8 +58,6 @@ Function equipRestraint(actor player, int ddEquipChance, int ddFilter) global
                 selectedDeviceList = standard[randomDeviceList]
             endIf
             randomDevice = DeviceLists.GetRandomDevice(selectedDeviceList)
-        else
-            randomDevice = DeviceLists.GetRandomDevice(DeviceLists.zad_dev_all)
         endIf
         if (deviceValidator(player, randomDevice))
             bmlUtility.LogTrace("Device Validated. Locking...")
@@ -98,7 +98,7 @@ Function RenewCollar(actor player, enchantment effect = none, int ddFilter) glob
     if player.WornHasKeyword(libs.zad_DeviousCollar)
         libs.UnlockDeviceByKeyword(player, libs.zad_DeviousCollar, true)
     endIf
-    if ddFilter < 1
+    if ddFilter == 1
         randomDevice = libs.cuffsPaddedCollar
     else
         randomDevice = DeviceLists.GetRandomDevice(DeviceLists.zad_dev_collars)
@@ -125,7 +125,7 @@ Function equipCollar(actor player, int ddFilter) global
     zadLibs libs = (Game.GetFormFromFile(0x00F624, "Devious Devices - Integration.esm") as Quest) as zadLibs
     zadDeviceLists DeviceLists = (Game.GetFormFromFile(0x00CA01, "Devious Devices - Expansion.esm") as Quest) as zadDeviceLists
     armor randomDevice = None
-    if ddFilter < 1
+    if ddFilter == 1
         randomDevice = libs.cuffsPaddedCollar
     else
         randomDevice = DeviceLists.GetRandomDevice(DeviceLists.zad_dev_collars)
