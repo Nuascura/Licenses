@@ -2,13 +2,16 @@
 Primary
 - Added keyword BM_LicensesBikiniItem.
 - Added color codes to Licenses MCM.
-- Increased internal Bikini keyword array limit from 15 to 32.
+- Added additional safeguards against erroneously populated FormLists pre-check.
+- Added fallback distance condition for loc change detection.
 - Adjusted item retrieval processing burden to better guard against heavy script load.
 - Adjusted DD filter array order.
 - Changed debug cell name (BM_Licenses_ItemStorageCell -> LPOItemStorageCell). Left editor ID as is.
-- Added additional safeguards against erroneously populated FormLists pre-check.
-- Optimized OnLocationChange event calls for increased papyrus performance and efficacy.
+- Fixed: Hostile actors will no longer report the player.
+- Increased internal Bikini keyword array limit from 15 to 32.
 - Improved robustness of curfew violation detection.
+- Improved robustness of travel violation detection.
+- Optimized OnLocationChange event calls for increased papyrus performance and efficacy.
 
 
 

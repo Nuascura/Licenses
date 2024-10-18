@@ -20,55 +20,46 @@ Function ViolationCheck_Travel()
     Actor playerActor = licenses.playerRef.GetActorRef()
 
     if !licenses.isTravelViolation
-        ; Return condition
+        ; Return conditions
         if licenses.isAccompanied
             bmlUtility.savedLoc = None
             bmlUtility.savedSpace = None
             return
         elseIf bmlmcm.isLimitToCitySpaceEnabled && bmlUtility.BM_LicensesIgnoreWorldspace.HasForm(bmlUtility.currSpace)
             return
+        elseIf bmlUtility.currLoc ; neccessary workaround
+            if playerActor.IsInInterior() && bmlUtility.currLoc.IsSameLocation(bmlUtility.lastLoc, Keyword.GetKeyword("LocTypeHabitationHasInn"))
+                bmlUtility.LogTrace("Holding off on checking Travel Violation because player may be in a safe interior.")
+                return
+            endIf
         endIf
         
         ; Main module body
         if !licenses.hasTravelPermit
             if !bmlUtility.savedLoc
-                if (licenses.isInCity || licenses.isInTown); if there is no saved location, set current City or Town location as saved location
+                if (licenses.isInCity || licenses.isInTown) && (bmlUtility.currLoc == bmlUtility.lastLoc); if there is no saved location, set current City or Town location as saved location
                     bmlUtility.savedLoc = bmlUtility.lastLoc
                     bmlUtility.savedSpace = bmlUtility.lastSpace
                     bmlUtility.GameMessage(licenses.MessageTravelLocated)
-                elseIf playerActor.IsInInterior() && bmlUtility.currLoc.IsSameLocation(bmlUtility.lastLoc, Keyword.GetKeyword("LocTypeHabitationHasInn"))
-                    bmlUtility.LogTrace("Holding off on flagging Travel Violation because player may be in a safe interior.")
                     return
-                else
-                    ; likely here when travel permit has expired
-                    ; violation will immediately occur if player is caught by guard outside settlement, so will need to find a location transfer event
-                    bmlUtility.LogTrace("Detected Travel Violation: Licenses did not find a saved location and/or worldspace")
-                    SetTravelViolation()
                 endIf
+                bmlUtility.LogTrace("ViolationCheck_Travel: Licenses couldn't satisfy conditions to mark a saved location or worldspace")
             else
-                if licenses.isInCity && bmlUtility.currLoc
-                    if bmlUtility.currLoc.IsSameLocation(bmlUtility.savedLoc, Keyword.GetKeyword("LocTypeCity")) && (!bmlmcm.isLimitToCitySpaceEnabled || bmlUtility.savedSpace == bmlUtility.lastSpace)
+                if bmlUtility.currLoc
+                    if licenses.isInCity && bmlUtility.currLoc.IsSameLocation(bmlUtility.savedLoc, Keyword.GetKeyword("LocTypeCity")) && (!bmlmcm.isLimitToCitySpaceEnabled || (bmlUtility.savedSpace == bmlUtility.lastSpace))
                         ; check city or worldspace against saved location or worldspace
                         bmlUtility.LogTrace("Found player in marked city.")
                         return
-                    else
-                        bmlUtility.LogTrace("Detected Travel Violation: Licenses found player outside a marked city location or worldspace")
-                        SetTravelViolation()
-                    endIf
-                elseIf licenses.isInTown && bmlUtility.currLoc
-                    if bmlUtility.currLoc.IsSameLocation(bmlUtility.savedLoc, Keyword.GetKeyword("LocTypeTown"))
+                    elseIf licenses.isInTown && bmlUtility.currLoc.IsSameLocation(bmlUtility.savedLoc, Keyword.GetKeyword("LocTypeTown"))
                         ; check town against saved location
                         bmlUtility.LogTrace("Found player in marked town.")
                         return
-                    else
-                        bmlUtility.LogTrace("Detected Travel Violation: Licenses found player outside a marked town location")
-                        SetTravelViolation()
                     endIf
-                else
-                    bmlUtility.LogTrace("Detected Travel Violation: Licenses found player outside a marked location or worldspace")
-                    SetTravelViolation()
                 endIf
+                bmlUtility.LogTrace("ViolationCheck_Travel: Licenses found player outside a marked location or worldspace")
             endIf
+            bmlUtility.LogTrace("Detected Travel Violation: Missing Travel Permit")
+            SetTravelViolation()
         endIf
     endIf
 
