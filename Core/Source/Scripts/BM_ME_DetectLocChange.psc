@@ -26,7 +26,9 @@ Event OnLocationChange(Location akOldLoc, Location akNewLoc)
     BM_CurrentLocation.AddForm(bmlUtility.currLoc)
     BM_CurrentWorldspace.Revert()
     BM_CurrentWorldspace.AddForm(bmlUtility.currSpace)
-    bmlUtility.ModeratorMaintanence()
+    if akOldLoc || akNewLoc
+        bmlUtility.ModeratorMaintanence()
+    endIf
 EndEvent
 
 ; This script runs under the following primary conditions:
@@ -34,7 +36,8 @@ EndEvent
 ; IF player's CurrentWorldspace isn't the same as the last recorded CurrentWorldspace.
 ; These secondary conditions act as safeguards:
 ; IF player is not in the same cell as BM_PlayerMarker, AND
-; IF player is at least 100 units away from BM_PlayerMarker, AND
+; IF player is at least 10000 units away from BM_PlayerMarker, AND
+; IF player is in an interior, OR
 ; IF player location has ref type LocationCenterMarker, OR
 ; IF BM_PlayerMarker has ref type LocationCenterMarker.
 ; This script runs erroneously in the wilderness because a lack of actual Location property makes BM_CurrentLocation cache a NONE property, hence allowing MGEF to refresh at each cell change instead.
