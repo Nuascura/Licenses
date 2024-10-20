@@ -28,7 +28,7 @@ Function ViolationCheck_Travel()
         elseIf bmlmcm.isLimitToCitySpaceEnabled && bmlUtility.BM_LicensesIgnoreWorldspace.HasForm(bmlUtility.currSpace)
             return
         elseIf bmlUtility.currLoc ; neccessary workaround
-            if playerActor.IsInInterior() && bmlUtility.currLoc.IsSameLocation(bmlUtility.lastLoc, Keyword.GetKeyword("LocTypeHabitationHasInn"))
+            if !bmlUtility.savedLoc && playerActor.IsInInterior() && bmlUtility.currLoc.IsSameLocation(bmlUtility.lastLoc, Keyword.GetKeyword("LocTypeHabitationHasInn"))
                 bmlUtility.LogTrace("Holding off on checking Travel Violation because player may be in a safe interior.")
                 return
             endIf
