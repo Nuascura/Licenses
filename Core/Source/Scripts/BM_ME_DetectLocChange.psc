@@ -36,7 +36,7 @@ EndEvent
 ; IF player's CurrentWorldspace isn't the same as the last recorded CurrentWorldspace.
 ; These secondary conditions act as safeguards:
 ; IF player is not in the same cell as BM_PlayerMarker, AND
-; IF player is at least 10000 units away from BM_PlayerMarker, AND
+; IF player is at least 1000 units away from BM_PlayerMarker, AND
 ; IF player is in an interior, OR
 ; IF player location has ref type LocationCenterMarker, OR
 ; IF BM_PlayerMarker has ref type LocationCenterMarker.

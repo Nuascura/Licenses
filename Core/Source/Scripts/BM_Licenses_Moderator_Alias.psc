@@ -127,14 +127,14 @@ Function TrackPlayerStatus_SL() ; SexLab
     if SexLab
         SexLab.TrackActor(self.GetActorRef(), "SLScene")
     endIf
-    RegisterForModEvent("SLScene_Added", "SLScene_OnAdded")
+    RegisterForModEvent("SLScene_Start", "SLScene_OnStart")
     RegisterForModEvent("SLScene_End", "SLScene_OnEnd")
 EndFunction
 
-Event SLScene_OnAdded(Form FormRef, int tid)
-    bmlUtility.LogTrace("SLScene_OnAdded")
+Function SLScene_OnStart(Form FormRef, int tid)
+    bmlUtility.LogTrace("SLScene_OnStart")
     bmlUtility.BM_IsInAnimation.SetValue(1.0)
-EndEvent
+EndFunction
 
 Event SLScene_OnEnd(Form FormRef, int tid)
     bmlUtility.LogTrace("SLScene_OnEnd")
@@ -195,7 +195,6 @@ EndFunction
 Event DHLP_OnSuspend(String eventName, String strArg, Float numArg, Form sender)
     bmlUtility.LogTrace("DHLP_OnSuspend")
     bmlUtility.BM_IsInDHLPEvent.SetValue(1.0)
-    licenses.ResetViolations(-1)
 EndEvent
 
 Event DHLP_OnResume(String eventName, String strArg, Float numArg, Form sender)
