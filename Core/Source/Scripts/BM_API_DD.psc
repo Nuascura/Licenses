@@ -59,12 +59,13 @@ Function equipRestraint(actor player, int ddEquipChance, int ddFilter) global
             endIf
             randomDevice = DeviceLists.GetRandomDevice(selectedDeviceList)
         endIf
-        if (deviceValidator(player, randomDevice))
-            bmlUtility.LogTrace("Device Validated. Locking...")
-            libs.lockDevice(libs.playerRef, randomDevice)
+
+        if (deviceValidator(libs, player, randomDevice))
+            bmlUtility.LogTrace("Device Validated: " + randomDevice.GetName() + ", " + randomDevice.GetFormID())
+            LockDeviceAndWait(libs, player, randomDevice, libs.GetDeviceKeyword(randomDevice))
+            Debug.Trace("BM-LPO devicekeyword: " + libs.GetDeviceKeyword(randomDevice))
         else
-            bmlUtility.LogTrace("Device Failed to Validate: " + randomDevice.GetName())
-            bmlUtility.LogNotification("Device Failed to Validate: " + randomDevice.GetName())
+            bmlUtility.LogTrace("Device Failed to Validate: " + randomDevice.GetName() + ", " + randomDevice.GetFormID())
         endIf
     endIf
 EndFunction
@@ -72,20 +73,22 @@ EndFunction
 Function RefreshCollar(actor player, enchantment effect = none) global
     ; this equips a new collar of the same kind
     zadLibs libs = (Game.GetFormFromFile(0x00F624, "Devious Devices - Integration.esm") as Quest) as zadLibs
-    armor WornDevice = None
-    ObjectReference WornDeviceRef = None
+    armor WornDevice = none
     if player.WornHasKeyword(libs.zad_DeviousCollar)
         WornDevice = libs.GetWornDevice(player, libs.zad_DeviousCollar)
         libs.UnlockDevice(player, WornDevice, none, libs.zad_DeviousCollar, true)
     endIf
-    if (deviceValidator(player, WornDevice))
-        WornDeviceRef = player.PlaceAtMe(WornDevice)
+    if (deviceValidator(libs, player, WornDevice))
+        ObjectReference WornDeviceRef = player.PlaceAtMe(WornDevice, abInitiallyDisabled = true)
         if effect
             WornDeviceRef.SetEnchantment(effect, 0)
             WornDeviceRef.SetDisplayName("Cursed " + WornDevice.GetName())
         endIf
         player.AddItem(WornDeviceRef)
-        libs.lockDevice(libs.playerRef, WornDevice)
+        LockDeviceAndWait(libs, player, WornDevice, libs.zad_DeviousCollar, true)
+        if WornDeviceRef
+            WornDeviceRef.delete()
+        endIf
     endIf
 EndFunction
 
@@ -94,7 +97,6 @@ Function RenewCollar(actor player, enchantment effect = none, int ddFilter) glob
     zadLibs libs = (Game.GetFormFromFile(0x00F624, "Devious Devices - Integration.esm") as Quest) as zadLibs
     zadDeviceLists DeviceLists = (Game.GetFormFromFile(0x00CA01, "Devious Devices - Expansion.esm") as Quest) as zadDeviceLists
     armor randomDevice = None
-    ObjectReference randomDeviceRef = None
     if player.WornHasKeyword(libs.zad_DeviousCollar)
         libs.UnlockDeviceByKeyword(player, libs.zad_DeviousCollar, true)
     endIf
@@ -103,14 +105,17 @@ Function RenewCollar(actor player, enchantment effect = none, int ddFilter) glob
     else
         randomDevice = DeviceLists.GetRandomDevice(DeviceLists.zad_dev_collars)
     endIf
-    if (deviceValidator(player, randomDevice))
-        randomDeviceRef = player.PlaceAtMe(randomDevice)
+    if (deviceValidator(libs, player, randomDevice))
+        ObjectReference randomDeviceRef = player.PlaceAtMe(randomDevice, abInitiallyDisabled = true)
         if effect
             randomDeviceRef.SetEnchantment(effect, 0)
             randomDeviceRef.SetDisplayName("Cursed " + randomDevice.GetName())
         endIf
         player.AddItem(randomDeviceRef)
-        libs.lockDevice(libs.playerRef, randomDevice)
+        LockDeviceAndWait(libs, player, randomDevice, libs.zad_DeviousCollar, true)
+        if randomDeviceRef
+            randomDeviceRef.delete()
+        endIf
     endIf
 EndFunction
 
@@ -130,29 +135,20 @@ Function equipCollar(actor player, int ddFilter) global
     else
         randomDevice = DeviceLists.GetRandomDevice(DeviceLists.zad_dev_collars)
     endIf
-    if (deviceValidator(player, randomDevice))
-        libs.lockDevice(libs.playerRef, randomDevice)
+    if (deviceValidator(libs, player, randomDevice))
+        LockDeviceAndWait(libs, player, randomDevice, libs.GetDeviceKeyword(randomDevice))
     endIf
 EndFunction
 
 Bool Function hasCollarEquipped(actor player) global
     zadLibs libs = (Game.GetFormFromFile(0x00F624, "Devious Devices - Integration.esm") as Quest) as zadLibs
-    if (libs.isWearingDeviceType(libs.playerRef, libs.zad_DeviousCollar) || player.WornHasKeyword(libs.zad_DeviousCollar))
+    if player.WornHasKeyword(libs.zad_deviousCollar)
         return true
     endIf
     return false
 EndFunction
 
-Bool Function hasDeviceEquipped(actor player, armor device) global
-    zadLibs libs = (Game.GetFormFromFile(0x00F624, "Devious Devices - Integration.esm") as Quest) as zadLibs
-    if (libs.isWearingDeviceType(libs.playerRef, libs.GetDeviceKeyword(device)) || player.WornHasKeyword(libs.GetDeviceKeyword(device)))
-        return true
-    endIf
-    return false
-EndFunction
-
-Bool Function deviceValidator(actor player, armor device) global
-    zadLibs libs = (Game.GetFormFromFile(0x00F624, "Devious Devices - Integration.esm") as Quest) as zadLibs
+Bool Function deviceValidator(zadLibs libs, actor player, armor device) global
     
     if (device == none) 
         return false
@@ -163,36 +159,51 @@ Bool Function deviceValidator(actor player, armor device) global
 		If player.WornHasKeyword( libs.zad_DeviousHeavyBondage )
             return false
         elseIf device.HasKeyword( libs.zad_DeviousCollar ) ;account for prisoner chains
-			Return !hasDeviceEquipped(player, device) && !player.WornHasKeyword( libs.zad_DeviousArmCuffs) && !player.WornHasKeyword( libs.zad_DeviousLegCuffs)
+			Return !player.WornHasKeyword(libs.GetDeviceKeyword(device)) && !player.WornHasKeyword( libs.zad_DeviousArmCuffs ) && !player.WornHasKeyword( libs.zad_DeviousLegCuffs )
 		ElseIf !device.HasKeyword( libs.zad_DeviousCollar )
-			Return !hasDeviceEquipped(player, device)
+			Return !player.WornHasKeyword(libs.GetDeviceKeyword(device))
 		EndIf
 	ElseIf device.HasKeyword( libs.zad_DeviousPetSuit )
-		Return !hasDeviceEquipped(player, device) && !player.WornHasKeyword( libs.zad_DeviousHeavyBondage )
+		Return !player.WornHasKeyword(libs.GetDeviceKeyword(device)) && !player.WornHasKeyword( libs.zad_DeviousHeavyBondage )
 	ElseIf device.HasKeyword( libs.zad_DeviousBra )
-		Return !hasDeviceEquipped(player, device) && !player.WornHasKeyword( libs.zad_DeviousYokeBB )
+		Return !player.WornHasKeyword(libs.GetDeviceKeyword(device)) && !player.WornHasKeyword( libs.zad_DeviousYokeBB )
 	ElseIf device.HasKeyword( libs.zad_DeviousElbowTie )
-		Return !hasDeviceEquipped(player, device) && !player.WornHasKeyword( libs.zad_DeviousHobbleSkirt )
+		Return !player.WornHasKeyword(libs.GetDeviceKeyword(device)) && !player.WornHasKeyword( libs.zad_DeviousHobbleSkirt )
 	ElseIf device.HasKeyword( libs.zad_DeviousHobbleSkirt )
-		Return !hasDeviceEquipped(player, device) && !player.WornHasKeyword( libs.zad_DeviousElbowTie )
+		Return !player.WornHasKeyword(libs.GetDeviceKeyword(device)) && !player.WornHasKeyword( libs.zad_DeviousElbowTie )
 	ElseIf device.HasKeyword( libs.zad_DeviousHarness )
-		Return !hasDeviceEquipped(player, device) && !player.WornHasKeyword( libs.zad_DeviousCorset )
+        if device.HasKeyword( libs.zad_DeviousCollar ) && player.WornHasKeyword( libs.zad_DeviousCollar )
+            Return false
+        elseIf device.HasKeyword( libs.zad_DeviousBelt ) && player.WornHasKeyword( libs.zad_DeviousBelt )
+            Return false
+        else
+		    Return !player.WornHasKeyword(libs.GetDeviceKeyword(device)) && !player.WornHasKeyword( libs.zad_DeviousCorset )
+        endIf
 	ElseIf device.HasKeyword( libs.zad_DeviousBondageMittens )
-		Return !hasDeviceEquipped(player, device) && !player.WornHasKeyword( libs.zad_DeviousGloves )
+		Return !player.WornHasKeyword(libs.GetDeviceKeyword(device)) && !player.WornHasKeyword( libs.zad_DeviousGloves )
 	ElseIf device.HasKeyword( libs.zad_DeviousCorset ) 
-		Return !hasDeviceEquipped(player, device) && !player.WornHasKeyword( libs.zad_DeviousHarness )
-	;plugs and piercings cannot go through chastity belts and bras	
+		Return !player.WornHasKeyword(libs.GetDeviceKeyword(device)) && !player.WornHasKeyword( libs.zad_DeviousHarness )
 	ElseIf device.HasKeyword( libs.zad_DeviousPiercingsNipple )
-		Return !hasDeviceEquipped(player, device) && !player.WornHasKeyword( libs.zad_DeviousBra )
+		Return !player.WornHasKeyword(libs.GetDeviceKeyword(device)) && !player.WornHasKeyword( libs.zad_DeviousBra )
 	ElseIf device.HasKeyword( libs.zad_DeviousPiercingsVaginal )
-		Return !hasDeviceEquipped(player, device) && !player.WornHasKeyword( libs.zad_DeviousBelt )
+		Return !player.WornHasKeyword(libs.GetDeviceKeyword(device)) && !player.WornHasKeyword( libs.zad_DeviousBelt )
 	ElseIf device.HasKeyword( libs.zad_DeviousPlugVaginal )
-		Return !hasDeviceEquipped(player, device) && !player.WornHasKeyword( libs.zad_DeviousBelt )
+		Return !player.WornHasKeyword(libs.GetDeviceKeyword(device)) && !player.WornHasKeyword( libs.zad_DeviousBelt )
 	ElseIf device.HasKeyword( libs.zad_DeviousPlugAnal )
-		Return !hasDeviceEquipped(player, device) && !player.WornHasKeyword( libs.zad_DeviousBelt )
+		Return !player.WornHasKeyword(libs.GetDeviceKeyword(device)) && !player.WornHasKeyword( libs.zad_DeviousBelt )
     else
-        Return !hasDeviceEquipped(player, device)
+        Return !player.WornHasKeyword(libs.GetDeviceKeyword(device))
 	EndIf
 
     return false
+EndFunction
+
+Function LockDeviceAndWait(zadLibs libs, actor akActor, armor deviceInventory, keyword zad_DeviousDevice, bool force = false) global
+	if libs.LockDevice(akActor, deviceInventory, force)
+        int counter = 3
+        while !akActor.WornHasKeyword(zad_DeviousDevice) && counter > 0
+            Utility.Wait(0.1)
+            counter -= 1
+        endWhile
+    endIf
 EndFunction

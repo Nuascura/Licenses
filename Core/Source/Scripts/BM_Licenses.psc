@@ -163,9 +163,11 @@ Function ApplyDeviousDevices()
     Actor player = playerRef.GetActorRef()
     if bmlmcm.DeviousDevices_State
         if !hasCollarExemption
+            bmlUtility.LogTrace("equipCollar")
             BM_API_DD.equipCollar(player, bmlmcm.ddFilter)
         endIf
-        If bmlmcm.equipDDOnViolation
+        if bmlmcm.equipDDOnViolation
+            bmlUtility.LogTrace("equipRestraint")
             BM_API_DD.equipRestraint(player, bmlmcm.ddEquipChance, bmlmcm.ddFilter)
         endIf
     endIf

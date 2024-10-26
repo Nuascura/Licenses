@@ -1,3 +1,12 @@
+1.19.2
+Primary
+- Fix: Duplicated calls to Periodic Check if user stresses the system.
+- Fix: Duplicated calls to Collar Equip functions, which may leave an unused DD item in the player's inventory.
+- Fix: Collared harnesses erroneously passing device validation.
+- Optimized device restraint sequence.
+
+
+
 1.19.1
 Primary
 - Fix: Hostile actors no longer report the player.
