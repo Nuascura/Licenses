@@ -474,17 +474,136 @@ MiscObject Property Gold001  Auto
 ObjectReference Property BM_ItemConfiscationChest Auto
 
 bool Property hasArmorLicense = true auto conditional
+bool Property ArmorLicense
+    bool Function Get()
+        Return hasArmorLicense
+    EndFunction
+    Function Set(bool value)
+        hasArmorLicense = value
+        StorageUtil.SetIntValue(None, "LPO_ArmorLicense", hasArmorLicense as int)
+    EndFunction
+EndProperty
+
 bool Property hasBikiniLicense = true auto conditional
+bool Property BikiniLicense
+    bool Function Get()
+        Return hasBikiniLicense
+    EndFunction
+    Function Set(bool value)
+        hasBikiniLicense = value
+        StorageUtil.SetIntValue(None, "LPO_BikiniLicense", hasBikiniLicense as int)
+    EndFunction
+EndProperty
+
 bool Property hasClothingLicense = true auto conditional
+bool Property ClothingLicense
+    bool Function Get()
+        Return hasClothingLicense
+    EndFunction
+    Function Set(bool value)
+        hasClothingLicense = value
+        StorageUtil.SetIntValue(None, "LPO_ClothingLicense", hasClothingLicense as int)
+    EndFunction
+EndProperty
+
 bool Property hasMagicLicense = true auto conditional
+bool Property MagicLicense
+    bool Function Get()
+        Return hasMagicLicense
+    EndFunction
+    Function Set(bool value)
+        hasMagicLicense = value
+        StorageUtil.SetIntValue(None, "LPO_MagicLicense", hasMagicLicense as int)
+    EndFunction
+EndProperty
+
 bool Property hasWeaponLicense = true auto conditional
+bool Property WeaponLicense
+    bool Function Get()
+        Return hasWeaponLicense
+    EndFunction
+    Function Set(bool value)
+        hasWeaponLicense = value
+        StorageUtil.SetIntValue(None, "LPO_WeaponLicense", hasWeaponLicense as int)
+    EndFunction
+EndProperty
+
 bool Property hasCraftingLicense = true auto conditional
+bool Property CraftingLicense
+    bool Function Get()
+        Return hasCraftingLicense
+    EndFunction
+    Function Set(bool value)
+        hasCraftingLicense = value
+        StorageUtil.SetIntValue(None, "LPO_CraftingLicense", hasCraftingLicense as int)
+    EndFunction
+EndProperty
+
 bool Property hasTradingLicense = true auto conditional
+bool Property TradingLicense
+    bool Function Get()
+        Return hasTradingLicense
+    EndFunction
+    Function Set(bool value)
+        hasTradingLicense = value
+        StorageUtil.SetIntValue(None, "LPO_TradingLicense", hasTradingLicense as int)
+    EndFunction
+EndProperty
+
 bool Property hasWhoreLicense = true auto conditional
+bool Property WhoreLicense
+    bool Function Get()
+        Return hasWhoreLicense
+    EndFunction
+    Function Set(bool value)
+        hasWhoreLicense = value
+        StorageUtil.SetIntValue(None, "LPO_WhoreLicense", hasWhoreLicense as int)
+    EndFunction
+EndProperty
+
 bool Property hasTravelPermit = true auto conditional
+bool Property TravelPermit
+    bool Function Get()
+        Return hasTravelPermit
+    EndFunction
+    Function Set(bool value)
+        hasTravelPermit = value
+        StorageUtil.SetIntValue(None, "LPO_TravelPermit", hasTravelPermit as int)
+    EndFunction
+EndProperty
+
 bool Property hasCollarExemption = true auto conditional
+bool Property CollarExemption
+    bool Function Get()
+        Return hasCollarExemption
+    EndFunction
+    Function Set(bool value)
+        hasCollarExemption = value
+        StorageUtil.SetIntValue(None, "LPO_CollarExemption", hasCollarExemption as int)
+    EndFunction
+EndProperty
+
 bool Property hasInsurance = true auto conditional
+bool Property Insurance
+    bool Function Get()
+        Return hasInsurance
+    EndFunction
+    Function Set(bool value)
+        hasInsurance = value
+        StorageUtil.SetIntValue(None, "LPO_Insurance", hasInsurance as int)
+    EndFunction
+EndProperty
+
 bool Property hasCurfewExemption = true auto conditional
+bool Property CurfewExemption
+    bool Function Get()
+        Return hasCurfewExemption
+    EndFunction
+    Function Set(bool value)
+        hasCurfewExemption = value
+        StorageUtil.SetIntValue(None, "LPO_CurfewExemption", hasCurfewExemption as int)
+    EndFunction
+EndProperty
 
 bool Property isArmorViolation auto conditional
 bool Property isMagicViolation auto conditional
