@@ -63,7 +63,7 @@ Function equipRestraint(actor player, int ddEquipChance, int ddFilter) global
         if (deviceValidator(libs, player, randomDevice))
             bmlUtility.LogTrace("Device Validated: " + randomDevice.GetName() + ", " + randomDevice.GetFormID())
             LockDeviceAndWait(libs, player, randomDevice, libs.GetDeviceKeyword(randomDevice))
-            Debug.Trace("BM-LPO devicekeyword: " + libs.GetDeviceKeyword(randomDevice))
+            bmlUtility.LogTrace("devicekeyword: " + libs.GetDeviceKeyword(randomDevice))
         else
             bmlUtility.LogTrace("Device Failed to Validate: " + randomDevice.GetName() + ", " + randomDevice.GetFormID())
         endIf
@@ -80,13 +80,13 @@ Function RefreshCollar(actor player, enchantment effect = none) global
     endIf
     if (deviceValidator(libs, player, WornDevice))
         ObjectReference WornDeviceRef = player.PlaceAtMe(WornDevice, abInitiallyDisabled = true)
-        if effect
-            WornDeviceRef.SetEnchantment(effect, 0)
-            WornDeviceRef.SetDisplayName("Cursed " + WornDevice.GetName())
-        endIf
-        player.AddItem(WornDeviceRef)
-        LockDeviceAndWait(libs, player, WornDevice, libs.zad_DeviousCollar, true)
         if WornDeviceRef
+            if effect
+                WornDeviceRef.SetEnchantment(effect, 0)
+                WornDeviceRef.SetDisplayName("Cursed " + WornDevice.GetName())
+            endIf
+            player.AddItem(WornDeviceRef)
+            LockDeviceAndWait(libs, player, WornDevice, libs.zad_DeviousCollar, true)
             WornDeviceRef.delete()
         endIf
     endIf
@@ -107,13 +107,13 @@ Function RenewCollar(actor player, enchantment effect = none, int ddFilter) glob
     endIf
     if (deviceValidator(libs, player, randomDevice))
         ObjectReference randomDeviceRef = player.PlaceAtMe(randomDevice, abInitiallyDisabled = true)
-        if effect
-            randomDeviceRef.SetEnchantment(effect, 0)
-            randomDeviceRef.SetDisplayName("Cursed " + randomDevice.GetName())
-        endIf
-        player.AddItem(randomDeviceRef)
-        LockDeviceAndWait(libs, player, randomDevice, libs.zad_DeviousCollar, true)
         if randomDeviceRef
+            if effect
+                randomDeviceRef.SetEnchantment(effect, 0)
+                randomDeviceRef.SetDisplayName("Cursed " + randomDevice.GetName())
+            endIf
+            player.AddItem(randomDeviceRef)
+            LockDeviceAndWait(libs, player, randomDevice, libs.zad_DeviousCollar, true)
             randomDeviceRef.delete()
         endIf
     endIf
