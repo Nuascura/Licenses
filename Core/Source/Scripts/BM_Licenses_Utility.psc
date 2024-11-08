@@ -1177,9 +1177,7 @@ Function BM_ExpireArmorLicense()
     if bmlmcm.LicenseCooldown != 0
         licenses.armorLicenseCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_ALDuration.GetValue())) as int
     endIf
-    if bmlmcm.isArmorLicenseFeatureEnabled
-        licenses.ArmorLicense = false
-    endIf
+    licenses.ArmorLicense = false
     SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 1)
 EndFunction
 
@@ -1193,9 +1191,7 @@ Function BM_ExpireBikiniLicense()
     if bmlmcm.LicenseCooldown != 0
         licenses.bikiniLicenseCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_BLDuration.GetValue())) as int
     endIf
-    if bmlmcm.isBikiniLicenseFeatureEnabled
-        licenses.BikiniLicense = false
-    endIf
+    licenses.BikiniLicense = false
     SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 2)
 EndFunction
 
@@ -1209,9 +1205,7 @@ Function BM_ExpireClothingLicense()
     if bmlmcm.LicenseCooldown != 0
         licenses.clothingLicenseCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_CLDuration.GetValue())) as int
     endIf
-    if bmlmcm.isClothingLicenseFeatureEnabled
-        licenses.ClothingLicense = false
-    endIf
+    licenses.ClothingLicense = false
     SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 3)
 EndFunction
 
@@ -1225,9 +1219,7 @@ Function BM_ExpireMagicLicense()
     if bmlmcm.LicenseCooldown != 0
         licenses.magicLicenseCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_MLDuration.GetValue())) as int
     endIf
-    if bmlmcm.isMagicLicenseFeatureEnabled
-        licenses.MagicLicense = false
-    endIf
+    licenses.MagicLicense = false
     BM_LenientCurseViolation.SetValue(1.0)
     SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 4)
 EndFunction
@@ -1242,9 +1234,7 @@ Function BM_ExpireWeaponLicense()
     if bmlmcm.LicenseCooldown != 0
         licenses.weaponLicenseCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_WLDuration.GetValue())) as int
     endIf
-    if bmlmcm.isWeaponLicenseFeatureEnabled
-        licenses.WeaponLicense = false
-    endIf
+    licenses.WeaponLicense = false
     SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 5)
 Endfunction
 
@@ -1258,9 +1248,7 @@ Function BM_ExpireCraftingLicense()
     if bmlmcm.LicenseCooldown != 0
         licenses.craftingLicenseCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_CrfLDuration.GetValue())) as int
     endIf
-    if bmlmcm.isCraftingLicenseFeatureEnabled
-        licenses.CraftingLicense = false
-    endIf
+    licenses.CraftingLicense = false
     SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 6)
 EndFunction
 
@@ -1274,9 +1262,7 @@ Function BM_ExpireTravelPermit()
     if bmlmcm.LicenseCooldown != 0
         licenses.travelPermitCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_TPDuration.GetValue())) as int
     endIf
-    if bmlmcm.isTravelPermitFeatureEnabled
-        licenses.TravelPermit = false
-    endIf
+    licenses.TravelPermit = false
     SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 7)
 EndFunction
 
@@ -1290,9 +1276,7 @@ Function BM_ExpireCollarExemption()
     if bmlmcm.LicenseCooldown != 0
         licenses.collarExemptionCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_CEDuration.GetValue())) as int
     endIf
-    if bmlmcm.isCollarExemptionFeatureEnabled
-        licenses.hasCollarExemption = false
-    endIf
+    licenses.hasCollarExemption = false
     SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 8)
 EndFunction
 
@@ -1306,9 +1290,7 @@ Function BM_ExpireLifeInsurance()
     if bmlmcm.LicenseCooldown != 0
         licenses.insuranceCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_InsurDuration.GetValue())) as int
     endIf
-    if bmlmcm.isInsuranceFeatureEnabled
-        licenses.Insurance = false
-    endIf
+    licenses.Insurance = false
     SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 9)
 EndFunction
 
@@ -1322,9 +1304,7 @@ Function BM_ExpireCurfewExemption()
     if bmlmcm.LicenseCooldown != 0
         licenses.curfewExemptionCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_CuEDuration.GetValue())) as int
     endIf
-    if bmlmcm.isCurfewExemptionFeatureEnabled
-        licenses.CurfewExemption = false
-    endIf
+    licenses.CurfewExemption = false
     SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 10)
 EndFunction
 
@@ -1338,9 +1318,7 @@ Function BM_ExpireTradingLicense()
     if bmlmcm.LicenseCooldown != 0
         licenses.tradingLicenseCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_TLDuration.GetValue())) as int
     endIf
-    if bmlmcm.isTradingLicenseFeatureEnabled
-        licenses.TradingLicense = false
-    endIf
+    licenses.TradingLicense = false
     SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 11)
 EndFunction
 
@@ -1354,9 +1332,7 @@ Function BM_ExpireWhoreLicense()
     if bmlmcm.LicenseCooldown != 0
         licenses.whoreLicenseCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_WhLDuration.GetValue())) as int
     endIf
-    if bmlmcm.isWhoreLicenseFeatureEnabled
-        licenses.WhoreLicense = false
-    endIf
+    licenses.WhoreLicense = false
     SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 12)
 EndFunction
 ; ------------------------------
@@ -1536,66 +1512,18 @@ EndFunction
 
 Function refreshLicenseFeatures()
     Actor player = licenses.playerRef.GetActorRef()
-	if !bmlmcm.isArmorLicenseFeatureEnabled || (licenses.armorLicenseExpirationTime != -1.0 && player.getItemCount(BM_ArmorLicense) > 0)
-		licenses.ArmorLicense = true
-	else
-		licenses.ArmorLicense = false
-	endIf
-	if !bmlmcm.isBikiniLicenseFeatureEnabled || (licenses.bikiniLicenseExpirationTime != -1.0 && player.getItemCount(BM_BikiniLicense) > 0)
-		licenses.BikiniLicense = true
-	else
-		licenses.BikiniLicense = false
-	endIf
-	if !bmlmcm.isClothingLicenseFeatureEnabled || (licenses.clothingLicenseExpirationTime != -1.0 && player.getItemCount(BM_ClothingLicense) > 0)
-		licenses.ClothingLicense = true
-	else
-		licenses.ClothingLicense = false
-	endIf
-	if !bmlmcm.isMagicLicenseFeatureEnabled || (licenses.magicLicenseExpirationTime != -1.0 && player.getItemCount(BM_MagicLicense) > 0)
-		licenses.MagicLicense = true
-	else
-		licenses.MagicLicense = false
-	endIf
-	if !bmlmcm.isWeaponLicenseFeatureEnabled || (licenses.weaponLicenseExpirationTime != -1.0 && player.getItemCount(BM_WeaponLicense) > 0)
-		licenses.WeaponLicense = true
-	else
-		licenses.WeaponLicense = false
-	endIf
-	if !bmlmcm.isCraftingLicenseFeatureEnabled || (licenses.craftingLicenseExpirationTime != -1.0 && player.getItemCount(BM_CraftingLicense) > 0)
-		licenses.CraftingLicense = true
-	else
-		licenses.CraftingLicense = false
-	endIf
-	if !bmlmcm.isTradingLicenseFeatureEnabled || (licenses.tradingLicenseExpirationTime != -1.0 && player.getItemCount(BM_TradingLicense) > 0)
-		licenses.TradingLicense = true
-	else
-		licenses.TradingLicense = false
-	endIf
-	if !bmlmcm.isWhoreLicenseFeatureEnabled || (licenses.whoreLicenseExpirationTime != -1.0 && player.getItemCount(BM_WhoreLicense) > 0)
-		licenses.WhoreLicense = true
-	else
-		licenses.WhoreLicense = false
-	endIf
-	if !bmlmcm.isTravelPermitFeatureEnabled || (licenses.travelPermitExpirationTime != -1.0 && player.getItemCount(BM_TravelPermit) > 0)
-		licenses.TravelPermit = true
-	else
-		licenses.TravelPermit = false
-	endIf
-	if !bmlmcm.isCollarExemptionFeatureEnabled || (licenses.collarExemptionExpirationTime != -1.0 && player.getItemCount(BM_CollarExemption) > 0)
-		licenses.CollarExemption = true
-	else
-		licenses.CollarExemption = false
-	endIf
-	if !bmlmcm.isInsuranceFeatureEnabled || (licenses.insuranceExpirationTime != -1.0 && player.getItemCount(BM_Insurance) > 0)
-		licenses.Insurance = true
-	else
-		licenses.Insurance = false
-	endIf
-	if !bmlmcm.isCurfewExemptionFeatureEnabled || (licenses.curfewExemptionExpirationTime != -1.0 && player.getItemCount(BM_CurfewExemption) > 0)
-		licenses.CurfewExemption = true
-	else
-		licenses.CurfewExemption = false
-    endIf
+	licenses.ArmorLicense = (licenses.armorLicenseExpirationTime != -1.0 && player.getItemCount(BM_ArmorLicense) > 0)
+	licenses.BikiniLicense = (licenses.bikiniLicenseExpirationTime != -1.0 && player.getItemCount(BM_BikiniLicense) > 0)
+	licenses.ClothingLicense = (licenses.clothingLicenseExpirationTime != -1.0 && player.getItemCount(BM_ClothingLicense) > 0)
+	licenses.MagicLicense = (licenses.magicLicenseExpirationTime != -1.0 && player.getItemCount(BM_MagicLicense) > 0)
+	licenses.WeaponLicense = (licenses.weaponLicenseExpirationTime != -1.0 && player.getItemCount(BM_WeaponLicense) > 0)
+	licenses.CraftingLicense = (licenses.craftingLicenseExpirationTime != -1.0 && player.getItemCount(BM_CraftingLicense) > 0)
+	licenses.TradingLicense = (licenses.tradingLicenseExpirationTime != -1.0 && player.getItemCount(BM_TradingLicense) > 0)
+	licenses.WhoreLicense = (licenses.whoreLicenseExpirationTime != -1.0 && player.getItemCount(BM_WhoreLicense) > 0)
+	licenses.TravelPermit = (licenses.travelPermitExpirationTime != -1.0 && player.getItemCount(BM_TravelPermit) > 0)
+	licenses.CollarExemption = (licenses.collarExemptionExpirationTime != -1.0 && player.getItemCount(BM_CollarExemption) > 0)
+	licenses.Insurance = (licenses.insuranceExpirationTime != -1.0 && player.getItemCount(BM_Insurance) > 0)
+	licenses.CurfewExemption = (licenses.curfewExemptionExpirationTime != -1.0 && player.getItemCount(BM_CurfewExemption) > 0)
 EndFunction
 
 Function refreshActivationLimit()

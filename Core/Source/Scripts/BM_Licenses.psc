@@ -479,8 +479,8 @@ bool Property ArmorLicense
         Return hasArmorLicense
     EndFunction
     Function Set(bool value)
-        hasArmorLicense = value
-        StorageUtil.SetIntValue(None, "LPO_ArmorLicense", hasArmorLicense as int)
+        hasArmorLicense = (value && bmlmcm.isArmorLicenseFeatureEnabled) || !bmlmcm.isArmorLicenseFeatureEnabled
+        StorageUtil.SetIntValue(None, "LPO_ArmorLicense", (hasArmorLicense as int) - (2 * (!bmlmcm.isArmorLicenseFeatureEnabled) as int))
     EndFunction
 EndProperty
 
@@ -490,8 +490,8 @@ bool Property BikiniLicense
         Return hasBikiniLicense
     EndFunction
     Function Set(bool value)
-        hasBikiniLicense = value
-        StorageUtil.SetIntValue(None, "LPO_BikiniLicense", hasBikiniLicense as int)
+        hasBikiniLicense = (value && bmlmcm.isBikiniLicenseFeatureEnabled) || !bmlmcm.isBikiniLicenseFeatureEnabled
+        StorageUtil.SetIntValue(None, "LPO_BikiniLicense", (hasBikiniLicense as int) - (2 * (!bmlmcm.isBikiniLicenseFeatureEnabled) as int))
     EndFunction
 EndProperty
 
@@ -501,8 +501,8 @@ bool Property ClothingLicense
         Return hasClothingLicense
     EndFunction
     Function Set(bool value)
-        hasClothingLicense = value
-        StorageUtil.SetIntValue(None, "LPO_ClothingLicense", hasClothingLicense as int)
+        hasClothingLicense = (value && bmlmcm.isClothingLicenseFeatureEnabled) || !bmlmcm.isClothingLicenseFeatureEnabled
+        StorageUtil.SetIntValue(None, "LPO_ClothingLicense", (hasClothingLicense as int) - (2 * (!bmlmcm.isClothingLicenseFeatureEnabled) as int))
     EndFunction
 EndProperty
 
@@ -512,8 +512,8 @@ bool Property MagicLicense
         Return hasMagicLicense
     EndFunction
     Function Set(bool value)
-        hasMagicLicense = value
-        StorageUtil.SetIntValue(None, "LPO_MagicLicense", hasMagicLicense as int)
+        hasMagicLicense = (value && bmlmcm.isMagicLicenseFeatureEnabled) || !bmlmcm.isMagicLicenseFeatureEnabled
+        StorageUtil.SetIntValue(None, "LPO_MagicLicense", (hasMagicLicense as int) - (2 * (!bmlmcm.isMagicLicenseFeatureEnabled) as int))
     EndFunction
 EndProperty
 
@@ -523,8 +523,8 @@ bool Property WeaponLicense
         Return hasWeaponLicense
     EndFunction
     Function Set(bool value)
-        hasWeaponLicense = value
-        StorageUtil.SetIntValue(None, "LPO_WeaponLicense", hasWeaponLicense as int)
+        hasWeaponLicense = (value && bmlmcm.isWeaponLicenseFeatureEnabled) || !bmlmcm.isWeaponLicenseFeatureEnabled
+        StorageUtil.SetIntValue(None, "LPO_WeaponLicense", (hasWeaponLicense as int) - (2 * (!bmlmcm.isWeaponLicenseFeatureEnabled) as int))
     EndFunction
 EndProperty
 
@@ -534,8 +534,8 @@ bool Property CraftingLicense
         Return hasCraftingLicense
     EndFunction
     Function Set(bool value)
-        hasCraftingLicense = value
-        StorageUtil.SetIntValue(None, "LPO_CraftingLicense", hasCraftingLicense as int)
+        hasCraftingLicense = (value && bmlmcm.isCraftingLicenseFeatureEnabled) || !bmlmcm.isCraftingLicenseFeatureEnabled
+        StorageUtil.SetIntValue(None, "LPO_CraftingLicense", (hasCraftingLicense as int) - (2 * (!bmlmcm.isCraftingLicenseFeatureEnabled) as int))
     EndFunction
 EndProperty
 
@@ -545,8 +545,8 @@ bool Property TradingLicense
         Return hasTradingLicense
     EndFunction
     Function Set(bool value)
-        hasTradingLicense = value
-        StorageUtil.SetIntValue(None, "LPO_TradingLicense", hasTradingLicense as int)
+        hasTradingLicense = (value && bmlmcm.isTradingLicenseFeatureEnabled) || !bmlmcm.isTradingLicenseFeatureEnabled
+        StorageUtil.SetIntValue(None, "LPO_TradingLicense", (hasTradingLicense as int) - (2 * (!bmlmcm.isTradingLicenseFeatureEnabled) as int))
     EndFunction
 EndProperty
 
@@ -556,8 +556,8 @@ bool Property WhoreLicense
         Return hasWhoreLicense
     EndFunction
     Function Set(bool value)
-        hasWhoreLicense = value
-        StorageUtil.SetIntValue(None, "LPO_WhoreLicense", hasWhoreLicense as int)
+        hasWhoreLicense = (value && bmlmcm.isWhoreLicenseFeatureEnabled) || !bmlmcm.isWhoreLicenseFeatureEnabled
+        StorageUtil.SetIntValue(None, "LPO_WhoreLicense", (hasWhoreLicense as int) - (2 * (!bmlmcm.isWhoreLicenseFeatureEnabled) as int))
     EndFunction
 EndProperty
 
@@ -567,8 +567,8 @@ bool Property TravelPermit
         Return hasTravelPermit
     EndFunction
     Function Set(bool value)
-        hasTravelPermit = value
-        StorageUtil.SetIntValue(None, "LPO_TravelPermit", hasTravelPermit as int)
+        hasTravelPermit = (value && bmlmcm.isTravelPermitFeatureEnabled) || !bmlmcm.isTravelPermitFeatureEnabled
+        StorageUtil.SetIntValue(None, "LPO_TravelPermit", (hasTravelPermit as int) - (2 * (!bmlmcm.isTravelPermitFeatureEnabled) as int))
     EndFunction
 EndProperty
 
@@ -578,8 +578,8 @@ bool Property CollarExemption
         Return hasCollarExemption
     EndFunction
     Function Set(bool value)
-        hasCollarExemption = value
-        StorageUtil.SetIntValue(None, "LPO_CollarExemption", hasCollarExemption as int)
+        hasCollarExemption = (value && bmlmcm.isCollarExemptionFeatureEnabled) || !bmlmcm.isCollarExemptionFeatureEnabled
+        StorageUtil.SetIntValue(None, "LPO_CollarExemption", (hasCollarExemption as int) - (2 * (!bmlmcm.isCollarExemptionFeatureEnabled) as int))
     EndFunction
 EndProperty
 
@@ -589,8 +589,8 @@ bool Property Insurance
         Return hasInsurance
     EndFunction
     Function Set(bool value)
-        hasInsurance = value
-        StorageUtil.SetIntValue(None, "LPO_Insurance", hasInsurance as int)
+        hasInsurance = (value && bmlmcm.isInsuranceFeatureEnabled) || !bmlmcm.isInsuranceFeatureEnabled
+        StorageUtil.SetIntValue(None, "LPO_Insurance", (hasInsurance as int) - (2 * (!bmlmcm.isInsuranceFeatureEnabled) as int))
     EndFunction
 EndProperty
 
@@ -600,8 +600,8 @@ bool Property CurfewExemption
         Return hasCurfewExemption
     EndFunction
     Function Set(bool value)
-        hasCurfewExemption = value
-        StorageUtil.SetIntValue(None, "LPO_CurfewExemption", hasCurfewExemption as int)
+        hasCurfewExemption = (value && bmlmcm.isCurfewExemptionFeatureEnabled) || !bmlmcm.isCurfewExemptionFeatureEnabled
+        StorageUtil.SetIntValue(None, "LPO_CurfewExemption", (hasCurfewExemption as int) - (2 * (!bmlmcm.isCurfewExemptionFeatureEnabled) as int))
     EndFunction
 EndProperty
 
