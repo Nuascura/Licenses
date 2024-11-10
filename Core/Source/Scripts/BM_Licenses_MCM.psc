@@ -128,11 +128,11 @@ bool Property Curse_FormatOverride = false auto ; true = CBBE 3BA, false = BHUNP
 ; Page 6 - Auxiliary
 ; Dependency Check
 ; Hard dependency - PapyrusExtender
-string Property PapyrusExtender_Status = "<font color='#b40707'>$LPO_Missing</font>" auto
+string Property PapyrusExtender_Status = "$LPO_Null" auto
 ; Hard dependency - PapyrusUtil
-string Property PapyrusUtil_Status = "<font color='#b40707'>$LPO_Missing</font>" auto
-; Hard dependency - Pyramid Utils
-string Property PyramidUtils_Status = "<font color='#b40707'>$LPO_Missing</font>" auto
+string Property PapyrusUtil_Status = "$LPO_Null" auto
+; Hard dependency - ScrabsPapyrusExtender
+string Property ScrabsPapyrusExtender_Status = "$LPO_Null" auto
 ; Soft dependency - Devious Devices - Assets.esm
 ; Soft dependency - Devious Devices - Expansion.esm
 ; Soft dependency - Devious Devices - Integration.esm
@@ -677,7 +677,7 @@ Event OnPageReset(string page)
 		AddHeaderOption("$LPO_HardDependencies")
 		AddTextOption("$LPO_PapyrusExtender_State", PapyrusExtender_Status)
 		AddTextOption("$LPO_PapyrusUtil_State", PapyrusUtil_Status)
-		AddTextOption("$LPO_PyramidUtils_State", PyramidUtils_Status)
+		AddTextOption("$LPO_ScrabsPapyrusExtender_State", ScrabsPapyrusExtender_Status)
 		AddEmptyOption()
 		AddHeaderOption("$LPO_SoftDependencies")
 		AddTextOption("$LPO_DeviousDevices_State", DeviousDevices_Status, (!DeviousDevices_State) as int)
@@ -2150,20 +2150,20 @@ Bool Function checkHardDependencies()
 	if SKSE.GetPluginVersion("powerofthree's Papyrus Extender") != -1 && (PO3_SKSEFunctions.GetPapyrusExtenderVersion()[0] >= 5)
 		PapyrusExtender_Status = "$LPO_Installed"
 	else
-		PapyrusExtender_Status = "<font color='#b40707'>$LPO_Missing</font>"
+		PapyrusExtender_Status = "$LPO_Null"
 	endIf
 	if (SKSE.GetPluginVersion("PapyrusUtil") != -1 || SKSE.GetPluginVersion("papyrusutil plugin") != -1) && (PapyrusUtil.GetVersion() >= 30)
 		PapyrusUtil_Status = "$LPO_Installed"
 	else
-		PapyrusUtil_Status = "<font color='#b40707'>$LPO_Missing</font>"
+		PapyrusUtil_Status = "$LPO_Null"
 	endIf
-	if SKSE.GetPluginVersion("PyramidUtils") != -1 && (PyramidUtils.GetVersion() >= 0.002009)
-		PyramidUtils_Status = "$LPO_Installed"
+	if (SKSE.GetPluginVersion("PyramidUtils") != -1 || SKSE.GetPluginVersion("ScrabsPapyrusExtender") != -1) && (PyramidUtils.GetVersion() >= 0.002009)
+		ScrabsPapyrusExtender_Status = "$LPO_Installed"
 	else
-		PyramidUtils_Status = "<font color='#b40707'>$LPO_Missing</font>"
+		ScrabsPapyrusExtender_Status = "$LPO_Null"
 	endIf
 
-	if PapyrusExtender_Status == "$LPO_Installed" && PapyrusUtil_Status == "$LPO_Installed" && PyramidUtils_Status == "$LPO_Installed"
+	if PapyrusExtender_Status == "$LPO_Installed" && PapyrusUtil_Status == "$LPO_Installed" && ScrabsPapyrusExtender_Status == "$LPO_Installed"
 		return true
 	else
 		return false
