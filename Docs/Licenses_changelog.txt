@@ -6,6 +6,9 @@ Primary
 - Fix: Save bloat from unused collar ObjectReferences.
 - Improved ease of integration via StorageUtil global vars.
 - Optimized device restraint sequence.
+- Optimized OnItemRemoved event function sequence.
+- Updated internal dependency checks, migrating from PyramidUtils to Scrab's Papyrus Extender with backwards compatibility.
+- Updated localization files.
 
 
 
