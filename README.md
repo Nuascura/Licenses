@@ -12,9 +12,9 @@ NSFW Applications: [LoversLab](https://www.loverslab.com/files/file/29357-licens
 
 Papyrus sources from the following dependencies must be available in your installation directory to compile this project's scripts.
 1. [SkyUI](https://github.com/schlangster/skyui)
-2. [PapyrusExtenderSSE](https://github.com/powerof3/PapyrusExtenderSSE)
+2. [PO3's Papyrus Extender](https://github.com/powerof3/PapyrusExtenderSSE)
 3. [PapyrusUtil](https://github.com/eeveelo/PapyrusUtil)
-4. [PyramidUtils](https://github.com/ponzipyramid/PyramidUtils)
+4. [Scrab's Papyrus Extender](https://github.com/Scrabx3/ScrabsPapyrusExtender/)
 
 The following dependency requirements are script-specific.
 1. Devious Devices
