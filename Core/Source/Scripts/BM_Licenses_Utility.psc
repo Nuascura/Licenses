@@ -370,7 +370,7 @@ Function Startup()
     endIf
 
     ; Start Add-on Quests
-    if Game.GetModByName("Licenses - Ambient Dialogue.esp") != 255
+    if Game.GetModByName("Licenses - Ambience.esp") != 255
         Quest.GetQuest("LPO_WIComment").Start()
     endIf
 
@@ -402,7 +402,7 @@ Function Shutdown()
 	BM_LenientCurseViolation.SetValue(1.0)
 
     ; Stop Add-on Quests
-    if Game.GetModByName("Licenses - Ambient Dialogue.esp") != 255
+    if Game.GetModByName("Licenses - Ambience.esp") != 255
         Quest.GetQuest("LPO_WIComment").Stop()
     endIf
 
