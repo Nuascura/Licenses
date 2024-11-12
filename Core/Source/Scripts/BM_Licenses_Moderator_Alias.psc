@@ -8,7 +8,7 @@ Event OnPlayerLoadGame()
 EndEvent
 
 Function OnLoad()
-    if bmlUtility.Licenses_State && Quest.GetQuest("BM_Licenses_MCM").IsRunning()
+    if bmlUtility.Licenses_State && bmlUtility.bmlmcm.IsRunning()
         bmlUtility.ReloadMCMVariables()
     endIf
 

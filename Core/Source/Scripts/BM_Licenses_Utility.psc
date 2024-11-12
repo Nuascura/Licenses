@@ -362,11 +362,16 @@ Function Startup()
     bmlmcm.allowJailQuestNodes = true
     bmlmcm.ConfigWarn = true
 
-    ; Start Quests
+    ; Start Core Quests
     licenses.start()
     licenseBarterQuest.start()
     if licenseModeratorQuest.start()
         bmlModeratorAlias.OnLoad()
+    endIf
+
+    ; Start Add-on Quests
+    if Game.GetModByName("Licenses - Ambient Dialogue.esp") != 255
+        Quest.GetQuest("LPO_WIComment").Start()
     endIf
 
     ; Initialize Variables
@@ -395,6 +400,11 @@ Function Shutdown()
 	savedSpace = None
     BM_FirstTimeViolation.SetValue(1.0)
 	BM_LenientCurseViolation.SetValue(1.0)
+
+    ; Stop Add-on Quests
+    if Game.GetModByName("Licenses - Ambient Dialogue.esp") != 255
+        Quest.GetQuest("LPO_WIComment").Stop()
+    endIf
 
     ; Stop Quests
     licenses.stop()
@@ -1631,13 +1641,12 @@ EndFunction
 
 ; ---------- MCM Utilities ----------
 Function ResetMCM()
-    Quest BM_MCM = Quest.GetQuest("BM_Licenses_MCM")
-    BM_MCM.Stop()
-    While !BM_MCM.IsStopped()
+    bmlmcm.Stop()
+    While !bmlmcm.IsStopped()
         Utility.Wait(0.1)
     EndWhile
-    BM_MCM.Start()
-    While !BM_MCM.IsRunning()
+    bmlmcm.Start()
+    While !bmlmcm.IsRunning()
         Utility.Wait(0.1)
     EndWhile
     ReloadMCMVariables(true)
