@@ -38,21 +38,12 @@ Event OnSpellCast(Form akSpell)
 EndEvent
 
 Event OnObjectEquipped(Form item, ObjectReference akReference)
-    ;bmlUtility.LogTrace("OnObjectEquipped")
-    ; No check required if full armor license available -> bikini/clothing check happens in function
-    If (licenses.hasCollarExemption == false && item.HasKeywordString("zad_DeviousCollar"))
-        CheckViolations()
-    elseif ((licenses.hasArmorLicense == false || licenses.isInsured == false) && item as Armor)
-        CheckViolations()
-    elseIf ((licenses.hasMagicLicense == false || licenses.isInsured == false) && item as Spell)
-        CheckViolations()
-    elseIf ((licenses.hasWeaponLicense == false || licenses.isInsured == false) && (item as Weapon || item as Ammo))
+    if (item as Armor || item as Spell || item as Weapon || item as Ammo)
         CheckViolations()
     endIf
 endEvent
 
 Event OnObjectUnEquipped(Form item, ObjectReference akReference)
-    ;bmlUtility.LogTrace("OnObjectUnEquipped")
     if (item as Armor || item as Spell || item as Weapon || item as Ammo)
         CheckViolations()
     endIf
