@@ -1,4 +1,4 @@
-1.19.2
+1.20.0
 Primary
 - Fix: Duplicated calls to Periodic Check if user stresses the system.
 - Fix: Duplicated calls to Collar Equip functions, which may leave an unused DD item in the player's inventory.
@@ -9,6 +9,7 @@ Primary
 - Optimized OnItemRemoved event function sequence.
 - Updated internal dependency checks, migrating from PyramidUtils to Scrab's Papyrus Extender with backwards compatibility.
 - Updated localization files.
+- Added preliminary support for add-on integration.
 
 
 
