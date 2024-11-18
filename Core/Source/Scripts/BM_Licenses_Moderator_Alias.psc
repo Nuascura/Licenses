@@ -251,7 +251,7 @@ EndFunction
 
 Event LPO_OnConfrontationEnd(int aiArg1)
     bmlUtility.LogTrace("LPO_OnConfrontationEnd")
-    if aiArg1 == 1
+    if aiArg1 == 1 && bmlUtility.CountValidLicenses() != 0
         bmlUtility.DF_AdjustResistance(8.0 * (1.0 + (bmlUtility.CountActiveViolations() / bmlUtility.CountValidLicenses())))
     endIf
 EndEvent
