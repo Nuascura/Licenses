@@ -18,6 +18,7 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 	RegisterForModEvent("BM-LPO_LicenseExpired", "LPO_OnLicenseExpired")
 
 	bmlUtility.GameMessage(BM_Licenses_MessageCurfewActive)
+	bmlUtility.BM_LenientCurfewViolation.SetValue(1.0)
 	if !licenses.hasCurfewExemption
 		RegisterForSingleUpdate(10.0)
 		if !akTarget.IsInInterior()
