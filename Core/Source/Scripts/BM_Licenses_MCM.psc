@@ -3,8 +3,12 @@ Scriptname BM_Licenses_MCM extends SKI_ConfigBase conditional
 BM_Licenses Property licenses auto
 BM_Licenses_Utility Property bmlUtility Auto
 GlobalVariable Property GameDaysPassed auto
-
 bool Property SessionModified auto
+Message Property MessageConfigWarn  Auto  
+string config = "../../../Interface/Licenses/Settings.json"
+string[] ModVersionCache
+
+import JsonUtil
 
 ; Page 1 - General
 ; Basic Settings
@@ -175,13 +179,6 @@ bool Property ConfigWarn = true auto
 bool Property allowJailQuestNodes = true auto conditional
 float Property standardEventDelay = 2.0 auto
 
-Message Property MessageConfigWarn  Auto  
-
-string config = "../../../Interface/Licenses/Settings.json"
-string[] ModVersionCache
-
-import JsonUtil
-
 string Function GetModName(bool cache = true)
 	if cache
 		return modname
@@ -191,7 +188,7 @@ string Function GetModName(bool cache = true)
 EndFunction
 
 string Function GetModVersion()
-	return "1.20.0"
+	return "1.21.0"
 EndFunction
 
 int Function GetVersion()
