@@ -50,6 +50,7 @@ Function FinishConfrontation(Actor akEnforcer, int type = 0)
         ResetViolations(type)
     elseIf type == 2
         bmlUtility.BM_FirstTimeViolation.SetValue(0.0)
+        bmlUtility.BM_LenientCurfewViolation.SetValue(0.0)
         if bmlmcm.NullifyMagickaSource > 0
             bmlUtility.BM_LenientCurseViolation.SetValue(0.0)
         endIf
