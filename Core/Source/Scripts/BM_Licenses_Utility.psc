@@ -1,7 +1,7 @@
 Scriptname BM_Licenses_Utility extends Quest  
 
 ; ----------------------------------------------------------------------------------------------------
-; -------------------------------------------------- API
+; -------------------------------------------------- Utility
 ; ----------------------------------------------------------------------------------------------------
 
 ; - Guide -
@@ -400,6 +400,7 @@ Function Shutdown()
 	savedSpace = None
     BM_FirstTimeViolation.SetValue(1.0)
 	BM_LenientCurseViolation.SetValue(1.0)
+    BM_LenientCurfewViolation.SetValue(1.0)
 
     ; Stop Add-on Quests
     if Game.GetModByName("Licenses - Ambience.esp") != 255
@@ -1689,6 +1690,7 @@ Function insuranceModifier(string type, float value)
         endIf
     endIf
     bmlmcm.BM_InsurCost.setValue(bmlmcm.BM_InsurCostBase * licenses.insuranceMisbehaviourMultiplier * licenses.insurancePopularityMultiplier)
+    licenses.UpdateCurrentInstanceGlobal(BM_InsurCost)
 EndFunction
 
 Float Function insuranceModifierViolation()
@@ -1889,6 +1891,7 @@ GlobalVariable Property BM_IsViolatingCurfew Auto
 GlobalVariable Property BM_FineAmount auto
 GlobalVariable Property BM_FirstTimeViolation auto
 GlobalVariable Property BM_LenientCurseViolation auto
+GlobalVariable Property BM_LenientCurfewViolation auto
 
 MiscObject Property Gold001  Auto 
 
