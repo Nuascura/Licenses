@@ -1,6 +1,7 @@
 1.21.0
 Primary
 - Adjustment: Dialogue branch now offers the option to refuse your bounty fine.
+- Adjustment: Actor waits for player unsheathe animation before confiscating items.
 - Fix: Possible outdated cached Insurance cost display.
 - Fix: DF resistance adjustment divide by zero logic gap.
 - Added leniency for first curfew violation of each day.

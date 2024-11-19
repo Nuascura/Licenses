@@ -42,7 +42,6 @@ Function FinishConfrontation(Actor akEnforcer, int type = 0)
         ResetViolations(type)
     elseIf type == 0
         ConfiscateItems(bmlmcm.isConfiscateFeatureEnabled, bmlmcm.isConfiscateInventoryFeatureEnabled)
-        Utility.Wait(2.0) ; give item confiscation some time to finish
         PlayerArrest(akEnforcer, crimeFaction)
     elseIf type == 1
         PayFine(crimeFaction)
@@ -79,6 +78,7 @@ Function PlayerWalkaway(Actor akEnforcer, Faction crimeFaction)
 EndFunction
 
 Function PlayerArrest(Actor akEnforcer, Faction crimeFaction)
+    Utility.Wait(2.0) ; give item confiscation some time to finish
     if bmlmcm.PrisonOverhaulPatched_State
         if UI.IsMenuOpen("Dialogue Menu")
             UI.InvokeString("Dialogue Menu", "_global.skse.CloseMenu", "Dialogue Menu")
@@ -214,6 +214,14 @@ Function ConfiscateItems(Bool Confiscate = false, bool ConfiscateInventory = fal
         Confiscate = false
     endIf
 
+    if playerActor.isWeaponDrawn()
+        playerActor.SheatheWeapon()
+        float break
+        while playerActor.isWeaponDrawn() && break < 2.0 ; wait to finish sheathe animation
+            break += 0.1
+        endWhile
+    endIf
+
     if Confiscate && ConfiscateInventory
         bmlUtility.GameMessage(MessageItemCheckInv)
         ; Merge two lists, remove dupes
@@ -264,6 +272,7 @@ Function ConfiscateItems(Bool Confiscate = false, bool ConfiscateInventory = fal
             bmlUtility.LogNotification("Dispelled: " + equippedSpell.getName())
         endif
     endIf
+
 EndFunction
 
 Function ConfiscateItems_Simple()
