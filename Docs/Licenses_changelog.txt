@@ -1,3 +1,17 @@
+1.21.0
+Primary
+- Adjustment: Dialogue branch now offers the option to refuse your bounty fine.
+- Fix: Possible outdated cached Insurance cost display.
+- Fix: DF resistance adjustment divide by zero logic gap.
+- Added leniency for first curfew violation of each day.
+- Added a two second safeguard delay prior to jail transit.
+- Added additional contextual dialogue for first time violations under the dialogue patch.
+- Reworked bounty dialogue branches for improved clarity.
+- Updated dialogue patch.
+- Updated Bruma patch.
+
+
+
 1.20.0
 Primary
 - Fix: Duplicated calls to Periodic Check if user stresses the system.
