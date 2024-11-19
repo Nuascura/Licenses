@@ -5,7 +5,7 @@ Primary
 - Fix: DF resistance adjustment divide by zero logic gap.
 - Added leniency for first curfew violation of each day.
 - Added a two second safeguard delay prior to jail transit.
-- Added additional contextual dialogue for first time violations under the dialogue patch.
+- Added additional contextual dialogue for first time violations.
 - Reworked bounty dialogue branches for improved clarity.
 - Updated dialogue patch.
 - Updated Bruma patch.
