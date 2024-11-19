@@ -1555,10 +1555,6 @@ state isCurfewExemptionFeatureEnabledST
 	event OnSelectST()
 		isCurfewExemptionFeatureEnabled = !isCurfewExemptionFeatureEnabled
 		SetToggleOptionValueST(isCurfewExemptionFeatureEnabled)
-		if !isCurfewExemptionFeatureEnabled
-			bmlUtility.BM_IsViolatingCurfew.SetValue(0.0)
-			licenses.isCurfewViolation = false
-		endIf
 		SessionModified = true
 	endEvent
 	event OnHighlightST()

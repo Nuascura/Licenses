@@ -398,9 +398,9 @@ Function Shutdown()
     ; Reset Additional Variables
     savedLoc = None
 	savedSpace = None
-    BM_FirstTimeViolation.SetValue(1.0)
-	BM_LenientCurseViolation.SetValue(1.0)
-    BM_LenientCurfewViolation.SetValue(1.0)
+    BM_FirstTimeViolation.SetValue(1.0) ; enabled by default
+	BM_LenientCurseViolation.SetValue(1.0) ; enabled by default
+    BM_LenientCurfewViolation.SetValue(1.0) ; enabled by default
 
     ; Stop Add-on Quests
     if Game.GetModByName("Licenses - Ambience.esp") != 255
@@ -1316,6 +1316,7 @@ Function BM_ExpireCurfewExemption()
         licenses.curfewExemptionCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_CuEDuration.GetValue())) as int
     endIf
     licenses.CurfewExemption = false
+    BM_LenientCurfewViolation.SetValue(1.0)
     SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 10)
 EndFunction
 

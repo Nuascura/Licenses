@@ -42,6 +42,7 @@ Function FinishConfrontation(Actor akEnforcer, int type = 0)
         ResetViolations(type)
     elseIf type == 0
         ConfiscateItems(bmlmcm.isConfiscateFeatureEnabled, bmlmcm.isConfiscateInventoryFeatureEnabled)
+        Utility.Wait(2.0) ; give item confiscation some time to finish
         PlayerArrest(akEnforcer, crimeFaction)
     elseIf type == 1
         PayFine(crimeFaction)
