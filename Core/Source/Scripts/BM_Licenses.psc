@@ -218,7 +218,7 @@ Function ConfiscateItems(Bool Confiscate = false, bool ConfiscateInventory = fal
         ; Merge two lists, remove dupes
         Form[] ValidatedForms = PapyrusUtil.MergeFormArray(bmlUtility.ScanInventory_Base(playerActor), bmlUtility.ScanInventory_Ench(playerActor), true)
         ; Remove items
-        if PyramidUtils.RemoveForms(playerActor, ValidatedForms, BM_ItemConfiscationChest) > 0
+        if SPE_ObjectRef.RemoveItems(playerActor, ValidatedForms, BM_ItemConfiscationChest) > 0
             bmlUtility.GameMessage(MessageItemConfiscated)
         endIf
     elseIf Confiscate
@@ -226,7 +226,7 @@ Function ConfiscateItems(Bool Confiscate = false, bool ConfiscateInventory = fal
         ; Merge two lists, remove dupes
         Form[] ValidatedForms = PapyrusUtil.MergeFormArray(bmlUtility.ScanEquippedItems_Base(playerActor), bmlUtility.ScanEquippedItems_Ench(playerActor), true)
         ; Remove items
-        if PyramidUtils.RemoveForms(playerActor, ValidatedForms, BM_ItemConfiscationChest) > 0
+        if SPE_ObjectRef.RemoveItems(playerActor, ValidatedForms, BM_ItemConfiscationChest) > 0
             bmlUtility.GameMessage(MessageItemConfiscated)
         endIf
     else
@@ -314,18 +314,18 @@ Function ConfiscateItems_Simple()
         endIf
     endIf
     ; Get items matching valid keywords per license features
-    Form[] PotentialForms = PyramidUtils.GetItemsByKeyword(playerActor, KeywordConfiscation_Simple, false)
+    Form[] PotentialForms = SPE_ObjectRef.GetItemsByKeyword(playerActor, KeywordConfiscation_Simple, false)
     ; Get potentially enchanted items matching valid keywords per license features
-    Form[] PotentialFormsEnch = PyramidUtils.GetItemsByKeyword(playerActor, KeywordConfiscationEnch_Simple, false)
+    Form[] PotentialFormsEnch = SPE_ObjectRef.GetItemsByKeyword(playerActor, KeywordConfiscationEnch_Simple, false)
     ; Filter for only enchanted items
-    PotentialFormsEnch = PyramidUtils.FilterByEnchanted(playerActor, PotentialFormsEnch, true)
+    PotentialFormsEnch = SPE_Utility.IntersectArray_Form(PotentialFormsEnch, SPE_ObjectRef.GetEnchantedItems(playerActor, true, true, false))
     ; Merge two lists, remove dupes
     Form[] ValidatedForms = PapyrusUtil.MergeFormArray(PotentialForms, PotentialFormsEnch, true)
     ; Filter out items matching keyword combinations
-    ValidatedForms = PyramidUtils.FilterFormsByKeyword(ValidatedForms, KeywordQuestItem, true, true)
-    ValidatedForms = PyramidUtils.FilterFormsByKeyword(ValidatedForms, KeywordModItem, false, true)
+    ValidatedForms = SPE_Utility.FilterFormsByKeyword(ValidatedForms, KeywordQuestItem, true, true)
+    ValidatedForms = SPE_Utility.FilterFormsByKeyword(ValidatedForms, KeywordModItem, false, true)
     ; Remove items
-    PyramidUtils.RemoveForms(playerActor, ValidatedForms, none) ; banish default jail outfit items to the void!
+    SPE_ObjectRef.RemoveItems(playerActor, ValidatedForms, none)
 EndFunction
 ; ------------------------------
 

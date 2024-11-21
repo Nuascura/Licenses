@@ -2150,7 +2150,7 @@ Bool Function checkHardDependencies()
 	else
 		PapyrusUtil_Status = "$LPO_Null"
 	endIf
-	if SKSE.GetPluginVersion("ScrabsPapyrusExtender") >= 16842752
+	if SKSE.GetPluginVersion("ScrabsPapyrusExtender") >= 0x01020000
 		ScrabsPapyrusExtender_Status = "$LPO_Installed"
 	else
 		ScrabsPapyrusExtender_Status = "$LPO_Null"

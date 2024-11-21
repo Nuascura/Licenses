@@ -547,15 +547,15 @@ EndFunction
 ; ---------- Inventory Scanners ----------
 Form[] Function ScanInventory_CommonFilter(Form[] Array)
     ; Filter out items matching keyword combinations
-    Array = PyramidUtils.FilterFormsByKeyword(Array, licenses.KeywordQuestItem, true, true)
-    Array = PyramidUtils.FilterFormsByKeyword(Array, licenses.KeywordModItem, false, true)
+    Array = SPE_Utility.FilterFormsByKeyword(Array, licenses.KeywordQuestItem, true, true)
+    Array = SPE_Utility.FilterFormsByKeyword(Array, licenses.KeywordModItem, false, true)
     return Array
 EndFunction
 
 Form[] Function ScanEquippedItems_Base(Actor playerActor)
     Form[] PotentialForms = PO3_SKSEFunctions.AddAllEquippedItemsToArray(playerActor)
 
-    PotentialForms = PyramidUtils.FilterFormsByKeyword(PotentialForms, licenses.KeywordConfiscation, false, false)
+    PotentialForms = SPE_Utility.FilterFormsByKeyword(PotentialForms, licenses.KeywordConfiscation, false, false)
 
     ; LogTrace("Pre-filter: " + PotentialForms)
     ; int[] slotArray = new int[10]
@@ -569,40 +569,40 @@ Form[] Function ScanEquippedItems_Base(Actor playerActor)
     ; slotArray[7] = 37
     ; slotArray[8] = 38
     ; slotArray[9] = 39
-    ; PotentialForms = PyramidUtils.FilterByEquippedSlot(PotentialForms, slotArray)
+    ; PotentialForms = SPE_Utility.FilterByEquippedSlot(PotentialForms, slotArray)
     ; LogTrace("Post-filter: " + PotentialForms)
 
     PotentialForms = ScanInventory_CommonFilter(PotentialForms)
     if (licenses.hasBikiniLicense && licenses.isInsured)
-        PotentialForms = PyramidUtils.FilterFormsByKeyword(PotentialForms, licenses.KeywordBikiniItem, false, true)
+        PotentialForms = SPE_Utility.FilterFormsByKeyword(PotentialForms, licenses.KeywordBikiniItem, false, true)
     endIf
     return PotentialForms
 EndFunction
 
 Form[] Function ScanEquippedItems_Ench(Actor playerActor)
     Form[] PotentialFormsEnch = PO3_SKSEFunctions.AddAllEquippedItemsToArray(playerActor)
-    PotentialFormsEnch = PyramidUtils.FilterFormsByKeyword(PotentialFormsEnch, licenses.KeywordConfiscationEnch, false, false)
-    PotentialFormsEnch = PyramidUtils.FilterByEnchanted(playerActor, PotentialFormsEnch, true)
+    PotentialFormsEnch = SPE_Utility.FilterFormsByKeyword(PotentialFormsEnch, licenses.KeywordConfiscationEnch, false, false)
+    PotentialFormsEnch = SPE_Utility.IntersectArray_Form(PotentialFormsEnch, SPE_ObjectRef.GetEnchantedItems(playerActor, true, true, false))
     PotentialFormsEnch = ScanInventory_CommonFilter(PotentialFormsEnch)
     return PotentialFormsEnch
 EndFunction
 
 Form[] Function ScanInventory_Base(ObjectReference playerActor)
     ; Get items matching valid keywords per license features
-    Form[] PotentialForms = PyramidUtils.GetItemsByKeyword(playerActor, licenses.KeywordConfiscation, false)
+    Form[] PotentialForms = SPE_ObjectRef.GetItemsByKeyword(playerActor, licenses.KeywordConfiscation, false)
     ; Filter
     PotentialForms = ScanInventory_CommonFilter(PotentialForms)
     if (licenses.hasBikiniLicense && licenses.isInsured)
-        PotentialForms = PyramidUtils.FilterFormsByKeyword(PotentialForms, licenses.KeywordBikiniItem, false, true)
+        PotentialForms = SPE_Utility.FilterFormsByKeyword(PotentialForms, licenses.KeywordBikiniItem, false, true)
     endIf
     return PotentialForms
 EndFunction
 
 Form[] Function ScanInventory_Ench(ObjectReference playerActor)
     ; Get potentially enchanted items matching valid keywords per license features
-    Form[] PotentialFormsEnch = PyramidUtils.GetItemsByKeyword(playerActor, licenses.KeywordConfiscationEnch, false)
+    Form[] PotentialFormsEnch = SPE_ObjectRef.GetItemsByKeyword(playerActor, licenses.KeywordConfiscationEnch, false)
     ; Filter for only enchanted items
-    PotentialFormsEnch = PyramidUtils.FilterByEnchanted(playerActor, PotentialFormsEnch, true)
+    PotentialFormsEnch = SPE_Utility.IntersectArray_Form(PotentialFormsEnch, SPE_ObjectRef.GetEnchantedItems(playerActor, true, true, false))
     ; Final Filter
     PotentialFormsEnch = ScanInventory_CommonFilter(PotentialFormsEnch)
     return PotentialFormsEnch

@@ -20,7 +20,7 @@ EndEvent
 Event OnMenuOpen(String MenuName)
     bmlUtility.LogTrace("OnMenuOpen")
     ;Vendor = Game.GetCurrentCrosshairRef() as Actor
-    Vendor = PyramidUtils.GetPlayerSpeechTarget()
+    Vendor = SPE_Actor.GetPlayerSpeechTarget()
     if (bmlUtility.bmlmcm.isLimitToCityEnabled && !licenses.isInCity) && (bmlUtility.bmlmcm.isLimitToTownEnabled && !licenses.isInTown)
         bmlUtility.LogTrace("OnMenuOpen return")
         return
@@ -85,7 +85,7 @@ Function FillFormLists(Actor Player, ObjectReference VendorChest)
 EndFunction
 
 Form[] Function ScanVendor(ObjectReference VendorChest)
-    Form[] PotentialForms = PyramidUtils.GetItemsByKeyword(VendorChest, licenses.KeywordBarterItem, false)
+    Form[] PotentialForms = SPE_ObjectRef.GetItemsByKeyword(VendorChest, licenses.KeywordBarterItem, false)
     PotentialForms = bmlUtility.ScanInventory_CommonFilter(PotentialForms)
     return PotentialForms
 EndFunction
