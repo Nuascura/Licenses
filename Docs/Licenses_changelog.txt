@@ -8,6 +8,7 @@ Primary
 - Added additional contextual dialogue for first time violations.
 - Added idle animations for some dialogue lines.
 - Reworked bounty dialogue branches for improved clarity.
+- Removed check for PyramidUtils.
 
 Secondary
 - Updated dialogue patch.
