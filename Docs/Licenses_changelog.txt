@@ -2,6 +2,7 @@
 Primary
 - Adjustment: Bounty dialogue branch now offers the option to refuse your fine.
 - Adjustment: Player now sheathes weapon after item confiscation.
+- Adjustment: License-related query dialogues can now only be initiated if player is inside a City or Town per MCM settings.
 - Fix: Possible outdated cached Insurance cost display.
 - Fix: DF resistance adjustment divide by zero logic gap.
 - Added leniency for first curfew violation of each day.
