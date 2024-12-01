@@ -11,6 +11,7 @@ Primary
 - Reworked bounty dialogue branches for improved clarity.
 
 Secondary
+- Refactor follower detection: shift process burden to violation detection module; use PO3 Papyrus Extender function.
 - Migrated utility calls for PyramidUtils to corresponding SPE scripts/functions.
 - Updated dialogue patch.
 - Updated Bruma patch.

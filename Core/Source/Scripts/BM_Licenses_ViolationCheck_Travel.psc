@@ -20,8 +20,9 @@ Function ViolationCheck_Travel()
     Actor playerActor = licenses.playerRef.GetActorRef()
 
     if !licenses.isTravelViolation
+
         ; Return conditions
-        if licenses.isAccompanied
+        if IsAccompanied()
             bmlUtility.savedLoc = None
             bmlUtility.savedSpace = None
             return
@@ -78,4 +79,20 @@ Function SetTravelViolation()
     bmlUtility.savedLoc = none
     bmlUtility.savedSpace = none
     bmlUtility.GameMessage(licenses.MessageTravelMissing)
+EndFunction
+
+bool Function IsAccompanied()
+    if (bmlmcm.BM_FollowerMale.GetValue() as bool) || (bmlmcm.BM_FollowerFemale.GetValue() as bool)
+        Actor[] PlayerFollowers = PO3_SKSEFunctions.GetPlayerFollowers()
+        int arrayLength = PlayerFollowers.Length
+        int i = 0
+        while i < arrayLength
+            if (PlayerFollowers[i].GetBaseObject() as ActorBase).GetSex() == 0 && (bmlmcm.BM_FollowerMale.GetValue() as bool) \
+            || (PlayerFollowers[i].GetBaseObject() as ActorBase).GetSex() == 1 && (bmlmcm.BM_FollowerFemale.GetValue() as bool)
+                return true
+            endIf
+            i += 1
+        endWhile
+    endIf
+    return false
 EndFunction

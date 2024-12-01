@@ -410,7 +410,6 @@ Function Shutdown()
     ; Stop Quests
     licenses.stop()
     licenseViolationCheckQuest.stop()
-    licenseProximityCheckQuest.stop()
     licenseThaneshipCheckQuest.stop()
     licenseWorldspaceCheckQuest.stop()
     licenseBountyQuest.stop()
@@ -667,7 +666,6 @@ Function CheckLicenseStatus()
 EndFunction
 
 Function ModeratorMaintanence()
-    CheckProximity()
     CheckThaneship()
     ModeratorUpdater()
 EndFunction
@@ -683,15 +681,6 @@ Function CheckThaneship()
         licenseThaneshipCheckQuest.stop()
     else
         licenses.isThane = false
-    endIf
-EndFunction
-
-Function CheckProximity()
-    if licenseProximityCheckQuest.start()
-        licenses.isAccompanied = bmlProximityCheck.Run()
-        licenseProximityCheckQuest.stop()
-    else
-        licenses.isAccompanied = false
     endIf
 EndFunction
 ; ------------------------------
@@ -1354,7 +1343,6 @@ EndFunction
 Function RefreshStatus()
     CheckLocation()
     CheckThaneship()
-    CheckProximity()
     CheckExceptionState()
     CheckLicenseStatus()
 EndFunction
@@ -1603,7 +1591,6 @@ EndFunction
 Function refreshRoutineCalls()
 	licenseDetectionQuest.stop()
     licenseViolationCheckQuest.stop()
-    licenseProximityCheckQuest.stop()
     licenseThaneshipCheckQuest.stop()
     licenseWorldspaceCheckQuest.stop()
 EndFunction
@@ -1827,7 +1814,6 @@ BM_Licenses_ViolationCheck Property bmlViolationCheck auto
 BM_Licenses_Bounty Property bmlBounty auto
 BM_Player Property bmPlayer auto
 BM_Licenses_Moderator_Alias Property bmlModeratorAlias auto
-BM_Licenses_ProximityCheck Property bmlProximityCheck auto
 BM_Licenses_ThaneshipCheck Property bmlThaneshipCheck auto
 BM_Licenses_WorldspaceCheck Property bmlWorldspaceCheck auto
 
@@ -1845,7 +1831,6 @@ Book Property BM_Insurance Auto
 Book Property BM_CurfewExemption Auto
 
 Quest Property licenseViolationCheckQuest auto
-Quest Property licenseProximityCheckQuest auto
 Quest Property licenseThaneshipCheckQuest auto
 Quest Property licenseWorldspaceCheckQuest auto
 Quest Property licenseDetectionQuest auto
