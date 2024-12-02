@@ -1,5 +1,4 @@
-**Licenses - Player Oppression**
-
+# Licenses - Player Oppression
 A licensed license mod for licenses.
 
 This mod is only for Skyrim: Special Edition. Its plugin has a 1.71 file header and is formatted for AE game versions 1.6.1130 and above.
