@@ -24,4 +24,4 @@ Thank you to the following primary and non-current contributors:
 * BananasManaic, for base structuration.
 * Taki17, for the inspiration from their restraint item validator.
 
-Looking to re-release or re-distribute this software? Terms of use outlined under official listings apply mainly to general users and are more concerned with the packaged archives presented as they are. Implicitly, if you can compile this repository's scripts, you can use this repository's MIT License. Check it out for more information!
+This mod is FOSS. Script assets are released under GNU GPL.
