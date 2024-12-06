@@ -3,6 +3,7 @@ Load Order:
 [.ESMs]
 [.ESPs]
 Licenses.esp
+[Licenses' Extensions]
 [.ESPs]
 [Conflicting Patches]
 [Licenses' Patches]

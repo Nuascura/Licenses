@@ -5,9 +5,9 @@ Primary
 - Adjustment: License-related query dialogues can now only be initiated if player is inside a City or Town per MCM settings.
 - Fix: Possible outdated cached Insurance cost display.
 - Fix: DF resistance adjustment divide by zero logic gap.
-- Added leniency for first curfew violation of each day.
-- Added additional contextual dialogue for first time violations.
-- Added idle animations for some dialogue lines.
+- Add: Leniency for first curfew violation of each day.
+- Add: Additional contextual dialogue for first time violations.
+- Add: Idle animations for some dialogue lines.
 - Reworked bounty dialogue branches for improved clarity.
 
 Secondary
