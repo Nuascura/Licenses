@@ -398,9 +398,10 @@ Function Shutdown()
     ; Reset Additional Variables
     savedLoc = None
 	savedSpace = None
-    BM_FirstTimeViolation.SetValue(1.0) ; enabled by default
-	BM_LenientCurseViolation.SetValue(1.0) ; enabled by default
-    BM_LenientCurfewViolation.SetValue(1.0) ; enabled by default
+    BM_IsPlayerCollared.SetValue(0.0) ; false by default
+    BM_FirstTimeViolation.SetValue(1.0) ; true by default
+	BM_LenientCurseViolation.SetValue(1.0) ; true by default
+    BM_LenientCurfewViolation.SetValue(1.0) ; true by default
 
     ; Stop Add-on Quests
     if Game.GetModByName("Licenses - Ambience.esp") != 255
@@ -1345,6 +1346,7 @@ Function RefreshStatus()
     CheckThaneship()
     CheckExceptionState()
     CheckLicenseStatus()
+    CheckDeviousDevicesStatus()
 EndFunction
 
 ; Refresh license statuses
@@ -1661,6 +1663,16 @@ Function DF_AdjustResistance(float factor = 0.0)
         endIf
     endIf
 EndFunction
+
+Function DD_FlagPlayerCollar(bool isWorn)
+    BM_IsPlayerCollared.SetValue(isWorn as int)
+EndFunction
+
+Function CheckDeviousDevicesStatus()
+    if bmlmcm.DeviousDevices_State
+        BM_IsPlayerCollared.SetValue(BM_API_DD.HasCollarEquipped(licenses.playerRef.GetActorRef()) as int)
+    endIf
+EndFunction
 ; ------------------------------
 
 ; ---------- Insurance Calculations ----------
@@ -1874,6 +1886,7 @@ GlobalVariable Property BM_IsInAnimation Auto
 ; -- Violation State
 GlobalVariable Property BM_IsViolatingCurfew Auto
 ; -- Others
+GlobalVariable Property BM_IsPlayerCollared auto
 GlobalVariable Property BM_FineAmount auto
 GlobalVariable Property BM_FirstTimeViolation auto
 GlobalVariable Property BM_LenientCurseViolation auto

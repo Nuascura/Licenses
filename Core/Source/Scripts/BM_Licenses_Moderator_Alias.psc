@@ -19,6 +19,7 @@ Function OnLoad()
     TrackPlayerStatus_SS()
     TrackPlayerStatus_PA()
     TrackPlayerStatus_DIN()
+    TrackDeviousDevicesStatus_DD()
 
     TrackInternalStatus_LPO()
     
@@ -241,9 +242,29 @@ Event DIN_OnFreed(string eventName, string strArg, float numArg, Form sender)
     bmlUtility.LogTrace("DIN_OnFreed")
     bmlUtility.BM_IsInJail.SetValue(0.0)
 EndEvent
+
+Function TrackDeviousDevicesStatus_DD() ; Devious Devices
+    RegisterForModEvent("DDI_DeviceEquipped", "DDI_OnDeviceEquipped")
+    RegisterForModEvent("DDI_DeviceRemoved", "DDI_OnDeviceRemoved")
+EndFunction
+
+Event DDI_OnDeviceEquipped(Form inventoryDevice, Form deviceKeyword, Form akActor)
+    bmlUtility.LogTrace("DDI_OnDeviceEquipped")
+    Debug.Trace("BM_ DDI_OnDeviceEquipped")
+    if (akActor as actor).WornHasKeyword(Keyword.GetKeyword("zad_deviousCollar"))
+        bmlUtility.DD_FlagPlayerCollar(true)
+    endIf
+EndEvent
+
+Event DDI_OnDeviceRemoved(Form inventoryDevice, Form deviceKeyword, Form akActor)
+    bmlUtility.LogTrace("DDI_OnDeviceRemoved")
+    if !(akActor as actor).WornHasKeyword(Keyword.GetKeyword("zad_deviousCollar"))
+        bmlUtility.DD_FlagPlayerCollar(false)
+    endIf
+EndEvent
 ; ------------------------------
 
-; ---------- Event Reception ----------
+; ---------- Internal Event Reception ----------
 Function TrackInternalStatus_LPO() ; Licenses
     RegisterForModEvent("BM-LPO_ConfrontationEnd", "LPO_OnConfrontationEnd")
     RegisterForModEvent("BM-LPO_LicensePurchased", "LPO_OnLicensePurchased")

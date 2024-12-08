@@ -188,7 +188,7 @@ string Function GetModName(bool cache = true)
 EndFunction
 
 string Function GetModVersion()
-	return "1.21.0"
+	return "1.21.1"
 EndFunction
 
 int Function GetVersion()

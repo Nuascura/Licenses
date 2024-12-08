@@ -43,7 +43,7 @@ Event OnObjectEquipped(Form item, ObjectReference akReference)
     endIf
 endEvent
 
-Event OnObjectUnEquipped(Form item, ObjectReference akReference)
+Event OnObjectUnequipped(Form item, ObjectReference akReference)
     if (item as Armor || item as Spell || item as Weapon || item as Ammo)
         CheckViolations()
     endIf

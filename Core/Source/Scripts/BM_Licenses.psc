@@ -130,7 +130,7 @@ Function ApplyNullifyMagicka(bool force = false)
         if bmlmcm.NullifyMagickaSource == 1
             player.AddSpell(NullifyMagickaSpell, false)
         elseIf bmlmcm.NullifyMagickaSource == 2 && bmlmcm.DeviousDevices_State
-            if BM_API_DD.hasCollarEquipped(player)
+            if bmlUtility.BM_IsPlayerCollared.GetValue() as bool
                 bmlUtility.LogTrace("RefreshCollar")
                 BM_API_DD.RefreshCollar(player, NullifyMagickaEnchantment)
             else

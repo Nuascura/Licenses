@@ -19,7 +19,7 @@ Function ViolationCheck_DD()
 
     if bmlmcm.DeviousDevices_State
         if !licenses.isCollarViolation && !licenses.hasCollarExemption
-            if !BM_API_DD.hasCollarEquipped(licenses.playerRef.GetActorRef())
+            if !(bmlUtility.BM_IsPlayerCollared.GetValue() as bool)
                 licenses.isCollarViolation = true
                 bmlUtility.LogTrace("Detected Collar Violation: Missing Collar")
             endIf
