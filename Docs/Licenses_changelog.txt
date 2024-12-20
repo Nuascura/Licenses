@@ -1,3 +1,13 @@
+1.21.1
+Primary
+- Adjust: Collar check method.
+- Adjust: Dialogue line "I refuse to pay that fine" to "I won't pay the fine."
+- Removed Devious Devices masters from Ambience extension.
+- Removed SexLab master from Ambience extension to allow for non-SexLab setups.
+- Updated dialogue patch.
+
+
+
 1.21.0
 Primary
 - Adjustment: Bounty dialogue branch now offers the option to refuse your fine.
