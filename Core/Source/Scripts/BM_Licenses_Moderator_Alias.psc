@@ -3,6 +3,8 @@ Scriptname BM_Licenses_Moderator_Alias extends ReferenceAlias
 BM_Licenses Property licenses auto
 BM_Licenses_Utility Property bmlUtility Auto
 
+Actor PlayerRef
+
 Event OnPlayerLoadGame()
     OnLoad()
 EndEvent
@@ -22,6 +24,8 @@ Function OnLoad()
     TrackDeviousDevicesStatus_DD()
 
     TrackInternalStatus_LPO()
+
+    PlayerRef = self.GetActorRef()
     
     bmlUtility.refreshInventoryEventFilters()
 EndFunction
@@ -250,15 +254,16 @@ EndFunction
 
 Event DDI_OnDeviceEquipped(Form inventoryDevice, Form deviceKeyword, Form akActor)
     bmlUtility.LogTrace("DDI_OnDeviceEquipped")
-    Debug.Trace("BM_ DDI_OnDeviceEquipped")
-    if (akActor as actor).WornHasKeyword(Keyword.GetKeyword("zad_deviousCollar"))
+    Utility.Wait(0.5)
+    if PlayerRef.WornHasKeyword(Keyword.GetKeyword("zad_deviousCollar"))
         bmlUtility.DD_FlagPlayerCollar(true)
     endIf
 EndEvent
 
 Event DDI_OnDeviceRemoved(Form inventoryDevice, Form deviceKeyword, Form akActor)
     bmlUtility.LogTrace("DDI_OnDeviceRemoved")
-    if !(akActor as actor).WornHasKeyword(Keyword.GetKeyword("zad_deviousCollar"))
+    Utility.Wait(0.5)
+    if !PlayerRef.WornHasKeyword(Keyword.GetKeyword("zad_deviousCollar"))
         bmlUtility.DD_FlagPlayerCollar(false)
     endIf
 EndEvent

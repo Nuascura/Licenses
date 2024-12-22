@@ -1,3 +1,9 @@
+1.21.2
+Primary
+- Workaround DD mod event desync.
+
+
+
 1.21.1
 Primary
 - Adjust: Collar check method.
