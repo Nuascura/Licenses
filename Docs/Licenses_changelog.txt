@@ -1,6 +1,7 @@
 1.21.2
 Primary
-- Workaround DD mod event desync.
+- Change: Unhide Config Save/Load options while mod operations are disabled.
+- Fix: Workaround DD mod event desync.
 
 
 
