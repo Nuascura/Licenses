@@ -1,7 +1,10 @@
 1.21.2
 Primary
+- Change: License book item names.
+- Change: License book item contents.
 - Change: Unhide Config Save/Load options while mod operations are disabled.
 - Fix: Workaround DD mod event desync.
+- Update: Dialogue patch with overwriting Book Item records.
 
 
 
