@@ -274,18 +274,22 @@ EndFunction
 Function ConfiscateItems_Simple()
     Actor playerActor = playerRef.GetActorRef()
 
-    Keyword[] KeywordConfiscation_Simple = new Keyword[7]
-    Keyword[] KeywordConfiscationEnch_Simple = new Keyword[4]
+    Keyword[] KeywordConfiscation_Simple = new Keyword[12]
+    Keyword[] KeywordConfiscationEnch_Simple = new Keyword[8]
     if bmlmcm.isClothingLicenseFeatureEnabled || (bmlmcm.isBikiniLicenseFeatureEnabled && bmlmcm.isBikiniClothingFeatureEnabled)
-        KeywordConfiscation_Simple[0] = VendorItemClothing
+        KeywordConfiscation_Simple[0] = BM_LicensesClothingItem
+        KeywordConfiscation_Simple[1] = VendorItemClothing
     endIf
     if bmlmcm.isArmorLicenseFeatureEnabled || (bmlmcm.isBikiniLicenseFeatureEnabled && bmlmcm.isBikiniArmorFeatureEnabled)
-        KeywordConfiscation_Simple[1] = VendorItemArmor
+        KeywordConfiscation_Simple[2] = BM_LicensesArmorItem
+        KeywordConfiscation_Simple[3] = VendorItemArmor
     endIf
     if bmlmcm.isWeaponLicenseFeatureEnabled
-        KeywordConfiscation_Simple[2] = VendorItemWeapon
+        KeywordConfiscation_Simple[4] = BM_LicensesWeaponItem
+        KeywordConfiscation_Simple[5] = VendorItemWeapon
         if bmlmcm.isWeaponAmmoFeatureEnabled
-            KeywordConfiscation_Simple[3] = VendorItemArrow
+            KeywordConfiscation_Simple[6] = BM_LicensesAmmoItem
+            KeywordConfiscation_Simple[7] = VendorItemArrow
         endIf
     endIf
     if bmlmcm.isMagicLicenseFeatureEnabled
@@ -297,20 +301,25 @@ Function ConfiscateItems_Simple()
         if (equippedSpell && !bmlUtility.BM_LicensesIgnoreSpell.HasForm(equippedSpell))
             playerActor.UnequipSpell(equippedSpell, 1)
         endif
-        KeywordConfiscation_Simple[4] = VendorItemSpellTome
-        KeywordConfiscation_Simple[5] = VendorItemScroll
-        KeywordConfiscation_Simple[6] = VendorItemStaff ; Some staffs aren't covered by VendorItemWeapon
+        KeywordConfiscation_Simple[8] = BM_LicensesMagicItem
+        KeywordConfiscation_Simple[9] = VendorItemSpellTome
+        KeywordConfiscation_Simple[10] = VendorItemScroll
+        KeywordConfiscation_Simple[11] = VendorItemStaff ; Some staffs aren't covered by VendorItemWeapon
         if bmlmcm.isEnchantedArmorFeatureEnabled
-            KeywordConfiscationEnch_Simple[0] = VendorItemArmor
+            KeywordConfiscationEnch_Simple[0] = BM_LicensesArmorItem
+            KeywordConfiscationEnch_Simple[1] = VendorItemArmor
         endIf
         if bmlmcm.isEnchantedClothingFeatureEnabled
-            KeywordConfiscationEnch_Simple[1] = VendorItemClothing
+            KeywordConfiscationEnch_Simple[2] = BM_LicensesClothingItem
+            KeywordConfiscationEnch_Simple[3] = VendorItemClothing
         endIf
         if bmlmcm.isEnchantedJewelryFeatureEnabled
-            KeywordConfiscationEnch_Simple[2] = VendorItemJewelry
+            KeywordConfiscationEnch_Simple[4] = BM_LicensesJewelryItem
+            KeywordConfiscationEnch_Simple[5] = VendorItemJewelry
         endIf
         if bmlmcm.isEnchantedWeaponryFeatureEnabled
-            KeywordConfiscationEnch_Simple[3] = VendorItemWeapon
+            KeywordConfiscationEnch_Simple[6] = BM_LicensesWeaponItem
+            KeywordConfiscationEnch_Simple[7] = VendorItemWeapon
         endIf
     endIf
     ; Get items matching valid keywords per license features
@@ -331,49 +340,62 @@ EndFunction
 
 ; ---------- Array Setup ----------
 Function PopulateKeywordConfiscationArray()
-    KeywordConfiscation = new Keyword[7]
-    KeywordConfiscationEnch = new Keyword[4]
+    KeywordConfiscation = new Keyword[12]
+    KeywordConfiscationEnch = new Keyword[8]
 
     if (!hasClothingLicense || !isInsured) && bmlmcm.isClothingLicenseFeatureEnabled
-        KeywordConfiscation[0] = VendorItemClothing
+        KeywordConfiscation[0] = BM_LicensesClothingItem
+        KeywordConfiscation[1] = VendorItemClothing
     endIf
     if (!hasBikiniLicense || !isInsured) && bmlmcm.isBikiniLicenseFeatureEnabled
         if (!hasClothingLicense || !bmlmcm.isClothingLicenseFeatureEnabled) && bmlmcm.isBikiniClothingFeatureEnabled
-            KeywordConfiscation[0] = VendorItemClothing
+            KeywordConfiscation[0] = BM_LicensesClothingItem
+            KeywordConfiscation[1] = VendorItemClothing
         endIf
         if (!hasArmorLicense || !bmlmcm.isArmorLicenseFeatureEnabled) && bmlmcm.isBikiniArmorFeatureEnabled
-            KeywordConfiscation[1] = VendorItemArmor
+            KeywordConfiscation[2] = BM_LicensesArmorItem
+            KeywordConfiscation[3] = VendorItemArmor
         endIf
     endIf
     if bmlmcm.isArmorLicenseFeatureEnabled
         if (!hasArmorLicense || !isInsured)
-            KeywordConfiscation[1] = VendorItemArmor
+            KeywordConfiscation[2] = BM_LicensesArmorItem
+            KeywordConfiscation[3] = VendorItemArmor
         else
             KeywordConfiscation[0] = None
             KeywordConfiscation[1] = None
+            KeywordConfiscation[2] = None
+            KeywordConfiscation[3] = None
         endIf
     endIf
     if (!hasWeaponLicense || !isInsured) && bmlmcm.isWeaponLicenseFeatureEnabled
-        KeywordConfiscation[2] = VendorItemWeapon
+        KeywordConfiscation[4] = BM_LicensesWeaponItem
+        KeywordConfiscation[5] = VendorItemWeapon
         if bmlmcm.isWeaponAmmoFeatureEnabled
-            KeywordConfiscation[3] = VendorItemArrow
+            KeywordConfiscation[6] = BM_LicensesAmmoItem
+            KeywordConfiscation[7] = VendorItemArrow
         endIf
     endIf
     if (!hasMagicLicense || !isInsured) && bmlmcm.isMagicLicenseFeatureEnabled
-        KeywordConfiscation[4] = VendorItemSpellTome
-        KeywordConfiscation[5] = VendorItemScroll
-        KeywordConfiscation[6] = VendorItemStaff ; Some staffs aren't covered by VendorItemWeapon
+        KeywordConfiscation[8] = BM_LicensesMagicItem
+        KeywordConfiscation[9] = VendorItemSpellTome
+        KeywordConfiscation[10] = VendorItemScroll
+        KeywordConfiscation[11] = VendorItemStaff ; Some staffs aren't covered by VendorItemWeapon
         if bmlmcm.isEnchantedArmorFeatureEnabled
-            KeywordConfiscationEnch[0] = VendorItemArmor
+            KeywordConfiscationEnch[0] = BM_LicensesArmorItem
+            KeywordConfiscationEnch[1] = VendorItemArmor
         endIf
         if bmlmcm.isEnchantedClothingFeatureEnabled
-            KeywordConfiscationEnch[1] = VendorItemClothing
+            KeywordConfiscationEnch[2] = BM_LicensesClothingItem
+            KeywordConfiscationEnch[3] = VendorItemClothing
         endIf
         if bmlmcm.isEnchantedJewelryFeatureEnabled
-            KeywordConfiscationEnch[2] = VendorItemJewelry
+            KeywordConfiscationEnch[4] = BM_LicensesJewelryItem
+            KeywordConfiscationEnch[5] = VendorItemJewelry
         endIf
         if bmlmcm.isEnchantedWeaponryFeatureEnabled
-            KeywordConfiscationEnch[3] = VendorItemWeapon
+            KeywordConfiscationEnch[6] = BM_LicensesWeaponItem
+            KeywordConfiscationEnch[7] = VendorItemWeapon
         endIf
     endIf
 EndFunction
@@ -423,20 +445,21 @@ EndFunction
 
 Function PopulateKeywordExclusionArray()
     KeywordQuestItem = new Keyword[2]
-    KeywordQuestItem[0] = Keyword.GetKeyword("MagicDisallowEnchanting")
-    KeywordQuestItem[1] = Keyword.GetKeyword("VendorNoSale")
+    KeywordQuestItem[0] = MagicDisallowEnchanting
+    KeywordQuestItem[1] = VendorNoSale
 
     KeywordModItem = new Keyword[4]
-    KeywordModItem[0] = Keyword.GetKeyword("BM_LicensesIgnoreItem")
+    KeywordModItem[0] = BM_LicensesIgnoreItem
     KeywordModItem[1] = Keyword.GetKeyword("zad_Lockable")
     KeywordModItem[2] = Keyword.GetKeyword("zad_InventoryDevice")
     KeywordModItem[3] = Keyword.GetKeyword("zbfWornDevice")
 
     KeywordBarterItem = new Keyword[4]
-    KeywordBarterItem[0] = VendorItemGem
-    KeywordBarterItem[1] = VendorItemJewelry
-    KeywordBarterItem[2] = VendorItemFood
-    KeywordBarterItem[3] = VendorItemFoodRaw
+    KeywordBarterItem[0] = BM_LicensesBarterItem
+    KeywordBarterItem[1] = VendorItemGem
+    KeywordBarterItem[2] = VendorItemJewelry
+    KeywordBarterItem[3] = VendorItemFood
+    KeywordBarterItem[4] = VendorItemFoodRaw
 EndFunction
 
 Function PopulateLicenseBooksArray()
@@ -459,7 +482,7 @@ Function PopulateKeywordBikiniItemArray()
 	String[] BikiniKeyword = PapyrusUtil.StringSplit(bmlmcm.bikiniKeywordString, ", ")
     BikiniKeyword = PapyrusUtil.ClearEmpty(BikiniKeyword)
     KeywordBikiniItem = new Keyword[32] ; limit to 32 for performance
-    KeywordBikiniItem[0] = Keyword.GetKeyword("BM_LicensesBikiniItem")
+    KeywordBikiniItem[0] = BM_LicensesBikiniItem
     int i = 1
     while i < BikiniKeyword.length
         if BikiniKeyword[i]
@@ -691,6 +714,18 @@ Keyword Property VendorItemGem Auto
 Keyword Property VendorItemJewelry Auto
 Keyword Property VendorItemFood Auto
 Keyword Property VendorItemFoodRaw Auto
+
+Keyword Property VendorNoSale Auto
+Keyword Property MagicDisallowEnchanting Auto
+Keyword Property BM_LicensesIgnoreItem Auto
+Keyword Property BM_LicensesBarterItem Auto
+Keyword Property BM_LicensesBikiniItem Auto
+Keyword Property BM_LicensesArmorItem Auto
+Keyword Property BM_LicensesClothingItem Auto
+Keyword Property BM_LicensesWeaponItem Auto
+Keyword Property BM_LicensesAmmoItem Auto
+Keyword Property BM_LicensesMagicItem Auto
+Keyword Property BM_LicensesJewelryItem Auto
 
 Enchantment Property NullifyMagickaEnchantment  Auto  
 Spell Property NullifyMagickaSpell  Auto  
