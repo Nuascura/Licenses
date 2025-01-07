@@ -709,11 +709,6 @@ Int Function CountValidLicenses()
         endIf
         i += 1
     EndWhile
-    if count == LicenseArray.Length
-        licenses.isLicenseLimit = true
-    else
-        licenses.isLicenseLimit = false
-    endIf
     return count
 EndFunction
 
@@ -739,11 +734,6 @@ Int Function CountActiveLicenses()
         endIf
         i += 1
     EndWhile
-    if count >= bmlmcm.LicenseLimit
-        licenses.isLicenseLimit = true
-    else
-        countValidLicenses()
-    endIf
     return count
 EndFunction
 
@@ -1529,11 +1519,11 @@ Function refreshLicenseFeatures()
 EndFunction
 
 Function refreshActivationLimit()
-    licenses.isLicenseLimit == false
+    licenses.isLicenseLimit = false
     if bmlmcm.LicenseLimit == 0
-        CountValidLicenses()
+        licenses.isLicenseLimit = (CountValidLicenses() >= licenses.LicenseBooks.Length)
     else
-        CountActiveLicenses()
+        licenses.isLicenseLimit = (CountActiveLicenses() >= bmlmcm.LicenseLimit)
     endIf
 EndFunction
 

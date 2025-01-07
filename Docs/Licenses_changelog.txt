@@ -6,6 +6,7 @@ Primary
 - Change: Unhide Config Save/Load options while mod operations are disabled.
 - Change: Attach vanilla keywords directly as script objects.
 - Fix: Workaround DD mod event desync.
+- Fix: Erroneous license activation limit flags.
 - Update: Dialogue patch with overwriting Book Item records.
 - Update: Ambience extension with support for LPO keywords.
 
