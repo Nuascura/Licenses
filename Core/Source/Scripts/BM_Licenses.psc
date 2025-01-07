@@ -454,7 +454,7 @@ Function PopulateKeywordExclusionArray()
     KeywordModItem[2] = Keyword.GetKeyword("zad_InventoryDevice")
     KeywordModItem[3] = Keyword.GetKeyword("zbfWornDevice")
 
-    KeywordBarterItem = new Keyword[4]
+    KeywordBarterItem = new Keyword[5]
     KeywordBarterItem[0] = BM_LicensesBarterItem
     KeywordBarterItem[1] = VendorItemGem
     KeywordBarterItem[2] = VendorItemJewelry
