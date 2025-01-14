@@ -6,6 +6,7 @@ Scriptname BM_D_EndLenient_Curfew Extends TopicInfo Hidden
 Function Fragment_0(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
+licenses.bmlUtility.BM_LenientCurfewViolation.SetValue(0.0)
 licenses.FinishConfrontation(akSpeaker, 2)
 ;END CODE
 EndFunction

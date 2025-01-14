@@ -50,10 +50,6 @@ Function FinishConfrontation(Actor akEnforcer, int type = 0)
         ResetViolations(type)
     elseIf type == 2
         bmlUtility.BM_FirstTimeViolation.SetValue(0.0)
-        bmlUtility.BM_LenientCurfewViolation.SetValue(0.0)
-        if bmlmcm.NullifyMagickaSource > 0
-            bmlUtility.BM_LenientCurseViolation.SetValue(0.0)
-        endIf
         ConfiscateItems(bmlmcm.isConfiscateFeatureEnabled, bmlmcm.isConfiscateInventoryFeatureEnabled)
         ApplyPunishment()
         ResetViolations(type)
@@ -62,11 +58,10 @@ Function FinishConfrontation(Actor akEnforcer, int type = 0)
 EndFunction
 
 Function PayFine(Faction crimeFaction = none)
-    Actor player = playerRef.GetActorRef()
     if (bmlmcm.fineAddsToBounty && crimeFaction)
         ApplyCrimeGold(crimeFaction)
     else
-        player.removeItem(Gold001, bmlUtility.BM_FineAmount.GetValue() as int)
+        PlayerActorRef.removeItem(Gold001, bmlUtility.BM_FineAmount.GetValue() as int)
     endIf
 EndFunction
 
@@ -124,35 +119,33 @@ EndFunction
 
 Function ApplyNullifyMagicka(bool force = false)
     bmlUtility.LogTrace("ApplyNullifyMagicka")
-    Actor player = playerRef.GetActorRef()
-    if force && (CheckNullifyMagickaCurse(player) == 0)
+    if force && (CheckNullifyMagickaCurse(PlayerActorRef) == 0)
         bmlUtility.LogTrace("ApplyNullifyMagicka passed conditions")
         if bmlmcm.NullifyMagickaSource == 1
-            player.AddSpell(NullifyMagickaSpell, false)
+            PlayerActorRef.AddSpell(NullifyMagickaSpell, false)
         elseIf bmlmcm.NullifyMagickaSource == 2 && bmlmcm.DeviousDevices_State
             if bmlUtility.BM_IsPlayerCollared.GetValue() as bool
                 bmlUtility.LogTrace("RefreshCollar")
-                BM_API_DD.RefreshCollar(player, NullifyMagickaEnchantment)
+                BM_API_DD.RefreshCollar(PlayerActorRef, NullifyMagickaEnchantment)
             else
                 bmlUtility.LogTrace("RenewCollar")
-                BM_API_DD.RenewCollar(player, NullifyMagickaEnchantment, bmlmcm.ddFilter)
+                BM_API_DD.RenewCollar(PlayerActorRef, NullifyMagickaEnchantment, bmlmcm.ddFilter)
             endIf
         endIf
     else
-        bmlUtility.LogTrace("ApplyNullifyMagicka failed to apply. isMagicViolation: " + isMagicViolation + "; force: " + force + "; CheckNullifyMagickaCurse(player): " + CheckNullifyMagickaCurse(player))
+        bmlUtility.LogTrace("ApplyNullifyMagicka failed to apply. isMagicViolation: " + isMagicViolation + "; force: " + force + "; CheckNullifyMagickaCurse(PlayerActorRef): " + CheckNullifyMagickaCurse(PlayerActorRef))
     endIf
 EndFunction
 
 Function RemoveNullifyMagicka(bool force = false)
-    Actor player = playerRef.GetActorRef()
-    if (hasMagicLicense || force) && player.HasMagicEffect(NullifyMagickaMagicEffect)
-        if player.HasSpell(NullifyMagickaSpell)
-            player.RemoveSpell(NullifyMagickaSpell)
+    if (hasMagicLicense || force) && PlayerActorRef.HasMagicEffect(NullifyMagickaMagicEffect)
+        if PlayerActorRef.HasSpell(NullifyMagickaSpell)
+            PlayerActorRef.RemoveSpell(NullifyMagickaSpell)
         elseIf bmlmcm.DeviousDevices_State
             if hasCollarExemption || force
-                BM_API_DD.RemoveCollar(player)
+                BM_API_DD.RemoveCollar(PlayerActorRef)
             else
-                BM_API_DD.RefreshCollar(player)
+                BM_API_DD.RefreshCollar(PlayerActorRef)
             endIf
         else
             bmlUtility.LogTrace("Licenses could not find or estimate a source for the Nullify Magicka Magic Effect.")
@@ -161,26 +154,24 @@ Function RemoveNullifyMagicka(bool force = false)
 EndFunction
 
 Function ApplyDeviousDevices()
-    Actor player = playerRef.GetActorRef()
     if bmlmcm.DeviousDevices_State
         if !hasCollarExemption
             bmlUtility.LogTrace("equipCollar")
-            BM_API_DD.equipCollar(player, bmlmcm.ddFilter)
+            BM_API_DD.equipCollar(PlayerActorRef, bmlmcm.ddFilter)
         endIf
         if bmlmcm.equipDDOnViolation
             bmlUtility.LogTrace("equipRestraint")
-            BM_API_DD.equipRestraint(player, bmlmcm.ddEquipChance, bmlmcm.ddFilter)
+            BM_API_DD.equipRestraint(PlayerActorRef, bmlmcm.ddEquipChance, bmlmcm.ddFilter)
         endIf
     endIf
 EndFunction
 
 Function RemoveDeviousDevicesCollar()
-    Actor player = playerRef.GetActorRef()
-    Form[] SourceList = PO3_SKSEFunctions.GetMagicEffectSource(player, NullifyMagickaMagicEffect)
+    Form[] SourceList = PO3_SKSEFunctions.GetMagicEffectSource(PlayerActorRef, NullifyMagickaMagicEffect)
     if !hasMagicLicense && SourceList.Find(NullifyMagickaEnchantment) > -1
         return
     elseIf bmlmcm.DeviousDevices_State
-        BM_API_DD.RemoveCollar(player)
+        BM_API_DD.RemoveCollar(PlayerActorRef)
     endIf
 EndFunction
 
@@ -207,8 +198,6 @@ EndFunction
 
 ; Equipment-related Functions
 Function ConfiscateItems(Bool Confiscate = false, bool ConfiscateInventory = false)
-    Actor playerActor = playerRef.GetActorRef()
-
     if bmlmcm.isInsuranceFeatureEnabled && isInsured
         Confiscate = false
     endIf
@@ -216,29 +205,29 @@ Function ConfiscateItems(Bool Confiscate = false, bool ConfiscateInventory = fal
     if Confiscate && ConfiscateInventory
         bmlUtility.GameMessage(MessageItemCheckInv)
         ; Merge two lists, remove dupes
-        Form[] ValidatedForms = PapyrusUtil.MergeFormArray(bmlUtility.ScanInventory_Base(playerActor), bmlUtility.ScanInventory_Ench(playerActor), true)
+        Form[] ValidatedForms = PapyrusUtil.MergeFormArray(bmlUtility.ScanInventory_Base(PlayerActorRef), bmlUtility.ScanInventory_Ench(PlayerActorRef), true)
         ; Remove items
-        if SPE_ObjectRef.RemoveItems(playerActor, ValidatedForms, BM_ItemConfiscationChest) > 0
+        if SPE_ObjectRef.RemoveItems(PlayerActorRef, ValidatedForms, BM_ItemConfiscationChest) > 0
             bmlUtility.GameMessage(MessageItemConfiscated)
         endIf
     elseIf Confiscate
         bmlUtility.GameMessage(MessageItemCheck)
         ; Merge two lists, remove dupes
-        Form[] ValidatedForms = PapyrusUtil.MergeFormArray(bmlUtility.ScanEquippedItems_Base(playerActor), bmlUtility.ScanEquippedItems_Ench(playerActor), true)
+        Form[] ValidatedForms = PapyrusUtil.MergeFormArray(bmlUtility.ScanEquippedItems_Base(PlayerActorRef), bmlUtility.ScanEquippedItems_Ench(PlayerActorRef), true)
         ; Remove items
-        if SPE_ObjectRef.RemoveItems(playerActor, ValidatedForms, BM_ItemConfiscationChest) > 0
+        if SPE_ObjectRef.RemoveItems(PlayerActorRef, ValidatedForms, BM_ItemConfiscationChest) > 0
             bmlUtility.GameMessage(MessageItemConfiscated)
         endIf
     else
         bmlUtility.GameMessage(MessageItemCheck)
         bmlUtility.BM_PotentialViolations.Revert()
-        bmlUtility.BM_PotentialViolations.AddForms(PapyrusUtil.MergeFormArray(bmlUtility.ScanEquippedItems_Base(playerActor), bmlUtility.ScanEquippedItems_Ench(playerActor), true))
+        bmlUtility.BM_PotentialViolations.AddForms(PapyrusUtil.MergeFormArray(bmlUtility.ScanEquippedItems_Base(PlayerActorRef), bmlUtility.ScanEquippedItems_Ench(PlayerActorRef), true))
 
         if bmlUtility.BM_PotentialViolations.GetAt(0)
             int i = bmlUtility.BM_PotentialViolations.GetSize()
             While (i > -1)
                 if bmlUtility.BM_PotentialViolations.GetAt(i)
-                    playerActor.UnequipItem(bmlUtility.BM_PotentialViolations.GetAt(i), false, true)
+                    PlayerActorRef.UnequipItem(bmlUtility.BM_PotentialViolations.GetAt(i), false, true)
                     bmlUtility.LogNotification("Unequipped: " + bmlUtility.BM_PotentialViolations.GetAt(i).getName())
                 endIf
                 i -= 1
@@ -252,28 +241,26 @@ Function ConfiscateItems(Bool Confiscate = false, bool ConfiscateInventory = fal
     endIf
 
     if (!hasMagicLicense && !isInsured)
-        Spell equippedSpell = playerActor.GetEquippedSpell(0)
+        Spell equippedSpell = PlayerActorRef.GetEquippedSpell(0)
         if (equippedSpell && !bmlUtility.BM_LicensesIgnoreSpell.HasForm(equippedSpell))
-            playerActor.UnequipSpell(equippedSpell, 0)
+            PlayerActorRef.UnequipSpell(equippedSpell, 0)
             bmlUtility.LogNotification("Dispelled: " + equippedSpell.getName())
         endIf
-        equippedSpell = playerActor.GetEquippedSpell(1)
+        equippedSpell = PlayerActorRef.GetEquippedSpell(1)
         if (equippedSpell && !bmlUtility.BM_LicensesIgnoreSpell.HasForm(equippedSpell))
-            playerActor.UnequipSpell(equippedSpell, 1)
+            PlayerActorRef.UnequipSpell(equippedSpell, 1)
             bmlUtility.LogNotification("Dispelled: " + equippedSpell.getName())
         endif
     endIf
     
     Utility.Wait(2.0) ; give item confiscation some time to finish
 
-    if playerActor.isWeaponDrawn()
-        playerActor.SheatheWeapon()
+    if PlayerActorRef.isWeaponDrawn()
+        PlayerActorRef.SheatheWeapon()
     endIf
 EndFunction
 
 Function ConfiscateItems_Simple()
-    Actor playerActor = playerRef.GetActorRef()
-
     Keyword[] KeywordConfiscation_Simple = new Keyword[12]
     Keyword[] KeywordConfiscationEnch_Simple = new Keyword[8]
     if bmlmcm.isClothingLicenseFeatureEnabled || (bmlmcm.isBikiniLicenseFeatureEnabled && bmlmcm.isBikiniClothingFeatureEnabled)
@@ -293,13 +280,13 @@ Function ConfiscateItems_Simple()
         endIf
     endIf
     if bmlmcm.isMagicLicenseFeatureEnabled
-        Spell equippedSpell = playerActor.GetEquippedSpell(0)
+        Spell equippedSpell = PlayerActorRef.GetEquippedSpell(0)
         if (equippedSpell && !bmlUtility.BM_LicensesIgnoreSpell.HasForm(equippedSpell))
-            playerActor.UnequipSpell(equippedSpell, 0)
+            PlayerActorRef.UnequipSpell(equippedSpell, 0)
         endIf
-        equippedSpell = playerActor.GetEquippedSpell(1)
+        equippedSpell = PlayerActorRef.GetEquippedSpell(1)
         if (equippedSpell && !bmlUtility.BM_LicensesIgnoreSpell.HasForm(equippedSpell))
-            playerActor.UnequipSpell(equippedSpell, 1)
+            PlayerActorRef.UnequipSpell(equippedSpell, 1)
         endif
         KeywordConfiscation_Simple[8] = BM_LicensesMagicItem
         KeywordConfiscation_Simple[9] = VendorItemSpellTome
@@ -323,18 +310,18 @@ Function ConfiscateItems_Simple()
         endIf
     endIf
     ; Get items matching valid keywords per license features
-    Form[] PotentialForms = SPE_ObjectRef.GetItemsByKeyword(playerActor, KeywordConfiscation_Simple, false)
+    Form[] PotentialForms = SPE_ObjectRef.GetItemsByKeyword(PlayerActorRef, KeywordConfiscation_Simple, false)
     ; Get potentially enchanted items matching valid keywords per license features
-    Form[] PotentialFormsEnch = SPE_ObjectRef.GetItemsByKeyword(playerActor, KeywordConfiscationEnch_Simple, false)
+    Form[] PotentialFormsEnch = SPE_ObjectRef.GetItemsByKeyword(PlayerActorRef, KeywordConfiscationEnch_Simple, false)
     ; Filter for only enchanted items
-    PotentialFormsEnch = SPE_Utility.IntersectArray_Form(PotentialFormsEnch, SPE_ObjectRef.GetEnchantedItems(playerActor, true, true, false))
+    PotentialFormsEnch = SPE_Utility.IntersectArray_Form(PotentialFormsEnch, SPE_ObjectRef.GetEnchantedItems(PlayerActorRef, true, true, false))
     ; Merge two lists, remove dupes
     Form[] ValidatedForms = PapyrusUtil.MergeFormArray(PotentialForms, PotentialFormsEnch, true)
     ; Filter out items matching keyword combinations
     ValidatedForms = SPE_Utility.FilterFormsByKeyword(ValidatedForms, KeywordQuestItem, true, true)
     ValidatedForms = SPE_Utility.FilterFormsByKeyword(ValidatedForms, KeywordModItem, false, true)
     ; Remove items
-    SPE_ObjectRef.RemoveItems(playerActor, ValidatedForms, none)
+    SPE_ObjectRef.RemoveItems(PlayerActorRef, ValidatedForms, none)
 EndFunction
 ; ------------------------------
 
@@ -497,6 +484,8 @@ EndFunction
 ; ----------------------------------------------------------------------------------------------------
 ; -------------------------------------------------- End Internal Tools
 ; ----------------------------------------------------------------------------------------------------
+
+Actor Property PlayerActorRef auto hidden
 
 ReferenceAlias Property playerRef auto
 BM_Licenses_MCM Property bmlmcm auto
@@ -715,7 +704,6 @@ Keyword Property VendorItemGem Auto
 Keyword Property VendorItemJewelry Auto
 Keyword Property VendorItemFood Auto
 Keyword Property VendorItemFoodRaw Auto
-
 Keyword Property VendorNoSale Auto
 Keyword Property MagicDisallowEnchanting Auto
 Keyword Property BM_LicensesIgnoreItem Auto
