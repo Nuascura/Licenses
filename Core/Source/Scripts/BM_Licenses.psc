@@ -448,11 +448,12 @@ Function PopulateKeywordExclusionArray()
     KeywordQuestItem[0] = MagicDisallowEnchanting
     KeywordQuestItem[1] = VendorNoSale
 
-    KeywordModItem = new Keyword[4]
+    KeywordModItem = new Keyword[5]
     KeywordModItem[0] = BM_LicensesIgnoreItem
-    KeywordModItem[1] = Keyword.GetKeyword("zad_Lockable")
-    KeywordModItem[2] = Keyword.GetKeyword("zad_InventoryDevice")
-    KeywordModItem[3] = Keyword.GetKeyword("zbfWornDevice")
+    KeywordModItem[1] = Keyword.GetKeyword("zad_QuestItem")
+    KeywordModItem[2] = Keyword.GetKeyword("zad_Lockable")
+    KeywordModItem[3] = Keyword.GetKeyword("zad_InventoryDevice")
+    KeywordModItem[4] = Keyword.GetKeyword("zbfWornDevice")
 
     KeywordBarterItem = new Keyword[5]
     KeywordBarterItem[0] = BM_LicensesBarterItem
