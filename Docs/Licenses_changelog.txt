@@ -1,6 +1,7 @@
 1.21.2
 Primary
 - Add: Additional keywords: BarterItem, ArmorItem, ClothingItem, JewelryItem, WeaponItem, AmmoItem, MagicItem.
+- Change: Ignore items with keyword zad_QuestItem.
 - Change: License book item names.
 - Change: License book item contents.
 - Change: Unhide Config Save/Load options while mod operations are disabled.
