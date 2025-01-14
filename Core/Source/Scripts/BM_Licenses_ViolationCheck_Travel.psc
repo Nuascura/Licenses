@@ -28,17 +28,14 @@ Function ViolationCheck_Travel()
             return
         elseIf bmlmcm.isLimitToCitySpaceEnabled && bmlUtility.BM_LicensesIgnoreWorldspace.HasForm(bmlUtility.currSpace)
             return
-        elseIf bmlUtility.currLoc ; neccessary workaround
-            if !bmlUtility.savedLoc && playerActor.IsInInterior() && bmlUtility.currLoc.IsSameLocation(bmlUtility.lastLoc, Keyword.GetKeyword("LocTypeHabitationHasInn"))
-                bmlUtility.LogTrace("Holding off on checking Travel Violation because player may be in a safe interior.")
-                return
-            endIf
         endIf
         
         ; Main module body
         if !licenses.hasTravelPermit
             if !bmlUtility.savedLoc
-                if (licenses.isInCity || licenses.isInTown) && (bmlUtility.currLoc == bmlUtility.lastLoc); if there is no saved location, set current City or Town location as saved location
+                if licenses.isInCity && bmlUtility.currLoc.IsSameLocation(bmlUtility.lastLoc, Keyword.GetKeyword("LocTypeCity")) \
+                || licenses.isInTown && bmlUtility.currLoc.IsSameLocation(bmlUtility.lastLoc, Keyword.GetKeyword("LocTypeTown"))
+                ; if there is no saved location, set current City or Town location as saved location
                     bmlUtility.savedLoc = bmlUtility.lastLoc
                     bmlUtility.savedSpace = bmlUtility.lastSpace
                     bmlUtility.GameMessage(licenses.MessageTravelLocated)
@@ -47,7 +44,8 @@ Function ViolationCheck_Travel()
                 bmlUtility.LogTrace("ViolationCheck_Travel: Licenses couldn't satisfy conditions to mark a saved location or worldspace")
             else
                 if bmlUtility.currLoc
-                    if licenses.isInCity && bmlUtility.currLoc.IsSameLocation(bmlUtility.savedLoc, Keyword.GetKeyword("LocTypeCity")) && (!bmlmcm.isLimitToCitySpaceEnabled || (bmlUtility.savedSpace == bmlUtility.lastSpace))
+                    if licenses.isInCity && bmlUtility.currLoc.IsSameLocation(bmlUtility.savedLoc, Keyword.GetKeyword("LocTypeCity")) \
+                    && (!bmlmcm.isLimitToCitySpaceEnabled || (bmlUtility.savedSpace == bmlUtility.lastSpace))
                         ; check city or worldspace against saved location or worldspace
                         bmlUtility.LogTrace("Found player in marked city.")
                         return

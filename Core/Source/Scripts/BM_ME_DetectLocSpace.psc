@@ -9,16 +9,12 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 EndEvent
 
 Event OnLocationChange(Location akOldLoc, Location akNewLoc)
-    if bmlUtility.BM_Cities.HasForm(akNewLoc)
-        bmlUtility.lastLoc = akNewLoc
-        bmlUtility.lastSpace = GetTargetActor().GetWorldSpace()
-    endIf
+    bmlUtility.ValidateLocNested(akNewLoc, GetTargetActor().GetWorldSpace(), bmlUtility.BM_Cities)
 EndEvent
 
 Event OnEffectFinish(Actor akTarget, Actor akCaster)
     if !akTarget.IsInInterior()
-        bmlUtility.lastSpace = none
-        bmlUtility.licenses.isInCity = bmlUtility.CheckCity(akTarget.GetCurrentLocation(), akTarget.GetWorldSpace())
+        bmlUtility.licenses.isInCity = bmlUtility.GetIsInCity()
         bmlUtility.bmPlayer.CheckViolations()
     endIf
 EndEvent

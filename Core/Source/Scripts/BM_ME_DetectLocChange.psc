@@ -12,16 +12,21 @@ EndEvent
 
 Event OnLocationChange(Location akOldLoc, Location akNewLoc)
     ; On the off-chance that this script still gets stuck, allow OnLocationChange() event to fire and re-sync marker with player.
-    Actor akTarget = GetTargetActor()
     BM_PlayerMarker.DisableNoWait()
-    if akTarget.IsInInterior()
-        BM_PlayerMarker.MoveTo(akTarget, -75.0 * Math.Sin(akTarget.GetAngleZ()), -75.0 * Math.Cos(akTarget.GetAngleZ())) ; move marker 75 units behind the player to improve possible load door detection
-    else
-        BM_PlayerMarker.MoveTo(akTarget)
-    endIf
+    BM_PlayerMarker.MoveTo(GetTargetActor())
+    PO3_SKSEFunctions.MoveToNearestNavmeshLocation(BM_PlayerMarker)
     BM_PlayerMarker.EnableNoWait()
+    if BM_PlayerMarker.IsInInterior()
+        WorldSpace[] ExteriorWorldSpaces = SPE_Cell.GetExteriorWorldSpaces(BM_PlayerMarker.GetParentCell())
+        if ExteriorWorldSpaces
+            bmlUtility.currSpace = ExteriorWorldSpaces[0]
+        else
+            bmlUtility.currSpace = bmlUtility.FindWorldFromDoor(BM_PlayerMarker, PO3_SKSEFunctions.FindAllReferencesOfFormType(BM_PlayerMarker, 29, 0))
+        endIf
+    else
+        bmlUtility.currSpace = BM_PlayerMarker.GetWorldSpace()
+    endIf
     bmlUtility.currLoc = akNewLoc
-    bmlUtility.currSpace = akTarget.GetWorldSpace()
     BM_CurrentLocation.Revert()
     BM_CurrentLocation.AddForm(bmlUtility.currLoc)
     BM_CurrentWorldspace.Revert()
