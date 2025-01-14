@@ -17,10 +17,8 @@ Function ViolationCheck_Magic()
         return
     endIf
 
-    Actor playerActor = licenses.playerRef.GetActorRef()
-
     if !licenses.isMagicViolation
-        Form[] equippedObjects = PapyrusUtil.GetMatchingForm(PO3_SKSEFunctions.AddItemsOfTypeToArray(playerActor, 26, false, false, true), bmlUtility.BM_PotentialViolations_Ench.ToArray())
+        Form[] equippedObjects = PapyrusUtil.GetMatchingForm(PO3_SKSEFunctions.AddItemsOfTypeToArray(licenses.PlayerActorRef, 26, false, false, true), bmlUtility.BM_PotentialViolations_Ench.ToArray())
         if (equippedObjects)
             licenses.isMagicViolation = true
             bmlUtility.LogTrace("Detected Magic Violation (Armor): " + equippedObjects)
@@ -29,23 +27,23 @@ Function ViolationCheck_Magic()
 
     ; Check for equipped enchanted weapons in both hands
     if !licenses.isMagicViolation
-        if playerActor.GetEquippedWeapon(false) && (bmlUtility.BM_PotentialViolations_Ench.HasForm(playerActor.GetEquippedWeapon(false)))
+        if licenses.PlayerActorRef.GetEquippedWeapon(false) && (bmlUtility.BM_PotentialViolations_Ench.HasForm(licenses.PlayerActorRef.GetEquippedWeapon(false)))
             licenses.isMagicViolation = true
-            bmlUtility.LogTrace("Detected Magic Violation (Weapon): " + playerActor.GetEquippedWeapon(false))
-        elseIf playerActor.GetEquippedWeapon(true) && (bmlUtility.BM_PotentialViolations_Ench.HasForm(playerActor.GetEquippedWeapon(true)))
+            bmlUtility.LogTrace("Detected Magic Violation (Weapon): " + licenses.PlayerActorRef.GetEquippedWeapon(false))
+        elseIf licenses.PlayerActorRef.GetEquippedWeapon(true) && (bmlUtility.BM_PotentialViolations_Ench.HasForm(licenses.PlayerActorRef.GetEquippedWeapon(true)))
             licenses.isMagicViolation = true
-            bmlUtility.LogTrace("Detected Magic Violation (Weapon): " + playerActor.GetEquippedWeapon(true))
+            bmlUtility.LogTrace("Detected Magic Violation (Weapon): " + licenses.PlayerActorRef.GetEquippedWeapon(true))
         endIf
     endif
 
     ; Check for equipped spells in both hands
     if !licenses.isMagicViolation
         ; Check for Curse
-        if licenses.CheckNullifyMagickaCurse(playerActor) == 0 && (!licenses.hasMagicLicense || !licenses.isInsured)
-            if playerActor.IsWeaponDrawn()
-                if bmlUtility.ValidateSpellForms(playerActor, playerActor.GetEquippedSpell(0), playerActor.GetEquippedSpell(1))
+        if licenses.CheckNullifyMagickaCurse(licenses.PlayerActorRef) == 0 && (!licenses.hasMagicLicense || !licenses.isInsured)
+            if licenses.PlayerActorRef.IsWeaponDrawn()
+                if bmlUtility.ValidateSpellForms(licenses.PlayerActorRef, licenses.PlayerActorRef.GetEquippedSpell(0), licenses.PlayerActorRef.GetEquippedSpell(1))
                     licenses.isMagicViolation = true
-                    bmlUtility.LogTrace("Detected Magic Violation (Spell): " + playerActor.GetEquippedSpell(0) + ", " + playerActor.GetEquippedSpell(1))
+                    bmlUtility.LogTrace("Detected Magic Violation (Spell): " + licenses.PlayerActorRef.GetEquippedSpell(0) + ", " + licenses.PlayerActorRef.GetEquippedSpell(1))
                 endIf
             endIf
             if bmlmcm.NullifyMagickaEnforce

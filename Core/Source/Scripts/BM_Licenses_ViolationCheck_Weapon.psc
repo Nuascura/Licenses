@@ -17,19 +17,17 @@ Function ViolationCheck_Weapon()
         return
     endIf
 
-    Actor playerActor = licenses.playerRef.GetActorRef()
-
     ; Check for equipped weapons / ammo
     if !licenses.isWeaponViolation
-        if playerActor.GetEquippedWeapon(false) && (bmlUtility.BM_PotentialViolations.HasForm(playerActor.GetEquippedWeapon(false)))
+        if licenses.PlayerActorRef.GetEquippedWeapon(false) && (bmlUtility.BM_PotentialViolations.HasForm(licenses.PlayerActorRef.GetEquippedWeapon(false)))
             licenses.isWeaponViolation = true
-            bmlUtility.LogTrace("Detected Weapon Violation: " + playerActor.GetEquippedWeapon(false))
-        elseIf playerActor.GetEquippedWeapon(true) && (bmlUtility.BM_PotentialViolations.HasForm(playerActor.GetEquippedWeapon(true)))
+            bmlUtility.LogTrace("Detected Weapon Violation: " + licenses.PlayerActorRef.GetEquippedWeapon(false))
+        elseIf licenses.PlayerActorRef.GetEquippedWeapon(true) && (bmlUtility.BM_PotentialViolations.HasForm(licenses.PlayerActorRef.GetEquippedWeapon(true)))
             licenses.isWeaponViolation = true
-            bmlUtility.LogTrace("Detected Weapon Violation: " + playerActor.GetEquippedWeapon(true))
-        elseIf PO3_SKSEFunctions.GetEquippedAmmo(playerActor) && (bmlUtility.BM_PotentialViolations.HasForm(PO3_SKSEFunctions.GetEquippedAmmo(playerActor)))
+            bmlUtility.LogTrace("Detected Weapon Violation: " + licenses.PlayerActorRef.GetEquippedWeapon(true))
+        elseIf PO3_SKSEFunctions.GetEquippedAmmo(licenses.PlayerActorRef) && (bmlUtility.BM_PotentialViolations.HasForm(PO3_SKSEFunctions.GetEquippedAmmo(licenses.PlayerActorRef)))
             licenses.isWeaponViolation = true
-            bmlUtility.LogTrace("Detected Weapon Violation: " + PO3_SKSEFunctions.GetEquippedAmmo(playerActor))
+            bmlUtility.LogTrace("Detected Weapon Violation: " + PO3_SKSEFunctions.GetEquippedAmmo(licenses.PlayerActorRef))
         endif
     endif
 

@@ -373,15 +373,25 @@ Function Startup()
         Quest.GetQuest("LPO_WIComment").Start()
     endIf
 
+    ; Buffer
+    Utility.Wait(1.0)
+
     ; Initialize Variables
+    FillLocalPlayer(licenses.PlayerRef.GetActorRef())
     ReloadMCMVariables()
     RefreshFeatures()
     RefreshStatus()
+    
 
     ; Cache State
     Licenses_State = true
     LogNotification("Completed initialization sequence.", true)
     LogTrace("State Change - INITIALIZED", true)
+EndFunction
+
+Function FillLocalPlayer(Actor Player)
+    PlayerActorRef = Player
+    licenses.PlayerActorRef = Player
 EndFunction
 ; ------------------------------
 
@@ -424,6 +434,21 @@ EndFunction
 ; ------------------------------
 
 ; ---------- Location Checkers ----------
+Function CheckLocation()
+    if PlayerActorRef.GetCurrentLocation()
+        licenses.isInCity = GetIsInCity()
+        licenses.isInTown = GetIsInTown()
+    endIf
+EndFunction
+
+Function ValidateLocNested(Location akNewLoc, WorldSpace akNewSpace, FormList LocList, Keyword akKeyword = none)
+    Location validatedLoc = FindLocFromParent(akNewLoc, LocList, akKeyword)
+    if validatedLoc
+        lastLoc = validatedLoc
+        lastSpace = akNewSpace
+    endIf
+EndFunction
+
 Location Function FindLocFromList(Location[] LocArray, FormList LocList)
     int index = LocArray.length
     while index
@@ -469,14 +494,6 @@ WorldSpace Function FindWorldFromDoor(ObjectReference akRef, ObjectReference[] D
         index += 1
     endWhile
     return none
-EndFunction
-
-Function ValidateLocNested(Location akNewLoc, WorldSpace akNewSpace, FormList LocList, Keyword akKeyword = none)
-    Location validatedLoc = FindLocFromParent(akNewLoc, LocList, akKeyword)
-    if validatedLoc
-        lastLoc = validatedLoc
-        lastSpace = akNewSpace
-    endIf
 EndFunction
 
 Bool Function GetIsInCity()
@@ -1575,13 +1592,6 @@ Function refreshArrays()
     licenses.PopulateLicenseBooksArray()
     licenses.PopulateCursedTattoosArray()
 EndFunction
-
-Function CheckLocation()
-    if PlayerActorRef.GetCurrentLocation()
-        licenses.isInCity = GetIsInCity()
-        licenses.isInTown = GetIsInTown()
-    endIf
-EndFunction
 ; ------------------------------
 
 ; ---------- MCM Utilities ----------
@@ -1773,11 +1783,7 @@ EndFunction
 ; -------------------------------------------------- End API
 ; ----------------------------------------------------------------------------------------------------
 
-Actor Property PlayerActorRef
-    Actor Function Get()
-        return licenses.PlayerRef.GetActorRef()
-    EndFunction
-EndProperty
+Actor PlayerActorRef
 
 BM_Licenses Property licenses auto
 BM_Licenses_MCM Property bmlmcm auto

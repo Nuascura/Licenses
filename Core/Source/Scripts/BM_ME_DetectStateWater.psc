@@ -7,7 +7,7 @@ Message Property BM_Licenses_MessageWaterWarn  Auto
 Actor playerActor
 
 Event OnEffectStart(Actor akTarget, Actor akCaster)
-	playerActor = licenses.playerRef.GetActorRef()
+	playerActor = licenses.PlayerActorRef
 	RegisterForSingleUpdate(0.1)
 EndEvent
 

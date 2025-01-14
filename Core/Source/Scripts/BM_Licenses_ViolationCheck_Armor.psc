@@ -17,10 +17,8 @@ Function ViolationCheck_Armor()
         return
     endIf
 
-    Actor playerActor = licenses.playerRef.GetActorRef()
-
     if !licenses.isArmorViolation
-        Form[] equippedObjects = PapyrusUtil.GetMatchingForm(PO3_SKSEFunctions.AddItemsOfTypeToArray(playerActor, 26, false, false, true), bmlUtility.BM_PotentialViolations.ToArray())
+        Form[] equippedObjects = PapyrusUtil.GetMatchingForm(PO3_SKSEFunctions.AddItemsOfTypeToArray(licenses.PlayerActorRef, 26, false, false, true), bmlUtility.BM_PotentialViolations.ToArray())
         if (equippedObjects)
             licenses.isArmorViolation = true
             bmlUtility.LogTrace("Detected Armor Violation: " + equippedObjects)

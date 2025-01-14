@@ -17,8 +17,6 @@ Function ViolationCheck_Travel()
         return
     endIf
 
-    Actor playerActor = licenses.playerRef.GetActorRef()
-
     if !licenses.isTravelViolation
 
         ; Return conditions
