@@ -482,7 +482,7 @@ WorldSpace Function FindWorldFromList(WorldSpace[] WorldArray, FormList WorldLis
     return none
 EndFunction
 
-WorldSpace Function FindWorldFromDoor(ObjectReference akRef, ObjectReference[] DoorArray)
+WorldSpace Function FindWorldFromDoor(ObjectReference[] DoorArray)
     int index = 0
     while index < DoorArray.Length
         if DoorArray[index] && PO3_SKSEFunctions.IsLoadDoor(DoorArray[index])
@@ -507,14 +507,14 @@ Bool Function GetIsInCity()
 EndFunction
 
 Bool Function GetIsInCitySpace()
-    if BM_LicensesIgnoreWorldspace.HasForm(PlayerActorRef.GetWorldSpace())
+    if BM_LicensesIgnoreWorldspace.HasForm(PlayerActorRef.GetWorldSpace())  
         return licenses.isInCity
     endIf
     WorldSpace[] ExteriorWorldSpaces = SPE_Cell.GetExteriorWorldSpaces(PlayerActorRef.GetParentCell())
     if ExteriorWorldSpaces
         lastSpace = FindWorldFromList(ExteriorWorldSpaces, BM_WorldSpaces)
     else
-        lastSpace = FindWorldFromDoor(PlayerActorRef, PO3_SKSEFunctions.FindAllReferencesOfFormType(PlayerActorRef, 29, 0))
+        lastSpace = FindWorldFromDoor(PO3_SKSEFunctions.FindAllReferencesOfFormType(PlayerActorRef, 29, 0))
     endIf
     return lastSpace
 EndFunction

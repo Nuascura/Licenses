@@ -21,7 +21,7 @@ Event OnLocationChange(Location akOldLoc, Location akNewLoc)
         if ExteriorWorldSpaces
             bmlUtility.currSpace = ExteriorWorldSpaces[0]
         else
-            bmlUtility.currSpace = bmlUtility.FindWorldFromDoor(BM_PlayerMarker, PO3_SKSEFunctions.FindAllReferencesOfFormType(BM_PlayerMarker, 29, 0))
+            bmlUtility.currSpace = bmlUtility.FindWorldFromDoor(PO3_SKSEFunctions.FindAllReferencesOfFormType(BM_PlayerMarker, 29, 0))
         endIf
     else
         bmlUtility.currSpace = BM_PlayerMarker.GetWorldSpace()
