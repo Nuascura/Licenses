@@ -6,6 +6,8 @@ Scriptname BM_D_EndLenient_Curse_Kinky Extends TopicInfo Hidden
 Function Fragment_0(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
+BM_D_RestrictWalkaway.SetValue(0.0)
+BM_D_ForceArrest.SetValue(0.0)
 licenses.bmlUtility.BM_LenientCurseViolation.SetValue(0.0)
 licenses.FinishConfrontation(akSpeaker, 2)
 ;END CODE
@@ -16,3 +18,5 @@ EndFunction
 
 BM_Licenses Property licenses Auto
 
+GlobalVariable Property BM_D_ForceArrest Auto
+GlobalVariable Property BM_D_RestrictWalkaway Auto

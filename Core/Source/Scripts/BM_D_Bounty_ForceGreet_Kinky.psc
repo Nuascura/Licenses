@@ -6,10 +6,9 @@ Scriptname BM_D_Bounty_ForceGreet_Kinky Extends TopicInfo Hidden
 Function Fragment_0(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
+BM_D_RestrictWalkaway.SetValue(1.0)
 if licenses.isTravelViolation && !licenses.isInCity && !licenses.isInTown
     BM_D_ForceArrest.SetValue(1.0)
-else
-    BM_D_ForceArrest.SetValue(0.0)
 endIf
 ;END CODE
 EndFunction
@@ -19,3 +18,4 @@ EndFunction
 
 BM_Licenses Property licenses Auto
 GlobalVariable Property BM_D_ForceArrest Auto
+GlobalVariable Property BM_D_RestrictWalkaway Auto

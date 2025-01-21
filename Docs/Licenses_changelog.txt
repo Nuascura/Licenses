@@ -1,3 +1,23 @@
+1.22.0
+Primary
+- Add: Exterior WorldSpace and Location detection.
+- Add: BM_WICommentChance.
+- Add: Additional safeguards against improper walkaway topic initiation.
+
+Secondary
+- Change: Check IsInScene == 0 for bounty ref alias fill.
+- Change: Check GetAllowWorldInteractions == 1 for bounty ref alias fill.
+- Change: Curse leniency internal reset condition.
+- Change: Set invisible walkaway topics for Bounty End dialogues where appropriate to prevent player escapes.
+- Optimize: Player actor reference retrieval.
+- Fix: FirstTimeViolation dialogue is sometimes erroneously blocked by feature-specific leniency dialogue.
+- Remove: Deprecated scripts: PayFineFirstTime, PayFineFirstTimeKinky.
+- Update: Dialogue patch.
+- Update: Ambience extension.
+- Update: Bruma patch.
+
+
+
 1.21.2
 Primary
 - Add: Additional keywords: BarterItem, ArmorItem, ClothingItem, JewelryItem, WeaponItem, AmmoItem, MagicItem.
