@@ -9,6 +9,8 @@ Actor akSpeaker = akSpeakerRef as Actor
 BM_D_RestrictWalkaway.SetValue(1.0)
 if licenses.isTravelViolation && !licenses.isInCity && !licenses.isInTown
     BM_D_ForceArrest.SetValue(1.0)
+else
+    BM_D_ForceArrest.SetValue(0.0)
 endIf
 ;END CODE
 EndFunction
