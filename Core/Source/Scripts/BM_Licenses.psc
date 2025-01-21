@@ -67,6 +67,17 @@ EndFunction
 
 Function PlayerWalkaway(Actor akEnforcer, Faction crimeFaction)
     ApplyCrimeGold(crimeFaction)
+
+    ; Punish Walk Away
+    bmlUtility.BM_FirstTimeViolation.SetValue(0.0)
+    if bmlmcm.isMagicLicenseFeatureEnabled && bmlmcm.NullifyMagickaSource > 0
+	    bmlUtility.BM_LenientCurseViolation.SetValue(0.0)
+    endIf
+    if bmlmcm.isCurfewExemptionFeatureEnabled
+        bmlUtility.BM_LenientCurfewViolation.SetValue(0.0)
+    endIf
+
+    ; Integrations
     if bmlmcm.PrisonOverhaulPatched_State
         akEnforcer.SendModEvent("xpoArrestPC", crimeFaction as string, 1)
     endIf
