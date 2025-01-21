@@ -3,6 +3,7 @@ Primary
 - Add: Exterior WorldSpace and Location detection.
 - Add: BM_WICommentChance.
 - Add: Additional safeguards against improper walkaway topic initiation.
+- Add: Walkaway topic delayed termination.
 
 Secondary
 - Change: Check IsInScene == 0 for bounty ref alias fill.
