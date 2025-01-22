@@ -29,7 +29,7 @@ EndFunction
 
 Event OnGainLOS(Actor akViewer, ObjectReference akTarget)
     isDetected = true
-    licenses.bmlUtility.LogTrace("BM_Licenses_Detection: Player was detected by enforcer " + akViewer)
+    licenses.bmlUtility.LogTrace("LOS Detection: Player was detected by enforcer " + akViewer)
     RegisterForSingleUpdate(1.0)
 EndEvent
 

@@ -73,7 +73,7 @@ Function PlayerWalkaway(Actor akEnforcer, Faction crimeFaction)
     if bmlmcm.isMagicLicenseFeatureEnabled && bmlmcm.NullifyMagickaSource > 0
 	    bmlUtility.BM_LenientCurseViolation.SetValue(0.0)
     endIf
-    if bmlmcm.isCurfewExemptionFeatureEnabled
+    if bmlmcm.isCurfewExemptionFeatureEnabled && bmlUtility.BM_IsViolatingCurfew.GetValue() > 0
         bmlUtility.BM_LenientCurfewViolation.SetValue(0.0)
     endIf
 

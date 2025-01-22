@@ -8,6 +8,7 @@ Actor enforcer
 Event OnInit()
     enforcer = self.GetActorRef()
     if enforcer
+        RegisterForModEvent("BM-LPO_ConfrontationStart", "LPO_OnConfrontationStart")
         RegisterForSingleUpdate(10.0)
     endIf
 EndEvent
@@ -19,4 +20,9 @@ Event OnUpdate()
     else
         RegisterForSingleUpdate(10.0)
     endIf
+EndEvent
+
+Event LPO_OnConfrontationStart(Form akForm1)
+    UnregisterForAllModEvents()
+    UnregisterForUpdate()
 EndEvent

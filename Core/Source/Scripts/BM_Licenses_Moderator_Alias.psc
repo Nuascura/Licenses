@@ -10,6 +10,8 @@ Event OnPlayerLoadGame()
 EndEvent
 
 Function OnLoad()
+    UnregisterForAllModEvents()
+
     if bmlUtility.Licenses_State && bmlUtility.bmlmcm.IsRunning()
         bmlUtility.ReloadMCMVariables()
     endIf

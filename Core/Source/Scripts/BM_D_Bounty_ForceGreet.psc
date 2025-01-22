@@ -6,6 +6,7 @@ Scriptname BM_D_Bounty_ForceGreet Extends TopicInfo Hidden
 Function Fragment_0(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
+licenses.bmlUtility.SendCustomEvent_SingleForm("BM-LPO_ConfrontationStart", akSpeaker)
 BM_D_RestrictWalkaway.SetValue(1.0)
 if licenses.isTravelViolation && !licenses.isInCity && !licenses.isInTown
     BM_D_ForceArrest.SetValue(1.0)

@@ -20,6 +20,7 @@ Scriptname BM_Licenses_Utility extends Quest
 ; BM-LPO_BountyStart
 ; BM-LPO_BountyEnd
 ; --Custom--
+; BM-LPO_ConfrontationStart
 ; BM-LPO_ConfrontationEnd
 ; BM-LPO_LicenseAdded
 ; BM-LPO_LicenseRemoved
@@ -1768,6 +1769,19 @@ Function SendCustomEvent_SingleInt(string EventName, int aiArg1 = 0)
     int handle = ModEvent.Create(EventName)
     if (handle)
         ModEvent.PushInt(handle, aiArg1)
+        if ModEvent.Send(handle)
+            LogTrace("Sent " + EventName)
+            return
+        else
+            ModEvent.Release(handle)
+        endIf
+    endIf
+    LogTrace("Failed to create event for " + EventName)
+EndFunction
+Function SendCustomEvent_SingleForm(string EventName, form akForm1 = none)
+    int handle = ModEvent.Create(EventName)
+    if (handle)
+        ModEvent.PushForm(handle, akForm1)
         if ModEvent.Send(handle)
             LogTrace("Sent " + EventName)
             return

@@ -68,7 +68,6 @@ EndEvent
 
 Event OnPlayerFastTravelEnd(float afTravelGameTimeHours)
     if afTravelGameTimeHours > 0.1
-        bmlUtility.licenseBountyQuest.stop()
-        licenses.ResetViolations(-1)
+        bmlUtility.bmlBounty.Terminate()
     endIf
 EndEvent
