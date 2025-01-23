@@ -8,6 +8,8 @@ ReferenceAlias Property guardRef_2 auto
 ReferenceAlias Property guardRef_3 auto
 ReferenceAlias Property guardRef_4 auto
 ReferenceAlias Property guardRef_5 auto
+GlobalVariable Property BM_D_ForceArrest Auto
+GlobalVariable Property BM_D_RestrictWalkaway Auto
 
 Actor Speaker
 
@@ -16,6 +18,7 @@ Bool Function Setup()
         RegisterForSingleUpdate(30.0)
         SendModEvent("BM-LPO_BountyStart")
         RegisterForModEvent("BM-LPO_ConfrontationStart", "LPO_OnConfrontationStart")
+        RegisterForModEvent("BM-LPO_ConfrontationWalkaway", "LPO_OnConfrontationWalkaway")
         bmlUtility.LogTrace("Alias setup valid. Running periodic bounty update event.")
         return true
     else
@@ -24,9 +27,7 @@ Bool Function Setup()
     endIf
 EndFunction
 
-Event OnUpdate()
-    CheckAliasValidity()
-endEvent
+; -----
 
 Function CheckAliasValidity()
     if !IsAliasArrayValid()
@@ -37,21 +38,38 @@ Function CheckAliasValidity()
         RegisterForSingleUpdate(10.0) 
     endIf
 EndFunction
-
 Function Terminate()
     licenses.ResetViolations(-1)
     bmlUtility.bmPlayer.CheckViolations()
     StopQuest()
 EndFunction
 
+; -----
+
 State Walkaway
+    Function CheckAliasValidity()
+        Debug.Trace("BM_ Walkaway CheckAliasValidity")
+        if !(BM_D_RestrictWalkaway.GetValue() as bool)
+            UnregisterForAllModEvents()
+            bmlUtility.LogTrace("LPO Bounty: Walkaway state expired. Terminating...")
+            Terminate()
+        endIf
+    EndFunction
     Function Terminate()
         licenses.FinishConfrontation(Speaker, -1)
         StopQuest()
     EndFunction
 EndState
 
+; -----
+
+Event OnUpdate()
+    CheckAliasValidity()
+endEvent
+
 Function StopQuest()
+    BM_D_RestrictWalkaway.SetValue(0.0)
+    BM_D_ForceArrest.SetValue(0.0)
     SendModEvent("BM-LPO_BountyEnd")
     self.stop()
 EndFunction
@@ -66,7 +84,12 @@ Event LPO_OnConfrontationStart(Form akForm1)
     if ConfrontingEnforcer
         Speaker = ConfrontingEnforcer
         GoToState("Walkaway")
-        UnregisterForAllModEvents()
+        UnregisterForModEvent("BM-LPO_ConfrontationStart")
         UnregisterForUpdate()
     endIf
+EndEvent
+
+Event LPO_OnConfrontationWalkaway(Form akForm1)
+    Debug.Trace("BM_ LPO_OnConfrontationWalkaway")
+    RegisterForSingleUpdate(5.0)
 EndEvent

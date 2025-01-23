@@ -21,6 +21,7 @@ Scriptname BM_Licenses_Utility extends Quest
 ; BM-LPO_BountyEnd
 ; --Custom--
 ; BM-LPO_ConfrontationStart
+; BM-LPO_ConfrontationWalkaway
 ; BM-LPO_ConfrontationEnd
 ; BM-LPO_LicenseAdded
 ; BM-LPO_LicenseRemoved
