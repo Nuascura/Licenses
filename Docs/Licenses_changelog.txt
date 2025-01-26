@@ -6,6 +6,7 @@ Primary
 - Add: Walkaway topic delayed termination.
 
 Secondary
+- Change: Ambience misc dialogues require Kinky Dialogue to be enabled.
 - Change: Check IsInScene == 0 for bounty ref alias fill.
 - Change: Check GetAllowWorldInteractions == 1 for bounty ref alias fill.
 - Change: Curse leniency internal reset condition.
