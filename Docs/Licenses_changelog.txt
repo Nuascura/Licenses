@@ -4,6 +4,7 @@ Primary
 - Add: BM_WICommentChance.
 - Add: Additional safeguards against improper walkaway topic initiation.
 - Add: Walkaway topic delayed termination.
+- Add: Kaxat's GetMatchingForms shim function for 1.5 game versions.
 
 Secondary
 - Change: Ambience misc dialogues require Kinky Dialogue to be enabled.

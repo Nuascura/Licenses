@@ -18,7 +18,7 @@ Function ViolationCheck_Magic()
     endIf
 
     if !licenses.isMagicViolation
-        Form[] equippedObjects = PapyrusUtil.GetMatchingForm(PO3_SKSEFunctions.AddItemsOfTypeToArray(licenses.PlayerActorRef, 26, false, false, true), bmlUtility.BM_PotentialViolations_Ench.ToArray())
+        Form[] equippedObjects = bmlUtility.GetMatchingForm(PO3_SKSEFunctions.AddItemsOfTypeToArray(licenses.PlayerActorRef, 26, false, false, true), bmlUtility.BM_PotentialViolations_Ench.ToArray())
         if (equippedObjects)
             licenses.isMagicViolation = true
             bmlUtility.LogTrace("Detected Magic Violation (Armor): " + equippedObjects)

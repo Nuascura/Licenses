@@ -580,6 +580,27 @@ Bool Function ValidateWeaponForms(Weapon leftWeapon, Weapon rightWeapon)
 EndFunction
 ; ------------------------------
 
+Form[] function GetMatchingForm(Form[] ArrayValues1, Form[] ArrayValues2)
+    if PapyrusUtil.GetVersion() > 39
+        ; Use native function in AE 1.6+
+        return PapyrusUtil.GetMatchingForm(ArrayValues1, ArrayValues2)
+    else
+        Form[] Output
+        if ArrayValues1.Length == 0 || ArrayValues2.Length == 0
+            return Output
+        endif
+        int i = 0
+        Output = PapyrusUtil.RemoveForm(ArrayValues1, None); Most values are none in current usage, trimming speeds up loop.
+        While i < Output.Length
+            if ArrayValues2.Find(Output[i]) == -1 || PapyrusUtil.CountForm(Output, Output[i]) > 1
+                Output[i] = None
+            endIf
+            i += 1
+        EndWhile
+        return PapyrusUtil.RemoveForm(Output, None)
+    endIf
+EndFunction
+
 ; ---------- Inventory Scanners ----------
 Form[] Function ScanInventory_CommonFilter(Form[] Array)
     ; Filter out items matching keyword combinations
