@@ -78,7 +78,7 @@ endEvent
 
 Event OnItemRemoved(Form item, int count, ObjectReference itemRef, ObjectReference sourceContainer)
     ; book items do not pass inventory event if respective license feature is disabled or license is invalid/expired
-    if (item as Book) && (sourceContainer.GetItemCount(item) < 1)
+    if (item as Book) && (PlayerRef.GetItemCount(item) < 1)
         if (item == bmlUtility.BM_ArmorLicense)
             licenses.ArmorLicense = false
             bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseRemoved", 1)
