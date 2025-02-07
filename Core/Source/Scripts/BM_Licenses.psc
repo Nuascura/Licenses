@@ -482,11 +482,9 @@ Function PopulateKeywordBikiniItemArray()
     BikiniKeyword = PapyrusUtil.ClearEmpty(BikiniKeyword)
     KeywordBikiniItem = new Keyword[32] ; limit to 32 for performance
     KeywordBikiniItem[0] = BM_LicensesBikiniItem
-    int i = 1
-    while i < BikiniKeyword.length
-        if BikiniKeyword[i]
-            KeywordBikiniItem[i] = Keyword.GetKeyword(BikiniKeyword[i])
-        endIf
+    int i = 0
+    while i < BikiniKeyword.length && (i + 1) < KeywordBikiniItem.length && BikiniKeyword[i]
+        KeywordBikiniItem[i + 1] = Keyword.GetKeyword(BikiniKeyword[i])
         i += 1
     EndWhile
 EndFunction
