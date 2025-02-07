@@ -1,3 +1,9 @@
+1.22.0.1
+- Update: API doc.
+- Fix: Missing IsInInterior check for Curfew ambient dialogue.
+- Fix: Trade warn dialogue appears for Innkeepers and Food Vendors.
+- Fix: Female Blacksmiths say contextually erroneous Crafting ambient dialogue.	
+
 1.22.0
 Primary
 - Add: Exterior WorldSpace and Location detection.
