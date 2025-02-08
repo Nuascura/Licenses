@@ -1,6 +1,7 @@
 1.22.1
 Primary
 - Fix: Bikini keyword array creation.
+- Fix: Bikini keyword string delimiter.
 - Fix: Possible "none" object for sourceContainer from OnItemRemoved event.
 
 

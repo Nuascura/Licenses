@@ -478,7 +478,7 @@ Function PopulateLicenseBooksArray()
 EndFunction
 
 Function PopulateKeywordBikiniItemArray()
-	String[] BikiniKeyword = PapyrusUtil.StringSplit(bmlmcm.bikiniKeywordString, ", ")
+	String[] BikiniKeyword = PapyrusUtil.StringSplit(bmlmcm.bikiniKeywordString, ",")
     BikiniKeyword = PapyrusUtil.ClearEmpty(BikiniKeyword)
     KeywordBikiniItem = new Keyword[32] ; limit to 32 for performance
     KeywordBikiniItem[0] = BM_LicensesBikiniItem
