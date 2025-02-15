@@ -1,5 +1,6 @@
 1.22.1
 Primary
+- Fix: Bounty quest may erroneously terminate during player dialogue with enforcer.
 - Fix: Bikini keyword array creation.
 - Fix: Bikini keyword string delimiter.
 - Fix: Possible "none" object for sourceContainer from OnItemRemoved event.

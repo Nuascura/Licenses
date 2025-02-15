@@ -833,8 +833,10 @@ EndFunction
 
 Function ConsiderViolationCheck()
     If licenseBountyQuest.IsRunning()
-        LogTrace("Bounty Quest is running. Checking Alias Validity instead.")
-        bmlBounty.RegisterForSingleUpdate(1.0)
+        if bmlBounty.GetState() == ""
+            LogTrace("Bounty Quest is running. Checking Alias Validity instead.")
+            bmlBounty.RegisterForSingleUpdate(1.0)
+        endIf
     elseIf !IsExceptionState()
         LogTrace("Violation Checker passed initial conditions.")
         if bmlmcm.isCheckLOSFeatureEnabled

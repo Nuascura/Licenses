@@ -18,6 +18,7 @@ Bool Function Setup()
         RegisterForSingleUpdate(30.0)
         SendModEvent("BM-LPO_BountyStart")
         RegisterForModEvent("BM-LPO_ConfrontationStart", "LPO_OnConfrontationStart")
+        RegisterForModEvent("BM-LPO_ConfrontationEnd", "LPO_OnConfrontationEnd")
         RegisterForModEvent("BM-LPO_ConfrontationWalkaway", "LPO_OnConfrontationWalkaway")
         bmlUtility.LogTrace("Alias setup valid. Running periodic bounty update event.")
         return true
@@ -48,7 +49,6 @@ EndFunction
 
 State Walkaway
     Function CheckAliasValidity()
-        Debug.Trace("BM_ Walkaway CheckAliasValidity")
         if !(BM_D_RestrictWalkaway.GetValue() as bool)
             UnregisterForAllModEvents()
             bmlUtility.LogTrace("LPO Bounty: Walkaway state expired. Terminating...")
@@ -57,6 +57,17 @@ State Walkaway
     EndFunction
     Function Terminate()
         licenses.FinishConfrontation(Speaker, -1)
+        StopQuest()
+    EndFunction
+EndState
+
+; -----
+
+State WalkawayNoViolation
+    Function CheckAliasValidity()
+        Terminate()
+    EndFunction
+    Function Terminate()
         StopQuest()
     EndFunction
 EndState
@@ -81,7 +92,7 @@ EndFunction
 
 Event LPO_OnConfrontationStart(Form akForm1)
     Actor ConfrontingEnforcer = akForm1 as actor
-    if ConfrontingEnforcer
+    if ConfrontingEnforcer && GetState() == ""
         Speaker = ConfrontingEnforcer
         GoToState("Walkaway")
         UnregisterForModEvent("BM-LPO_ConfrontationStart")
@@ -90,6 +101,14 @@ Event LPO_OnConfrontationStart(Form akForm1)
 EndEvent
 
 Event LPO_OnConfrontationWalkaway(Form akForm1)
-    Debug.Trace("BM_ LPO_OnConfrontationWalkaway")
-    RegisterForSingleUpdate(5.0)
+    if GetState() == "WalkawayNoViolation"
+        RegisterForSingleUpdate(0.1)
+    else
+        RegisterForSingleUpdate(5.0)
+    endIf
+EndEvent
+
+Event LPO_OnConfrontationEnd(int endType)
+    self.UnregisterForUpdate()
+    GotoState("WalkawayNoViolation")
 EndEvent
