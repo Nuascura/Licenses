@@ -62,11 +62,8 @@ Event LPO_OnLicenseExpired(int aiArg1)
 EndEvent
 
 Function CheckCurfewViolation()
-	if GetTargetActor().IsInInterior()
-		BM_IsViolatingCurfew.SetValue(0.0)
-    elseIf !licenses.isCurfewViolation
+	If !licenses.isCurfewViolation
 		bmlUtility.GameMessage(BM_Licenses_MessageCurfewWarn)
-		BM_IsViolatingCurfew.SetValue(1.0)
 		licenses.isCurfewViolation = true
 		bmlUtility.bmPlayer.CheckViolations()
     EndIf
@@ -83,7 +80,10 @@ Event OnLocationChange(Location akOldLoc, Location akNewLoc)
 			RegisterForSingleUpdate(2.0)
 		endIf
 		if !GetTargetActor().IsInInterior() && akNewLoc.HasKeyword(Keyword.GetKeyword("LocTypeHabitation"))
+			BM_IsViolatingCurfew.SetValue(1.0)
 			bmlUtility.LogNotification("This location has an active curfew.")
+		else
+			BM_IsViolatingCurfew.SetValue(0.0)
 		endIf
 	endIf
 EndEvent
