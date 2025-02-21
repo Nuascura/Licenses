@@ -110,7 +110,10 @@ bool Property isCollarExemptionFeatureEnabled = false auto conditional
 GlobalVariable Property BM_CECost Auto
 GlobalVariable Property BM_CEDuration Auto
 
-; Page 5 - Integrations
+; Page 5 - Slot Filtering
+Int[] Property ArmorSlotArray Auto
+
+; Page 6 - Integrations
 ; Devious Devices
 bool Property equipDDOnViolation = false auto
 int Property ddEquipChance = 50 auto
@@ -129,7 +132,7 @@ bool Property Curse_Legs = true auto
 bool Property Curse_ReduceSlotUsage = false auto
 bool Property Curse_FormatOverride = false auto ; true = CBBE 3BA, false = BHUNP (UUNP)
 
-; Page 6 - Auxiliary
+; Page 7 - Auxiliary
 ; Dependency Check
 ; Hard dependency - PapyrusExtender
 string Property PapyrusExtender_Status = "$LPO_Null" auto
@@ -178,6 +181,7 @@ bool Property LogTrace = false auto
 bool Property ConfigWarn = true auto
 bool Property allowJailQuestNodes = true auto conditional
 float Property standardEventDelay = 2.0 auto
+GlobalVariable Property BM_WICommentChance auto
 
 string Function GetModName(bool cache = true)
 	if cache
@@ -188,11 +192,11 @@ string Function GetModName(bool cache = true)
 EndFunction
 
 string Function GetModVersion()
-	return "1.22.1"
+	return "1.23.0"
 EndFunction
 
 int Function GetVersion()
-	return 18
+	return 19
 EndFunction
 
 bool Function CheckVersionConflict()
@@ -250,19 +254,29 @@ Event OnConfigInit()
 	NullifyMagickaSourceList[2] = "$LPO_NullifyMagickaSourceList2"
 
 	ModVersionCache = PapyrusUtil.StringSplit(GetModVersion(), ".")
+	if JsonExists(config)
+		Load(config)
+	endIf
 	if CurrentVersion == 0
 		bmlUtility.LogNotification("Installed Licenses " + GetModVersion(), true)
 		bmlUtility.LogTrace("Installed Licenses " + GetModVersion(), true)
+		if !bmlUtility.Licenses_State && GetIntValue(config, "!!doautostart") == 1
+			GoToState("AutoStartST")
+		endIf
 	endIf
 EndEvent
 
 Event OnConfigOpen()
+	if self.GetState() == "AutoStartST"
+		return
+	endIf
+
 	SessionModified = false
 	if !bmlUtility.Licenses_State
 		Pages = new string[1]
 		Pages[0] = "$LPO_Pages0"
 	else
-		Pages = new string[7]
+		Pages = new string[8]
 		Pages[0] = "$LPO_Pages0"
 		Pages[1] = "$LPO_Pages1"
 		Pages[2] = "$LPO_Pages2"
@@ -270,6 +284,7 @@ Event OnConfigOpen()
 		Pages[4] = "$LPO_Pages4"
 		Pages[5] = "$LPO_Pages5"
 		Pages[6] = "$LPO_Pages6"
+		Pages[7] = "$LPO_Pages7"
 	endIf
 EndEvent
 
@@ -283,6 +298,7 @@ Event OnConfigClose()
 EndEvent
 
 Event OnPageReset(string page)
+	GoToState("")
 	if !bmlUtility.Licenses_State || (page == "$LPO_Pages0")
 		SetCursorFillMode(TOP_TO_BOTTOM)
 		SetTitleText("$LPO_Pages0")
@@ -502,7 +518,7 @@ Event OnPageReset(string page)
         AddToggleOptionST("isCheckIntervalFeatureEnabledST", "$LPO_isCheckIntervalFeatureEnabled", isCheckIntervalFeatureEnabled)
 		AddSliderOptionST("checkIntervalST", "$LPO_checkInterval", checkInterval, "{0} second(s)", (!isCheckIntervalFeatureEnabled) as int)
 		AddToggleOptionST("isCheckLOSFeatureEnabledST", "$LPO_isCheckLOSFeatureEnabled", isCheckLOSFeatureEnabled)
-		AddEmptyOption()
+		AddSliderOptionST("BM_WICommentChanceST", "$LPO_BM_WICommentChance", BM_WICommentChance.GetValue(), "{0}%")
 		AddEmptyOption()
 		AddHeaderOption("$LPO_AdditionalSettings")
 		AddMenuOptionST("licenseSellerST", "$LPO_licenseSeller", sellerList[licenseSellerFaction])
@@ -625,6 +641,9 @@ Event OnPageReset(string page)
         AddSliderOptionST("BM_CECostST", "$LPO_BM_CECost", BM_CECost.getValue(), "{0} gold", (!DeviousDevices_State) as int)
         AddSliderOptionST("BM_CEDurationST", "$LPO_BM_CEDuration", BM_CEDuration.getValue(), "{0} day(s)", (!DeviousDevices_State) as int)
     elseIf (page == "$LPO_Pages5")
+		SetCursorFillMode(LEFT_TO_RIGHT)
+		GoToState("SlotFilteringST")
+	elseIf (page == "$LPO_Pages6")
 		SetCursorFillMode(TOP_TO_BOTTOM)
 		if !DeviousDevices_State && !SlaveTats_State
 			AddTextOption("$LPO_Integrations_Empty", "", OPTION_FLAG_DISABLED)
@@ -642,8 +661,8 @@ Event OnPageReset(string page)
 		if SlaveTats_State
 			AddHeaderOption("$LPO_SlaveTats")
 			AddToggleOptionST("ShowCurseTattoosST", "$LPO_ShowCurseTattoos", ShowCurseTattoos)
-			AddInputOptionST("Curse_ColorST", "$LPO_Curse_Color", "$LPO_InputModify", (!ShowCurseTattoos) as int)
-			AddInputOptionST("Curse_GlowST", "$LPO_Curse_Glow", "$LPO_InputModify", (!ShowCurseTattoos) as int)
+			AddInputOptionST("Curse_ColorST", "$LPO_Curse_Color", Curse_Color, (!ShowCurseTattoos) as int)
+			AddInputOptionST("Curse_GlowST", "$LPO_Curse_Glow", Curse_Glow, (!ShowCurseTattoos) as int)
 			AddSliderOptionST("Curse_AlphaST", "$LPO_Curse_Alpha", Curse_Alpha, "{1}", (!ShowCurseTattoos) as int)
 			AddToggleOptionST("Curse_NeckST", "$LPO_Curse_Neck", Curse_Neck, (!ShowCurseTattoos) as int)
 			AddToggleOptionST("Curse_TorsoST", "$LPO_Curse_Torso", Curse_Torso, (!ShowCurseTattoos) as int)
@@ -652,7 +671,7 @@ Event OnPageReset(string page)
 			AddToggleOptionST("Curse_ReduceSlotUsageST", "$LPO_Curse_ReduceSlotUsage", Curse_ReduceSlotUsage, (!ShowCurseTattoos) as int)
 			AddTextOptionST("Curse_FormatOverrideST", "$LPO_Curse_FormatOverride", Curse_FormatOverride, (!ShowCurseTattoos) as int)
 		endIf
-	elseIf (page == "$LPO_Pages6")
+	elseIf (page == "$LPO_Pages7")
 		SetCursorFillMode(TOP_TO_BOTTOM)
 		AddHeaderOption("$LPO_DebugFunctions")
 		AddTextOptionST("RefreshFeaturesST", "$LPO_RefreshFeatures", "")
@@ -704,33 +723,98 @@ Event OnPageReset(string page)
     endIf
 EndEvent
 
+Int[] SlotFilteringOID
+state SlotFilteringST
+	Event OnBeginState()
+		SlotFilteringOID = new Int[32]
+		Int i = 0
+		While i < SlotFilteringOID.Length
+			SlotFilteringOID[i] = AddToggleOption("$LPO_EquipmentSlot_{" + (i + 30) + "}", ArmorSlotArray[i] == (i + 30))
+			Armor OccupiedItem = licenses.PlayerActorRef.GetEquippedArmorInSlot(ArmorSlotArray[i])
+			if OccupiedItem && OccupiedItem.GetName() != ""
+				AddTextOption("$LPO_EquipmentSlotOccupiedItem_{" + OccupiedItem.GetName() + "}_{" + OccupiedItem.GetSlotMask() + "}", "", OPTION_FLAG_DISABLED)
+			else
+				AddEmptyOption()
+			endIf
+			i += 1
+		EndWhile
+	EndEvent
+	Event OnOptionSelect(Int OptionID)
+		Int i = SlotFilteringOID.Find(OptionID)
+		if ArmorSlotArray[i]
+			ArmorSlotArray[i] = 0
+		else
+			ArmorSlotArray[i] = i + 30
+		endIf
+		SetToggleOptionValue(OptionID, ArmorSlotArray[i] == (i + 30))
+	EndEvent
+	Event OnOptionDefault(Int OptionID)
+		Int i = SlotFilteringOID.Find(OptionID)
+		if i > 13
+			ArmorSlotArray[i] = 0
+		else
+			ArmorSlotArray[i] = i + 30
+		endIf
+		SetToggleOptionValue(OptionID, ArmorSlotArray[i] == (i + 30))
+	EndEvent
+	Event OnOptionHighlight(Int OptionID)
+		if SlotFilteringOID.Find(OptionID) != -1
+			SetInfoText("$LPO_EquipmentSlotHighlight")
+		endIf
+	EndEvent
+endState
+
+State AutoStartST
+	Event OnBeginState()
+		RegisterForSingleUpdate(10.0)
+	EndEvent
+	Event OnUpdate()
+		StartupLicenses()
+		GoToState("")
+	EndEvent
+EndState
+
+Function StartupLicenses()
+	bmlUtility.Startup(GetIntValue(config, "!!doautoload") == 1)
+EndFunction
+
+Function ShutdownLicenses()
+	; Remove currently held license book items
+	licenses.PlayerActorRef.removeItem(bmlUtility.BM_ArmorLicense, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_ArmorLicense))
+	licenses.PlayerActorRef.removeItem(bmlUtility.BM_BikiniLicense, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_BikiniLicense))
+	licenses.PlayerActorRef.removeItem(bmlUtility.BM_ClothingLicense, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_ClothingLicense))
+	licenses.PlayerActorRef.removeItem(bmlUtility.BM_MagicLicense, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_MagicLicense))
+	licenses.PlayerActorRef.removeItem(bmlUtility.BM_WeaponLicense, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_WeaponLicense))
+	licenses.PlayerActorRef.removeItem(bmlUtility.BM_CraftingLicense, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_CraftingLicense))
+	licenses.PlayerActorRef.removeItem(bmlUtility.BM_TradingLicense, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_TradingLicense))
+	licenses.PlayerActorRef.removeItem(bmlUtility.BM_WhoreLicense, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_WhoreLicense))
+	licenses.PlayerActorRef.removeItem(bmlUtility.BM_TravelPermit, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_TravelPermit))
+	licenses.PlayerActorRef.removeItem(bmlUtility.BM_CollarExemption, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_CollarExemption))
+	licenses.PlayerActorRef.removeItem(bmlUtility.BM_Insurance, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_Insurance))
+	licenses.PlayerActorRef.removeItem(bmlUtility.BM_CurfewExemption, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_CurfewExemption))
+	; Remove Nullify Magicka
+	licenses.RemoveNullifyMagicka(true)
+	; shutdown
+	bmlUtility.Shutdown()
+EndFunction
+
 state Licenses_StateST
     event OnSelectST()
         if !bmlUtility.Licenses_State
 			SetTextOptionValueST("$LPO_Licenses_StateValue2")
 			ShowMessage("$LPO_Licenses_StateMessageInitialize1", false)
-			; startup
-			bmlUtility.Startup()
+			bmlUtility.reset()
+			bmlUtility.stop()
+			while !bmlUtility.IsStopped()
+				Utility.Wait(0.1)
+			endWhile
+			if bmlUtility.start()
+				StartupLicenses()
+			endIf
         else
 			if ShowMessage("$LPO_Licenses_StateMessageShutdown1")
 				SetTextOptionValueST("$LPO_Licenses_StateValue4")
-				; Remove currently held license book items
-				licenses.PlayerActorRef.removeItem(bmlUtility.BM_ArmorLicense, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_ArmorLicense))
-				licenses.PlayerActorRef.removeItem(bmlUtility.BM_BikiniLicense, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_BikiniLicense))
-				licenses.PlayerActorRef.removeItem(bmlUtility.BM_ClothingLicense, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_ClothingLicense))
-				licenses.PlayerActorRef.removeItem(bmlUtility.BM_MagicLicense, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_MagicLicense))
-				licenses.PlayerActorRef.removeItem(bmlUtility.BM_WeaponLicense, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_WeaponLicense))
-				licenses.PlayerActorRef.removeItem(bmlUtility.BM_CraftingLicense, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_CraftingLicense))
-				licenses.PlayerActorRef.removeItem(bmlUtility.BM_TradingLicense, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_TradingLicense))
-				licenses.PlayerActorRef.removeItem(bmlUtility.BM_WhoreLicense, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_WhoreLicense))
-				licenses.PlayerActorRef.removeItem(bmlUtility.BM_TravelPermit, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_TravelPermit))
-				licenses.PlayerActorRef.removeItem(bmlUtility.BM_CollarExemption, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_CollarExemption))
-				licenses.PlayerActorRef.removeItem(bmlUtility.BM_Insurance, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_Insurance))
-				licenses.PlayerActorRef.removeItem(bmlUtility.BM_CurfewExemption, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_CurfewExemption))
-				; Remove Nullify Magicka
-				licenses.RemoveNullifyMagicka(true)
-				; shutdown
-				bmlUtility.Shutdown()
+				ShutdownLicenses()
 				SessionModified = false
 				ForcePageReset()
 			endIf
@@ -914,6 +998,26 @@ state standardEventDelayST
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_standardEventDelayHighlight")
+	endEvent
+endState
+
+state BM_WICommentChanceST
+	event OnSliderOpenST()
+		SetSliderDialogStartValue(BM_WICommentChance.GetValue())
+		SetSliderDialogDefaultValue(100.0)
+		SetSliderDialogRange(0.0, 100.0)
+		SetSliderDialogInterval(1.0)
+	endEvent
+	event OnSliderAcceptST(float value)
+		BM_WICommentChance.SetValue(value)
+		SetSliderOptionValueST(BM_WICommentChance.GetValue(), "{0}%")
+	endEvent
+	event OnDefaultST()
+		BM_WICommentChance.SetValue(100.0)
+		SetSliderOptionValueST(BM_WICommentChance.GetValue(), "{0}%")
+	endEvent
+	event OnHighlightST()
+		SetInfoText("$LPO_BM_WICommentChanceHighlight")
 	endEvent
 endState
 
@@ -2034,6 +2138,7 @@ state Curse_ColorST
 	endEvent
     event OnInputAcceptST(string value)
         Curse_Color = bmlUtility.AdjustStringToInt(value)
+		SetInputOptionValueST(Curse_Color)
     endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_Curse_ColorHighlight")
@@ -2046,6 +2151,7 @@ state Curse_GlowST
 	endEvent
     event OnInputAcceptST(string value)
         Curse_Glow = bmlUtility.AdjustStringToInt(value)
+		SetInputOptionValueST(Curse_Glow)
     endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_Curse_GlowHighlight")
@@ -2165,7 +2271,10 @@ EndFunction
 Function checkSoftDependencies()
     DeviousDevices_State = false
 	DeviousDevices_Status = ""
-    if(Game.GetModByName("Devious Devices - Assets.esm") != 255) && (Game.GetModByName("Devious Devices - Integration.esm") != 255) && (Game.GetModByName("Devious Devices - Expansion.esm") != 255) && (Game.GetModByName("Devious Devices - Contraptions.esm") != 255)
+    if(Game.GetModByName("Devious Devices - Assets.esm") != 255) \ 
+	&& (Game.GetModByName("Devious Devices - Integration.esm") != 255) \ 
+	&& (Game.GetModByName("Devious Devices - Expansion.esm") != 255) \
+	&& (Game.GetModByName("Devious Devices - Contraptions.esm") != 255)
         DeviousDevices_State = true
 		DeviousDevices_Status = "$LPO_Installed"
     endIf
@@ -2264,6 +2373,7 @@ Bool Function exportConfig()
 	SetIntValue(config, "isCheckIntervalFeatureEnabled", isCheckIntervalFeatureEnabled as int)
 	SetFloatValue(config, "checkInterval", checkInterval)
 	SetIntValue(config, "isCheckLOSFeatureEnabled", isCheckLOSFeatureEnabled as int)
+	SetFloatValue(config, "BM_WICommentChance", BM_WICommentChance.GetValue())
 
 	; General - Additional Settings
 	SetIntValue(config, "licenseSellerFaction", licenseSellerFaction)
@@ -2347,6 +2457,9 @@ Bool Function exportConfig()
 	SetFloatValue(config, "BM_CECost", BM_CECost.getValue())
 	SetFloatValue(config, "BM_CEDuration", BM_CEDuration.getValue())
 
+	; Slot Filtering
+	IntListCopy(config, "ArmorSlotArray", ArmorSlotArray)
+
 	; Integrations - Devious Devices
 	SetIntValue(config, "equipDDOnViolation", equipDDOnViolation as int)
 	SetIntValue(config, "ddEquipChance", ddEquipChance)
@@ -2377,36 +2490,38 @@ Bool Function exportConfig()
 	return true
 EndFunction
 
-Bool Function importConfig()
+Bool Function importConfig(Bool abSilent = false)
 	; Check config health
 	bool IgnoredWarning = false
-	if !(Load(config) && IsGood(config) && GetStringValue(config, "Mod Name") == GetModName() )
-		ShowMessage("$LPO_ImportConfigMessageError1", false)
-		return false
-	endIf
-	if GetVersion() != GetIntValue(config, "Mod Config Version") && GetModVersion() == GetStringValue(config, "Mod Version")
-		ShowMessage("$LPO_ImportConfigMessageError2_{" + GetModVersion() + "_" + GetVersion() + "}_{" + GetStringValue(config, "Mod Version") + "_" + GetIntValue(config, "Mod Config Version") + "}", false)
-		return false
-	endIf
-	if GetModVersion() != GetStringValue(config, "Mod Version")
-		if ShowMessage("$LPO_ImportConfigMessage1")
-			ShowMessage("$LPO_ImportConfigMessageError3_{" + GetModVersion() + "}_{" + GetStringValue(config, "Mod Version") + "}", false)
+	if !abSilent
+		if !(Load(config) && IsGood(config) && GetStringValue(config, "Mod Name") == GetModName() )
+			ShowMessage("$LPO_ImportConfigMessageError1", false)
 			return false
 		endIf
-		IgnoredWarning = true
-	endIf
-	if GetVersion() > GetIntValue(config, "Mod Config Version")
-		if ShowMessage("$LPO_ImportConfigMessage2")
-			ShowMessage("$LPO_ImportConfigMessageError4_{" + GetVersion() + "}_{" + GetIntValue(config, "Mod Config Version") + "}", false)
+		if GetVersion() != GetIntValue(config, "Mod Config Version") && GetModVersion() == GetStringValue(config, "Mod Version")
+			ShowMessage("$LPO_ImportConfigMessageError2_{" + GetModVersion() + "_" + GetVersion() + "}_{" + GetStringValue(config, "Mod Version") + "_" + GetIntValue(config, "Mod Config Version") + "}", false)
 			return false
 		endIf
-		IgnoredWarning = true
-	elseIf GetVersion() < GetIntValue(config, "Mod Config Version")
-		if ShowMessage("$LPO_ImportConfigMessage3")
-			ShowMessage("$LPO_ImportConfigMessageError5_{" + GetVersion() + "}_{" + GetIntValue(config, "Mod Config Version") + "}", false)
-			return false
+		if GetModVersion() != GetStringValue(config, "Mod Version")
+			if ShowMessage("$LPO_ImportConfigMessage1")
+				ShowMessage("$LPO_ImportConfigMessageError3_{" + GetModVersion() + "}_{" + GetStringValue(config, "Mod Version") + "}", false)
+				return false
+			endIf
+			IgnoredWarning = true
 		endIf
-		IgnoredWarning = true
+		if GetVersion() > GetIntValue(config, "Mod Config Version")
+			if ShowMessage("$LPO_ImportConfigMessage2")
+				ShowMessage("$LPO_ImportConfigMessageError4_{" + GetVersion() + "}_{" + GetIntValue(config, "Mod Config Version") + "}", false)
+				return false
+			endIf
+			IgnoredWarning = true
+		elseIf GetVersion() < GetIntValue(config, "Mod Config Version")
+			if ShowMessage("$LPO_ImportConfigMessage3")
+				ShowMessage("$LPO_ImportConfigMessageError5_{" + GetVersion() + "}_{" + GetIntValue(config, "Mod Config Version") + "}", false)
+				return false
+			endIf
+			IgnoredWarning = true
+		endIf
 	endIf
 
 	; General - Basic Settings
@@ -2414,6 +2529,7 @@ Bool Function importConfig()
 	isCheckIntervalFeatureEnabled = GetIntValue(config, "isCheckIntervalFeatureEnabled", isCheckIntervalFeatureEnabled as int) as Bool
 	checkInterval = GetFloatValue(config, "checkInterval", checkInterval)
 	isCheckLOSFeatureEnabled = GetIntValue(config, "isCheckLOSFeatureEnabled", isCheckLOSFeatureEnabled as int) as Bool
+	BM_WICommentChance.SetValue(GetFloatValue(config, "BM_WICommentChance", BM_WICommentChance.GetValue()))
 
 	; General - Additional Settings
 	licenseSellerFaction = GetIntValue(config, "licenseSellerFaction", licenseSellerFaction)
@@ -2497,6 +2613,9 @@ Bool Function importConfig()
 	BM_CECost.SetValue(GetFloatValue(config, "BM_CECost", BM_CECost.getValue()))
 	BM_CEDuration.SetValue(GetFloatValue(config, "BM_CEDuration", BM_CEDuration.getValue()))
 
+	; Slot Filtering
+	ArmorSlotArray = IntListToArray(config, "ArmorSlotArray")
+
 	; Integrations - Devious Devices
 	equipDDOnViolation = GetIntValue(config, "equipDDOnViolation", equipDDOnViolation as int) as Bool
 	ddEquipChance = GetIntValue(config, "ddEquipChance", ddEquipChance)
@@ -2527,10 +2646,12 @@ Bool Function importConfig()
 	bmlUtility.RefreshFeatures()
 	updateGlobals()
 
-	if !IgnoredWarning
-		ShowMessage("$LPO_ImportConfigMessage4", false)
-	else
-		ShowMessage("$LPO_ImportConfigMessage5", false)
+	if !abSilent
+		if !IgnoredWarning
+			ShowMessage("$LPO_ImportConfigMessage4", false)
+		else
+			ShowMessage("$LPO_ImportConfigMessage5", false)
+		endIf
 	endIf
 	Return true
 EndFunction

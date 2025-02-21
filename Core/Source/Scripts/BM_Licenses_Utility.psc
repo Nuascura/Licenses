@@ -355,7 +355,7 @@ EndFunction
 ; -------------------------------------------------- Common Tools --------------------------------------------------
 
 ; ---------- Startup ----------
-Function Startup()
+Function Startup(Bool abAutoLoad)
     LogNotification("Initializing Licenses...", true)
     LogTrace("State Change - INITIALIZING", true)
 
@@ -381,10 +381,13 @@ Function Startup()
     ; Initialize Variables
     FillLocalPlayer(licenses.PlayerRef.GetActorRef())
     ReloadMCMVariables()
-    RefreshFeatures()
+    if abAutoLoad && bmlmcm.importConfig(true)
+        LogNotification("Auto loaded configuration.", true)
+    else
+        RefreshFeatures()
+    endIf
     RefreshStatus()
     
-
     ; Cache State
     Licenses_State = true
     LogNotification("Completed initialization sequence.", true)
@@ -409,24 +412,39 @@ Function Shutdown()
     ; Reset Additional Variables
     savedLoc = None
 	savedSpace = None
+    BM_IsInSSLV.SetValue(0.0)
+    BM_IsInDHLPEvent.SetValue(0.0)
+    BM_IsInPlayerHome.SetValue(0.0)
+    BM_IsInJail.SetValue(0.0)
+    BM_IsInAnimation.SetValue(0.0)
+    BM_IsViolatingCurfew.SetValue(0.0)
     BM_IsPlayerCollared.SetValue(0.0) ; false by default
+    BM_FineAmount.SetValue(0.0) ; 0.0 by default
     BM_FirstTimeViolation.SetValue(1.0) ; true by default
 	BM_LenientCurseViolation.SetValue(1.0) ; true by default
     BM_LenientCurfewViolation.SetValue(1.0) ; true by default
 
     ; Stop Add-on Quests
     if Game.GetModByName("Licenses - Ambience.esp") != 255
-        Quest.GetQuest("LPO_WIComment").Stop()
+        Quest.GetQuest("LPO_WIComment").reset()
+        Quest.GetQuest("LPO_WIComment").stop()
     endIf
 
     ; Stop Quests
-    licenses.stop()
-    licenseViolationCheckQuest.stop()
-    licenseThaneshipCheckQuest.stop()
-    licenseBountyQuest.stop()
-    licenseBarterQuest.stop()
-    licenseDetectionQuest.stop()
-    licenseModeratorQuest.stop()
+    Quest.GetQuest("BM_Licenses").reset()
+    Quest.GetQuest("BM_Licenses").stop()
+    Quest.GetQuest("BM_Licenses_ViolationCheck").reset()
+    Quest.GetQuest("BM_Licenses_ViolationCheck").stop()
+    Quest.GetQuest("BM_Licenses_ThaneshipCheck").reset()
+    Quest.GetQuest("BM_Licenses_ThaneshipCheck").stop()
+    Quest.GetQuest("BM_Licenses_Bounty").reset()
+    Quest.GetQuest("BM_Licenses_Bounty").stop()
+    Quest.GetQuest("BM_Licenses_Barter").reset()
+    Quest.GetQuest("BM_Licenses_Barter").stop()
+    Quest.GetQuest("BM_Licenses_Detection").reset()
+    Quest.GetQuest("BM_Licenses_Detection").stop()
+    Quest.GetQuest("BM_Licenses_Moderator").reset()
+    Quest.GetQuest("BM_Licenses_Moderator").stop()
 
     ; Cache State
     Licenses_State = false
@@ -437,7 +455,18 @@ EndFunction
 
 ; ---------- Location Checkers ----------
 Function CheckLocation()
-    if PlayerActorRef.GetCurrentLocation()
+    currLoc = PlayerActorRef.GetCurrentLocation()
+    if currLoc
+        if PlayerActorRef.IsInInterior()
+            WorldSpace[] ExteriorWorldSpaces = SPE_Cell.GetExteriorWorldSpaces(PlayerActorRef.GetParentCell())
+            if ExteriorWorldSpaces
+                currSpace = ExteriorWorldSpaces[0]
+            else
+                currSpace = FindWorldFromDoor(PO3_SKSEFunctions.FindAllReferencesOfFormType(PlayerActorRef, 29, 0))
+            endIf
+        else
+            currSpace = PlayerActorRef.GetWorldSpace()
+        endIf
         licenses.isInCity = GetIsInCity()
         licenses.isInTown = GetIsInTown()
     endIf
@@ -580,27 +609,6 @@ Bool Function ValidateWeaponForms(Weapon leftWeapon, Weapon rightWeapon)
 EndFunction
 ; ------------------------------
 
-Form[] function GetMatchingForm(Form[] ArrayValues1, Form[] ArrayValues2)
-    if PapyrusUtil.GetVersion() > 39
-        ; Use native function in AE 1.6+
-        return PapyrusUtil.GetMatchingForm(ArrayValues1, ArrayValues2)
-    else
-        Form[] Output
-        if ArrayValues1.Length == 0 || ArrayValues2.Length == 0
-            return Output
-        endif
-        int i = 0
-        Output = PapyrusUtil.RemoveForm(ArrayValues1, None); Most values are none in current usage, trimming speeds up loop.
-        While i < Output.Length
-            if ArrayValues2.Find(Output[i]) == -1 || PapyrusUtil.CountForm(Output, Output[i]) > 1
-                Output[i] = None
-            endIf
-            i += 1
-        EndWhile
-        return PapyrusUtil.RemoveForm(Output, None)
-    endIf
-EndFunction
-
 ; ---------- Inventory Scanners ----------
 Form[] Function ScanInventory_CommonFilter(Form[] Array)
     ; Filter out items matching keyword combinations
@@ -616,7 +624,7 @@ Form[] Function ScanEquippedItems_Base(Actor playerActor)
     if (licenses.hasBikiniLicense && licenses.isInsured)
         PotentialForms = SPE_Utility.FilterFormsByKeyword(PotentialForms, licenses.KeywordBikiniItem, false, true)
     endIf
-    return PotentialForms
+    return FilterByOccupiedSlotmask(PotentialForms, bmlmcm.ArmorSlotArray)
 EndFunction
 
 Form[] Function ScanEquippedItems_Ench(Actor playerActor)
@@ -624,7 +632,7 @@ Form[] Function ScanEquippedItems_Ench(Actor playerActor)
     PotentialFormsEnch = SPE_Utility.FilterFormsByKeyword(PotentialFormsEnch, licenses.KeywordConfiscationEnch, false, false)
     PotentialFormsEnch = SPE_Utility.IntersectArray_Form(PotentialFormsEnch, SPE_ObjectRef.GetEnchantedItems(playerActor, true, true, false))
     PotentialFormsEnch = ScanInventory_CommonFilter(PotentialFormsEnch)
-    return PotentialFormsEnch
+    return FilterByOccupiedSlotmask(PotentialFormsEnch, bmlmcm.ArmorSlotArray)
 EndFunction
 
 Form[] Function ScanInventory_Base(ObjectReference playerActor)
@@ -635,7 +643,7 @@ Form[] Function ScanInventory_Base(ObjectReference playerActor)
     if (licenses.hasBikiniLicense && licenses.isInsured)
         PotentialForms = SPE_Utility.FilterFormsByKeyword(PotentialForms, licenses.KeywordBikiniItem, false, true)
     endIf
-    return PotentialForms
+    return FilterByOccupiedSlotmask(PotentialForms, bmlmcm.ArmorSlotArray)
 EndFunction
 
 Form[] Function ScanInventory_Ench(ObjectReference playerActor)
@@ -645,7 +653,29 @@ Form[] Function ScanInventory_Ench(ObjectReference playerActor)
     PotentialFormsEnch = SPE_Utility.IntersectArray_Form(PotentialFormsEnch, SPE_ObjectRef.GetEnchantedItems(playerActor, true, true, false))
     ; Final Filter
     PotentialFormsEnch = ScanInventory_CommonFilter(PotentialFormsEnch)
-    return PotentialFormsEnch
+    return FilterByOccupiedSlotmask(PotentialFormsEnch, bmlmcm.ArmorSlotArray)
+EndFunction
+
+Int Function GetCombinedSlotMask(int[] aiSlotArray)
+	aiSlotArray = PapyrusUtil.RemoveInt(aiSlotArray, 0)
+	int slotMask = 0
+	int index = aiSlotArray.length
+	while index
+		index -= 1
+		slotMask = Math.LogicalOr(slotMask, Armor.GetMaskForSlot(aiSlotArray[index]))
+	endWhile
+	return slotMask
+EndFunction
+
+Form[] Function FilterByOccupiedSlotmask(Form[] akForms, int[] aiSlotArray, bool abAll = false)
+    Armor[] armors = SPE_Utility.FilterBySlotmask(akForms, GetCombinedSlotMask(aiSlotArray), abAll)
+    Form[] ret = Utility.CreateFormArray(armors.Length)
+    int i = 0
+    While (i < armors.Length)
+        ret[i] = armors[i]
+        i += 1
+    EndWhile
+    return ret
 EndFunction
 ; ------------------------------
 
@@ -718,11 +748,11 @@ EndFunction
 
 Function CheckThaneship()
     if licenseThaneshipCheckQuest.start()
-        licenses.isThane = bmlThaneshipCheck.Run()
-        licenseThaneshipCheckQuest.stop()
+        licenses.isThane = true
     else
         licenses.isThane = false
     endIf
+    licenseThaneshipCheckQuest.stop()
 EndFunction
 ; ------------------------------
 
@@ -741,15 +771,7 @@ Int Function CountValidLicenses()
     LicenseArray[9] = licenses.hasCollarExemption
     LicenseArray[10] = licenses.hasInsurance
     LicenseArray[11] = licenses.hasCurfewExemption
-    int count = 0
-    int i = 0
-    while i < LicenseArray.Length
-        if LicenseArray[i]
-            count += 1
-        endIf
-        i += 1
-    EndWhile
-    return count
+    return PapyrusUtil.CountBool(LicenseArray, true)
 EndFunction
 
 Int Function CountActiveLicenses()
@@ -766,15 +788,7 @@ Int Function CountActiveLicenses()
     LicenseArray[9] = (licenses.collarExemptionExpirationTime != -1) && bmlmcm.isCollarExemptionFeatureEnabled
     LicenseArray[10] = (licenses.insuranceExpirationTime != -1) && bmlmcm.isInsuranceFeatureEnabled
     LicenseArray[11] = (licenses.curfewExemptionExpirationTime != -1) && bmlmcm.isCurfewExemptionFeatureEnabled
-    int count = 0
-    int i = 0
-    while i < LicenseArray.Length
-        if LicenseArray[i]
-            count += 1
-        endIf
-        i += 1
-    EndWhile
-    return count
+    return PapyrusUtil.CountBool(LicenseArray, true)
 EndFunction
 
 Int Function CountActiveViolations()
@@ -789,15 +803,7 @@ Int Function CountActiveViolations()
     ActiveViolations[7] = licenses.isCurfewViolation
     ActiveViolations[8] = licenses.isTradingViolation
     ActiveViolations[9] = licenses.isWhoreViolation
-    int count = 0
-    int i = 0
-    while i < ActiveViolations.Length
-        if ActiveViolations[i]
-            count += 1
-        endIf
-        i += 1
-    EndWhile
-    return count
+    return PapyrusUtil.CountBool(ActiveViolations, true)
 EndFunction
 
 bool Function CheckViolationExists()
@@ -812,10 +818,7 @@ bool Function CheckViolationExists()
     violations[7] = licenses.isCurfewViolation
     violations[8] = licenses.isTradingViolation
     violations[9] = licenses.isWhoreViolation
-    if violations.Find(true) >= 0
-        return true
-    endIf
-    return false
+    return violations.Find(true) != -1
 EndFunction
 ; ------------------------------
 
@@ -852,11 +855,7 @@ EndFunction
 Function startViolationCheckQuest()
     if !licenseViolationCheckQuest.IsRunning() && licenseViolationCheckQuest.start()
         LogTrace("Started Violation Check Quest.")
-        BM_PotentialViolations.Revert()
-        BM_PotentialViolations.AddForms(ScanEquippedItems_Base(PlayerActorRef))
-        BM_PotentialViolations_Ench.Revert()
-        BM_PotentialViolations_Ench.AddForms(ScanEquippedItems_Ench(PlayerActorRef))
-        bmlViolationCheck.Setup()
+        bmlViolationCheck.GoToState("Start")
     else
         LogTrace("Error: Violation Check Quest is already running.")
     endIf
@@ -965,6 +964,12 @@ Function LogNotification(String LogMessage, Bool Force = False)
         elseIf bmlmcm.LogNotification
             Debug.Notification(LogMessage)
         endIf
+    endIf
+EndFunction
+
+Function LogMessageBox(String LogMessage)
+    if LogMessage
+        Debug.MessageBox(LogMessage)
     endIf
 EndFunction
 
@@ -1616,21 +1621,27 @@ Function refreshArrays()
     licenses.PopulateKeywordBikiniItemArray()
     licenses.PopulateLicenseBooksArray()
     licenses.PopulateCursedTattoosArray()
+    
+    licenses.ValidateArmorSlotArray()
 EndFunction
 ; ------------------------------
 
 ; ---------- MCM Utilities ----------
 Function ResetMCM()
-    bmlmcm.Stop()
-    While !bmlmcm.IsStopped()
+    Quest kQuest = Quest.GetQuest("BM_Licenses_MCM")
+    kQuest.Reset()
+    Utility.Wait(2.0)
+    kQuest.Stop()
+    While !kQuest.IsStopped()
         Utility.Wait(0.1)
     EndWhile
-    bmlmcm.Start()
-    While !bmlmcm.IsRunning()
-        Utility.Wait(0.1)
-    EndWhile
-    ReloadMCMVariables(true)
-    RefreshFeatures()
+    if kQuest.Start()
+        ReloadMCMVariables(true)
+        RefreshFeatures()
+        LogMessageBox("Successfully reset the MCM. If Licenses was recently updated, you may also want to restart the mod.")
+    else
+        LogMessageBox("The MCM failed to restart. Please check your Papyrus log and notify the author of this error.")
+    endIf
 EndFunction
 
 Function ReloadMCMVariables(bool abSilent = false)
@@ -1684,59 +1695,44 @@ EndFunction
 
 Float Function insuranceModifierViolation()
     ; Define weights for each infraction (adjust as needed)
-    Float weightArmor = 0.3 * (licenses.isArmorViolation as float)
-    Float weightMagic = 0.2 * (licenses.isMagicViolation as float)
-    Float weightWeapon = 0.2 * (licenses.isWeaponViolation as float)
-    Float weightCrafting = 0.1 * (licenses.isCraftingViolation as float)
-    Float weightTravel = 0.1 * (licenses.isTravelViolation as float)
-    Float weightCollar = 0.2 * (licenses.isCollarViolation as float)
-    Float weightUninsured = 0.1 * (licenses.isUninsuredViolation as float)
-    Float weightCurfew = 0.1 * (licenses.isCurfewViolation as float)
-    Float weightTrading = 0.1 * (licenses.isTradingViolation as float)
+    Float[] ViolationWeight = new Float[9]
+    ViolationWeight[0] = 0.3 * (licenses.isArmorViolation as float)
+    ViolationWeight[1] = 0.2 * (licenses.isMagicViolation as float)
+    ViolationWeight[2] = 0.2 * (licenses.isWeaponViolation as float)
+    ViolationWeight[3] = 0.1 * (licenses.isCraftingViolation as float)
+    ViolationWeight[4] = 0.1 * (licenses.isTravelViolation as float)
+    ViolationWeight[5] = 0.2 * (licenses.isCollarViolation as float)
+    ViolationWeight[6] = 0.1 * (licenses.isUninsuredViolation as float)
+    ViolationWeight[7] = 0.1 * (licenses.isCurfewViolation as float)
+    ViolationWeight[8] = 0.1 * (licenses.isTradingViolation as float)
 
-    Return (weightArmor + weightMagic + weightWeapon + weightCrafting + weightTravel + weightCollar + weightUninsured + weightCurfew + weightTrading)
+    Return PapyrusUtil.AddFloatValues(ViolationWeight)
 EndFunction
 
 Float Function insuranceModifierFame()
-    float TitleFameCount = 0.0
-    float ThaneshipFameCount = 0.0
-    int i = 0
-
     ; Weight of a Title: 4.5
     ; Weight of a Thaneship: 1.7
     ; Max Popularity modifier: 18.0 + 15.3 = 33.3
 
-    Quest[] TitleFame = new Quest[4]
-    TitleFame[0] = Game.GetFormFromFile(0x02610C, "Skyrim.esm") as Quest; dragonborn
-    TitleFame[1] = Game.GetFormFromFile(0x01CEF6, "Skyrim.esm") as Quest; harbinger
-    TitleFame[2] = Game.GetFormFromFile(0x01F258, "Skyrim.esm") as Quest; arch-mage
-    TitleFame[3] = Game.GetFormFromFile(0x096E71, "Skyrim.esm") as Quest; Civil War: Siege any city, radiant quest
-    while i < TitleFame.Length
-        if TitleFame[i].IsCompleted()
-            TitleFameCount += 4.5
-        endIf
-        i += 1
-    EndWhile
+    Bool[] TitleFame = new Bool[4]
+    TitleFame[0] = MQ104.IsCompleted(); Dragonborn (0x02610C)
+    TitleFame[1] = C06.IsCompleted(); Harbinger (0x01CEF6)
+    TitleFame[2] = MG08.IsCompleted(); Arch-Mage (0x01F258)
+    TitleFame[3] = CWSiegeObj.IsCompleted(); Civil War (0x096E71)
 
     Bool[] ThaneshipFame = new Bool[9]
-    ThaneshipFame[0] = licenses.isWhiterunThane
-    ThaneshipFame[1] = licenses.isWinterholdThane
-    ThaneshipFame[2] = licenses.isRiftThane
-    ThaneshipFame[3] = licenses.isReachThane
-    ThaneshipFame[4] = licenses.isPaleThane
-    ThaneshipFame[5] = licenses.isHjaalmarchThane
-    ThaneshipFame[6] = licenses.isHaafingarThane
-    ThaneshipFame[7] = licenses.isFalkreathThane
-    ThaneshipFame[8] = licenses.isEastmarchThane
-    i = 0
-    while i < ThaneshipFame.Length
-        if ThaneshipFame[i]
-            ThaneshipFameCount += 1.7
-        endIf
-        i += 1
-    EndWhile
+    ThaneshipFame[0] = FJMF.WhiterunImpGetOutofJail + FJMF.WhiterunSonsGetOutofJail
+    ThaneshipFame[1] = FJMF.WinterholdImpGetOutofJail + FJMF.WinterholdSonsGetOutofJail
+    ThaneshipFame[2] = FJMF.RiftImpGetOutofJail + FJMF.RiftSonsGetOutofJail
+    ThaneshipFame[3] = FJMF.ReachImpGetOutofJail + FJMF.ReachSonsGetOutofJail
+    ThaneshipFame[4] = FJMF.PaleImpGetOutofJail + FJMF.PaleSonsGetOutofJail
+    ThaneshipFame[5] = FJMF.HjaalmarchImpGetOutofJail + FJMF.HjaalmarchSonsGetOutofJail
+    ThaneshipFame[6] = FJMF.HaafingarImpGetOutofJail + FJMF.HaafingarSonsGetOutofJail
+    ThaneshipFame[7] = FJMF.FalkreathImpGetOutofJail + FJMF.FalkreathSonsGetOutofJail
+    ThaneshipFame[8] = FJMF.EastmarchImpGetOutofJail + FJMF.EastmarchSonsGetOutofJail
 
-    return ((TitleFameCount / TitleFame.Length) + (ThaneshipFameCount / ThaneshipFame.Length))
+    return (((PapyrusUtil.CountBool(TitleFame, true) * 4.5) / TitleFame.Length) \
+    + ((PapyrusUtil.CountBool(ThaneshipFame, true) * 1.7) / ThaneshipFame.Length))
 EndFunction
 
 Float Function insuranceModifierJail()
@@ -1830,7 +1826,6 @@ BM_Licenses_ViolationCheck Property bmlViolationCheck auto
 BM_Licenses_Bounty Property bmlBounty auto
 BM_Player Property bmPlayer auto
 BM_Licenses_Moderator_Alias Property bmlModeratorAlias auto
-BM_Licenses_ThaneshipCheck Property bmlThaneshipCheck auto
 
 Book Property BM_ArmorLicense Auto
 Book Property BM_BikiniLicense Auto
@@ -1915,3 +1910,10 @@ WorldSpace Property savedSpace auto
 WorldSpace Property lastSpace auto
 
 Bool Property Licenses_State = false Auto
+
+; Vanilla Quests
+Quest Property MQ104 auto
+Quest Property C06 auto
+Quest Property MG08 auto
+Quest Property CWSiegeObj auto
+FavorJarlsMakeFriendsScript Property FJMF auto

@@ -231,24 +231,20 @@ Function ConfiscateItems(Bool Confiscate = false, bool ConfiscateInventory = fal
         endIf
     else
         bmlUtility.GameMessage(MessageItemCheck)
-        bmlUtility.BM_PotentialViolations.Revert()
-        bmlUtility.BM_PotentialViolations.AddForms(PapyrusUtil.MergeFormArray(bmlUtility.ScanEquippedItems_Base(PlayerActorRef), bmlUtility.ScanEquippedItems_Ench(PlayerActorRef), true))
+        Form[] ValidatedForms = PapyrusUtil.MergeFormArray(bmlUtility.ScanEquippedItems_Base(PlayerActorRef), bmlUtility.ScanEquippedItems_Ench(PlayerActorRef), true)
 
-        if bmlUtility.BM_PotentialViolations.GetAt(0)
-            int i = bmlUtility.BM_PotentialViolations.GetSize()
-            While (i > -1)
-                if bmlUtility.BM_PotentialViolations.GetAt(i)
-                    PlayerActorRef.UnequipItem(bmlUtility.BM_PotentialViolations.GetAt(i), false, true)
-                    bmlUtility.LogNotification("Unequipped: " + bmlUtility.BM_PotentialViolations.GetAt(i).getName())
+        if ValidatedForms.Length
+            int index = ValidatedForms.Length
+            While index
+                index -= 1
+                if ValidatedForms[index]
+                    PlayerActorRef.UnequipItem(ValidatedForms[index], false, true)
+                    bmlUtility.LogNotification("Unequipped: " + ValidatedForms[index].getName())
                 endIf
-                i -= 1
             EndWhile
             
             bmlUtility.GameMessage(MessageItemUnequipped)
         endIf
-
-        ; Clean Up
-        bmlUtility.BM_PotentialViolations.Revert()
     endIf
 
     if (!hasMagicLicense && !isInsured)
@@ -331,6 +327,8 @@ Function ConfiscateItems_Simple()
     ; Filter out items matching keyword combinations
     ValidatedForms = SPE_Utility.FilterFormsByKeyword(ValidatedForms, KeywordQuestItem, true, true)
     ValidatedForms = SPE_Utility.FilterFormsByKeyword(ValidatedForms, KeywordModItem, false, true)
+    ; Filter by Armor Slots
+    ValidatedForms = bmlUtility.FilterByOccupiedSlotmask(ValidatedForms, bmlmcm.ArmorSlotArray)
     ; Remove items
     SPE_ObjectRef.RemoveItems(PlayerActorRef, ValidatedForms, none)
 EndFunction
@@ -487,6 +485,20 @@ Function PopulateKeywordBikiniItemArray()
         KeywordBikiniItem[i + 1] = Keyword.GetKeyword(BikiniKeyword[i])
         i += 1
     EndWhile
+EndFunction
+
+Function ValidateArmorSlotArray()
+    if bmlmcm.ArmorSlotArray.Length != 32
+        bmlmcm.ArmorSlotArray = Utility.CreateIntArray(32, 0)
+    else
+        int i = 0
+        while i < bmlmcm.ArmorSlotArray.Length
+            if bmlmcm.ArmorSlotArray[i] && bmlmcm.ArmorSlotArray[i] != (i + 30)
+                bmlmcm.ArmorSlotArray[i] = 0
+            endIf
+            i += 1
+        endWhile
+    endIf
 EndFunction
 ; ------------------------------
 
@@ -647,25 +659,13 @@ bool Property isWhoreViolation auto conditional
 
 bool Property isInCity = false auto conditional
 bool Property isInTown = false auto conditional
+bool Property isLicenseLimit = false auto conditional
 bool Property isThane = false auto
 bool Property isInsured
     bool Function Get()
         return hasInsurance || (bmlmcm.isInsuranceFeatureEnabled && bmlmcm.thaneImmunityInsurance && isThane)
     EndFunction
 EndProperty
-
-; Below variables are 'trapped' when true. They remain true even if player loses Thaneship due to Civil War. This behavior is FINE.
-bool Property isWhiterunThane auto
-bool Property isWinterholdThane auto
-bool Property isRiftThane auto
-bool Property isReachThane auto
-bool Property isPaleThane auto
-bool Property isHjaalmarchThane auto
-bool Property isHaafingarThane auto
-bool Property isFalkreathThane auto
-bool Property isEastmarchThane auto
-; ---
-bool Property isLicenseLimit = false auto conditional
 
 ; if expiration time == -1.0 -> not purchased yet
 ; resets after license runs out
