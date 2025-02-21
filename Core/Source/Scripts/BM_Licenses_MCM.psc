@@ -7,6 +7,7 @@ bool Property SessionModified auto
 Message Property MessageConfigWarn  Auto  
 string config = "../../../Interface/Licenses/Settings.json"
 string[] ModVersionCache
+GlobalVariable Property Licenses_State auto
 
 import JsonUtil
 
@@ -260,22 +261,18 @@ Event OnConfigInit()
 	if CurrentVersion == 0
 		bmlUtility.LogNotification("Installed Licenses " + GetModVersion(), true)
 		bmlUtility.LogTrace("Installed Licenses " + GetModVersion(), true)
-		if !bmlUtility.Licenses_State && GetIntValue(config, "!!doautostart") == 1
+		if Licenses_State.GetValue() == 0 && GetIntValue(config, "!!doautostart") == 1
 			GoToState("AutoStartST")
 		endIf
 	endIf
 EndEvent
 
 Event OnConfigOpen()
-	if self.GetState() == "AutoStartST"
-		return
-	endIf
+	UnregisterForUpdate()
+	GoToState("")
 
 	SessionModified = false
-	if !bmlUtility.Licenses_State
-		Pages = new string[1]
-		Pages[0] = "$LPO_Pages0"
-	else
+	if Licenses_State.GetValue() == 1
 		Pages = new string[8]
 		Pages[0] = "$LPO_Pages0"
 		Pages[1] = "$LPO_Pages1"
@@ -285,11 +282,14 @@ Event OnConfigOpen()
 		Pages[5] = "$LPO_Pages5"
 		Pages[6] = "$LPO_Pages6"
 		Pages[7] = "$LPO_Pages7"
+	else
+		Pages = new string[1]
+		Pages[0] = "$LPO_Pages0"
 	endIf
 EndEvent
 
 Event OnConfigClose()
-	if SessionModified && bmlUtility.Licenses_State
+	if SessionModified && Licenses_State.GetValue() == 1
 		SessionModified = false
 		bmlUtility.refreshLicenseFeatures()
 		bmlUtility.refreshInventoryEventFilters()
@@ -297,21 +297,33 @@ Event OnConfigClose()
 	endIf
 EndEvent
 
+String Function GetModState()
+	if Licenses_State.GetValue() == 1
+		return "$LPO_Licenses_StateInitialized"
+	elseIf Licenses_State.GetValue() == 0
+		return "$LPO_Licenses_StateInitialize"
+	elseIf Licenses_State.GetValue() == -1
+		if bmlUtility.Licenses_CachedState
+			return "$LPO_Licenses_StateTerminating"
+		else
+			return "$LPO_Licenses_StateInitializing"
+		endIf
+	else
+		return "$LPO_Licenses_StateErrored" ; function default
+	endIf
+EndFunction
+
 Event OnPageReset(string page)
 	GoToState("")
-	if !bmlUtility.Licenses_State || (page == "$LPO_Pages0")
+	if Licenses_State.GetValue() != 1 || (page == "$LPO_Pages0")
 		SetCursorFillMode(TOP_TO_BOTTOM)
 		SetTitleText("$LPO_Pages0")
 		AddHeaderOption("$LPO_Setup")
-		if !bmlUtility.Licenses_State
-			AddTextOptionST("Licenses_StateST", "$LPO_Licenses_State", "$LPO_Licenses_StateValue1")
-		else
-			AddTextOptionST("Licenses_StateST", "$LPO_Licenses_State", "$LPO_Licenses_StateValue3")
-		endIf
+		AddTextOptionST("Licenses_StateST", "$LPO_Licenses_State", GetModState())
 		AddEmptyOption()
 		AddHeaderOption("$LPO_ConfigurationFile")
-		AddTextOptionST("exportConfigST", "$LPO_exportConfig", "", (!bmlUtility.Licenses_State) as int)
-		AddTextOptionST("importConfigST", "$LPO_importConfig", "", (!bmlUtility.Licenses_State) as int)
+		AddTextOptionST("exportConfigST", "$LPO_exportConfig", "", (Licenses_State.GetValue() != 1) as int)
+		AddTextOptionST("importConfigST", "$LPO_importConfig", "", (Licenses_State.GetValue() != 1) as int)
 		SetCursorPosition(1)
 		AddHeaderOption("")
 		AddTextOption("$LPO_ModVersion", GetModVersion(), OPTION_FLAG_DISABLED)
@@ -775,10 +787,19 @@ State AutoStartST
 EndState
 
 Function StartupLicenses()
-	bmlUtility.Startup(GetIntValue(config, "!!doautoload") == 1)
+	Licenses_State.SetValue(-1.0)
+	bmlUtility.reset()
+	bmlUtility.stop()
+	while !bmlUtility.IsStopped()
+		Utility.Wait(0.1)
+	endWhile
+	if bmlUtility.start()
+		bmlUtility.Startup(GetIntValue(config, "!!doautoload") == 1)
+	endIf
 EndFunction
 
 Function ShutdownLicenses()
+	Licenses_State.SetValue(-1.0)
 	; Remove currently held license book items
 	licenses.PlayerActorRef.removeItem(bmlUtility.BM_ArmorLicense, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_ArmorLicense))
 	licenses.PlayerActorRef.removeItem(bmlUtility.BM_BikiniLicense, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_BikiniLicense))
@@ -800,20 +821,15 @@ EndFunction
 
 state Licenses_StateST
     event OnSelectST()
-        if !bmlUtility.Licenses_State
-			SetTextOptionValueST("$LPO_Licenses_StateValue2")
+        if Licenses_State.GetValue() == 0
+			Licenses_State.SetValue(-1.0)
+			SetTextOptionValueST("$LPO_Licenses_StateInitializing")
 			ShowMessage("$LPO_Licenses_StateMessageInitialize1", false)
-			bmlUtility.reset()
-			bmlUtility.stop()
-			while !bmlUtility.IsStopped()
-				Utility.Wait(0.1)
-			endWhile
-			if bmlUtility.start()
-				StartupLicenses()
-			endIf
-        else
+			StartupLicenses()
+        elseIf Licenses_State.GetValue() == 1
 			if ShowMessage("$LPO_Licenses_StateMessageShutdown1")
-				SetTextOptionValueST("$LPO_Licenses_StateValue4")
+				Licenses_State.SetValue(-1.0)
+				SetTextOptionValueST("$LPO_Licenses_StateTerminating")
 				ShutdownLicenses()
 				SessionModified = false
 				ForcePageReset()
@@ -821,7 +837,7 @@ state Licenses_StateST
         endIf
 	endEvent
 	event OnHighlightST()
-		if bmlUtility.Licenses_State
+		if Licenses_State.GetValue() == 1
 			SetInfoText("$LPO_Licenses_StateHighlight")
 		endIf
 	endEvent

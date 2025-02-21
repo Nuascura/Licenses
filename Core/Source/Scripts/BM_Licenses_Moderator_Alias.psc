@@ -12,7 +12,7 @@ EndEvent
 Function OnLoad()
     UnregisterForAllModEvents()
 
-    if bmlUtility.Licenses_State && bmlUtility.bmlmcm.IsRunning()
+    if bmlUtility.Licenses_CachedState && bmlUtility.bmlmcm.IsRunning()
         bmlUtility.ReloadMCMVariables()
     endIf
 

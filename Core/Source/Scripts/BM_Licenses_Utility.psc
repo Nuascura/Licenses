@@ -389,7 +389,8 @@ Function Startup(Bool abAutoLoad)
     RefreshStatus()
     
     ; Cache State
-    Licenses_State = true
+    Licenses_CachedState = true
+    Licenses_State.SetValue(1.0)
     LogNotification("Completed initialization sequence.", true)
     LogTrace("State Change - INITIALIZED", true)
 EndFunction
@@ -447,7 +448,8 @@ Function Shutdown()
     Quest.GetQuest("BM_Licenses_Moderator").stop()
 
     ; Cache State
-    Licenses_State = false
+    Licenses_CachedState = false
+    Licenses_State.SetValue(0.0)
     LogNotification("Completed termination sequence.", true)
     LogTrace("State Change - TERMINATED", true)
 EndFunction
@@ -1909,7 +1911,8 @@ WorldSpace Property currSpace auto
 WorldSpace Property savedSpace auto
 WorldSpace Property lastSpace auto
 
-Bool Property Licenses_State = false Auto
+GlobalVariable Property Licenses_State auto
+Bool Property Licenses_CachedState auto hidden
 
 ; Vanilla Quests
 Quest Property MQ104 auto
