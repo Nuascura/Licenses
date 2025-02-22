@@ -6,9 +6,9 @@ Auto State Start
     Event OnBeginState()
         bmlUtility.LogTrace("ViolationCheck")
         bmlUtility.BM_PotentialViolations.Revert()
-        bmlUtility.BM_PotentialViolations.AddForms(bmlUtility.ScanEquippedItems_Base(bmlUtility.licenses.PlayerActorRef))
+        bmlUtility.BM_PotentialViolations.AddForms(bmlUtility.GetViolatingItems(bmlUtility.licenses.PlayerActorRef, true))
         bmlUtility.BM_PotentialViolations_Ench.Revert()
-        bmlUtility.BM_PotentialViolations_Ench.AddForms(bmlUtility.ScanEquippedItems_Ench(bmlUtility.licenses.PlayerActorRef))
+        bmlUtility.BM_PotentialViolations_Ench.AddForms(bmlUtility.GetViolatingItems(bmlUtility.licenses.PlayerActorRef, true, true))
         RegisterForSingleUpdate(0.1)
     EndEvent
     Event OnUpdate()
