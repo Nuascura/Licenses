@@ -11,37 +11,41 @@ ReferenceAlias Property enforcerRef_5 auto
 Actor[] EnforcerActors
 ReferenceAlias[] EnforcerAliases
 
-bool Property isDetected = false auto
-
-Function Setup()
-    Actor playerActor = playerRef.GetActorRef()
-    SetActorArray()
-    int i = 0
-    while i < EnforcerActors.Length
-        if EnforcerActors[i]
-            RegisterForSingleLOSGain(EnforcerActors[i], playerActor)
+Auto State Default
+    Event OnBeginState()
+        Actor playerActor = playerRef.GetActorRef()
+        SetActorArray()
+        int i = 0
+        while i < EnforcerActors.Length
+            if EnforcerActors[i]
+                RegisterForSingleLOSGain(EnforcerActors[i], playerActor)
+            endIf
+            i += 1
+        endWhile
+        licenses.bmlUtility.LogTrace("Alias setup valid. Running periodic detection update event.")
+        RegisterForSingleUpdate(15) ; time out after 15 seconds
+    EndEvent
+    Event OnGainLOS(Actor akViewer, ObjectReference akTarget)
+        if GetState() != "Detected"
+            GoToState("Detected")
+            licenses.bmlUtility.LogTrace("LOS Detection: Player was detected by enforcer " + akViewer)
+            RegisterForSingleUpdate(1.0)
         endIf
-        i += 1
-    endWhile
-    RegisterForSingleUpdate(15) ; time out after 15 seconds
-    licenses.bmlUtility.LogTrace("Alias setup valid. Running periodic detection update event.")
-EndFunction
+    EndEvent
+    Event OnUpdate()
+        licenses.bmlUtility.LogTrace("Stopping detection quest due to time out.")
+        self.stop()
+    EndEvent
+EndState
 
-Event OnGainLOS(Actor akViewer, ObjectReference akTarget)
-    isDetected = true
-    licenses.bmlUtility.LogTrace("LOS Detection: Player was detected by enforcer " + akViewer)
-    RegisterForSingleUpdate(1.0)
-EndEvent
-
-Event OnUpdate()
-    if isDetected
+State Detected
+    Event OnGainLOS(Actor akViewer, ObjectReference akTarget)
+    EndEvent
+    Event OnUpdate()
         SendModEvent("BM-LPO_ReporterLOSGain")
         licenses.bmlUtility.startViolationCheckQuest()
-    else
-        licenses.bmlUtility.LogTrace("Stopping detection quest due to time out.")
-    endIf
-    self.stop()
-EndEvent
+    EndEvent
+EndState
 
 Function SetActorArray()
     EnforcerActors = new Actor[5]

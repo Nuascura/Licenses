@@ -15,7 +15,7 @@ EndFunction
 Function Fragment_1(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
-Form[] ValidatedForms = PapyrusUtil.MergeFormArray(licenses.bmlUtility.ScanInventory_Base(ItemRetrievalActor), licenses.bmlUtility.ScanInventory_Ench(ItemRetrievalActor), true)
+Form[] ValidatedForms = licenses.bmlUtility.GetViolatingItemsAll(ItemRetrievalActor, false)
 SPE_ObjectRef.RemoveItems(ItemRetrievalActor, ValidatedForms, licenses.BM_ItemConfiscationChest)
 ItemRetrievalActor.ShowGiftMenu(false, none, true, false)
 ;END CODE

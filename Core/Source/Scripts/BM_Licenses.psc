@@ -213,36 +213,34 @@ Function ConfiscateItems(Bool Confiscate = false, bool ConfiscateInventory = fal
         Confiscate = false
     endIf
 
-    if Confiscate && ConfiscateInventory
+    if Confiscate
         bmlUtility.GameMessage(MessageItemCheckInv)
         ; Merge two lists, remove dupes
-        Form[] ValidatedForms = PapyrusUtil.MergeFormArray(bmlUtility.ScanInventory_Base(PlayerActorRef), bmlUtility.ScanInventory_Ench(PlayerActorRef), true)
-        ; Remove items
-        if SPE_ObjectRef.RemoveItems(PlayerActorRef, ValidatedForms, BM_ItemConfiscationChest) > 0
-            bmlUtility.GameMessage(MessageItemConfiscated)
-        endIf
-    elseIf Confiscate
-        bmlUtility.GameMessage(MessageItemCheck)
-        ; Merge two lists, remove dupes
-        Form[] ValidatedForms = PapyrusUtil.MergeFormArray(bmlUtility.ScanEquippedItems_Base(PlayerActorRef), bmlUtility.ScanEquippedItems_Ench(PlayerActorRef), true)
+        Form[] ValidatedForms = bmlUtility.GetViolatingItemsAll(PlayerActorRef, ConfiscateInventory)
         ; Remove items
         if SPE_ObjectRef.RemoveItems(PlayerActorRef, ValidatedForms, BM_ItemConfiscationChest) > 0
             bmlUtility.GameMessage(MessageItemConfiscated)
         endIf
     else
         bmlUtility.GameMessage(MessageItemCheck)
-        Form[] ValidatedForms = PapyrusUtil.MergeFormArray(bmlUtility.ScanEquippedItems_Base(PlayerActorRef), bmlUtility.ScanEquippedItems_Ench(PlayerActorRef), true)
+        Form[] ValidatedForms = bmlUtility.GetViolatingItemsAll(PlayerActorRef, true)
 
         if ValidatedForms.Length
             int index = ValidatedForms.Length
             While index
                 index -= 1
-                if ValidatedForms[index]
-                    PlayerActorRef.UnequipItem(ValidatedForms[index], false, true)
-                    bmlUtility.LogNotification("Unequipped: " + ValidatedForms[index].getName())
+                if ValidatedForms[index] as Weapon
+                    if ValidatedForms[index] == PlayerActorRef.GetEquippedObject(0)
+                        PlayerActorRef.UnequipItemEx(ValidatedForms[index], 2)
+                    endIf
+                    If ValidatedForms[index] == PlayerActorRef.GetEquippedObject(1)
+                        PlayerActorRef.UnequipItemEx(ValidatedForms[index], 1)
+                    endIf
+                else
+                    PlayerActorRef.UnequipItemEx(ValidatedForms[index], 0)
                 endIf
+                bmlUtility.LogNotification("Unequipped: " + ValidatedForms[index].getName())
             EndWhile
-            
             bmlUtility.GameMessage(MessageItemUnequipped)
         endIf
     endIf
@@ -263,7 +261,13 @@ Function ConfiscateItems(Bool Confiscate = false, bool ConfiscateInventory = fal
     Utility.Wait(2.0) ; give item confiscation some time to finish
 
     if PlayerActorRef.isWeaponDrawn()
-        PlayerActorRef.SheatheWeapon()
+        float break
+        while PlayerActorRef.IsWeaponDrawn() && break < 5
+			PlayerActorRef.SheatheWeapon()
+			Utility.Wait(0.25)
+            break += 0.25
+		endWhile
+        Utility.Wait(0.5)
     endIf
 EndFunction
 
@@ -316,21 +320,23 @@ Function ConfiscateItems_Simple()
             KeywordConfiscationEnch_Simple[7] = VendorItemWeapon
         endIf
     endIf
-    ; Get items matching valid keywords per license features
-    Form[] PotentialForms = SPE_ObjectRef.GetItemsByKeyword(PlayerActorRef, KeywordConfiscation_Simple, false)
-    ; Get potentially enchanted items matching valid keywords per license features
-    Form[] PotentialFormsEnch = SPE_ObjectRef.GetItemsByKeyword(PlayerActorRef, KeywordConfiscationEnch_Simple, false)
-    ; Filter for only enchanted items
-    PotentialFormsEnch = SPE_Utility.IntersectArray_Form(PotentialFormsEnch, SPE_ObjectRef.GetEnchantedItems(PlayerActorRef, true, true, false))
-    ; Merge two lists, remove dupes
-    Form[] ValidatedForms = PapyrusUtil.MergeFormArray(PotentialForms, PotentialFormsEnch, true)
-    ; Filter out items matching keyword combinations
-    ValidatedForms = SPE_Utility.FilterFormsByKeyword(ValidatedForms, KeywordQuestItem, true, true)
-    ValidatedForms = SPE_Utility.FilterFormsByKeyword(ValidatedForms, KeywordModItem, false, true)
-    ; Filter by Armor Slots
-    ValidatedForms = bmlUtility.FilterByOccupiedSlotmask(ValidatedForms, bmlmcm.ArmorSlotArray)
+    ; Get Armor, selecting by slot
+    Form[] PotentialForms = bmlUtility.FilterByOccupiedSlotmask(PO3_SKSEFunctions.AddItemsOfTypeToArray(PlayerActorRef, 26, false), bmlmcm.ArmorSlotArray)
+    ; Get Weapons
+    PotentialForms = PapyrusUtil.MergeFormArray(PotentialForms, PO3_SKSEFunctions.AddItemsOfTypeToArray(PlayerActorRef, 41, false), true)
+    ; Get Ammo
+    PotentialForms = PapyrusUtil.MergeFormArray(PotentialForms, PO3_SKSEFunctions.AddItemsOfTypeToArray(PlayerActorRef, 42, false), true)
+    ; Filter by KeywordConfiscation_Simple
+    Form[] array1 = SPE_Utility.IntersectArray_Form(PotentialForms, SPE_ObjectRef.GetItemsByKeyword(PlayerActorRef, KeywordConfiscation_Simple, false))
+    ; Filter by KeywordConfiscationEnch_Simple
+    Form[] array2 = SPE_Utility.IntersectArray_Form(PotentialForms, SPE_ObjectRef.GetItemsByKeyword(PlayerActorRef, KeywordConfiscationEnch_Simple, false))
+    array2 = SPE_Utility.IntersectArray_Form(array2, SPE_ObjectRef.GetEnchantedItems(PlayerActorRef, true, true, false))
+    ; Merge Arrays
+    PotentialForms = PapyrusUtil.MergeFormArray(array1, array2, true)
+    ; Overrides
+    PotentialForms = bmlUtility.ScanInventory_CommonFilter(PotentialForms)
     ; Remove items
-    SPE_ObjectRef.RemoveItems(PlayerActorRef, ValidatedForms, none)
+    SPE_ObjectRef.RemoveItems(PlayerActorRef, PotentialForms, none)
 EndFunction
 ; ------------------------------
 

@@ -77,10 +77,8 @@ Event OnItemRemoved(Form item, int count, ObjectReference itemRef, ObjectReferen
 EndEvent
 
 Function FillFormLists(Actor Player, ObjectReference VendorChest)
-    BM_PotentialPlayerBarterViolations.AddForms(bmlUtility.ScanInventory_Base(Player))
-    BM_PotentialPlayerBarterViolations.AddForms(bmlUtility.ScanInventory_Ench(Player))
-    BM_PotentialVendorBarterViolations.AddForms(bmlUtility.ScanInventory_Base(VendorChest))
-    BM_PotentialVendorBarterViolations.AddForms(bmlUtility.ScanInventory_Ench(VendorChest))
+    BM_PotentialPlayerBarterViolations.AddForms(bmlUtility.GetViolatingItemsAll(Player, false))
+    BM_PotentialVendorBarterViolations.AddForms(bmlUtility.GetViolatingItemsAll(VendorChest, false))
     BM_PotentialBarterExclusions.AddForms(ScanVendor(VendorChest))
 EndFunction
 

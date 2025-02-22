@@ -3,10 +3,14 @@ Primary
 - Add: Equipment slot filtering.
 - Add: Option to adjust global Comment Chance.
 - Add: Auto Load and Auto Start flags.
+
+Secondary
+- Improve: Compressed function to reduce logic fragmentation.
 - Improve: Handling of internal mod state.
 - Improve: Insurance fame calculation procedures.
 - Improve: Utility Count functions.
 - Improve: Violation Check thread handling.
+- Improve: LOS Detection thread handling.
 - Improve: Handling of Global Variables on mod shutdown.
 - Improve: Curfew global var state dynamism.
 - Change: Locational Thaneship status now checks relationship rank with closest Jarl instead of Thaneship variables directly. This change reduces dependency on vanilla variables while allowing alternate ways to gain immunity. Insurance fame multipliers will still depend on true Thaneship statuses.
