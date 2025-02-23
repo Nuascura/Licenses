@@ -741,10 +741,10 @@ state SlotFilteringST
 		SlotFilteringOID = new Int[32]
 		Int i = 0
 		While i < SlotFilteringOID.Length
-			SlotFilteringOID[i] = AddToggleOption("$LPO_EquipmentSlot_{" + (i + 30) + "}", ArmorSlotArray[i] == (i + 30))
+			SlotFilteringOID[i] = AddToggleOption("$LPO_EquipmentSlot-" + (i + 30), ArmorSlotArray[i] == (i + 30))
 			Armor OccupiedItem = licenses.PlayerActorRef.GetEquippedArmorInSlot(ArmorSlotArray[i])
 			if OccupiedItem && OccupiedItem.GetName() != ""
-				AddTextOption("$LPO_EquipmentSlotOccupiedItem_{" + OccupiedItem.GetName() + "}_{" + OccupiedItem.GetSlotMask() + "}", "", OPTION_FLAG_DISABLED)
+				AddTextOption("$LPO_EquipmentSlotOccupiedItem_{" + OccupiedItem.GetName() + "}", "", OPTION_FLAG_DISABLED)
 			else
 				AddEmptyOption()
 			endIf
@@ -770,8 +770,14 @@ state SlotFilteringST
 		SetToggleOptionValue(OptionID, ArmorSlotArray[i] == (i + 30))
 	EndEvent
 	Event OnOptionHighlight(Int OptionID)
-		if SlotFilteringOID.Find(OptionID) != -1
-			SetInfoText("$LPO_EquipmentSlotHighlight")
+		Int i = SlotFilteringOID.Find(OptionID)
+		if i != -1
+			Armor OccupiedItem = licenses.PlayerActorRef.GetEquippedArmorInSlot(ArmorSlotArray[i])
+			if OccupiedItem && OccupiedItem.GetName() != "" && OccupiedItem.GetNthKeyword(0)
+				SetInfoText("$LPO_EquipmentSlotHighlight_{" + OccupiedItem.GetKeywords().Length + "}")
+			else
+				SetInfoText("$LPO_EquipmentSlotHighlight")
+			endIf
 		endIf
 	EndEvent
 endState
