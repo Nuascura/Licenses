@@ -76,7 +76,7 @@ Function RefreshCollar(actor player, enchantment effect = none) global
     armor WornDevice = none
     if player.WornHasKeyword(libs.zad_DeviousCollar)
         WornDevice = libs.GetWornDevice(player, libs.zad_DeviousCollar)
-        libs.UnlockDevice(player, WornDevice, none, libs.zad_DeviousCollar, true)
+        UnlockDeviceAndWait(libs, player, WornDevice, none, libs.zad_DeviousCollar, true)
     endIf
     if (deviceValidator(libs, player, WornDevice))
         ObjectReference WornDeviceRef = player.PlaceAtMe(WornDevice, abInitiallyDisabled = true)
@@ -98,7 +98,7 @@ Function RenewCollar(actor player, enchantment effect = none, int ddFilter) glob
     zadDeviceLists DeviceLists = (Game.GetFormFromFile(0x00CA01, "Devious Devices - Expansion.esm") as Quest) as zadDeviceLists
     armor randomDevice = None
     if player.WornHasKeyword(libs.zad_DeviousCollar)
-        libs.UnlockDeviceByKeyword(player, libs.zad_DeviousCollar, true)
+        UnlockDeviceAndWait(libs, player, libs.GetWornDevice(player, libs.zad_DeviousCollar), zad_DeviousDevice = libs.zad_DeviousCollar, destroyDevice = true)
     endIf
     if ddFilter == 1
         randomDevice = libs.cuffsPaddedCollar
@@ -200,8 +200,18 @@ EndFunction
 
 Function LockDeviceAndWait(zadLibs libs, actor akActor, armor deviceInventory, keyword zad_DeviousDevice, bool force = false) global
 	if libs.LockDevice(akActor, deviceInventory, force)
-        int counter = 3
+        int counter = 5
         while !akActor.WornHasKeyword(zad_DeviousDevice) && counter > 0
+            Utility.Wait(0.1)
+            counter -= 1
+        endWhile
+    endIf
+EndFunction
+
+Function UnlockDeviceAndWait(zadLibs libs, actor akActor, armor deviceInventory, armor deviceRendered = none, keyword zad_DeviousDevice = none, bool destroyDevice = false, bool genericonly = false) global
+    if libs.UnlockDevice(akActor, deviceInventory, deviceRendered, zad_DeviousDevice, destroyDevice, genericonly)
+        int counter = 5
+        while akActor.WornHasKeyword(zad_DeviousDevice) && counter > 0
             Utility.Wait(0.1)
             counter -= 1
         endWhile
