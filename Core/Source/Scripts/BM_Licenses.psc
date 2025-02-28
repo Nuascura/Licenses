@@ -216,14 +216,14 @@ Function ConfiscateItems(Bool Confiscate = false, bool ConfiscateInventory = fal
     if Confiscate
         bmlUtility.GameMessage(MessageItemCheckInv)
         ; Merge two lists, remove dupes
-        Form[] ValidatedForms = bmlUtility.GetViolatingItemsAll(PlayerActorRef, ConfiscateInventory)
+        Form[] ValidatedForms = bmlUtility.GetViolatingItemsAll(PlayerActorRef, !ConfiscateInventory)
         ; Remove items
         if SPE_ObjectRef.RemoveItems(PlayerActorRef, ValidatedForms, BM_ItemConfiscationChest) > 0
             bmlUtility.GameMessage(MessageItemConfiscated)
         endIf
     else
         bmlUtility.GameMessage(MessageItemCheck)
-        Form[] ValidatedForms = bmlUtility.GetViolatingItemsAll(PlayerActorRef, true)
+        Form[] ValidatedForms = bmlUtility.GetViolatingItemsAll(PlayerActorRef, false)
 
         if ValidatedForms.Length
             int index = ValidatedForms.Length
