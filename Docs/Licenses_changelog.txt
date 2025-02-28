@@ -1,3 +1,10 @@
+1.23.1
+Primary
+- Fix: Inventory items aren't confiscated after confrontation event.
+- Fix: DD Restraint refresh does not wait until item is properly unequipped before proceeding.
+
+
+
 1.23.0
 Primary
 - Add: Equipment slot filtering.
