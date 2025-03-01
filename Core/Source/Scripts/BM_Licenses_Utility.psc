@@ -460,12 +460,7 @@ Function CheckLocation()
     currLoc = PlayerActorRef.GetCurrentLocation()
     if currLoc
         if PlayerActorRef.IsInInterior()
-            WorldSpace[] ExteriorWorldSpaces = SPE_Cell.GetExteriorWorldSpaces(PlayerActorRef.GetParentCell())
-            if ExteriorWorldSpaces
-                currSpace = ExteriorWorldSpaces[0]
-            else
-                currSpace = FindWorldFromDoor(PO3_SKSEFunctions.FindAllReferencesOfFormType(PlayerActorRef, 29, 0))
-            endIf
+            currSpace = GetWorldSpaceFromInterior(PlayerActorRef)
         else
             currSpace = PlayerActorRef.GetWorldSpace()
         endIf
@@ -478,7 +473,9 @@ Function ValidateLocNested(Location akNewLoc, WorldSpace akNewSpace, FormList Lo
     Location validatedLoc = FindLocFromParent(akNewLoc, LocList, akKeyword)
     if validatedLoc
         lastLoc = validatedLoc
-        lastSpace = akNewSpace
+        if !BM_LicensesIgnoreWorldspace.HasForm(akNewSpace)
+            lastSpace = akNewSpace
+        endIf
     endIf
 EndFunction
 
@@ -504,28 +501,49 @@ Location Function FindLocFromParent(Location akLoc, FormList LocList, Keyword ak
     return none
 EndFunction
 
-WorldSpace Function FindWorldFromList(WorldSpace[] WorldArray, FormList WorldList)
+WorldSpace Function FindWorldFromList(WorldSpace[] WorldArray, FormList WorldList, FormList ExclusionList)
     int index = WorldArray.length
+    WorldSpace CachedSpace = none
     while index
         index -= 1
         if WorldList.HasForm(WorldArray[index])
             return WorldArray[index]
+        elseIf ExclusionList.HasForm(WorldArray[index])
+            CachedSpace = lastSpace
         endIf
     endWhile
-    return none
+    return CachedSpace
 EndFunction
 
-WorldSpace Function FindWorldFromDoor(ObjectReference[] DoorArray)
+WorldSpace Function FindWorldFromDoor(ObjectReference[] DoorArray, FormList WorldList, FormList ExclusionList)
     int index = 0
+    WorldSpace CachedSpace = none
     while index < DoorArray.Length
         if DoorArray[index] && PO3_SKSEFunctions.IsLoadDoor(DoorArray[index])
             WorldSpace CurrExteriorWorld = PO3_SKSEFunctions.GetDoorDestination(DoorArray[index]).GetWorldSpace()
             if CurrExteriorWorld
-                return CurrExteriorWorld
+                if WorldList.HasForm(CurrExteriorWorld)
+                    return CurrExteriorWorld
+                elseIf ExclusionList.HasForm(CurrExteriorWorld)
+                    CachedSpace = lastSpace
+                endIf
             endIf
         endIf
         index += 1
     endWhile
+    return CachedSpace
+EndFunction
+
+WorldSpace Function GetWorldSpaceFromInterior(ObjectReference akObjRef)
+    WorldSpace[] ExteriorWorldSpaces = SPE_Cell.GetExteriorWorldSpaces(akObjRef.GetParentCell())
+    if ExteriorWorldSpaces
+        return FindWorldFromList(ExteriorWorldSpaces, BM_WorldSpaces, BM_LicensesIgnoreWorldspace)
+    else
+        ObjectReference[] InteriorDoors = PO3_SKSEFunctions.FindAllReferencesOfFormType(akObjRef, 29, 0)
+        if InteriorDoors
+            return FindWorldFromDoor(InteriorDoors, BM_WorldSpaces, BM_LicensesIgnoreWorldspace)
+        endIf
+    endIf
     return none
 EndFunction
 
@@ -540,16 +558,16 @@ Bool Function GetIsInCity()
 EndFunction
 
 Bool Function GetIsInCitySpace()
-    if BM_LicensesIgnoreWorldspace.HasForm(PlayerActorRef.GetWorldSpace())  
-        return licenses.isInCity
-    endIf
-    WorldSpace[] ExteriorWorldSpaces = SPE_Cell.GetExteriorWorldSpaces(PlayerActorRef.GetParentCell())
-    if ExteriorWorldSpaces
-        lastSpace = FindWorldFromList(ExteriorWorldSpaces, BM_WorldSpaces)
+    WorldSpace tempSpace = PlayerActorRef.GetWorldSpace()
+    if tempSpace
+        If BM_WorldSpaces.HasForm(tempSpace)
+            return tempSpace
+        elseIf BM_LicensesIgnoreWorldspace.HasForm(tempSpace)
+            return licenses.isInCity
+        endIf
     else
-        lastSpace = FindWorldFromDoor(PO3_SKSEFunctions.FindAllReferencesOfFormType(PlayerActorRef, 29, 0))
+        return GetWorldSpaceFromInterior(PlayerActorRef)
     endIf
-    return lastSpace
 EndFunction
 
 Bool Function GetIsInTown()

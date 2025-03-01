@@ -1,6 +1,8 @@
 1.23.2
 Primary
 - Fix: Unequip process erroneously considers already unequipped/inventory items.
+- Fix: LPO erroneously stores Ignored WorldSpace form.
+- Improve: Handling of invalid and ignored worldspaces.
 
 
 

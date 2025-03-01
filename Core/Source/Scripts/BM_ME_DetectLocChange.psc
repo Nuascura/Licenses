@@ -17,12 +17,7 @@ Event OnLocationChange(Location akOldLoc, Location akNewLoc)
     PO3_SKSEFunctions.MoveToNearestNavmeshLocation(BM_PlayerMarker)
     BM_PlayerMarker.EnableNoWait()
     if BM_PlayerMarker.IsInInterior()
-        WorldSpace[] ExteriorWorldSpaces = SPE_Cell.GetExteriorWorldSpaces(BM_PlayerMarker.GetParentCell())
-        if ExteriorWorldSpaces
-            bmlUtility.currSpace = ExteriorWorldSpaces[0]
-        else
-            bmlUtility.currSpace = bmlUtility.FindWorldFromDoor(PO3_SKSEFunctions.FindAllReferencesOfFormType(BM_PlayerMarker, 29, 0))
-        endIf
+        bmlUtility.currSpace = bmlUtility.GetWorldSpaceFromInterior(BM_PlayerMarker)
     else
         bmlUtility.currSpace = BM_PlayerMarker.GetWorldSpace()
     endIf

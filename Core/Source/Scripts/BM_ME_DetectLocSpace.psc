@@ -4,8 +4,7 @@ BM_Licenses_Utility Property bmlUtility Auto
 
 Event OnEffectStart(Actor akTarget, Actor akCaster)
     bmlUtility.licenses.isInCity = true
-    bmlUtility.lastLoc = akTarget.GetCurrentLocation()
-    bmlUtility.lastSpace = akTarget.GetWorldSpace()
+    OnLocationChange(none, akTarget.GetCurrentLocation())
 EndEvent
 
 Event OnLocationChange(Location akOldLoc, Location akNewLoc)
