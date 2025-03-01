@@ -1,3 +1,9 @@
+1.23.2
+Primary
+- Fix: Unequip process erroneously considers already unequipped/inventory items.
+
+
+
 1.23.1
 Primary
 - Fix: Inventory items aren't confiscated after confrontation event.

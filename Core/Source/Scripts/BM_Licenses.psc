@@ -223,7 +223,7 @@ Function ConfiscateItems(Bool Confiscate = false, bool ConfiscateInventory = fal
         endIf
     else
         bmlUtility.GameMessage(MessageItemCheck)
-        Form[] ValidatedForms = bmlUtility.GetViolatingItemsAll(PlayerActorRef, false)
+        Form[] ValidatedForms = bmlUtility.GetViolatingItemsAll(PlayerActorRef, true)
 
         if ValidatedForms.Length
             int index = ValidatedForms.Length
