@@ -554,20 +554,23 @@ Bool Function GetIsInCity()
     else
         lastLoc = FindLocFromParent(PlayerActorRef.GetCurrentLocation(), BM_Cities, Keyword.GetKeyword("LocTypeCity"))
     endIf
-    return lastLoc && (!bmlmcm.isLimitToCitySpaceEnabled || GetIsInCitySpace())
+    return (!bmlmcm.isLimitToCitySpaceEnabled || GetIsInCitySpace()) && lastLoc
 EndFunction
 
 Bool Function GetIsInCitySpace()
     WorldSpace tempSpace = PlayerActorRef.GetWorldSpace()
     if tempSpace
         If BM_WorldSpaces.HasForm(tempSpace)
-            return tempSpace
+            lastSpace = tempSpace
         elseIf BM_LicensesIgnoreWorldspace.HasForm(tempSpace)
             return licenses.isInCity
+        else
+            lastSpace = none
         endIf
     else
-        return GetWorldSpaceFromInterior(PlayerActorRef)
+        lastSpace = GetWorldSpaceFromInterior(PlayerActorRef)
     endIf
+    return lastSpace
 EndFunction
 
 Bool Function GetIsInTown()
