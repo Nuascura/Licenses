@@ -2,6 +2,7 @@
 Primary
 - Fix: Unequip process erroneously considers already unequipped/inventory items.
 - Fix: LPO erroneously stores Ignored WorldSpace form.
+- Fix: Missing follow-up violation topic for default dialogue if first violation of playthrough is a Magic Violation.
 - Improve: Handling of invalid and ignored worldspaces.
 
 
