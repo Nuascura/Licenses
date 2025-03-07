@@ -373,6 +373,8 @@ Function Startup(Bool abAutoLoad)
     ; Start Add-on Quests
     if Game.GetModByName("Licenses - Ambience.esp") != 255
         Quest.GetQuest("LPO_WIComment").Start()
+        Quest.GetQuest("LPO_WICommentGuard").Start()
+        Quest.GetQuest("LPO_WICommentUncommon").Start()
     endIf
 
     ; Buffer
@@ -427,31 +429,30 @@ Function Shutdown()
 
     ; Stop Add-on Quests
     if Game.GetModByName("Licenses - Ambience.esp") != 255
-        Quest.GetQuest("LPO_WIComment").reset()
-        Quest.GetQuest("LPO_WIComment").stop()
+        StopQuest("LPO_WIComment")
+        StopQuest("LPO_WICommentGuard")
+        StopQuest("LPO_WICommentUncommon")
     endIf
 
     ; Stop Quests
-    Quest.GetQuest("BM_Licenses").reset()
-    Quest.GetQuest("BM_Licenses").stop()
-    Quest.GetQuest("BM_Licenses_ViolationCheck").reset()
-    Quest.GetQuest("BM_Licenses_ViolationCheck").stop()
-    Quest.GetQuest("BM_Licenses_ThaneshipCheck").reset()
-    Quest.GetQuest("BM_Licenses_ThaneshipCheck").stop()
-    Quest.GetQuest("BM_Licenses_Bounty").reset()
-    Quest.GetQuest("BM_Licenses_Bounty").stop()
-    Quest.GetQuest("BM_Licenses_Barter").reset()
-    Quest.GetQuest("BM_Licenses_Barter").stop()
-    Quest.GetQuest("BM_Licenses_Detection").reset()
-    Quest.GetQuest("BM_Licenses_Detection").stop()
-    Quest.GetQuest("BM_Licenses_Moderator").reset()
-    Quest.GetQuest("BM_Licenses_Moderator").stop()
+    StopQuest("BM_Licenses")
+    StopQuest("BM_Licenses_ViolationCheck")
+    StopQuest("BM_Licenses_ThaneshipCheck")
+    StopQuest("BM_Licenses_Bounty")
+    StopQuest("BM_Licenses_Barter")
+    StopQuest("BM_Licenses_Detection")
+    StopQuest("BM_Licenses_Moderator")
 
     ; Cache State
     Licenses_CachedState = false
     Licenses_State.SetValue(0.0)
     LogNotification("Completed termination sequence.", true)
     LogTrace("State Change - TERMINATED", true)
+EndFunction
+Function StopQuest(string asQuestName)
+    Quest kQuest = Quest.GetQuest(asQuestName)
+    kQuest.reset()
+    kQuest.stop()
 EndFunction
 ; ------------------------------
 
