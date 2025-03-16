@@ -96,14 +96,15 @@ Function PlayerArrest(Actor akEnforcer, Faction crimeFaction)
     endIf
 EndFunction
 
-Function PlayerJailed(bool soft = false)
+Function PlayerJailed(bool abConfiscateItems = true, bool abApplyPunishments = true)
     ; internal function and variable setups
     bmlUtility.BM_IsInJail.SetValue(1.0)
     bmlUtility.insuranceModifier("infamy", bmlUtility.insuranceModifierJail())
 
-    if !soft
-        ; remove all valid items
+    if abConfiscateItems
         ConfiscateItems_Simple()
+    endIf
+    if abApplyPunishments
         ApplyPunishment(true)
     endIf
 

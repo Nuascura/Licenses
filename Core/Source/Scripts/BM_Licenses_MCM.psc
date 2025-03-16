@@ -167,7 +167,7 @@ string Property DeviousInterests_Status = "" auto
 bool Property OStim_State = false auto conditional
 string Property OStim_Status = "" auto
 ; Soft dependency - PamaPrisonAlternative.esm
-bool Property PrisonAlternative_State = false auto
+bool Property PrisonAlternative_State = false auto conditional
 string Property PrisonAlternative_Status = "" auto
 ; Soft dependency - SexLab.esm
 bool Property SexLab_State = false auto

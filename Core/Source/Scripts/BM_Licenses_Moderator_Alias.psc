@@ -172,12 +172,12 @@ EndFunction
 
 Event xpo_OnSubArrestPC(String eventName, String strArg, Float numArg, Form sender)
     bmlUtility.LogTrace("xpo_OnSubArrestPC")
-    licenses.PlayerJailed(true)
+    licenses.PlayerJailed(false, false)
 EndEvent
 
 Event xpo_OnArrestPC(String eventName, String strArg, Float numArg, Form sender)
     bmlUtility.LogTrace("xpo_OnArrestPC")
-    licenses.PlayerJailed(true)
+    licenses.PlayerJailed(false, false)
 EndEvent
 
 Event xpo_OnPCisFree(String eventName, String strArg, Float numArg, Form sender)
@@ -232,7 +232,7 @@ EndFunction
 
 Event pamaPA_OnImprisonementStart(string eventName, string strArg, float numArg, Form sender)
     bmlUtility.LogTrace("pamaPA_OnImprisonementStart")
-    licenses.PlayerJailed(true)
+    licenses.PlayerJailed(false, false)
 EndEvent
 
 Event pamaPA_OnImprisonementEnd(string eventName, string strArg, float numArg, Form sender)
@@ -241,8 +241,14 @@ Event pamaPA_OnImprisonementEnd(string eventName, string strArg, float numArg, F
 EndEvent
 
 Function TrackPlayerStatus_DIN() ; Devious Interests
+    RegisterForModEvent("DIN_Jailed", "DIN_OnJailed")
     RegisterForModEvent("DIN_Freed", "DIN_OnFreed")
 EndFunction
+
+Event DIN_OnJailed(string eventName, string strArg, float numArg, Form sender)
+    bmlUtility.LogTrace("DIN_OnJailed")
+    licenses.PlayerJailed(false, false)
+EndEvent
 
 Event DIN_OnFreed(string eventName, string strArg, float numArg, Form sender)
     bmlUtility.LogTrace("DIN_OnFreed")
