@@ -151,7 +151,7 @@ string Property DeviousDevices_Status = "" auto
 bool Property DeviousFollowers_State = false auto
 string Property DeviousFollowers_Status = "" auto
 ; Soft dependency - xazPrisonOverhaulPatched.esp
-bool Property PrisonOverhaulPatched_State = false auto
+bool Property PrisonOverhaulPatched_State = false auto conditional
 string Property PrisonOverhaulPatched_Status = "" auto
 ; Soft dependency - SexLabAroused.esm
 bool Property SexLabAroused_State = false auto

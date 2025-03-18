@@ -589,11 +589,12 @@ Bool Function GetIsInPlayerHome(location targetLoc)
 EndFunction
 
 Bool Function GetIsInJail(location targetLoc, bool ignoreLoc = false)
-    ; approximation method
-    if !(bmlmcm.PrisonAlternative_State || bmlmcm.PrisonOverhaulPatched_State) && (BM_IsInJail.GetValue() as bool)
+    if (bmlmcm.PrisonAlternative_State || bmlmcm.PrisonOverhaulPatched_State || bmlmcm.DeviousInterests_State)
+        return BM_IsInJail.GetValue()
+    elseIf BM_IsInJail.GetValue() > 0
         return !(ignoreLoc || (targetLoc && !targetLoc.HasKeywordString("LocTypeJail")))
     endIf
-    return BM_IsInJail.GetValue()
+    return false
 EndFunction
 ; ------------------------------
 
