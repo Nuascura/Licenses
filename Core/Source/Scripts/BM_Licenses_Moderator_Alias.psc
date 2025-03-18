@@ -182,6 +182,7 @@ EndEvent
 
 Event xpo_OnPCisFree(String eventName, String strArg, Float numArg, Form sender)
     bmlUtility.LogTrace("xpo_OnPCisFree")
+    licenses.ApplyPunishment(true)
     bmlUtility.BM_IsInJail.SetValue(0.0)
 EndEvent
 
@@ -237,6 +238,7 @@ EndEvent
 
 Event pamaPA_OnImprisonementEnd(string eventName, string strArg, float numArg, Form sender)
     bmlUtility.LogTrace("pamaPA_OnImprisonementEnd")
+    licenses.ApplyPunishment(true)
     bmlUtility.BM_IsInJail.SetValue(0.0)
 EndEvent
 
@@ -252,6 +254,7 @@ EndEvent
 
 Event DIN_OnFreed(string eventName, string strArg, float numArg, Form sender)
     bmlUtility.LogTrace("DIN_OnFreed")
+    licenses.ApplyPunishment(true)
     bmlUtility.BM_IsInJail.SetValue(0.0)
 EndEvent
 
