@@ -1,3 +1,21 @@
+1.23.3
+Primary
+- Add: Change tattoo colors via SkyUI color palette for improved accessibility.
+- Fix: Possible conflicting event between BM_LenientCurfewViolation and BM_D_ForceArrest.
+- Fix: Guards don't transfer the player if first time violation is Travel Violation.
+- Fix: Erroneous conditions for manual curse removal request.
+- Fix: Repeated jail node reception via Prison Alternative events.
+- Improve: General outward compatibility with jail-entry events from Prison Alternative, Devious Interests, and Prison Overhaul Patched.
+- Change: Separate World Interaction quests into base, Guard, and Uncommon.
+- Change: Lower misc dialogue quest priorities from 90 to 50.
+- Optimize: Quest stop procedure.
+- Optimize: Jail release detection and associated events.
+- Remove: Devious Interests hard-coded event release function call.
+- Update: Dialogue patch.
+- Update: Localization files.
+
+
+
 1.23.2
 Primary
 - Fix: Unequip process erroneously considers already unequipped/inventory items.
