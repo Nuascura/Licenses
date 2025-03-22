@@ -123,8 +123,8 @@ string[] ddFilterList
 
 ; SlaveTats
 bool Property ShowCurseTattoos = false auto
-int Property Curse_Color = 8900331 auto
-int Property Curse_Glow = 27028 auto
+int Property Curse_Color = 0x99FFFF auto
+int Property Curse_Glow = 0x007A87 auto
 float Property Curse_Alpha = 1.0 auto
 bool Property Curse_Neck = true auto
 bool Property Curse_Torso = true auto
@@ -673,8 +673,8 @@ Event OnPageReset(string page)
 		if SlaveTats_State
 			AddHeaderOption("$LPO_SlaveTats")
 			AddToggleOptionST("ShowCurseTattoosST", "$LPO_ShowCurseTattoos", ShowCurseTattoos)
-			AddInputOptionST("Curse_ColorST", "$LPO_Curse_Color", Curse_Color, (!ShowCurseTattoos) as int)
-			AddInputOptionST("Curse_GlowST", "$LPO_Curse_Glow", Curse_Glow, (!ShowCurseTattoos) as int)
+			AddColorOptionST("Curse_ColorST", "$LPO_Curse_Color", Curse_Color, (!ShowCurseTattoos) as int)
+			AddColorOptionST("Curse_GlowST", "$LPO_Curse_Glow", Curse_Glow, (!ShowCurseTattoos) as int)
 			AddSliderOptionST("Curse_AlphaST", "$LPO_Curse_Alpha", Curse_Alpha, "{1}", (!ShowCurseTattoos) as int)
 			AddToggleOptionST("Curse_NeckST", "$LPO_Curse_Neck", Curse_Neck, (!ShowCurseTattoos) as int)
 			AddToggleOptionST("Curse_TorsoST", "$LPO_Curse_Torso", Curse_Torso, (!ShowCurseTattoos) as int)
@@ -2155,26 +2155,36 @@ state ShowCurseTattoosST
 endState
 
 state Curse_ColorST
-	event OnInputOpenST()
-        SetInputDialogStartText(Curse_Color)
+	event OnColorOpenST()
+        SetColorDialogStartColor(Curse_Color)
+		SetColorDialogDefaultColor(0x99FFFF)
 	endEvent
-    event OnInputAcceptST(string value)
-        Curse_Color = bmlUtility.AdjustStringToInt(value)
-		SetInputOptionValueST(Curse_Color)
+    event OnColorAcceptST(int value)
+        Curse_Color = value
+		SetColorOptionValueST(Curse_Color)
     endEvent
+	event OnDefaultST()
+		Curse_Color = 0x99FFFF
+		SetColorOptionValueST(Curse_Color)
+	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_Curse_ColorHighlight")
 	endEvent
 endState
 
 state Curse_GlowST
-	event OnInputOpenST()
-        SetInputDialogStartText(Curse_Glow)
+	event OnColorOpenST()
+        SetColorDialogStartColor(Curse_Glow)
+		SetColorDialogDefaultColor(0x007A87)
 	endEvent
-    event OnInputAcceptST(string value)
-        Curse_Glow = bmlUtility.AdjustStringToInt(value)
-		SetInputOptionValueST(Curse_Glow)
+    event OnColorAcceptST(int value)
+        Curse_Glow = value
+		SetColorOptionValueST(Curse_Glow)
     endEvent
+	event OnDefaultST()
+		Curse_Glow = 0x007A87
+		SetColorOptionValueST(Curse_Glow)
+	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_Curse_GlowHighlight")
 	endEvent

@@ -948,15 +948,6 @@ Float Function ClampFloat(float value, float minValue, float maxValue)
     EndIf
 EndFunction
 
-Int Function AdjustStringToInt(string OldValue)
-    int NewValue = PO3_SKSEFunctions.StringToInt(OldValue)
-    if NewValue == -1
-        return 0
-    else
-        return NewValue
-    endIf
-EndFunction
-
 bool Function IsInLocation(Location akLocation)
 	if currLoc == None
 		return false
