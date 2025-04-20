@@ -11,6 +11,7 @@ EndEvent
 
 Function OnLoad()
     UnregisterForAllModEvents()
+    PlayerRef = self.GetActorRef()
 
     if bmlUtility.Licenses_CachedState && bmlUtility.bmlmcm.IsRunning()
         bmlUtility.ReloadMCMVariables()
@@ -26,8 +27,6 @@ Function OnLoad()
     TrackDeviousDevicesStatus_DD()
 
     TrackInternalStatus_LPO()
-
-    PlayerRef = self.GetActorRef()
     
     bmlUtility.refreshInventoryEventFilters()
 EndFunction
@@ -130,9 +129,8 @@ EndEvent
 
 ; ---------- Event Mitigation ----------
 Function TrackPlayerStatus_SL() ; SexLab
-    SexLabFramework SexLab = (Game.GetFormFromFile(0x000D62, "SexLab.esm") as Quest) as SexLabFramework
-    if SexLab
-        SexLab.TrackActor(self.GetActorRef(), "SLScene")
+    if bmlUtility.bmlmcm.SexLab_State
+        (Quest.GetQuest("SexLabQuestFramework") as SexLabFramework).TrackActor(PlayerRef, "SLScene")
     endIf
     RegisterForModEvent("SLScene_Start", "SLScene_OnStart")
     RegisterForModEvent("SLScene_End", "SLScene_OnEnd")

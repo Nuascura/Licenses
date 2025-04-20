@@ -1,3 +1,10 @@
+1.23.4
+Primary
+- Optimize: Moderator Alias player actor usage.
+- Fix: Invalid property handling if SexLab isn't installed.
+
+
+
 1.23.3
 Primary
 - Add: Change tattoo colors via SkyUI color palette for improved accessibility.
