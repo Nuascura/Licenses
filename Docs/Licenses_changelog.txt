@@ -1,3 +1,9 @@
+1.23.5
+Primary
+- Fix: Script spam under MGEF OnLocationChange event.
+
+
+
 1.23.4
 Primary
 - Optimize: Moderator Alias player actor usage.

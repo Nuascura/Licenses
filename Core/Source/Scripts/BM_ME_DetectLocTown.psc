@@ -8,7 +8,9 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 EndEvent
 
 Event OnLocationChange(Location akOldLoc, Location akNewLoc)
-    bmlUtility.ValidateLocNested(akNewLoc, GetTargetActor().GetWorldSpace(), bmlUtility.BM_Towns, Keyword.GetKeyword("LocTypeTown"))
+    if akNewLoc
+        bmlUtility.ValidateLocNested(akNewLoc, GetTargetActor().GetWorldSpace(), bmlUtility.BM_Towns, Keyword.GetKeyword("LocTypeTown"))
+    endIf
 EndEvent
 
 Event OnEffectFinish(Actor akTarget, Actor akCaster)
