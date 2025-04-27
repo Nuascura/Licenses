@@ -47,7 +47,8 @@ bool Property isArmorLicenseFeatureEnabled = true auto conditional
 GlobalVariable Property BM_ALCost Auto
 GlobalVariable Property BM_ALDuration Auto
 
-bool Property isBikiniLicenseFeatureEnabled = false auto conditional
+int Property isBikiniLicenseFeatureEnabled = 0 auto conditional
+string[] BikiniLicenseFeatureState
 GlobalVariable Property BM_BLCost Auto
 GlobalVariable Property BM_BLDuration Auto
 bool Property isBikiniArmorFeatureEnabled = true auto
@@ -253,6 +254,11 @@ Event OnConfigInit()
 	NullifyMagickaSourceList[0] = "$LPO_NullifyMagickaSourceList0"
 	NullifyMagickaSourceList[1] = "$LPO_NullifyMagickaSourceList1"
 	NullifyMagickaSourceList[2] = "$LPO_NullifyMagickaSourceList2"
+
+	BikiniLicenseFeatureState = new string[3]
+	BikiniLicenseFeatureState[0] = "$LPO_BikiniLicenseFeatureState0"
+	BikiniLicenseFeatureState[1] = "$LPO_BikiniLicenseFeatureState1"
+	BikiniLicenseFeatureState[2] = "$LPO_BikiniLicenseFeatureState2"
 
 	ModVersionCache = PapyrusUtil.StringSplit(GetModVersion(), ".")
 	if JsonExists(config)
@@ -559,13 +565,13 @@ Event OnPageReset(string page)
     elseIf (page == "$LPO_Pages2")
 		SetCursorFillMode(LEFT_TO_RIGHT)
         AddHeaderOption("$LPO_ArmorLicense")
-        AddToggleOptionST("isArmorLicenseFeatureEnabledST", "$LPO_Enabled", isArmorLicenseFeatureEnabled)
+        AddTextOptionST("isArmorLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isArmorLicenseFeatureEnabled))
         AddSliderOptionST("BM_ALCostST", "$LPO_BM_ALCost", BM_ALCost.getValue(), "{0} gold")
         AddSliderOptionST("BM_ALDurationST", "$LPO_BM_ALDuration", BM_ALDuration.getValue(), "{0} day(s)")
         AddEmptyOption()
         AddEmptyOption()
         AddHeaderOption("$LPO_BikiniLicense")
-        AddToggleOptionST("isBikiniLicenseFeatureEnabledST", "$LPO_Enabled", isBikiniLicenseFeatureEnabled)
+        AddMenuOptionST("isBikiniLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isBikiniLicenseFeatureEnabled as int))
         AddSliderOptionST("BM_BLCostST", "$LPO_BM_BLCost", BM_BLCost.getValue(), "{0} gold")
         AddSliderOptionST("BM_BLDurationST", "$LPO_BM_BLDuration", BM_BLDuration.getValue(), "{0} day(s)")
 		AddToggleOptionST("isBikiniArmorFeatureEnabledST", "$LPO_isBikiniArmorFeatureEnabled", isBikiniArmorFeatureEnabled)
@@ -575,13 +581,13 @@ Event OnPageReset(string page)
         AddEmptyOption()
         AddEmptyOption()
         AddHeaderOption("$LPO_ClothingLicense")
-        AddToggleOptionST("isClothingLicenseFeatureEnabledST", "$LPO_Enabled", isClothingLicenseFeatureEnabled)
+        AddTextOptionST("isClothingLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isClothingLicenseFeatureEnabled))
         AddSliderOptionST("BM_CLCostST", "$LPO_BM_CLCost", BM_CLCost.getValue(), "{0} gold")
         AddSliderOptionST("BM_CLDurationST", "$LPO_BM_CLDuration", BM_CLDuration.getValue(), "{0} day(s)")
         AddEmptyOption()
         AddEmptyOption()
         AddHeaderOption("$LPO_MagicLicense")
-        AddToggleOptionST("isMagicLicenseFeatureEnabledST", "$LPO_Enabled", isMagicLicenseFeatureEnabled)
+        AddTextOptionST("isMagicLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isMagicLicenseFeatureEnabled))
         AddSliderOptionST("BM_MLCostST", "$LPO_BM_MLCost", BM_MLCost.getValue(), "{0} gold")
         AddSliderOptionST("BM_MLDurationST", "$LPO_BM_MLDuration", BM_MLDuration.getValue(), "{0} day(s)")
 		AddToggleOptionST("isEnchantedArmorFeatureEnabledST", "$LPO_isEnchantedArmorFeatureEnabled", isEnchantedArmorFeatureEnabled)
@@ -593,26 +599,26 @@ Event OnPageReset(string page)
 		AddEmptyOption()
 		AddEmptyOption()
         AddHeaderOption("$LPO_WeaponLicense")
-        AddToggleOptionST("isWeaponLicenseFeatureEnabledST", "$LPO_Enabled", isWeaponLicenseFeatureEnabled)
+        AddTextOptionST("isWeaponLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isWeaponLicenseFeatureEnabled))
         AddSliderOptionST("BM_WLCostST", "$LPO_BM_WLCost", BM_WLCost.getValue(), "{0} gold")
         AddSliderOptionST("BM_WLDurationST", "$LPO_BM_WLDuration", BM_WLDuration.getValue(), "{0} day(s)")
 		AddToggleOptionST("isWeaponAmmoFeatureEnabledST", "$LPO_isWeaponAmmoFeatureEnabled", isWeaponAmmoFeatureEnabled)
 	elseIf (page == "$LPO_Pages3")
 		SetCursorFillMode(LEFT_TO_RIGHT)
 		AddHeaderOption("$LPO_CraftingLicense")
-        AddToggleOptionST("isCraftingLicenseFeatureEnabledST", "$LPO_Enabled", isCraftingLicenseFeatureEnabled)
+        AddTextOptionST("isCraftingLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isCraftingLicenseFeatureEnabled))
         AddSliderOptionST("BM_CrfLCostST", "$LPO_BM_CrfLCost", BM_CrfLCost.getValue(), "{0} gold")
         AddSliderOptionST("BM_CrfLDurationST", "$LPO_BM_CrfLDuration", BM_CrfLDuration.getValue(), "{0} day(s)")
 		AddEmptyOption()
         AddEmptyOption()
 		AddHeaderOption("$LPO_TradingLicense")
-        AddToggleOptionST("isTradingLicenseFeatureEnabledST", "$LPO_Enabled", isTradingLicenseFeatureEnabled)
+        AddTextOptionST("isTradingLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isTradingLicenseFeatureEnabled))
         AddSliderOptionST("BM_TLCostST", "$LPO_BM_TLCost", BM_TLCost.getValue(), "{0} gold")
         AddSliderOptionST("BM_TLDurationST", "$LPO_BM_TLDuration", BM_TLDuration.getValue(), "{0} day(s)")
 		AddEmptyOption()
         AddEmptyOption()
 		AddHeaderOption("$LPO_CurfewExemption")
-        AddToggleOptionST("isCurfewExemptionFeatureEnabledST", "$LPO_Enabled", isCurfewExemptionFeatureEnabled)
+        AddTextOptionST("isCurfewExemptionFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isCurfewExemptionFeatureEnabled))
         AddSliderOptionST("BM_CuECostST", "$LPO_BM_CuECost", BM_CuECost.getValue(), "{0} gold")
         AddSliderOptionST("BM_CuEDurationST", "$LPO_BM_CuEDuration", BM_CuEDuration.getValue(), "{0} day(s)")
 		AddSliderOptionST("BM_CurfewStartST", "$LPO_BM_CurfewStart", BM_CurfewStart.getValue(), "{0}:00")
@@ -620,7 +626,7 @@ Event OnPageReset(string page)
 		AddEmptyOption()
 		AddEmptyOption()
 		AddHeaderOption("$LPO_TravelPermit")
-		AddToggleOptionST("isTravelPermitFeatureEnabledST", "$LPO_Enabled", isTravelPermitFeatureEnabled)
+		AddTextOptionST("isTravelPermitFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isTravelPermitFeatureEnabled))
         AddSliderOptionST("BM_TPCostST", "$LPO_BM_TPCost", BM_TPCost.getValue(), "{0} gold")
         AddSliderOptionST("BM_TPDurationST", "$LPO_BM_TPDuration", BM_TPDuration.getValue(), "{0} day(s)")
 		AddToggleOptionST("BM_FollowerMaleST", "$LPO_BM_FollowerMale", BM_FollowerMale.GetValue() as bool)
@@ -630,7 +636,7 @@ Event OnPageReset(string page)
 		AddEmptyOption()
         AddEmptyOption()
 		AddHeaderOption("$LPO_Insurance")
-		AddToggleOptionST("isInsuranceFeatureEnabledST", "$LPO_Enabled", isInsuranceFeatureEnabled)
+		AddTextOptionST("isInsuranceFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isInsuranceFeatureEnabled))
         AddSliderOptionST("BM_InsurCostBaseST", "$LPO_BM_InsurCostBase", BM_InsurCostBase, "{0} gold")
         AddSliderOptionST("BM_InsurDurationST", "$LPO_BM_InsurDuration", BM_InsurDuration.getValue(), "{0} day(s)")
 		AddTextOptionST("insuranceMisbehaviourMonitorST", "$LPO_MisbehaviourMultiplier", licenses.insuranceMisbehaviourMultiplier + "x")
@@ -643,13 +649,13 @@ Event OnPageReset(string page)
 	elseIf (page == "$LPO_Pages4")
 		SetCursorFillMode(LEFT_TO_RIGHT)
 		AddHeaderOption("$LPO_WhoreLicense")
-        AddToggleOptionST("isWhoreLicenseFeatureEnabledST", "$LPO_Enabled", isWhoreLicenseFeatureEnabled)
+        AddTextOptionST("isWhoreLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isWhoreLicenseFeatureEnabled))
         AddSliderOptionST("BM_WhLCostST", "$LPO_BM_WhLCost", BM_WhLCost.getValue(), "{0} gold")
         AddSliderOptionST("BM_WhLDurationST", "$LPO_BM_WhLDuration", BM_WhLDuration.getValue(), "{0} day(s)")
 		AddEmptyOption()
         AddEmptyOption()
 		AddHeaderOption("$LPO_CollarExemption")
-		AddToggleOptionST("isCollarExemptionFeatureEnabledST", "$LPO_Enabled", isCollarExemptionFeatureEnabled, (!DeviousDevices_State) as int)
+		AddTextOptionST("isCollarExemptionFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isCollarExemptionFeatureEnabled), (!DeviousDevices_State) as int)
         AddSliderOptionST("BM_CECostST", "$LPO_BM_CECost", BM_CECost.getValue(), "{0} gold", (!DeviousDevices_State) as int)
         AddSliderOptionST("BM_CEDurationST", "$LPO_BM_CEDuration", BM_CEDuration.getValue(), "{0} day(s)", (!DeviousDevices_State) as int)
     elseIf (page == "$LPO_Pages5")
@@ -1233,7 +1239,7 @@ endState
 state isArmorLicenseFeatureEnabledST
 	event OnSelectST()
 		isArmorLicenseFeatureEnabled = !isArmorLicenseFeatureEnabled
-		SetToggleOptionValueST(isArmorLicenseFeatureEnabled)
+		SetTextOptionValueST(GetBoolString(isArmorLicenseFeatureEnabled))
 		SessionModified = true
 	endEvent
 	event OnHighlightST()
@@ -1278,10 +1284,17 @@ state BM_ALDurationST
 endState
 
 state isBikiniLicenseFeatureEnabledST
-	event OnSelectST()
-		isBikiniLicenseFeatureEnabled = !isBikiniLicenseFeatureEnabled
-		SetToggleOptionValueST(isBikiniLicenseFeatureEnabled)
-		SessionModified = true
+	event OnMenuOpenST()
+		SetMenuDialogOptions(BikiniLicenseFeatureState)
+		SetMenuDialogStartIndex(isBikiniLicenseFeatureEnabled)
+		SetMenuDialogDefaultIndex(0)
+	endEvent
+	event OnMenuAcceptST(int index)
+		if isBikiniLicenseFeatureEnabled != index
+			isBikiniLicenseFeatureEnabled = index
+			SessionModified = true
+		endIf
+		SetMenuOptionValueST(GetBoolString(isBikiniLicenseFeatureEnabled as int))
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_isBikiniLicenseFeatureEnabledHighlight")
@@ -1363,7 +1376,7 @@ endState
 state isClothingLicenseFeatureEnabledST
 	event OnSelectST()
 		isClothingLicenseFeatureEnabled = !isClothingLicenseFeatureEnabled
-		SetToggleOptionValueST(isClothingLicenseFeatureEnabled)
+		SetTextOptionValueST(GetBoolString(isClothingLicenseFeatureEnabled))
 		SessionModified = true
 	endEvent
 	event OnHighlightST()
@@ -1410,7 +1423,7 @@ endState
 state isMagicLicenseFeatureEnabledST
 	event OnSelectST()
 		isMagicLicenseFeatureEnabled = !isMagicLicenseFeatureEnabled
-		SetToggleOptionValueST(isMagicLicenseFeatureEnabled)
+		SetTextOptionValueST(GetBoolString(isMagicLicenseFeatureEnabled))
 		SessionModified = true
 	endEvent
 	event OnHighlightST()
@@ -1527,7 +1540,7 @@ endState
 state isWeaponLicenseFeatureEnabledST
 	event OnSelectST()
 		isWeaponLicenseFeatureEnabled = !isWeaponLicenseFeatureEnabled
-		SetToggleOptionValueST(isWeaponLicenseFeatureEnabled)
+		SetTextOptionValueST(GetBoolString(isWeaponLicenseFeatureEnabled))
 		SessionModified = true
 	endEvent
 	event OnHighlightST()
@@ -1585,7 +1598,7 @@ endState
 state isCraftingLicenseFeatureEnabledST
 	event OnSelectST()
 		isCraftingLicenseFeatureEnabled = !isCraftingLicenseFeatureEnabled
-		SetToggleOptionValueST(isCraftingLicenseFeatureEnabled)
+		SetTextOptionValueST(GetBoolString(isCraftingLicenseFeatureEnabled))
 		SessionModified = true
 	endEvent
 	event OnHighlightST()
@@ -1632,7 +1645,7 @@ endState
 state isTradingLicenseFeatureEnabledST
 	event OnSelectST()
 		isTradingLicenseFeatureEnabled = !isTradingLicenseFeatureEnabled
-		SetToggleOptionValueST(isTradingLicenseFeatureEnabled)
+		SetTextOptionValueST(GetBoolString(isTradingLicenseFeatureEnabled))
 		SessionModified = true
 	endEvent
 	event OnHighlightST()
@@ -1679,7 +1692,7 @@ endState
 state isCurfewExemptionFeatureEnabledST
 	event OnSelectST()
 		isCurfewExemptionFeatureEnabled = !isCurfewExemptionFeatureEnabled
-		SetToggleOptionValueST(isCurfewExemptionFeatureEnabled)
+		SetTextOptionValueST(GetBoolString(isCurfewExemptionFeatureEnabled))
 		SessionModified = true
 	endEvent
 	event OnHighlightST()
@@ -1768,7 +1781,7 @@ endState
 state isWhoreLicenseFeatureEnabledST
 	event OnSelectST()
 		isWhoreLicenseFeatureEnabled = !isWhoreLicenseFeatureEnabled
-		SetToggleOptionValueST(isWhoreLicenseFeatureEnabled)
+		SetTextOptionValueST(GetBoolString(isWhoreLicenseFeatureEnabled))
 		SessionModified = true
 	endEvent
 	event OnHighlightST()
@@ -1815,7 +1828,7 @@ endState
 state isTravelPermitFeatureEnabledST
 	event OnSelectST()
 		isTravelPermitFeatureEnabled = !isTravelPermitFeatureEnabled
-		SetToggleOptionValueST(isTravelPermitFeatureEnabled)
+		SetTextOptionValueST(GetBoolString(isTravelPermitFeatureEnabled))
 		if !isTravelPermitFeatureEnabled
 			bmlUtility.savedLoc = None
 			bmlUtility.savedSpace = None
@@ -1889,7 +1902,7 @@ endState
 state isCollarExemptionFeatureEnabledST
 	event OnSelectST()
 		isCollarExemptionFeatureEnabled = !isCollarExemptionFeatureEnabled
-		SetToggleOptionValueST(isCollarExemptionFeatureEnabled)
+		SetTextOptionValueST(GetBoolString(isCollarExemptionFeatureEnabled))
 		SessionModified = true
 	endEvent
 	event OnHighlightST()
@@ -1936,7 +1949,7 @@ endState
 state isInsuranceFeatureEnabledST
 	event OnSelectST()
 		isInsuranceFeatureEnabled = !isInsuranceFeatureEnabled
-		SetToggleOptionValueST(isInsuranceFeatureEnabled)
+		SetTextOptionValueST(GetBoolString(isInsuranceFeatureEnabled))
 		SessionModified = true
 	endEvent
 	event OnHighlightST()
@@ -2276,6 +2289,14 @@ state RefreshTattoosST
 	endEvent
 endState
 
+String Function GetBoolString(Bool varb)
+	if varb
+		return "$LPO_Enabled"
+	else
+		return "$LPO_Disabled"
+	endIf
+EndFunction
+
 Bool Function checkHardDependencies()
 	if SKSE.GetPluginVersion("powerofthree's Papyrus Extender") != -1 && (PO3_SKSEFunctions.GetPapyrusExtenderVersion()[0] >= 5)
 		PapyrusExtender_Status = "$LPO_Installed"
@@ -2591,7 +2612,7 @@ Bool Function importConfig(Bool abSilent = false)
 	isArmorLicenseFeatureEnabled = GetIntValue(config, "isArmorLicenseFeatureEnabled", isArmorLicenseFeatureEnabled as int) as Bool
 	BM_ALCost.SetValue(GetFloatValue(config, "BM_ALCost", BM_ALCost.getValue()))
 	BM_ALDuration.SetValue(GetFloatValue(config, "BM_ALDuration", BM_ALDuration.getValue()))
-	isBikiniLicenseFeatureEnabled = GetIntValue(config, "isBikiniLicenseFeatureEnabled", isBikiniLicenseFeatureEnabled as int) as Bool
+	isBikiniLicenseFeatureEnabled = GetIntValue(config, "isBikiniLicenseFeatureEnabled", isBikiniLicenseFeatureEnabled)
 	BM_BLCost.SetValue(GetFloatValue(config, "BM_BLCost", BM_BLCost.getValue()))
 	BM_BLDuration.SetValue(GetFloatValue(config, "BM_BLDuration", BM_BLDuration.getValue()))
 	isBikiniArmorFeatureEnabled = GetIntValue(config, "isBikiniArmorFeatureEnabled", isBikiniArmorFeatureEnabled as int) as Bool
