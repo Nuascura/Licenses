@@ -813,18 +813,20 @@ EndFunction
 Function ShutdownLicenses()
 	Licenses_State.SetValue(-1.0)
 	; Remove currently held license book items
-	licenses.PlayerActorRef.removeItem(bmlUtility.BM_ArmorLicense, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_ArmorLicense))
-	licenses.PlayerActorRef.removeItem(bmlUtility.BM_BikiniLicense, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_BikiniLicense))
-	licenses.PlayerActorRef.removeItem(bmlUtility.BM_ClothingLicense, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_ClothingLicense))
-	licenses.PlayerActorRef.removeItem(bmlUtility.BM_MagicLicense, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_MagicLicense))
-	licenses.PlayerActorRef.removeItem(bmlUtility.BM_WeaponLicense, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_WeaponLicense))
-	licenses.PlayerActorRef.removeItem(bmlUtility.BM_CraftingLicense, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_CraftingLicense))
-	licenses.PlayerActorRef.removeItem(bmlUtility.BM_TradingLicense, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_TradingLicense))
-	licenses.PlayerActorRef.removeItem(bmlUtility.BM_WhoreLicense, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_WhoreLicense))
-	licenses.PlayerActorRef.removeItem(bmlUtility.BM_TravelPermit, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_TravelPermit))
-	licenses.PlayerActorRef.removeItem(bmlUtility.BM_CollarExemption, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_CollarExemption))
-	licenses.PlayerActorRef.removeItem(bmlUtility.BM_Insurance, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_Insurance))
-	licenses.PlayerActorRef.removeItem(bmlUtility.BM_CurfewExemption, licenses.PlayerActorRef.getItemCount(bmlUtility.BM_CurfewExemption))
+	Actor ActorRef = licenses.PlayerActorRef
+	ActorRef.removeItem(bmlUtility.BM_ArmorLicense, ActorRef.getItemCount(bmlUtility.BM_ArmorLicense))
+	ActorRef.removeItem(bmlUtility.BM_BikiniLicense, ActorRef.getItemCount(bmlUtility.BM_BikiniLicense))
+	ActorRef.removeItem(bmlUtility.BM_BikiniExemption, ActorRef.getItemCount(bmlUtility.BM_BikiniExemption))
+	ActorRef.removeItem(bmlUtility.BM_ClothingLicense, ActorRef.getItemCount(bmlUtility.BM_ClothingLicense))
+	ActorRef.removeItem(bmlUtility.BM_MagicLicense, ActorRef.getItemCount(bmlUtility.BM_MagicLicense))
+	ActorRef.removeItem(bmlUtility.BM_WeaponLicense, ActorRef.getItemCount(bmlUtility.BM_WeaponLicense))
+	ActorRef.removeItem(bmlUtility.BM_CraftingLicense, ActorRef.getItemCount(bmlUtility.BM_CraftingLicense))
+	ActorRef.removeItem(bmlUtility.BM_TradingLicense, ActorRef.getItemCount(bmlUtility.BM_TradingLicense))
+	ActorRef.removeItem(bmlUtility.BM_WhoreLicense, ActorRef.getItemCount(bmlUtility.BM_WhoreLicense))
+	ActorRef.removeItem(bmlUtility.BM_TravelPermit, ActorRef.getItemCount(bmlUtility.BM_TravelPermit))
+	ActorRef.removeItem(bmlUtility.BM_CollarExemption, ActorRef.getItemCount(bmlUtility.BM_CollarExemption))
+	ActorRef.removeItem(bmlUtility.BM_Insurance, ActorRef.getItemCount(bmlUtility.BM_Insurance))
+	ActorRef.removeItem(bmlUtility.BM_CurfewExemption, ActorRef.getItemCount(bmlUtility.BM_CurfewExemption))
 	; Remove Nullify Magicka
 	licenses.RemoveNullifyMagicka(true)
 	; shutdown
@@ -1365,7 +1367,7 @@ state bikiniKeywordStringST
 	endEvent
     event OnInputAcceptST(string value)
         bikiniKeywordString = value
-		licenses.PopulateKeywordBikiniItemArray()
+		licenses.FillItemTypeArrayBikini()
 		SessionModified = true
     endEvent
 	event OnHighlightST()

@@ -45,35 +45,37 @@ int Function GetLicenseID(string LicensePrefix)
     if LicensePrefix
         if LicensePrefix == "Armor"
             return 1
-        elseIf LicensePrefix == "Bikini"
+        elseIf LicensePrefix == "Bikini1"
             return 2
-        elseIf LicensePrefix == "Clothing"
+        elseIf LicensePrefix == "Bikini2"
             return 3
-        elseIf LicensePrefix == "Magic"
+        elseIf LicensePrefix == "Clothing"
             return 4
-        elseIf LicensePrefix == "Weapon"
+        elseIf LicensePrefix == "Magic"
             return 5
-        elseIf LicensePrefix == "Crafting"
+        elseIf LicensePrefix == "Weapon"
             return 6
-        elseIf LicensePrefix == "Travel"
+        elseIf LicensePrefix == "Crafting"
             return 7
-        elseIf LicensePrefix == "Collar"
+        elseIf LicensePrefix == "Travel"
             return 8
-        elseIf LicensePrefix == "Insurance"
+        elseIf LicensePrefix == "Collar"
             return 9
-        elseIf LicensePrefix == "Curfew"
+        elseIf LicensePrefix == "Insurance"
             return 10
-        elseIf LicensePrefix == "Trading"
+        elseIf LicensePrefix == "Curfew"
             return 11
-        elseIf LicensePrefix == "Whore"
+        elseIf LicensePrefix == "Trading"
             return 12
+        elseIf LicensePrefix == "Whore"
+            return 13
         else
-            LogTrace("GetLicenseID(): Parameter(1) failed to retrieve an ID from index, returning 0.")
+            LogTrace("GetLicenseID(): Parameter(0) failed to retrieve an ID from index, returning 0.")
             return 0
         endIf
     endIf
 
-    LogTrace("GetLicenseID(): Ran to function default. Invalid parameter(1)")
+    LogTrace("GetLicenseID(): Ran to function default. Invalid parameter(0)")
     return -1
 EndFunction
 
@@ -89,27 +91,29 @@ Float Function GetLicenseTimeLeft(int LicenseType)
     elseIf LicenseType == 2
         return licenses.bikiniLicenseExpirationTime - currentTime
     elseIf LicenseType == 3
-        return licenses.clothingLicenseExpirationTime - currentTime
+        return licenses.bikiniExemptionExpirationTime - currentTime
     elseIf LicenseType == 4
-        return licenses.magicLicenseExpirationTime - currentTime
+        return licenses.clothingLicenseExpirationTime - currentTime
     elseIf LicenseType == 5
-        return licenses.weaponLicenseExpirationTime - currentTime
+        return licenses.magicLicenseExpirationTime - currentTime
     elseIf LicenseType == 6
-        return licenses.craftingLicenseExpirationTime - currentTime
+        return licenses.weaponLicenseExpirationTime - currentTime
     elseIf LicenseType == 7
-        return licenses.travelPermitExpirationTime - currentTime
+        return licenses.craftingLicenseExpirationTime - currentTime
     elseIf LicenseType == 8
-        return licenses.collarExemptionExpirationTime - currentTime
+        return licenses.travelPermitExpirationTime - currentTime
     elseIf LicenseType == 9
-        return licenses.insuranceExpirationTime - currentTime
+        return licenses.collarExemptionExpirationTime - currentTime
     elseIf LicenseType == 10
-        return licenses.curfewExemptionExpirationTime - currentTime
+        return licenses.insuranceExpirationTime - currentTime
     elseIf LicenseType == 11
-        return licenses.tradingLicenseExpirationTime - currentTime
+        return licenses.curfewExemptionExpirationTime - currentTime
     elseIf LicenseType == 12
+        return licenses.tradingLicenseExpirationTime - currentTime
+    elseIf LicenseType == 13
         return licenses.whoreLicenseExpirationTime - currentTime
     else
-        LogTrace("GetLicenseTimeLeft(): Invalid parameter(1)")
+        LogTrace("GetLicenseTimeLeft(): Invalid parameter(0)")
         return 0
     endIf
 EndFunction
@@ -126,29 +130,33 @@ bool Function FlagViolation(int ViolationType, bool Push = true, bool CheckSafet
 
     if ViolationType == 0
         ; Empty
-        LogTrace("FlagViolation(): Received integer 0 for parameter(1)")
-    elseIf (ViolationType == 1) || (ViolationType == 2) || (ViolationType == 3)
+        LogTrace("FlagViolation(): Received integer 0 for parameter(0)")
+    elseIf ViolationType == 1
         licenses.isArmorViolation = true
+    elseIf ViolationType == 2 || ViolationType == 3
+        licenses.isBikiniViolation = true
     elseIf ViolationType == 4
-        licenses.isMagicViolation = true
+        licenses.isClothingViolation = true
     elseIf ViolationType == 5
-        licenses.isWeaponViolation = true
+        licenses.isMagicViolation = true
     elseIf ViolationType == 6
-        licenses.isCraftingViolation = true
+        licenses.isWeaponViolation = true
     elseIf ViolationType == 7
-        licenses.isTravelViolation = true
+        licenses.isCraftingViolation = true
     elseIf ViolationType == 8
-        licenses.isCollarViolation = true
+        licenses.isTravelViolation = true
     elseIf ViolationType == 9
-        licenses.isUninsuredViolation = true
+        licenses.isCollarViolation = true
     elseIf ViolationType == 10
-        licenses.isCurfewViolation = true
+        licenses.isUninsuredViolation = true
     elseIf ViolationType == 11
-        licenses.isTradingViolation = true
+        licenses.isCurfewViolation = true
     elseIf ViolationType == 12
+        licenses.isTradingViolation = true
+    elseIf ViolationType == 13
         licenses.isWhoreViolation = true
     else
-        LogTrace("FlagViolation(): Invalid parameter(1)")
+        LogTrace("FlagViolation(): Invalid parameter(0)")
         return false
     endIf
 
@@ -191,33 +199,35 @@ bool Function PurchaseLicense(int LicenseType, bool SubtractGold = true, bool Ch
 
     if LicenseType == 0
         ; Empty
-        LogTrace("PurchaseLicense(): Received integer 0 for parameter(1)")
+        LogTrace("PurchaseLicense(): Received integer 0 for parameter(0)")
     elseIf LicenseType == 1
         BM_PurchaseArmorLicense(SubtractGold)
     elseIf LicenseType == 2
         BM_PurchaseBikiniLicense(SubtractGold)
     elseIf LicenseType == 3
-        BM_PurchaseClothingLicense(SubtractGold)
+        BM_PurchaseBikiniExemption(SubtractGold)
     elseIf LicenseType == 4
-        BM_PurchaseMagicLicense(SubtractGold)
+        BM_PurchaseClothingLicense(SubtractGold)
     elseIf LicenseType == 5
-        BM_PurchaseWeaponLicense(SubtractGold)
+        BM_PurchaseMagicLicense(SubtractGold)
     elseIf LicenseType == 6
-        BM_PurchaseCraftingLicense(SubtractGold)
+        BM_PurchaseWeaponLicense(SubtractGold)
     elseIf LicenseType == 7
-        BM_PurchaseTravelPermit(SubtractGold)
+        BM_PurchaseCraftingLicense(SubtractGold)
     elseIf LicenseType == 8
-        BM_PurchaseCollarExemption(SubtractGold)
+        BM_PurchaseTravelPermit(SubtractGold)
     elseIf LicenseType == 9
-        BM_PurchaseLifeInsurance(SubtractGold)
+        BM_PurchaseCollarExemption(SubtractGold)
     elseIf LicenseType == 10
-        BM_PurchaseCurfewExemption(SubtractGold)
+        BM_PurchaseLifeInsurance(SubtractGold)
     elseIf LicenseType == 11
-        BM_PurchaseTradingLicense(SubtractGold)
+        BM_PurchaseCurfewExemption(SubtractGold)
     elseIf LicenseType == 12
+        BM_PurchaseTradingLicense(SubtractGold)
+    elseIf LicenseType == 13
         BM_PurchaseWhoreLicense(SubtractGold)
     else
-        LogTrace("PurchaseLicense(): Invalid parameter(1)")
+        LogTrace("PurchaseLicense(): Invalid parameter(0)")
         return false
     endIf
 
@@ -231,33 +241,35 @@ EndFunction
 bool Function ExpireLicense(int LicenseType, bool Push = true)
     if LicenseType == 0
         ; Empty
-        LogTrace("ExpireLicense(): Received integer 0 for parameter(1)")
+        LogTrace("ExpireLicense(): Received integer 0 for parameter(0)")
     elseIf LicenseType == 1
         BM_ExpireArmorLicense()
     elseIf LicenseType == 2
         BM_ExpireBikiniLicense()
     elseIf LicenseType == 3
-        BM_ExpireClothingLicense()
+        BM_ExpireBikiniExemption()
     elseIf LicenseType == 4
-        BM_ExpireMagicLicense()
+        BM_ExpireClothingLicense()
     elseIf LicenseType == 5
-        BM_ExpireWeaponLicense()
+        BM_ExpireMagicLicense()
     elseIf LicenseType == 6
-        BM_ExpireCraftingLicense()
+        BM_ExpireWeaponLicense()
     elseIf LicenseType == 7
-        BM_ExpireTravelPermit()
+        BM_ExpireCraftingLicense()
     elseIf LicenseType == 8
-        BM_ExpireCollarExemption()
+        BM_ExpireTravelPermit()
     elseIf LicenseType == 9
-        BM_ExpireLifeInsurance()
+        BM_ExpireCollarExemption()
     elseIf LicenseType == 10
-        BM_ExpireCurfewExemption()
+        BM_ExpireLifeInsurance()
     elseIf LicenseType == 11
-        BM_ExpireTradingLicense()
+        BM_ExpireCurfewExemption()
     elseIf LicenseType == 12
+        BM_ExpireTradingLicense()
+    elseIf LicenseType == 13
         BM_ExpireWhoreLicense()
     else
-        LogTrace("ExpireLicense(): Invalid parameter(1)")
+        LogTrace("ExpireLicense(): Invalid parameter(0)")
         return false
     endIf
 
@@ -283,57 +295,61 @@ bool Function RemoveLicense(int LicenseType, int LicenseCount = 0, ObjectReferen
 
     if LicenseType == 0
         ; Empty
-        LogTrace("RemoveLicense(): Received integer 0 for parameter(1)")
+        LogTrace("RemoveLicense(): Received integer 0 for parameter(0)")
     elseIf LicenseType == 1
         if !CheckSafety || bmlmcm.isArmorLicenseFeatureEnabled
             LicenseToRemove = BM_ArmorLicense
         endIf
     elseIf LicenseType == 2
-        if !CheckSafety || bmlmcm.isBikiniLicenseFeatureEnabled
+        if !CheckSafety || bmlmcm.isBikiniLicenseFeatureEnabled == 1
             LicenseToRemove = BM_BikiniLicense
         endIf
     elseIf LicenseType == 3
+        if !CheckSafety || bmlmcm.isBikiniLicenseFeatureEnabled == 2
+            LicenseToRemove = BM_BikiniExemption
+        endIf
+    elseIf LicenseType == 4
         if !CheckSafety || bmlmcm.isClothingLicenseFeatureEnabled
             LicenseToRemove = BM_ClothingLicense
         endIf
-    elseIf LicenseType == 4
+    elseIf LicenseType == 5
         if !CheckSafety || bmlmcm.isMagicLicenseFeatureEnabled
             LicenseToRemove = BM_MagicLicense
         endIf
-    elseIf LicenseType == 5
+    elseIf LicenseType == 6
         if !CheckSafety || bmlmcm.isWeaponLicenseFeatureEnabled
             LicenseToRemove = BM_WeaponLicense
         endIf
-    elseIf LicenseType == 6
+    elseIf LicenseType == 7
         if !CheckSafety || bmlmcm.isCraftingLicenseFeatureEnabled
             LicenseToRemove = BM_CraftingLicense
         endIf
-    elseIf LicenseType == 7
+    elseIf LicenseType == 8
         if !CheckSafety || bmlmcm.isTravelPermitFeatureEnabled
             LicenseToRemove = BM_TravelPermit
         endIf
-    elseIf LicenseType == 8
+    elseIf LicenseType == 9
         if !CheckSafety || bmlmcm.isCollarExemptionFeatureEnabled
             LicenseToRemove = BM_CollarExemption
         endIf
-    elseIf LicenseType == 9
+    elseIf LicenseType == 10
         if !CheckSafety || bmlmcm.isInsuranceFeatureEnabled
             LicenseToRemove = BM_Insurance
         endIf
-    elseIf LicenseType == 10
+    elseIf LicenseType == 11
         if !CheckSafety || bmlmcm.isCurfewExemptionFeatureEnabled
             LicenseToRemove = BM_CurfewExemption
         endIf
-    elseIf LicenseType == 11
+    elseIf LicenseType == 12
         if !CheckSafety || bmlmcm.isTradingLicenseFeatureEnabled
             LicenseToRemove = BM_TradingLicense
         endIf
-    elseIf LicenseType == 12
+    elseIf LicenseType == 13
         if !CheckSafety || bmlmcm.isWhoreLicenseFeatureEnabled
             LicenseToRemove = BM_WhoreLicense
         endIf
     else
-        LogTrace("RemoveLicense(): Invalid parameter(1)")
+        LogTrace("RemoveLicense(): Invalid parameter(0)")
         return false
     endIf
 
@@ -345,7 +361,7 @@ bool Function RemoveLicense(int LicenseType, int LicenseCount = 0, ObjectReferen
             PlayerActorRef.RemoveItem(LicenseToRemove, LicenseCount, true, DestinationContainer)
         endIf
     else
-        LogTrace("RemoveLicense(): Parameter(1) returned an invalid or ineligible license to remove: LicenseType " + LicenseType + " for book item " + LicenseToRemove)
+        LogTrace("RemoveLicense(): Parameter(0) returned an invalid or ineligible license to remove: LicenseType " + LicenseType + " for book item " + LicenseToRemove)
         return false
     endIf
 
@@ -640,7 +656,7 @@ Form[] Function ScanInventory_CommonFilter(Form[] Array, Bool abFilterBikini = f
     Array = SPE_Utility.FilterFormsByKeyword(Array, licenses.KeywordQuestItem, true, true)
     Array = SPE_Utility.FilterFormsByKeyword(Array, licenses.KeywordModItem, false, true)
     if abFilterBikini
-        Array = SPE_Utility.FilterFormsByKeyword(Array, licenses.KeywordBikiniItem, false, true)
+        Array = SPE_Utility.FilterFormsByKeyword(Array, licenses.ItemTypeBikini, false, true)
     endIf
     return Array
 EndFunction
@@ -774,26 +790,28 @@ EndFunction
 
 ; ---------- Core Licenses Counters ----------
 Int Function CountValidLicenses()
-    Bool[] LicenseArray = new Bool[12]
+    Bool[] LicenseArray = new Bool[13]
     LicenseArray[0] = licenses.hasArmorLicense
     LicenseArray[1] = licenses.hasBikiniLicense
-    LicenseArray[2] = licenses.hasClothingLicense
-    LicenseArray[3] = licenses.hasMagicLicense
-    LicenseArray[4] = licenses.hasWeaponLicense
-    LicenseArray[5] = licenses.hasCraftingLicense
-    LicenseArray[6] = licenses.hasTradingLicense
-    LicenseArray[7] = licenses.hasWhoreLicense
-    LicenseArray[8] = licenses.hasTravelPermit
-    LicenseArray[9] = licenses.hasCollarExemption
-    LicenseArray[10] = licenses.hasInsurance
-    LicenseArray[11] = licenses.hasCurfewExemption
+    LicenseArray[2] = licenses.hasBikiniExemption
+    LicenseArray[3] = licenses.hasClothingLicense
+    LicenseArray[4] = licenses.hasMagicLicense
+    LicenseArray[5] = licenses.hasWeaponLicense
+    LicenseArray[6] = licenses.hasCraftingLicense
+    LicenseArray[7] = licenses.hasTradingLicense
+    LicenseArray[8] = licenses.hasWhoreLicense
+    LicenseArray[9] = licenses.hasTravelPermit
+    LicenseArray[10] = licenses.hasCollarExemption
+    LicenseArray[11] = licenses.hasInsurance
+    LicenseArray[12] = licenses.hasCurfewExemption
     return PapyrusUtil.CountBool(LicenseArray, true)
 EndFunction
 
 Int Function CountActiveLicenses()
-    Bool[] LicenseArray = new Bool[12]
+    Bool[] LicenseArray = new Bool[13]
     LicenseArray[0] = (licenses.armorLicenseExpirationTime != -1) && bmlmcm.isArmorLicenseFeatureEnabled
-    LicenseArray[1] = (licenses.bikiniLicenseExpirationTime != -1) && bmlmcm.isBikiniLicenseFeatureEnabled
+    LicenseArray[1] = ((licenses.bikiniLicenseExpirationTime != -1) && (bmlmcm.isBikiniLicenseFeatureEnabled == 1)) \
+                    || ((licenses.bikiniExemptionExpirationTime != -1) && (bmlmcm.isBikiniLicenseFeatureEnabled == 2))
     LicenseArray[2] = (licenses.clothingLicenseExpirationTime != -1) && bmlmcm.isClothingLicenseFeatureEnabled
     LicenseArray[3] = (licenses.magicLicenseExpirationTime != -1) && bmlmcm.isMagicLicenseFeatureEnabled
     LicenseArray[4] = (licenses.weaponLicenseExpirationTime != -1) && bmlmcm.isWeaponLicenseFeatureEnabled
@@ -808,32 +826,36 @@ Int Function CountActiveLicenses()
 EndFunction
 
 Int Function CountActiveViolations()
-    Bool[] ActiveViolations = new Bool[10]
+    Bool[] ActiveViolations = new Bool[12]
     ActiveViolations[0] = licenses.isArmorViolation
-    ActiveViolations[1] = licenses.isMagicViolation
-    ActiveViolations[2] = licenses.isWeaponViolation
-    ActiveViolations[3] = licenses.isCraftingViolation
-    ActiveViolations[4] = licenses.isTravelViolation
-    ActiveViolations[5] = licenses.isCollarViolation
-    ActiveViolations[6] = licenses.isUninsuredViolation
-    ActiveViolations[7] = licenses.isCurfewViolation
-    ActiveViolations[8] = licenses.isTradingViolation
-    ActiveViolations[9] = licenses.isWhoreViolation
+    ActiveViolations[1] = licenses.isBikiniViolation
+    ActiveViolations[2] = licenses.isClothingViolation
+    ActiveViolations[3] = licenses.isMagicViolation
+    ActiveViolations[4] = licenses.isWeaponViolation
+    ActiveViolations[5] = licenses.isCraftingViolation
+    ActiveViolations[6] = licenses.isTravelViolation
+    ActiveViolations[7] = licenses.isCollarViolation
+    ActiveViolations[8] = licenses.isUninsuredViolation
+    ActiveViolations[9] = licenses.isCurfewViolation
+    ActiveViolations[10] = licenses.isTradingViolation
+    ActiveViolations[11] = licenses.isWhoreViolation
     return PapyrusUtil.CountBool(ActiveViolations, true)
 EndFunction
 
 bool Function CheckViolationExists()
-    Bool[] violations = new Bool[10]
+    Bool[] violations = new Bool[12]
     violations[0] = licenses.isArmorViolation
-    violations[1] = licenses.isMagicViolation
-    violations[2] = licenses.isWeaponViolation
-    violations[3] = licenses.isCraftingViolation
-    violations[4] = licenses.isTravelViolation
-    violations[5] = licenses.isCollarViolation
-    violations[6] = licenses.isUninsuredViolation
-    violations[7] = licenses.isCurfewViolation
-    violations[8] = licenses.isTradingViolation
-    violations[9] = licenses.isWhoreViolation
+    violations[1] = licenses.isBikiniViolation
+    violations[2] = licenses.isClothingViolation
+    violations[3] = licenses.isMagicViolation
+    violations[4] = licenses.isWeaponViolation
+    violations[5] = licenses.isCraftingViolation
+    violations[6] = licenses.isTravelViolation
+    violations[7] = licenses.isCollarViolation
+    violations[8] = licenses.isUninsuredViolation
+    violations[9] = licenses.isCurfewViolation
+    violations[10] = licenses.isTradingViolation
+    violations[11] = licenses.isWhoreViolation
     return violations.Find(true) != -1
 EndFunction
 ; ------------------------------
@@ -1008,14 +1030,9 @@ Float Function GetFine()
     Int Base = bmlmcm.FineBase
     Float Percentage = bmlmcm.FinePercentage / 100.0
 
-    Int ArmorFine = (licenses.isArmorViolation as int)
-    if !licenses.hasClothingLicense
-        ArmorFine *= (bmlmcm.BM_CLCost.GetValue() as int)
-    elseIf !licenses.hasBikiniLicense
-        ArmorFine *= (bmlmcm.BM_BLCost.GetValue() as int)
-    else
-        ArmorFine *= (bmlmcm.BM_ALCost.GetValue() as int)
-    endIf
+    Int ArmorFine = (licenses.isArmorViolation as int) * (bmlmcm.BM_ALCost.GetValue() as int)
+    Int BikiniFine = (licenses.isBikiniViolation as int) * (bmlmcm.BM_BLCost.GetValue() as int)
+    Int ClothingFine = (licenses.isClothingViolation as int) * (bmlmcm.BM_CLCost.GetValue() as int)
     Int MagicFine = (licenses.isMagicViolation as int) * (bmlmcm.BM_MLCost.GetValue() as int)
     Int WeaponFine = (licenses.isWeaponViolation as int) * (bmlmcm.BM_WLCost.GetValue() as int)
     Int CraftingFine = (licenses.isCraftingViolation as int) * (bmlmcm.BM_CrfLCost.GetValue() as int)
@@ -1026,8 +1043,9 @@ Float Function GetFine()
     Int TradingFine = (licenses.isTradingViolation as int) * (bmlmcm.BM_TLCost.GetValue() as int)
     Int WhoreFine = (licenses.isWhoreViolation as int) * (bmlmcm.BM_WhLCost.GetValue() as int)
 
-    Fine = Base + (Percentage * (ArmorFine + MagicFine + WeaponFine + CraftingFine + TravelFine + CollarFine + InsuranceFine + CurfewFine + TradingFine + WhoreFine))
-    ;LogTrace("Base: " + Base + "; Percentage: " + Percentage + "; Armor: " + ArmorFine + "; Magic: " + MagicFine + "; Weapon: " + WeaponFine + "; Crafting: " + CraftingFine + "; Travel: " + TravelFine + "; Collar: " + CollarFine + "; Insurance: " + InsuranceFine + "; Curfew: " + CurfewFine + "; Trading: " + TradingFine + "; Whore: " + WhoreFine)
+    Fine = Base + (Percentage * (ArmorFine + BikiniFine + ClothingFine + MagicFine \
+           + WeaponFine + CraftingFine + TravelFine + CollarFine + InsuranceFine \
+           + CurfewFine + TradingFine + WhoreFine))
     LogTrace("Generated Fine Total: " + Fine)
     return Fine
 EndFunction
@@ -1060,6 +1078,19 @@ Function BM_PurchaseBikiniLicense(bool pay = true)
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 2)
 EndFunction
 
+Function BM_PurchaseBikiniExemption(bool pay = true)
+    bmlModeratorAlias.AddInventoryEventFilter(BM_BikiniExemption)
+    if pay
+        PlayerActorRef.removeItem(Gold001, BM_BLCost.GetValueInt())
+    endIf
+    licenses.bikiniExemptionExpirationTime = (GameDaysPassed.getValue() + BM_BLDuration.getValue()) as int
+    if PlayerActorRef.getItemCount(BM_BikiniExemption) < 1
+        PlayerActorRef.addItem(BM_BikiniExemption, 1)
+    endIf
+    licenses.BikiniExemption = true
+    SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 3)
+EndFunction
+
 Function BM_PurchaseClothingLicense(bool pay = true)
     bmlModeratorAlias.AddInventoryEventFilter(BM_ClothingLicense)
     if pay
@@ -1070,7 +1101,7 @@ Function BM_PurchaseClothingLicense(bool pay = true)
         PlayerActorRef.addItem(BM_ClothingLicense, 1)
     endIf
     licenses.ClothingLicense = true
-    SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 3)
+    SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 4)
 EndFunction
 
 Function BM_PurchaseMagicLicense(bool pay = true)
@@ -1084,7 +1115,7 @@ Function BM_PurchaseMagicLicense(bool pay = true)
     endIf
     licenses.MagicLicense = true
     licenses.RemoveNullifyMagicka()
-    SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 4)
+    SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 5)
 EndFunction
 
 Function BM_PurchaseWeaponLicense(bool pay = true)
@@ -1097,7 +1128,7 @@ Function BM_PurchaseWeaponLicense(bool pay = true)
         PlayerActorRef.addItem(BM_WeaponLicense, 1)
     endIf
     licenses.WeaponLicense = true
-    SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 5)
+    SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 6)
 Endfunction
 
 Function BM_PurchaseCraftingLicense(bool pay = true)
@@ -1110,7 +1141,7 @@ Function BM_PurchaseCraftingLicense(bool pay = true)
         PlayerActorRef.addItem(BM_CraftingLicense, 1)
     endIf
     licenses.CraftingLicense = true
-    SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 6)
+    SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 7)
 EndFunction
 
 Function BM_PurchaseTravelPermit(bool pay = true)
@@ -1125,7 +1156,7 @@ Function BM_PurchaseTravelPermit(bool pay = true)
     licenses.TravelPermit = true
     savedLoc = None
     savedSpace = None
-    SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 7)
+    SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 8)
 EndFunction
 
 Function BM_PurchaseCollarExemption(bool pay = true)
@@ -1139,7 +1170,7 @@ Function BM_PurchaseCollarExemption(bool pay = true)
     endIf
     licenses.CollarExemption = true
     licenses.RemoveDeviousDevicesCollar()
-    SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 8)
+    SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 9)
 EndFunction
 
 Function BM_PurchaseLifeInsurance(bool pay = true)
@@ -1153,7 +1184,7 @@ Function BM_PurchaseLifeInsurance(bool pay = true)
     endIf
     licenses.Insurance = true
     licenses.RemoveNullifyMagicka()
-    SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 9)
+    SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 10)
 EndFunction
 
 Function BM_PurchaseCurfewExemption(bool pay = true)
@@ -1166,7 +1197,7 @@ Function BM_PurchaseCurfewExemption(bool pay = true)
         PlayerActorRef.addItem(BM_CurfewExemption, 1)
     endIf
     licenses.CurfewExemption = true
-    SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 10)
+    SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 11)
 EndFunction
 
 Function BM_PurchaseTradingLicense(bool pay = true)
@@ -1179,7 +1210,7 @@ Function BM_PurchaseTradingLicense(bool pay = true)
         PlayerActorRef.addItem(BM_TradingLicense, 1)
     endIf
     licenses.TradingLicense = true
-    SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 11)
+    SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 12)
 EndFunction
 
 Function BM_PurchaseWhoreLicense(bool pay = true)
@@ -1192,7 +1223,7 @@ Function BM_PurchaseWhoreLicense(bool pay = true)
         PlayerActorRef.addItem(BM_WhoreLicense, 1)
     endIf
     licenses.WhoreLicense = true
-    SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 12)
+    SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 13)
 EndFunction
 ; ------------------------------
 
@@ -1225,6 +1256,19 @@ Function BM_ExpireBikiniLicense()
     SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 2)
 EndFunction
 
+Function BM_ExpireBikiniExemption()
+    bmlModeratorAlias.RemoveInventoryEventFilter(BM_BikiniExemption)
+    licenses.bikiniExemptionExpirationTime = -1.0
+    if PlayerActorRef.getItemCount(BM_BikiniExemption) > 0
+        PlayerActorRef.removeItem(BM_BikiniExemption, 1, true)
+    endIf
+    if bmlmcm.LicenseCooldown != 0
+        licenses.bikiniExemptionCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_BLDuration.GetValue())) as int
+    endIf
+    licenses.BikiniExemption = false
+    SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 3)
+EndFunction
+
 Function BM_ExpireClothingLicense()
     bmlModeratorAlias.RemoveInventoryEventFilter(BM_ClothingLicense)
     licenses.clothingLicenseExpirationTime = -1.0
@@ -1235,7 +1279,7 @@ Function BM_ExpireClothingLicense()
         licenses.clothingLicenseCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_CLDuration.GetValue())) as int
     endIf
     licenses.ClothingLicense = false
-    SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 3)
+    SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 4)
 EndFunction
 
 Function BM_ExpireMagicLicense()
@@ -1249,7 +1293,7 @@ Function BM_ExpireMagicLicense()
     endIf
     licenses.MagicLicense = false
     BM_LenientCurseViolation.SetValue(1.0)
-    SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 4)
+    SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 5)
 EndFunction
 
 Function BM_ExpireWeaponLicense()
@@ -1262,7 +1306,7 @@ Function BM_ExpireWeaponLicense()
         licenses.weaponLicenseCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_WLDuration.GetValue())) as int
     endIf
     licenses.WeaponLicense = false
-    SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 5)
+    SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 6)
 Endfunction
 
 Function BM_ExpireCraftingLicense()
@@ -1275,7 +1319,7 @@ Function BM_ExpireCraftingLicense()
         licenses.craftingLicenseCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_CrfLDuration.GetValue())) as int
     endIf
     licenses.CraftingLicense = false
-    SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 6)
+    SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 7)
 EndFunction
 
 Function BM_ExpireTravelPermit()
@@ -1288,7 +1332,7 @@ Function BM_ExpireTravelPermit()
         licenses.travelPermitCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_TPDuration.GetValue())) as int
     endIf
     licenses.TravelPermit = false
-    SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 7)
+    SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 8)
 EndFunction
 
 Function BM_ExpireCollarExemption()
@@ -1301,7 +1345,7 @@ Function BM_ExpireCollarExemption()
         licenses.collarExemptionCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_CEDuration.GetValue())) as int
     endIf
     licenses.hasCollarExemption = false
-    SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 8)
+    SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 9)
 EndFunction
 
 Function BM_ExpireLifeInsurance()
@@ -1314,7 +1358,7 @@ Function BM_ExpireLifeInsurance()
         licenses.insuranceCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_InsurDuration.GetValue())) as int
     endIf
     licenses.Insurance = false
-    SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 9)
+    SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 10)
 EndFunction
 
 Function BM_ExpireCurfewExemption()
@@ -1328,7 +1372,7 @@ Function BM_ExpireCurfewExemption()
     endIf
     licenses.CurfewExemption = false
     BM_LenientCurfewViolation.SetValue(1.0)
-    SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 10)
+    SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 11)
 EndFunction
 
 Function BM_ExpireTradingLicense()
@@ -1341,7 +1385,7 @@ Function BM_ExpireTradingLicense()
         licenses.tradingLicenseCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_TLDuration.GetValue())) as int
     endIf
     licenses.TradingLicense = false
-    SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 11)
+    SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 12)
 EndFunction
 
 Function BM_ExpireWhoreLicense()
@@ -1354,7 +1398,7 @@ Function BM_ExpireWhoreLicense()
         licenses.whoreLicenseCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_WhLDuration.GetValue())) as int
     endIf
     licenses.WhoreLicense = false
-    SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 12)
+    SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 13)
 EndFunction
 ; ------------------------------
 
@@ -1380,10 +1424,18 @@ Function RefreshLicenseStatus(float currentTime)
     endif
     if (licenses.bikiniLicenseExpirationTime >= 0)
         if (currentTime >= licenses.bikiniLicenseExpirationTime)
-            GameMessage(licenses.MessageBikiniExpired)
+            GameMessage(licenses.MessageBikini1Expired)
             BM_ExpireBikiniLicense()
         elseIf (licenses.bikiniLicenseExpirationTime - currentTime < 2)
-            GameMessage(licenses.MessageBikiniCountdown, Math.ceiling(24 * (licenses.bikiniLicenseExpirationTime - currentTime)))
+            GameMessage(licenses.MessageBikini1Countdown, Math.ceiling(24 * (licenses.bikiniLicenseExpirationTime - currentTime)))
+        endIf
+    endif
+    if (licenses.bikiniExemptionExpirationTime >= 0)
+        if (currentTime >= licenses.bikiniExemptionExpirationTime)
+            GameMessage(licenses.MessageBikini2Expired)
+            BM_ExpireBikiniExemption()
+        elseIf (licenses.bikiniExemptionExpirationTime - currentTime < 2)
+            GameMessage(licenses.MessageBikini2Countdown, Math.ceiling(24 * (licenses.bikiniExemptionExpirationTime - currentTime)))
         endIf
     endif
     if (licenses.clothingLicenseExpirationTime >= 0)
@@ -1475,6 +1527,9 @@ Function RefreshLicenseStatus(float currentTime)
     if (currentTime >= licenses.bikiniLicenseCooldownTime)
         licenses.bikiniLicenseCooldownTime = -1.0
     endif
+    if (currentTime >= licenses.bikiniExemptionCooldownTime)
+        licenses.bikiniExemptionCooldownTime = -1.0
+    endif
     if (currentTime >= licenses.clothingLicenseCooldownTime)
         licenses.clothingLicenseCooldownTime = -1.0
     endif
@@ -1532,6 +1587,7 @@ EndFunction
 Function refreshLicenseFeatures()
 	licenses.ArmorLicense = (licenses.armorLicenseExpirationTime != -1.0 && PlayerActorRef.getItemCount(BM_ArmorLicense) > 0)
 	licenses.BikiniLicense = (licenses.bikiniLicenseExpirationTime != -1.0 && PlayerActorRef.getItemCount(BM_BikiniLicense) > 0)
+    licenses.BikiniExemption = (licenses.bikiniExemptionExpirationTime != -1.0 && PlayerActorRef.getItemCount(BM_BikiniExemption) > 0)
 	licenses.ClothingLicense = (licenses.clothingLicenseExpirationTime != -1.0 && PlayerActorRef.getItemCount(BM_ClothingLicense) > 0)
 	licenses.MagicLicense = (licenses.magicLicenseExpirationTime != -1.0 && PlayerActorRef.getItemCount(BM_MagicLicense) > 0)
 	licenses.WeaponLicense = (licenses.weaponLicenseExpirationTime != -1.0 && PlayerActorRef.getItemCount(BM_WeaponLicense) > 0)
@@ -1559,8 +1615,11 @@ Function refreshInventoryEventFilters()
     if bmlmcm.isArmorLicenseFeatureEnabled && licenses.armorLicenseExpirationTime >= 0
         bmlModeratorAlias.AddInventoryEventFilter(BM_ArmorLicense)
     endIf
-    if bmlmcm.isBikiniLicenseFeatureEnabled && licenses.bikiniLicenseExpirationTime >= 0
+    if bmlmcm.isBikiniLicenseFeatureEnabled == 1 && licenses.bikiniLicenseExpirationTime >= 0
         bmlModeratorAlias.AddInventoryEventFilter(BM_BikiniLicense)
+    endIf
+    if bmlmcm.isBikiniLicenseFeatureEnabled == 2 && licenses.bikiniExemptionExpirationTime >= 0
+        bmlModeratorAlias.AddInventoryEventFilter(BM_BikiniExemption)
     endIf
     if bmlmcm.isClothingLicenseFeatureEnabled && licenses.clothingLicenseExpirationTime >= 0
         bmlModeratorAlias.AddInventoryEventFilter(BM_ClothingLicense)
@@ -1625,9 +1684,10 @@ EndFunction
 Function refreshArrays()
     licenses.PopulateKeywordConfiscationArray()
     licenses.PopulateKeywordExclusionArray()
-    licenses.PopulateKeywordBikiniItemArray()
     licenses.PopulateLicenseBooksArray()
     licenses.PopulateCursedTattoosArray()
+
+    licenses.FillItemTypeArray()
     
     licenses.ValidateArmorSlotArray()
 EndFunction
@@ -1702,16 +1762,19 @@ EndFunction
 
 Float Function insuranceModifierViolation()
     ; Define weights for each infraction (adjust as needed)
-    Float[] ViolationWeight = new Float[9]
-    ViolationWeight[0] = 0.3 * (licenses.isArmorViolation as float)
-    ViolationWeight[1] = 0.2 * (licenses.isMagicViolation as float)
-    ViolationWeight[2] = 0.2 * (licenses.isWeaponViolation as float)
-    ViolationWeight[3] = 0.1 * (licenses.isCraftingViolation as float)
-    ViolationWeight[4] = 0.1 * (licenses.isTravelViolation as float)
-    ViolationWeight[5] = 0.2 * (licenses.isCollarViolation as float)
-    ViolationWeight[6] = 0.1 * (licenses.isUninsuredViolation as float)
-    ViolationWeight[7] = 0.1 * (licenses.isCurfewViolation as float)
-    ViolationWeight[8] = 0.1 * (licenses.isTradingViolation as float)
+    Float[] ViolationWeight = new Float[12]
+    ViolationWeight[0] = 0.1 * (licenses.isArmorViolation as float)
+    ViolationWeight[1] = 0.1 * (licenses.isBikiniViolation as float)
+    ViolationWeight[2] = 0.1 * (licenses.isClothingViolation as float)
+    ViolationWeight[3] = 0.2 * (licenses.isMagicViolation as float)
+    ViolationWeight[4] = 0.2 * (licenses.isWeaponViolation as float)
+    ViolationWeight[5] = 0.1 * (licenses.isCraftingViolation as float)
+    ViolationWeight[6] = 0.1 * (licenses.isTravelViolation as float)
+    ViolationWeight[7] = 0.2 * (licenses.isCollarViolation as float)
+    ViolationWeight[8] = 0.1 * (licenses.isUninsuredViolation as float)
+    ViolationWeight[9] = 0.1 * (licenses.isCurfewViolation as float)
+    ViolationWeight[10] = 0.1 * (licenses.isTradingViolation as float)
+    ViolationWeight[11] = 0.1 * (licenses.isWhoreViolation as float)
 
     Return PapyrusUtil.AddFloatValues(ViolationWeight)
 EndFunction
@@ -1836,6 +1899,7 @@ BM_Licenses_Moderator_Alias Property bmlModeratorAlias auto
 
 Book Property BM_ArmorLicense Auto
 Book Property BM_BikiniLicense Auto
+Book Property BM_BikiniExemption Auto
 Book Property BM_ClothingLicense Auto
 Book Property BM_MagicLicense Auto
 Book Property BM_WeaponLicense Auto

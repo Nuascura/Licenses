@@ -40,36 +40,39 @@ Event OnItemAdded(Form item, int count, ObjectReference itemRef, ObjectReference
         elseIf (item == bmlUtility.BM_BikiniLicense)
             licenses.BikiniLicense = true
             bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseAdded", 2)
+        elseIf (item == bmlUtility.BM_BikiniExemption)
+            licenses.BikiniExemption = true
+            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseAdded", 3)
         elseIf (item == bmlUtility.BM_ClothingLicense)
             licenses.ClothingLicense = true
-            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseAdded", 3)
+            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseAdded", 4)
         elseIf (item == bmlUtility.BM_MagicLicense)
             licenses.MagicLicense = true
-            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseAdded", 4)
+            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseAdded", 5)
         elseIf (item == bmlUtility.BM_WeaponLicense)
             licenses.WeaponLicense = true
-            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseAdded", 5)
+            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseAdded", 6)
         elseIf (item == bmlUtility.BM_CraftingLicense)
             licenses.CraftingLicense = true
-            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseAdded", 6)
+            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseAdded", 7)
         elseIf (item == bmlUtility.BM_TravelPermit)
             licenses.TravelPermit = true
-            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseAdded", 7)
+            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseAdded", 8)
         elseIf (item == bmlUtility.BM_CollarExemption)
             licenses.CollarExemption = true
-            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseAdded", 8)
+            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseAdded", 9)
         elseIf (item == bmlUtility.BM_Insurance)
             licenses.Insurance = true
-            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseAdded", 9)
+            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseAdded", 10)
         elseIf (item == bmlUtility.BM_CurfewExemption)
             licenses.CurfewExemption = true
-            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseAdded", 10)
+            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseAdded", 11)
         elseIf (item == bmlUtility.BM_TradingLicense)
             licenses.TradingLicense = true
-            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseAdded", 11)
+            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseAdded", 12)
         elseIf (item == bmlUtility.BM_WhoreLicense)
             licenses.WhoreLicense = true
-            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseAdded", 12)
+            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseAdded", 13)
         endif
         RefreshLicenseValidity()
     endif
@@ -84,36 +87,39 @@ Event OnItemRemoved(Form item, int count, ObjectReference itemRef, ObjectReferen
         elseIf (item == bmlUtility.BM_BikiniLicense)
             licenses.BikiniLicense = false
             bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseRemoved", 2)
+        elseIf (item == bmlUtility.BM_BikiniExemption)
+            licenses.BikiniExemption = false
+            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseRemoved", 3)
         elseIf (item == bmlUtility.BM_ClothingLicense)
             licenses.ClothingLicense = false
-            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseRemoved", 3)
+            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseRemoved", 4)
         elseIf (item == bmlUtility.BM_MagicLicense)
             licenses.MagicLicense = false
-            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseRemoved", 4)
+            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseRemoved", 5)
         elseIf (item == bmlUtility.BM_WeaponLicense)
             licenses.WeaponLicense = false
-            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseRemoved", 5)
+            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseRemoved", 6)
         elseIf (item == bmlUtility.BM_CraftingLicense)
             licenses.CraftingLicense = false
-            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseRemoved", 6)
+            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseRemoved", 7)
         elseIf (item == bmlUtility.BM_TravelPermit)
             licenses.TravelPermit = false
-            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseRemoved", 7)
+            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseRemoved", 8)
         elseIf (item == bmlUtility.BM_CollarExemption)
             licenses.CollarExemption = false
-            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseRemoved", 8)
+            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseRemoved", 9)
         elseIf (item == bmlUtility.BM_Insurance)
             licenses.Insurance = false
-            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseRemoved", 9)
+            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseRemoved", 10)
         elseIf (item == bmlUtility.BM_CurfewExemption)
             licenses.CurfewExemption = false
-            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseRemoved", 10)
+            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseRemoved", 11)
         elseIf (item == bmlUtility.BM_TradingLicense)
             licenses.TradingLicense = false
-            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseRemoved", 11)
+            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseRemoved", 12)
         elseIf (item == bmlUtility.BM_WhoreLicense)
             licenses.WhoreLicense = false
-            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseRemoved", 12)
+            bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseRemoved", 13)
         endif
         RefreshLicenseValidity()
     endif

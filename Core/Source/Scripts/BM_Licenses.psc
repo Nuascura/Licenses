@@ -197,6 +197,8 @@ Function ResetViolations(int type = 0)
         isCurfewViolation = false
     endIf
     isArmorViolation = false
+    isBikiniViolation = false
+    isClothingViolation = false
     isMagicViolation = false
     isWeaponViolation = false
     isCraftingViolation = false
@@ -342,6 +344,36 @@ EndFunction
 ; ------------------------------
 
 ; ---------- Array Setup ----------
+Function FillItemTypeArray()
+    FillItemTypeArrayArmor()
+    FillItemTypeArrayClothing()
+    FillItemTypeArrayBikini()
+EndFunction
+
+Function FillItemTypeArrayArmor()
+    ItemTypeArmor = new Keyword[2]
+    ItemTypeArmor[0] = BM_LicensesArmorItem
+    ItemTypeArmor[1] = VendorItemArmor
+EndFunction
+
+Function FillItemTypeArrayClothing()
+    ItemTypeClothing = new Keyword[2]
+    ItemTypeClothing[0] = BM_LicensesClothingItem
+    ItemTypeClothing[1] = VendorItemClothing
+EndFunction
+
+Function FillItemTypeArrayBikini()
+	String[] BikiniKeyword = PapyrusUtil.StringSplit(bmlmcm.bikiniKeywordString, ",")
+    BikiniKeyword = PapyrusUtil.ClearEmpty(BikiniKeyword)
+    ItemTypeBikini = new Keyword[32] ; limit to 32 for performance
+    ItemTypeBikini[0] = BM_LicensesBikiniItem
+    int i = 0
+    while i < BikiniKeyword.length && (i + 1) < ItemTypeBikini.length && BikiniKeyword[i]
+        ItemTypeBikini[i + 1] = Keyword.GetKeyword(BikiniKeyword[i])
+        i += 1
+    EndWhile
+EndFunction
+
 Function PopulateKeywordConfiscationArray()
     KeywordConfiscation = new Keyword[12]
     KeywordConfiscationEnch = new Keyword[8]
@@ -482,18 +514,6 @@ Function PopulateLicenseBooksArray()
     LicenseBooks[11] = bmlUtility.BM_CurfewExemption
 EndFunction
 
-Function PopulateKeywordBikiniItemArray()
-	String[] BikiniKeyword = PapyrusUtil.StringSplit(bmlmcm.bikiniKeywordString, ",")
-    BikiniKeyword = PapyrusUtil.ClearEmpty(BikiniKeyword)
-    KeywordBikiniItem = new Keyword[32] ; limit to 32 for performance
-    KeywordBikiniItem[0] = BM_LicensesBikiniItem
-    int i = 0
-    while i < BikiniKeyword.length && (i + 1) < KeywordBikiniItem.length && BikiniKeyword[i]
-        KeywordBikiniItem[i + 1] = Keyword.GetKeyword(BikiniKeyword[i])
-        i += 1
-    EndWhile
-EndFunction
-
 Function ValidateArmorSlotArray()
     if bmlmcm.ArmorSlotArray.Length != 32
         bmlmcm.ArmorSlotArray = Utility.CreateIntArray(32, 0)
@@ -538,8 +558,18 @@ bool Property BikiniLicense
         Return hasBikiniLicense
     EndFunction
     Function Set(bool value)
-        hasBikiniLicense = (value && bmlmcm.isBikiniLicenseFeatureEnabled) || !bmlmcm.isBikiniLicenseFeatureEnabled
-        StorageUtil.SetIntValue(None, "LPO_BikiniLicense", (hasBikiniLicense as int) - (2 * (!bmlmcm.isBikiniLicenseFeatureEnabled) as int))
+        hasBikiniLicense = (value && bmlmcm.isBikiniLicenseFeatureEnabled == 1) || !bmlmcm.isBikiniLicenseFeatureEnabled
+        StorageUtil.SetIntValue(None, "LPO_BikiniLicense", (hasBikiniLicense as int) - (2 * (!(bmlmcm.isBikiniLicenseFeatureEnabled)) as int))
+    EndFunction
+EndProperty
+bool Property hasBikiniExemption = true auto conditional
+bool Property BikiniExemption
+    bool Function Get()
+        Return hasBikiniExemption
+    EndFunction
+    Function Set(bool value)
+        hasBikiniExemption = (value && bmlmcm.isBikiniLicenseFeatureEnabled == 2) || !bmlmcm.isBikiniLicenseFeatureEnabled
+        StorageUtil.SetIntValue(None, "LPO_BikiniExemption", (hasBikiniExemption as int) - (2 * (!(bmlmcm.isBikiniLicenseFeatureEnabled)) as int))
     EndFunction
 EndProperty
 
@@ -654,6 +684,8 @@ bool Property CurfewExemption
 EndProperty
 
 bool Property isArmorViolation auto conditional
+bool Property isBikiniViolation auto conditional
+bool Property isClothingViolation auto conditional
 bool Property isMagicViolation auto conditional
 bool Property isWeaponViolation auto conditional
 bool Property isCraftingViolation auto conditional
@@ -678,6 +710,7 @@ EndProperty
 ; resets after license runs out
 float property armorLicenseExpirationTime = -1.0 auto conditional
 float property bikiniLicenseExpirationTime = -1.0 auto conditional
+float property bikiniExemptionExpirationTime = -1.0 auto conditional
 float property clothingLicenseExpirationTime = -1.0 auto conditional
 float property magicLicenseExpirationTime = -1.0 auto conditional
 float property weaponLicenseExpirationTime = -1.0 auto conditional
@@ -692,6 +725,7 @@ float property curfewExemptionExpirationTime = -1.0 auto conditional
 ; if cooldown time == -1.0 -> delay inactive
 float property armorLicenseCooldownTime = -1.0 auto conditional
 float property bikiniLicenseCooldownTime = -1.0 auto conditional
+float property bikiniExemptionCooldownTime = -1.0 auto conditional
 float property clothingLicenseCooldownTime = -1.0 auto conditional
 float property magicLicenseCooldownTime = -1.0 auto conditional
 float property weaponLicenseCooldownTime = -1.0 auto conditional
@@ -740,8 +774,10 @@ Message Property MessageTravelLocated  Auto
 Message Property MessageTravelMissing  Auto 
 Message Property MessageArmorCountdown  Auto  
 Message Property MessageArmorExpired  Auto 
-Message Property MessageBikiniCountdown  Auto  
-Message Property MessageBikiniExpired  Auto 
+Message Property MessageBikini1Countdown  Auto  
+Message Property MessageBikini1Expired  Auto 
+Message Property MessageBikini2Countdown  Auto  
+Message Property MessageBikini2Expired  Auto 
 Message Property MessageClothingCountdown  Auto  
 Message Property MessageClothingExpired  Auto 
 Message Property MessageMagicCountdown  Auto  
@@ -770,9 +806,12 @@ Message Property MessageItemUnequipped  Auto
 String[] Property CursedTattoos Auto
 String[] Property CursedTattoosActive Auto
 Book[] Property LicenseBooks Auto
-Keyword[] Property KeywordBikiniItem Auto
 Keyword[] Property KeywordQuestItem Auto
 Keyword[] Property KeywordModItem Auto
 Keyword[] Property KeywordBarterItem Auto
 Keyword[] Property KeywordConfiscation Auto
 Keyword[] Property KeywordConfiscationEnch Auto
+
+Keyword[] Property ItemTypeArmor Auto
+Keyword[] Property ItemTypeClothing Auto
+Keyword[] Property ItemTypeBikini Auto
