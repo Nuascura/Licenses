@@ -194,11 +194,11 @@ string Function GetModName(bool cache = true)
 EndFunction
 
 string Function GetModVersion()
-	return "1.23.5"
+	return "1.24.0"
 EndFunction
 
 int Function GetVersion()
-	return 19
+	return 20
 EndFunction
 
 bool Function CheckVersionConflict()
@@ -1141,7 +1141,7 @@ state LicenseLimitST
 	event OnSliderOpenST()
 		SetSliderDialogStartValue(LicenseLimit)
 		SetSliderDialogDefaultValue(0.0)
-		SetSliderDialogRange(0.0, 12.0)
+		SetSliderDialogRange(0.0, licenses.LicenseBooks.Length - 1.0)
 		SetSliderDialogInterval(1.0)
 	endEvent
 	event OnSliderAcceptST(float value)

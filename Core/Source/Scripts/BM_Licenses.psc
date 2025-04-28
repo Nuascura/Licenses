@@ -382,7 +382,12 @@ Function PopulateKeywordConfiscationArray()
         KeywordConfiscation[0] = BM_LicensesClothingItem
         KeywordConfiscation[1] = VendorItemClothing
     endIf
-    if (!hasBikiniLicense || !isInsured) && bmlmcm.isBikiniLicenseFeatureEnabled
+    if (!hasArmorLicense || !isInsured) && bmlmcm.isArmorLicenseFeatureEnabled
+        KeywordConfiscation[2] = BM_LicensesArmorItem
+        KeywordConfiscation[3] = VendorItemArmor
+    endIf
+
+    if (!hasBikiniLicense || !isInsured) && (bmlmcm.isBikiniLicenseFeatureEnabled == 1)
         if (!hasClothingLicense || !bmlmcm.isClothingLicenseFeatureEnabled) && bmlmcm.isBikiniClothingFeatureEnabled
             KeywordConfiscation[0] = BM_LicensesClothingItem
             KeywordConfiscation[1] = VendorItemClothing
@@ -391,18 +396,17 @@ Function PopulateKeywordConfiscationArray()
             KeywordConfiscation[2] = BM_LicensesArmorItem
             KeywordConfiscation[3] = VendorItemArmor
         endIf
-    endIf
-    if bmlmcm.isArmorLicenseFeatureEnabled
-        if (!hasArmorLicense || !isInsured)
+    elseIf (!hasBikiniExemption || !isInsured) && (bmlmcm.isBikiniLicenseFeatureEnabled == 2)
+        if (hasClothingLicense && bmlmcm.isClothingLicenseFeatureEnabled) && bmlmcm.isBikiniClothingFeatureEnabled
+            KeywordConfiscation[0] = BM_LicensesClothingItem
+            KeywordConfiscation[1] = VendorItemClothing
+        endIf
+        if (hasArmorLicense && bmlmcm.isArmorLicenseFeatureEnabled) && bmlmcm.isBikiniArmorFeatureEnabled
             KeywordConfiscation[2] = BM_LicensesArmorItem
             KeywordConfiscation[3] = VendorItemArmor
-        else
-            KeywordConfiscation[0] = None
-            KeywordConfiscation[1] = None
-            KeywordConfiscation[2] = None
-            KeywordConfiscation[3] = None
         endIf
     endIf
+
     if (!hasWeaponLicense || !isInsured) && bmlmcm.isWeaponLicenseFeatureEnabled
         KeywordConfiscation[4] = BM_LicensesWeaponItem
         KeywordConfiscation[5] = VendorItemWeapon

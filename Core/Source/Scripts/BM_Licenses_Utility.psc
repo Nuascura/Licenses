@@ -680,7 +680,8 @@ Form[] Function GetViolatingItems(ObjectReference akObjRef, Bool abEquippedOnly,
         PotentialForms = SPE_Utility.IntersectArray_Form(PotentialForms, PO3_SKSEFunctions.AddAllEquippedItemsToArray(akObjRef as Actor))
     endIf
     ; Overrides
-    PotentialForms = ScanInventory_CommonFilter(PotentialForms, ((licenses.hasBikiniLicense && licenses.isInsured) && !abEnchantedOnly))
+    Bool FilterBikini = !abEnchantedOnly && ((licenses.hasBikiniLicense && licenses.hasBikiniExemption) && licenses.isInsured)
+    PotentialForms = ScanInventory_CommonFilter(PotentialForms, FilterBikini)
     return PotentialForms
 EndFunction
 
@@ -810,18 +811,18 @@ EndFunction
 Int Function CountActiveLicenses()
     Bool[] LicenseArray = new Bool[13]
     LicenseArray[0] = (licenses.armorLicenseExpirationTime != -1) && bmlmcm.isArmorLicenseFeatureEnabled
-    LicenseArray[1] = ((licenses.bikiniLicenseExpirationTime != -1) && (bmlmcm.isBikiniLicenseFeatureEnabled == 1)) \
-                    || ((licenses.bikiniExemptionExpirationTime != -1) && (bmlmcm.isBikiniLicenseFeatureEnabled == 2))
-    LicenseArray[2] = (licenses.clothingLicenseExpirationTime != -1) && bmlmcm.isClothingLicenseFeatureEnabled
-    LicenseArray[3] = (licenses.magicLicenseExpirationTime != -1) && bmlmcm.isMagicLicenseFeatureEnabled
-    LicenseArray[4] = (licenses.weaponLicenseExpirationTime != -1) && bmlmcm.isWeaponLicenseFeatureEnabled
-    LicenseArray[5] = (licenses.craftingLicenseExpirationTime != -1) && bmlmcm.isCraftingLicenseFeatureEnabled
-    LicenseArray[6] = (licenses.tradingLicenseExpirationTime != -1) && bmlmcm.isTradingLicenseFeatureEnabled
-    LicenseArray[7] = (licenses.whoreLicenseExpirationTime != -1) && bmlmcm.isWhoreLicenseFeatureEnabled
-    LicenseArray[8] = (licenses.travelPermitExpirationTime != -1) && bmlmcm.isTravelPermitFeatureEnabled
-    LicenseArray[9] = (licenses.collarExemptionExpirationTime != -1) && bmlmcm.isCollarExemptionFeatureEnabled
-    LicenseArray[10] = (licenses.insuranceExpirationTime != -1) && bmlmcm.isInsuranceFeatureEnabled
-    LicenseArray[11] = (licenses.curfewExemptionExpirationTime != -1) && bmlmcm.isCurfewExemptionFeatureEnabled
+    LicenseArray[1] = (licenses.bikiniLicenseExpirationTime != -1) && (bmlmcm.isBikiniLicenseFeatureEnabled == 1)
+    LicenseArray[2] = (licenses.bikiniExemptionExpirationTime != -1) && (bmlmcm.isBikiniLicenseFeatureEnabled == 2)
+    LicenseArray[3] = (licenses.clothingLicenseExpirationTime != -1) && bmlmcm.isClothingLicenseFeatureEnabled
+    LicenseArray[4] = (licenses.magicLicenseExpirationTime != -1) && bmlmcm.isMagicLicenseFeatureEnabled
+    LicenseArray[5] = (licenses.weaponLicenseExpirationTime != -1) && bmlmcm.isWeaponLicenseFeatureEnabled
+    LicenseArray[6] = (licenses.craftingLicenseExpirationTime != -1) && bmlmcm.isCraftingLicenseFeatureEnabled
+    LicenseArray[7] = (licenses.tradingLicenseExpirationTime != -1) && bmlmcm.isTradingLicenseFeatureEnabled
+    LicenseArray[8] = (licenses.whoreLicenseExpirationTime != -1) && bmlmcm.isWhoreLicenseFeatureEnabled
+    LicenseArray[9] = (licenses.travelPermitExpirationTime != -1) && bmlmcm.isTravelPermitFeatureEnabled
+    LicenseArray[10] = (licenses.collarExemptionExpirationTime != -1) && bmlmcm.isCollarExemptionFeatureEnabled
+    LicenseArray[11] = (licenses.insuranceExpirationTime != -1) && bmlmcm.isInsuranceFeatureEnabled
+    LicenseArray[12] = (licenses.curfewExemptionExpirationTime != -1) && bmlmcm.isCurfewExemptionFeatureEnabled
     return PapyrusUtil.CountBool(LicenseArray, true)
 EndFunction
 

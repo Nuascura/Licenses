@@ -13,9 +13,9 @@ Auto State Run
         if equippedObjects
             Form[] equippedArmor = SPE_Utility.FilterFormsByKeyword(equippedObjects, licenses.ItemTypeArmor, false, false)
             if equippedArmor
-                if bmlmcm.isBikiniLicenseFeatureEnabled == 2 && bmlmcm.isBikiniArmorFeatureEnabled
+                if !licenses.hasBikiniExemption
                     licenses.isBikiniViolation = true
-                    bmlUtility.LogTrace("Detected Bikini Armor Violation: " + equippedArmor)
+                    bmlUtility.LogTrace("Detected Bikini Armor Violation: " + SPE_Utility.FilterFormsByKeyword(equippedObjects, licenses.ItemTypeBikini, false, false))
                 elseIf bmlmcm.isArmorLicenseFeatureEnabled
                     licenses.isArmorViolation = true
                     bmlUtility.LogTrace("Detected Armor Violation: " + equippedArmor)
@@ -23,9 +23,9 @@ Auto State Run
             endIf
             Form[] equippedClothing = SPE_Utility.FilterFormsByKeyword(equippedObjects, licenses.ItemTypeClothing, false, false)
             if equippedClothing
-                if bmlmcm.isBikiniLicenseFeatureEnabled == 2 && bmlmcm.isBikiniClothingFeatureEnabled
+                if !licenses.hasBikiniExemption
                     licenses.isBikiniViolation = true
-                    bmlUtility.LogTrace("Detected Bikini Clothing Violation: " + equippedClothing)
+                    bmlUtility.LogTrace("Detected Bikini Clothing Violation: " + SPE_Utility.FilterFormsByKeyword(equippedObjects, licenses.ItemTypeBikini, false, false))
                 elseIf bmlmcm.isClothingLicenseFeatureEnabled
                     licenses.isClothingViolation = true
                     bmlUtility.LogTrace("Detected Clothing Violation: " + equippedClothing)
