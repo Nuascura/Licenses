@@ -397,11 +397,11 @@ Function PopulateKeywordConfiscationArray()
             KeywordConfiscation[3] = VendorItemArmor
         endIf
     elseIf (!hasBikiniExemption || !isInsured) && (bmlmcm.isBikiniLicenseFeatureEnabled == 2)
-        if (hasClothingLicense && bmlmcm.isClothingLicenseFeatureEnabled) && bmlmcm.isBikiniClothingFeatureEnabled
+        if hasClothingLicense && bmlmcm.isBikiniClothingFeatureEnabled
             KeywordConfiscation[0] = BM_LicensesClothingItem
             KeywordConfiscation[1] = VendorItemClothing
         endIf
-        if (hasArmorLicense && bmlmcm.isArmorLicenseFeatureEnabled) && bmlmcm.isBikiniArmorFeatureEnabled
+        if hasArmorLicense && bmlmcm.isBikiniArmorFeatureEnabled
             KeywordConfiscation[2] = BM_LicensesArmorItem
             KeywordConfiscation[3] = VendorItemArmor
         endIf
