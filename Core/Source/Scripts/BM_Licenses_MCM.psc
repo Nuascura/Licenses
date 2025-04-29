@@ -571,7 +571,7 @@ Event OnPageReset(string page)
         AddEmptyOption()
         AddEmptyOption()
         AddHeaderOption("$LPO_BikiniLicense")
-        AddMenuOptionST("isBikiniLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isBikiniLicenseFeatureEnabled as int))
+        AddMenuOptionST("isBikiniLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isBikiniLicenseFeatureEnabled, isBikiniLicenseFeatureEnabled))
         AddSliderOptionST("BM_BLCostST", "$LPO_BM_BLCost", BM_BLCost.getValue(), "{0} gold")
         AddSliderOptionST("BM_BLDurationST", "$LPO_BM_BLDuration", BM_BLDuration.getValue(), "{0} day(s)")
 		AddToggleOptionST("isBikiniArmorFeatureEnabledST", "$LPO_isBikiniArmorFeatureEnabled", isBikiniArmorFeatureEnabled)
@@ -1296,7 +1296,7 @@ state isBikiniLicenseFeatureEnabledST
 			isBikiniLicenseFeatureEnabled = index
 			SessionModified = true
 		endIf
-		SetMenuOptionValueST(GetBoolString(isBikiniLicenseFeatureEnabled as int))
+		SetMenuOptionValueST(GetBoolString(isBikiniLicenseFeatureEnabled, isBikiniLicenseFeatureEnabled))
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_isBikiniLicenseFeatureEnabledHighlight")
@@ -2291,8 +2291,11 @@ state RefreshTattoosST
 	endEvent
 endState
 
-String Function GetBoolString(Bool varb)
+String Function GetBoolString(Bool varb, String id = "")
 	if varb
+		if id
+			return "$LPO_Enabled{" + id + "}"
+		endIf
 		return "$LPO_Enabled"
 	else
 		return "$LPO_Disabled"
