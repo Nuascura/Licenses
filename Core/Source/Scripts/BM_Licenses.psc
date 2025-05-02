@@ -562,8 +562,8 @@ bool Property BikiniLicense
         Return hasBikiniLicense
     EndFunction
     Function Set(bool value)
-        hasBikiniLicense = (value && bmlmcm.isBikiniLicenseFeatureEnabled == 1) || !bmlmcm.isBikiniLicenseFeatureEnabled
-        StorageUtil.SetIntValue(None, "LPO_BikiniLicense", (hasBikiniLicense as int) - (2 * (!(bmlmcm.isBikiniLicenseFeatureEnabled)) as int))
+        hasBikiniLicense = (value && bmlmcm.isBikiniLicenseFeatureEnabled == 1) || (bmlmcm.isBikiniLicenseFeatureEnabled != 1)
+        StorageUtil.SetIntValue(None, "LPO_BikiniLicense", (hasBikiniLicense as int) - (2 * (bmlmcm.isBikiniLicenseFeatureEnabled != 1) as int))
     EndFunction
 EndProperty
 bool Property hasBikiniExemption = true auto conditional
@@ -572,8 +572,8 @@ bool Property BikiniExemption
         Return hasBikiniExemption
     EndFunction
     Function Set(bool value)
-        hasBikiniExemption = (value && bmlmcm.isBikiniLicenseFeatureEnabled == 2) || !bmlmcm.isBikiniLicenseFeatureEnabled
-        StorageUtil.SetIntValue(None, "LPO_BikiniExemption", (hasBikiniExemption as int) - (2 * (!(bmlmcm.isBikiniLicenseFeatureEnabled)) as int))
+        hasBikiniExemption = (value && bmlmcm.isBikiniLicenseFeatureEnabled == 2) || (bmlmcm.isBikiniLicenseFeatureEnabled != 2)
+        StorageUtil.SetIntValue(None, "LPO_BikiniExemption", (hasBikiniExemption as int) - (2 * (bmlmcm.isBikiniLicenseFeatureEnabled != 2) as int))
     EndFunction
 EndProperty
 

@@ -680,7 +680,7 @@ Form[] Function GetViolatingItems(ObjectReference akObjRef, Bool abEquippedOnly,
         PotentialForms = SPE_Utility.IntersectArray_Form(PotentialForms, PO3_SKSEFunctions.AddAllEquippedItemsToArray(akObjRef as Actor))
     endIf
     ; Overrides
-    Bool FilterBikini = !abEnchantedOnly && ((licenses.hasBikiniLicense && licenses.hasBikiniExemption) && licenses.isInsured)
+    Bool FilterBikini = !abEnchantedOnly && licenses.hasBikiniLicense && licenses.isInsured
     PotentialForms = ScanInventory_CommonFilter(PotentialForms, FilterBikini)
     return PotentialForms
 EndFunction
