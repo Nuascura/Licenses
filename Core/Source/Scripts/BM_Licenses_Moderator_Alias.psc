@@ -135,20 +135,17 @@ EndEvent
 
 ; ---------- Event Mitigation ----------
 Function TrackPlayerStatus_SL() ; SexLab
-    if bmlUtility.bmlmcm.SexLab_State
-        (Quest.GetQuest("SexLabQuestFramework") as SexLabFramework).TrackActor(PlayerRef, "SLScene")
-    endIf
-    RegisterForModEvent("SLScene_Start", "SLScene_OnStart")
-    RegisterForModEvent("SLScene_End", "SLScene_OnEnd")
+    RegisterForModEvent("PlayerTrack_Start", "PlayerTrack_OnStart")
+    RegisterForModEvent("PlayerTrack_End", "PlayerTrack_OnEnd")
 EndFunction
 
-Function SLScene_OnStart(Form FormRef, int tid)
-    bmlUtility.LogTrace("SLScene_OnStart")
+Function PlayerTrack_OnStart(Form FormRef, int tid)
+    bmlUtility.LogTrace("PlayerTrack_OnStart")
     bmlUtility.BM_IsInAnimation.SetValue(1.0)
 EndFunction
 
-Event SLScene_OnEnd(Form FormRef, int tid)
-    bmlUtility.LogTrace("SLScene_OnEnd")
+Event PlayerTrack_OnEnd(Form FormRef, int tid)
+    bmlUtility.LogTrace("PlayerTrack_OnEnd")
     bmlUtility.BM_IsInAnimation.SetValue(0.0)
 EndEvent
 

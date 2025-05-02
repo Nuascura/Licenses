@@ -1,6 +1,17 @@
-1.23.5
+1.24.0
 Primary
+- Add: Bikini Exemption feature.
+- Change: MCM feature state option displays.
+- Change: Armor License no longer confers Clothing License rule immunities.
+- Change: Separated Armor and Clothing violation tracking.
+- Change: Dialogue lines.
+- Change: License integer map.
 - Fix: Script spam under MGEF OnLocationChange event.
+- Fix: Whore violation is not accounted for during insurance price modification.
+- Fix: Bruma Patch: Missing bounty quest script props.
+- Change: SexLab player actor track method.
+- Update: Localization files.
+- Update: Bruma patch.
 
 
 
