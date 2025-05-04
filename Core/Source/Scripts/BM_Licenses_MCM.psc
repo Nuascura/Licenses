@@ -365,9 +365,9 @@ Event OnPageReset(string page)
 			AddEmptyOption()
 		endIf
 
-		if (licenses.hasBikiniLicense && isBikiniLicenseFeatureEnabled)
+		if (licenses.hasBikiniLicense && isBikiniLicenseFeatureEnabled == 1)
 			AddTextOption("$LPO_BikiniLicense",  "$LPO_Valid")
-		elseIf (!isBikiniLicenseFeatureEnabled)
+		elseIf (isBikiniLicenseFeatureEnabled != 1)
 			AddTextOption("$LPO_BikiniLicense",  "$LPO_Unnecessary")
 		else
 			AddTextOption("$LPO_BikiniLicense",  "$LPO_Invalid")
@@ -376,6 +376,21 @@ Event OnPageReset(string page)
 			AddTextOption("$LPO_ExpirationTime{" + Math.ceiling(24.0 * (licenses.bikiniLicenseExpirationTime - GameDaysPassed.GetValue())) + "}", "")
 		elseIf licenses.bikiniLicenseCooldownTime != -1.0
 			AddTextOption("$LPO_CooldownTime{" + Math.ceiling(24.0 * (licenses.bikiniLicenseCooldownTime - GameDaysPassed.GetValue())) + "}", "")
+		else
+			AddEmptyOption()
+		endIf
+
+		if (licenses.hasBikiniExemption && isBikiniLicenseFeatureEnabled == 2)
+			AddTextOption("$LPO_BikiniExemption",  "$LPO_Valid")
+		elseIf (isBikiniLicenseFeatureEnabled != 2)
+			AddTextOption("$LPO_BikiniExemption",  "$LPO_Unnecessary")
+		else
+			AddTextOption("$LPO_BikiniExemption",  "$LPO_Invalid")
+		endIf
+		if licenses.bikiniExemptionExpirationTime != -1.0
+			AddTextOption("$LPO_ExpirationTime{" + Math.ceiling(24.0 * (licenses.bikiniExemptionExpirationTime - GameDaysPassed.GetValue())) + "}", "")
+		elseIf licenses.bikiniExemptionCooldownTime != -1.0
+			AddTextOption("$LPO_CooldownTime{" + Math.ceiling(24.0 * (licenses.bikiniExemptionCooldownTime - GameDaysPassed.GetValue())) + "}", "")
 		else
 			AddEmptyOption()
 		endIf
