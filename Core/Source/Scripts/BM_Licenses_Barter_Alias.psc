@@ -84,7 +84,7 @@ EndFunction
 
 Form[] Function ScanVendor(ObjectReference VendorChest)
     Form[] PotentialForms = SPE_ObjectRef.GetItemsByKeyword(VendorChest, licenses.KeywordBarterItem, false)
-    PotentialForms = bmlUtility.ScanInventory_CommonFilter(PotentialForms)
+    PotentialForms = bmlUtility.FilterSensitive(PotentialForms)
     return PotentialForms
 EndFunction
 

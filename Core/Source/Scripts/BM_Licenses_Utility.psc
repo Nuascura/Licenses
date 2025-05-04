@@ -651,37 +651,52 @@ EndFunction
 ; ------------------------------
 
 ; ---------- Inventory Scanners ----------
-Form[] Function ScanInventory_CommonFilter(Form[] Array, Bool abFilterBikini = false)
+Form[] Function FilterSensitive(Form[] arr)
     ; Filter out items matching keyword combinations
-    Array = SPE_Utility.FilterFormsByKeyword(Array, licenses.KeywordQuestItem, true, true)
-    Array = SPE_Utility.FilterFormsByKeyword(Array, licenses.KeywordModItem, false, true)
-    if abFilterBikini
-        Array = SPE_Utility.FilterFormsByKeyword(Array, licenses.ItemTypeBikini, false, true)
+    arr = SPE_Utility.FilterFormsByKeyword(arr, licenses.KeywordQuestItem, true, true)
+    arr = SPE_Utility.FilterFormsByKeyword(arr, licenses.KeywordModItem, false, true)
+    return arr
+EndFunction
+
+Form[] Function FilterBikini(Form[] arr, int aiType)
+    Debug.Trace("BM_ arr pre: " + arr)
+    if licenses.isInsured
+        if aiType == 1
+            if licenses.hasBikiniLicense
+                arr = SPE_Utility.FilterFormsByKeyword(arr, licenses.ItemTypeBikini, false, true)
+            endIf
+        elseIf aiType == 2
+            if !licenses.hasBikiniExemption
+                arr = FilterByComparison(arr, licenses.ItemTypeClothing, licenses.ItemTypeBikini)
+                arr = FilterByComparison(arr, licenses.ItemTypeArmor, licenses.ItemTypeBikini)
+            endIf
+        endIf
     endIf
-    return Array
+    Debug.Trace("BM_ arr post: " + arr)
+    return arr
 EndFunction
 
 Form[] Function GetViolatingItems(ObjectReference akObjRef, Bool abEquippedOnly, Bool abEnchantedOnly = false)
-    ; Get Armor, selecting by slot
+    ; Get Armor by Slot
     Form[] PotentialForms = FilterByOccupiedSlotmask(PO3_SKSEFunctions.AddItemsOfTypeToArray(akObjRef, 26, false), bmlmcm.ArmorSlotArray)
     ; Get Weapons
     PotentialForms = PapyrusUtil.MergeFormArray(PotentialForms, PO3_SKSEFunctions.AddItemsOfTypeToArray(akObjRef, 41, false), true)
     ; Get Ammo
     PotentialForms = PapyrusUtil.MergeFormArray(PotentialForms, PO3_SKSEFunctions.AddItemsOfTypeToArray(akObjRef, 42, false), true)
-    ; Filter by keywords
+    ; Filter by Keywords
     if abEnchantedOnly
         PotentialForms = SPE_Utility.IntersectArray_Form(PotentialForms, SPE_ObjectRef.GetItemsByKeyword(akObjRef, licenses.KeywordConfiscationEnch, false))
         PotentialForms = SPE_Utility.IntersectArray_Form(PotentialForms, SPE_ObjectRef.GetEnchantedItems(akObjRef, true, true, abEquippedOnly))
     else
         PotentialForms = SPE_Utility.IntersectArray_Form(PotentialForms, SPE_ObjectRef.GetItemsByKeyword(akObjRef, licenses.KeywordConfiscation, false))
+        PotentialForms = FilterBikini(PotentialForms, bmlmcm.isBikiniLicenseFeatureEnabled)
     endIf
-    ; Filter by equipped
+    ; Filter by Equipped
     if abEquippedOnly && (akObjRef as Actor)
         PotentialForms = SPE_Utility.IntersectArray_Form(PotentialForms, PO3_SKSEFunctions.AddAllEquippedItemsToArray(akObjRef as Actor))
     endIf
     ; Overrides
-    Bool FilterBikini = !abEnchantedOnly && licenses.hasBikiniLicense && licenses.isInsured
-    PotentialForms = ScanInventory_CommonFilter(PotentialForms, FilterBikini)
+    PotentialForms = FilterSensitive(PotentialForms)
     return PotentialForms
 EndFunction
 
@@ -709,6 +724,16 @@ Form[] Function FilterByOccupiedSlotmask(Form[] akForms, int[] aiSlotArray, bool
         i += 1
     EndWhile
     return ret
+EndFunction
+
+Form[] Function FilterByComparison(Form[] arr, Keyword[] kwRemain, Keyword[] kwRemove)
+    return SPE_Utility.FilterArray_Form(\
+    arr, SPE_Utility.FilterFormsByKeyword(\
+    SPE_Utility.FilterFormsByKeyword(\
+    arr, kwRemain, false, false\
+    ), kwRemove, false, true\
+    )\
+    )
 EndFunction
 ; ------------------------------
 

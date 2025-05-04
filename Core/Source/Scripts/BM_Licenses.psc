@@ -337,7 +337,7 @@ Function ConfiscateItems_Simple()
     ; Merge Arrays
     PotentialForms = PapyrusUtil.MergeFormArray(array1, array2, true)
     ; Overrides
-    PotentialForms = bmlUtility.ScanInventory_CommonFilter(PotentialForms)
+    PotentialForms = bmlUtility.FilterSensitive(PotentialForms)
     ; Remove items
     SPE_ObjectRef.RemoveItems(PlayerActorRef, PotentialForms, none)
 EndFunction
@@ -387,7 +387,7 @@ Function PopulateKeywordConfiscationArray()
         KeywordConfiscation[3] = VendorItemArmor
     endIf
 
-    if (!hasBikiniLicense || !isInsured) && (bmlmcm.isBikiniLicenseFeatureEnabled == 1)
+    if (bmlmcm.isBikiniLicenseFeatureEnabled == 1)
         if (!hasClothingLicense || !bmlmcm.isClothingLicenseFeatureEnabled) && bmlmcm.isBikiniClothingFeatureEnabled
             KeywordConfiscation[0] = BM_LicensesClothingItem
             KeywordConfiscation[1] = VendorItemClothing
@@ -397,11 +397,11 @@ Function PopulateKeywordConfiscationArray()
             KeywordConfiscation[3] = VendorItemArmor
         endIf
     elseIf (!hasBikiniExemption || !isInsured) && (bmlmcm.isBikiniLicenseFeatureEnabled == 2)
-        if hasClothingLicense && bmlmcm.isBikiniClothingFeatureEnabled
+        if bmlmcm.isBikiniClothingFeatureEnabled
             KeywordConfiscation[0] = BM_LicensesClothingItem
             KeywordConfiscation[1] = VendorItemClothing
         endIf
-        if hasArmorLicense && bmlmcm.isBikiniArmorFeatureEnabled
+        if bmlmcm.isBikiniArmorFeatureEnabled
             KeywordConfiscation[2] = BM_LicensesArmorItem
             KeywordConfiscation[3] = VendorItemArmor
         endIf
