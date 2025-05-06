@@ -4,7 +4,7 @@ Scriptname BM_Licenses_Utility extends Quest
 ; -------------------------------------------------- Utility
 ; ----------------------------------------------------------------------------------------------------
 
-; -------------------------------------------------- Backwards Compatibility --------------------------------------------------
+; -------------------------------------------------- Shortcuts --------------------------------------------------
 string Function GetModVersion()
     return BM_API.GetModVersion()
 EndFunction
@@ -14,27 +14,31 @@ int Function GetLicenseID(string LicensePrefix)
 EndFunction
 
 Float Function GetLicenseTimeLeft(int LicenseType)
-    return BM_API.GetLicenseTimeLeft(LicenseType)
+    return BM_API.GetLicenseTimeLeft(LicenseType, self)
 EndFunction
 
 bool Function FlagViolation(int ViolationType, bool Push = true, bool CheckSafety = true)
-    return BM_API.FlagViolation(ViolationType, Push, CheckSafety)
+    return BM_API.FlagViolation(ViolationType, Push, CheckSafety, self)
 EndFunction
 
 bool Function ClearViolations(bool ClearPersistent = false, bool CheckSafety = true)
-    return BM_API.ClearViolations(ClearPersistent, CheckSafety)
+    return BM_API.ClearViolations(ClearPersistent, CheckSafety, self)
 EndFunction
 
 bool Function PurchaseLicense(int LicenseType, bool SubtractGold = true, bool CheckSafety = true)
-    return BM_API.PurchaseLicense(LicenseType, SubtractGold, CheckSafety)
+    return BM_API.PurchaseLicense(LicenseType, SubtractGold, CheckSafety, self)
 EndFunction
 
 bool Function ExpireLicense(int LicenseType, bool Push = true)
-    return BM_API.ExpireLicense(LicenseType, Push)
+    return BM_API.ExpireLicense(LicenseType, Push, self)
 EndFunction
 
 bool Function RemoveLicense(int LicenseType, int LicenseCount = 0, ObjectReference DestinationContainer = None, bool CheckSafety = true)
-    return BM_API.RemoveLicense(LicenseType, LicenseCount, DestinationContainer, CheckSafety)
+    return BM_API.RemoveLicense(LicenseType, LicenseCount, DestinationContainer, CheckSafety, self)
+EndFunction
+
+bool Function ToggleLicenseFeature(int LicenseType, bool FeatureFlag, bool Push = true, BM_Licenses_Utility bmlUtility)
+    return BM_API.ToggleLicenseFeature(LicenseType, FeatureFlag, Push, self)
 EndFunction
 
 ; -------------------------------------------------- Common Tools --------------------------------------------------
@@ -669,22 +673,21 @@ Float Function GetFine()
     Int Base = bmlmcm.FineBase
     Float Percentage = bmlmcm.FinePercentage / 100.0
 
-    Int ArmorFine = (licenses.isArmorViolation as int) * (bmlmcm.BM_ALCost.GetValue() as int)
-    Int BikiniFine = ((licenses.isBikiniViolation as bool) as int) * (bmlmcm.BM_BLCost.GetValue() as int)
-    Int ClothingFine = (licenses.isClothingViolation as int) * (bmlmcm.BM_CLCost.GetValue() as int)
-    Int MagicFine = (licenses.isMagicViolation as int) * (bmlmcm.BM_MLCost.GetValue() as int)
-    Int WeaponFine = (licenses.isWeaponViolation as int) * (bmlmcm.BM_WLCost.GetValue() as int)
-    Int CraftingFine = (licenses.isCraftingViolation as int) * (bmlmcm.BM_CrfLCost.GetValue() as int)
-    Int TravelFine = (licenses.isTravelViolation as int) * (bmlmcm.BM_TPCost.GetValue() as int)
-    Int CollarFine = (licenses.isCollarViolation as int) * (bmlmcm.BM_CECost.GetValue() as int)
-    Int InsuranceFine = (licenses.isUninsuredViolation as int) * (bmlmcm.BM_InsurCost.GetValue() as int)
-    Int CurfewFine = (licenses.isCurfewViolation as int) * (bmlmcm.BM_CuECost.GetValue() as int)
-    Int TradingFine = (licenses.isTradingViolation as int) * (bmlmcm.BM_TLCost.GetValue() as int)
-    Int WhoreFine = (licenses.isWhoreViolation as int) * (bmlmcm.BM_WhLCost.GetValue() as int)
+    Int[] FineList = new Int[12]
+    FineList[0] = (licenses.isArmorViolation as int) * (bmlmcm.BM_ALCost.GetValue() as int)
+    FineList[1] = ((licenses.isBikiniViolation as bool) as int) * (bmlmcm.BM_BLCost.GetValue() as int)
+    FineList[2] = (licenses.isClothingViolation as int) * (bmlmcm.BM_CLCost.GetValue() as int)
+    FineList[3] = (licenses.isMagicViolation as int) * (bmlmcm.BM_MLCost.GetValue() as int)
+    FineList[4] = (licenses.isWeaponViolation as int) * (bmlmcm.BM_WLCost.GetValue() as int)
+    FineList[5] = (licenses.isCraftingViolation as int) * (bmlmcm.BM_CrfLCost.GetValue() as int)
+    FineList[6] = (licenses.isTravelViolation as int) * (bmlmcm.BM_TPCost.GetValue() as int)
+    FineList[7] = (licenses.isCollarViolation as int) * (bmlmcm.BM_CECost.GetValue() as int)
+    FineList[8] = (licenses.isUninsuredViolation as int) * (bmlmcm.BM_InsurCost.GetValue() as int)
+    FineList[9] = (licenses.isCurfewViolation as int) * (bmlmcm.BM_CuECost.GetValue() as int)
+    FineList[10] = (licenses.isTradingViolation as int) * (bmlmcm.BM_TLCost.GetValue() as int)
+    FineList[11] = (licenses.isWhoreViolation as int) * (bmlmcm.BM_WhLCost.GetValue() as int)
 
-    Fine = Base + (Percentage * (ArmorFine + BikiniFine + ClothingFine + MagicFine \
-           + WeaponFine + CraftingFine + TravelFine + CollarFine + InsuranceFine \
-           + CurfewFine + TradingFine + WhoreFine))
+    Fine = Base + (Percentage * PapyrusUtil.AddIntValues(FineList))
     LogTrace("Generated Fine Total: " + Fine)
     return Fine
 EndFunction
@@ -1209,6 +1212,13 @@ Function RefreshTattoos()
             licenses.CursedTattoosActive = BM_API_ST.LockCursedTattoos(PlayerActorRef, licenses.CursedTattoos)
         endIf
     endIf
+EndFunction
+
+; Refresh Licenses
+Function RefreshLicenses()
+    refreshLicenseFeatures()
+    refreshInventoryEventFilters()
+    bmlModeratorAlias.RefreshLicenseValidity()
 EndFunction
 
 ; Refresh Features

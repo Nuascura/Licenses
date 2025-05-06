@@ -42,16 +42,22 @@ int Function GetConfigVersion() Global
 EndFunction
 
 ; Get - Script Version
-Int Function GetVersion() Global
-	return 0x01240020
+int Function GetVersion() Global
+	return 0x01240020 ;0x01020304
 EndFunction
 
+; Get - Mod Name
 string Function GetModName(bool cache = true) Global
 	if cache
 		return GetMCM().modname
 	else
 		return "Licenses - Player Oppression"
 	endIf
+EndFunction
+
+; Get - Mod State
+float Function GetModState() Global
+    return GetMCM().Licenses_State.GetValue()
 EndFunction
 
 ; Get - Utility
@@ -72,7 +78,7 @@ EndFunction
 ; Get - License ID
 ; Parameter 1 asks for a license or violation prefix as string.
 ; Note that Life Insurance uses "Insurance" as its prefix within scripts.
-; If function returns 0, prefix couldn't retrieve an ID. If function returns -1, function was given an invalid input.
+; If function returns -1, prefix couldn't retrieve an ID.
 int Function GetLicenseID(string LicensePrefix) Global
     if LicensePrefix
         if LicensePrefix == "Armor"
@@ -101,12 +107,48 @@ int Function GetLicenseID(string LicensePrefix) Global
             return 12
         elseIf LicensePrefix == "Whore"
             return 13
-        else
-            return 0
         endIf
     endIf
 
     return -1
+EndFunction
+
+; Get - License SID
+; Parameter 1 asks for a license ID as int.
+; Parameter 2 asks for a license prefix as string.
+; Whereas prefixes are shorthands for mod authors, SIDs are included for internal use.
+string Function GetLicenseSID(int LicenseID = 0, string LicensePrefix = "") Global
+    if LicenseID || LicensePrefix
+        if LicenseID == 1 || LicensePrefix == "Armor"
+            return "ArmorLicense"
+        elseIf LicenseID == 2 || LicensePrefix == "Bikini_L"
+            return "BikiniLicense"
+        elseIf LicenseID == 3 || LicensePrefix == "Bikini_E"
+            return "BikiniExemption"
+        elseIf LicenseID == 4 || LicensePrefix == "Clothing"
+            return "ClothingLicense"
+        elseIf LicenseID == 5 || LicensePrefix == "Magic"
+            return "MagicLicense"
+        elseIf LicenseID == 6 || LicensePrefix == "Weapon"
+            return "WeaponLicense"
+        elseIf LicenseID == 7 || LicensePrefix == "Crafting"
+            return "CraftingLicense"
+        elseIf LicenseID == 8 || LicensePrefix == "Travel"
+            return "TravelPermit"
+        elseIf LicenseID == 9 || LicensePrefix == "Collar"
+            return "CollarExemption"
+        elseIf LicenseID == 10 || LicensePrefix == "Insurance"
+            return "Insurance"
+        elseIf LicenseID == 11 || LicensePrefix == "Curfew"
+            return "CurfewExemption"
+        elseIf LicenseID == 12 || LicensePrefix == "Trading"
+            return "TradingLicense"
+        elseIf LicenseID == 13 || LicensePrefix == "Whore"
+            return "WhoreLicense"
+        endIf
+    endIf
+
+    return ""
 EndFunction
 
 ; Get - License Time left
@@ -114,11 +156,10 @@ EndFunction
 ; This function returns a remaining time per in-game hours.
 ; If function returns a negative value, the subject license cycle is inactive.
 ; If function returns 0, either the subject license cycle is waiting for a refresh or function was given an invalid input.
-Float Function GetLicenseTimeLeft(int LicenseType) Global
-    BM_Licenses_Utility bmlUtility = GetUtility()
-    BM_Licenses bml = GetLPO()
-
+float Function GetLicenseTimeLeft(int LicenseType, BM_Licenses_Utility bmlUtility) Global
+    BM_Licenses bml = bmlUtility.licenses
     float currentTime = bmlUtility.GameDaysPassed.GetValue()
+
     if LicenseType == 1
         return bml.armorLicenseExpirationTime - currentTime
     elseIf LicenseType == 2
@@ -154,9 +195,8 @@ EndFunction
 ; Parameter 1 asks for an integer corresponding to a violation type. 
 ; Parameter 2 asks if you want to push to aggregate violations and invoke the bounty quest. If manually flagging multiple violations in succession, pass true only with the last FlagViolation call.
 ; Parameter 3 asks if you want to skip safety checks. Don't change this boolean from its default unless absolutely necessary.
-bool Function FlagViolation(int ViolationType, bool Push = true, bool CheckSafety = true) Global
-    BM_Licenses_Utility bmlUtility = GetUtility()
-    BM_Licenses bml = GetLPO()
+bool Function FlagViolation(int ViolationType, bool Push = true, bool CheckSafety = true, BM_Licenses_Utility bmlUtility) Global
+    BM_Licenses bml = bmlUtility.licenses
 
     if CheckSafety && bmlUtility.IsExceptionState()
         return false
@@ -206,9 +246,8 @@ EndFunction
 ; Parameter 2 asks if you want to skip safety checks. Don't change this boolean from its default unless absolutely necessary.
 ; Note: This is an API layer above ResetViolations(). This function is intended to be called directly, outside LPO events, and will refresh LOS quest and active Fine amounts when run.
 ;       If you'd like to pass a Confrontation type, or require finer control over violation resetting, you should either call ResetViolations() directly or design your own function.
-bool Function ClearViolations(bool ClearPersistent = false, bool CheckSafety = true) Global
-    BM_Licenses_Utility bmlUtility = GetUtility()
-    BM_Licenses bml = GetLPO()
+bool Function ClearViolations(bool ClearPersistent = false, bool CheckSafety = true, BM_Licenses_Utility bmlUtility) Global
+    BM_Licenses bml = bmlUtility.licenses
 
     if CheckSafety && bmlUtility.licenseBountyQuest.IsRunning()
         return false
@@ -227,9 +266,7 @@ EndFunction
 ; Parameter 1 asks for an integer corresponding to a license type.
 ; Parameter 2 asks if you'd like to subtract a corresponding cost from player gold. Note that the function doesn't check whether the player has enough gold on-hand.
 ; Parameter 3 asks if you want to skip safety checks. Don't change this boolean from its default unless absolutely necessary.
-bool Function PurchaseLicense(int LicenseType, bool SubtractGold = true, bool CheckSafety = true) Global
-    BM_Licenses_Utility bmlUtility = GetUtility()
-
+bool Function PurchaseLicense(int LicenseType, bool SubtractGold = true, bool CheckSafety = true, BM_Licenses_Utility bmlUtility) Global
     if CheckSafety && bmlUtility.IsExceptionState()
         return false
     endIf
@@ -273,9 +310,7 @@ EndFunction
 ; Parameter 1 asks for an integer corresponding to a license type.
 ; Parameter 2 asks if you want to push to refresh mod-wide variables. If manually expiring multiple licenses in succession, pass true only with the last ExpireLicense call.
 ; Note: This function prematurely ends active license cycles. If you want to steal a license, use RemoveItem() or RemoveLicense() below.
-bool Function ExpireLicense(int LicenseType, bool Push = true) Global
-    BM_Licenses_Utility bmlUtility = GetUtility()
-
+bool Function ExpireLicense(int LicenseType, bool Push = true, BM_Licenses_Utility bmlUtility) Global
     if LicenseType == 0
         ; Empty
     elseIf LicenseType == 1
@@ -323,10 +358,9 @@ EndFunction
 ; Note: This function only removes license book items. If you want to end an active license cycle, use ExpireLicense().
 ; Note: LPO catches book item add and remove events filtered only for enabled license features. Disabled licenses disable corresponding book item filters. 
 ;       Item removals in such scenarios won't create hard issues but are likely counter-intuitive unless you're sure of what you're doing.
-bool Function RemoveLicense(int LicenseType, int LicenseCount = 0, ObjectReference DestinationContainer = None, bool CheckSafety = true) Global
-    BM_Licenses_Utility bmlUtility = GetUtility()
-    BM_Licenses_MCM bmlmcm = GetMCM()
-    BM_Licenses bml = GetLPO()
+bool Function RemoveLicense(int LicenseType, int LicenseCount = 0, ObjectReference DestinationContainer = None, bool CheckSafety = true, BM_Licenses_Utility bmlUtility) Global
+    BM_Licenses bml = bmlUtility.licenses
+    BM_Licenses_MCM bmlmcm = bmlUtility.bmlmcm
     Book LicenseToRemove = none
 
     if LicenseType == 0
@@ -396,6 +430,80 @@ bool Function RemoveLicense(int LicenseType, int LicenseCount = 0, ObjectReferen
         endIf
     else
         return false
+    endIf
+
+    return true
+EndFunction
+
+; Toggle License Feature
+; Parameter 1 asks for an integer corresponding to a license type.
+; Parameter 2 asks for a desired feature state. This input is compared against a feature's current state.
+; Parameter 3 asks if you want to push to refresh mod-wide variables. If manually toggling multiple licenses in succession, pass true only with the last ToggleLicenseFeature call.
+bool Function ToggleLicenseFeature(int LicenseType, bool FeatureFlag, bool Push = true, BM_Licenses_Utility bmlUtility) Global
+    BM_Licenses_MCM bmlmcm = bmlUtility.bmlmcm
+
+    If LicenseType == 1
+        if FeatureFlag != bmlmcm.isArmorLicenseFeatureEnabled
+            bmlmcm.isArmorLicenseFeatureEnabled = !bmlmcm.isArmorLicenseFeatureEnabled
+        endIf
+    elseIf LicenseType == 2
+        if FeatureFlag && !bmlmcm.isBikiniLicenseFeatureEnabled
+            bmlmcm.isBikiniLicenseFeatureEnabled = 1
+        else
+            bmlmcm.isBikiniLicenseFeatureEnabled = 0
+        endIf
+    elseIf LicenseType == 3
+        if FeatureFlag && !bmlmcm.isBikiniLicenseFeatureEnabled
+            bmlmcm.isBikiniLicenseFeatureEnabled = 2
+        else
+            bmlmcm.isBikiniLicenseFeatureEnabled = 0
+        endIf
+    elseIf LicenseType == 4
+        if FeatureFlag != bmlmcm.isClothingLicenseFeatureEnabled
+            bmlmcm.isClothingLicenseFeatureEnabled = !bmlmcm.isClothingLicenseFeatureEnabled
+        endIf
+    elseIf LicenseType == 5
+        if FeatureFlag != bmlmcm.isMagicLicenseFeatureEnabled
+            bmlmcm.isMagicLicenseFeatureEnabled = !bmlmcm.isMagicLicenseFeatureEnabled
+        endIf
+    elseIf LicenseType == 6
+        if FeatureFlag != bmlmcm.isWeaponLicenseFeatureEnabled
+            bmlmcm.isWeaponLicenseFeatureEnabled = !bmlmcm.isWeaponLicenseFeatureEnabled
+        endIf
+    elseIf LicenseType == 7
+        if FeatureFlag != bmlmcm.isCraftingLicenseFeatureEnabled
+            bmlmcm.isCraftingLicenseFeatureEnabled = !bmlmcm.isCraftingLicenseFeatureEnabled
+        endIf
+    elseIf LicenseType == 8
+        if FeatureFlag != bmlmcm.isTravelPermitFeatureEnabled
+            bmlmcm.isTravelPermitFeatureEnabled = !bmlmcm.isTravelPermitFeatureEnabled
+        endIf
+    elseIf LicenseType == 9
+        if FeatureFlag != bmlmcm.isCollarExemptionFeatureEnabled
+            bmlmcm.isCollarExemptionFeatureEnabled = !bmlmcm.isCollarExemptionFeatureEnabled
+        endIf
+    elseIf LicenseType == 10
+        if FeatureFlag != bmlmcm.isInsuranceFeatureEnabled
+            bmlmcm.isInsuranceFeatureEnabled = !bmlmcm.isInsuranceFeatureEnabled
+        endIf
+    elseIf LicenseType == 11
+        if FeatureFlag != bmlmcm.isCurfewExemptionFeatureEnabled
+            bmlmcm.isCurfewExemptionFeatureEnabled = !bmlmcm.isCurfewExemptionFeatureEnabled
+        endIf
+    elseIf LicenseType == 12
+        if FeatureFlag != bmlmcm.isTradingLicenseFeatureEnabled
+            bmlmcm.isTradingLicenseFeatureEnabled = !bmlmcm.isTradingLicenseFeatureEnabled
+        endIf
+    elseIf LicenseType == 13
+        if FeatureFlag != bmlmcm.isWhoreLicenseFeatureEnabled
+            bmlmcm.isWhoreLicenseFeatureEnabled = !bmlmcm.isWhoreLicenseFeatureEnabled
+        endIf
+    else
+        return false
+    endIf
+
+    if Push
+        bmlUtility.RefreshLicenses()
     endIf
 
     return true

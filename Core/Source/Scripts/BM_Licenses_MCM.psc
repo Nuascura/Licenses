@@ -293,9 +293,7 @@ EndEvent
 Event OnConfigClose()
 	if SessionModified && Licenses_State.GetValue() == 1
 		SessionModified = false
-		bmlUtility.refreshLicenseFeatures()
-		bmlUtility.refreshInventoryEventFilters()
-		bmlUtility.bmlModeratorAlias.RefreshLicenseValidity()
+		bmlUtility.RefreshLicenses()
 	endIf
 EndEvent
 
