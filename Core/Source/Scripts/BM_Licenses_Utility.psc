@@ -4,372 +4,40 @@ Scriptname BM_Licenses_Utility extends Quest
 ; -------------------------------------------------- Utility
 ; ----------------------------------------------------------------------------------------------------
 
-; - Guide -
-; BM_Licenses is the central script
-; BM_Player is for Player Quest Alias and any Events that run with said alias
-; BM_Licenses_Utility holds shared/common functions AND functions that external mods may wish to use
-; Scripts prefixed with BM_ME indicate that they are Magic Effects linked to a spell or enchantment
-; Scripts prefixed with BM_D indicate they are dialogue scripts holding start and end fragments
-; Scripts prefixed with BM_Licenses indicate they are quest scripts
-
-; - Available Events -
-; --Vanilla--
-; BM-LPO_ReporterLOSGain
-; BM-LPO_ViolationCheck
-; BM-LPO_ViolationFound
-; BM-LPO_BountyStart
-; BM-LPO_BountyEnd
-; --Custom--
-; BM-LPO_ConfrontationStart
-; BM-LPO_ConfrontationWalkaway
-; BM-LPO_ConfrontationEnd
-; BM-LPO_LicenseAdded
-; BM-LPO_LicenseRemoved
-; BM-LPO_LicensePurchased
-; BM-LPO_LicenseExpired
-
-; -------------------------------------------------- Simple Tools --------------------------------------------------
-; By and large, these are template functions, though some may be used as is by my own scripts, now or in the future.
-
-; Get - Mod Version
-; This is a shortcut function.
+; -------------------------------------------------- Backwards Compatibility --------------------------------------------------
 string Function GetModVersion()
-    return bmlmcm.GetModVersion()
+    return BM_API.GetModVersion()
 EndFunction
 
-; Get - License ID
-; Parameter 1 asks for a license or violation prefix as string.
-; Note that Life Insurance uses "Insurance" as its prefix within scripts.
-; If function returns 0, prefix couldn't retrieve an ID. If function returns -1, function was given an invalid input.
 int Function GetLicenseID(string LicensePrefix)
-    if LicensePrefix
-        if LicensePrefix == "Armor"
-            return 1
-        elseIf LicensePrefix == "Bikini1"
-            return 2
-        elseIf LicensePrefix == "Bikini2"
-            return 3
-        elseIf LicensePrefix == "Clothing"
-            return 4
-        elseIf LicensePrefix == "Magic"
-            return 5
-        elseIf LicensePrefix == "Weapon"
-            return 6
-        elseIf LicensePrefix == "Crafting"
-            return 7
-        elseIf LicensePrefix == "Travel"
-            return 8
-        elseIf LicensePrefix == "Collar"
-            return 9
-        elseIf LicensePrefix == "Insurance"
-            return 10
-        elseIf LicensePrefix == "Curfew"
-            return 11
-        elseIf LicensePrefix == "Trading"
-            return 12
-        elseIf LicensePrefix == "Whore"
-            return 13
-        else
-            LogTrace("GetLicenseID(): Parameter(0) failed to retrieve an ID from index, returning 0.")
-            return 0
-        endIf
-    endIf
-
-    LogTrace("GetLicenseID(): Ran to function default. Invalid parameter(0)")
-    return -1
+    return GetLicenseID(LicensePrefix)
 EndFunction
 
-; Get - License Time left
-; Parameter 1 asks for a license or violation prefix as string.
-; This function returns a remaining time per in-game hours.
-; If function returns a negative value, the subject license cycle is inactive.
-; If function returns 0, either the subject license cycle is waiting for a refresh or function was given an invalid input.
 Float Function GetLicenseTimeLeft(int LicenseType)
-    float currentTime = GameDaysPassed.GetValue()
-    if LicenseType == 1
-        return licenses.armorLicenseExpirationTime - currentTime
-    elseIf LicenseType == 2
-        return licenses.bikiniLicenseExpirationTime - currentTime
-    elseIf LicenseType == 3
-        return licenses.bikiniExemptionExpirationTime - currentTime
-    elseIf LicenseType == 4
-        return licenses.clothingLicenseExpirationTime - currentTime
-    elseIf LicenseType == 5
-        return licenses.magicLicenseExpirationTime - currentTime
-    elseIf LicenseType == 6
-        return licenses.weaponLicenseExpirationTime - currentTime
-    elseIf LicenseType == 7
-        return licenses.craftingLicenseExpirationTime - currentTime
-    elseIf LicenseType == 8
-        return licenses.travelPermitExpirationTime - currentTime
-    elseIf LicenseType == 9
-        return licenses.collarExemptionExpirationTime - currentTime
-    elseIf LicenseType == 10
-        return licenses.insuranceExpirationTime - currentTime
-    elseIf LicenseType == 11
-        return licenses.curfewExemptionExpirationTime - currentTime
-    elseIf LicenseType == 12
-        return licenses.tradingLicenseExpirationTime - currentTime
-    elseIf LicenseType == 13
-        return licenses.whoreLicenseExpirationTime - currentTime
-    else
-        LogTrace("GetLicenseTimeLeft(): Invalid parameter(0)")
-        return 0
-    endIf
+    return BM_API.GetLicenseTimeLeft(LicenseType)
 EndFunction
 
-; Flag Violation
-; Parameter 1 asks for an integer corresponding to a violation type. 
-; Parameter 2 asks if you want to push to aggregate violations and invoke the bounty quest. If manually flagging multiple violations in succession, pass true only with the last FlagViolation call.
-; Parameter 3 asks if you want to skip safety checks. Don't change this boolean from its default unless absolutely necessary.
 bool Function FlagViolation(int ViolationType, bool Push = true, bool CheckSafety = true)
-    if CheckSafety && IsExceptionState()
-        LogTrace("FlagViolation(): Detected an Exception State. Exit function.")
-        return false
-    endIf
-
-    if ViolationType == 0
-        ; Empty
-        LogTrace("FlagViolation(): Received integer 0 for parameter(0)")
-    elseIf ViolationType == 1
-        licenses.isArmorViolation = true
-    elseIf ViolationType == 2 || ViolationType == 3
-        licenses.isBikiniViolation = true
-    elseIf ViolationType == 4
-        licenses.isClothingViolation = true
-    elseIf ViolationType == 5
-        licenses.isMagicViolation = true
-    elseIf ViolationType == 6
-        licenses.isWeaponViolation = true
-    elseIf ViolationType == 7
-        licenses.isCraftingViolation = true
-    elseIf ViolationType == 8
-        licenses.isTravelViolation = true
-    elseIf ViolationType == 9
-        licenses.isCollarViolation = true
-    elseIf ViolationType == 10
-        licenses.isUninsuredViolation = true
-    elseIf ViolationType == 11
-        licenses.isCurfewViolation = true
-    elseIf ViolationType == 12
-        licenses.isTradingViolation = true
-    elseIf ViolationType == 13
-        licenses.isWhoreViolation = true
-    else
-        LogTrace("FlagViolation(): Invalid parameter(0)")
-        return false
-    endIf
-
-    if Push
-        AggregateViolations()
-    endIf
-
-    return true
+    return BM_API.FlagViolation(ViolationType, Push, CheckSafety)
 EndFunction
 
-; Clear Violations
-; Parameter 1 asks if you want to clear persistent violations.
-; Parameter 2 asks if you want to skip safety checks. Don't change this boolean from its default unless absolutely necessary.
-; Note: This is an API layer above ResetViolations(). This function is intended to be called directly, outside LPO events, and will refresh LOS quest and active Fine amounts when run.
-;       If you'd like to pass a Confrontation type, or require finer control over violation resetting, you should either call ResetViolations() directly or design your own function.
 bool Function ClearViolations(bool ClearPersistent = false, bool CheckSafety = true)
-    if CheckSafety && licenseBountyQuest.IsRunning()
-        LogTrace("ClearViolations(): Detected an Exception State. Exit function.")
-        return false
-    endIf
-
-    if ClearPersistent
-        licenses.ResetViolations()
-    else
-        licenses.ResetViolations(-1)
-    endIf
-
-    return true
+    return BM_API.ClearViolations(ClearPersistent, CheckSafety)
 EndFunction
 
-; Purchase License
-; Parameter 1 asks for an integer corresponding to a license type.
-; Parameter 2 asks if you'd like to subtract a corresponding cost from player gold. Note that the function doesn't check whether the player has enough gold on-hand.
-; Parameter 3 asks if you want to skip safety checks. Don't change this boolean from its default unless absolutely necessary.
 bool Function PurchaseLicense(int LicenseType, bool SubtractGold = true, bool CheckSafety = true)
-    if CheckSafety && IsExceptionState()
-        LogTrace("PurchaseLicense(): Detected an Exception State. Exit function.")
-        return false
-    endIf
-
-    if LicenseType == 0
-        ; Empty
-        LogTrace("PurchaseLicense(): Received integer 0 for parameter(0)")
-    elseIf LicenseType == 1
-        BM_PurchaseArmorLicense(SubtractGold)
-    elseIf LicenseType == 2
-        BM_PurchaseBikiniLicense(SubtractGold)
-    elseIf LicenseType == 3
-        BM_PurchaseBikiniExemption(SubtractGold)
-    elseIf LicenseType == 4
-        BM_PurchaseClothingLicense(SubtractGold)
-    elseIf LicenseType == 5
-        BM_PurchaseMagicLicense(SubtractGold)
-    elseIf LicenseType == 6
-        BM_PurchaseWeaponLicense(SubtractGold)
-    elseIf LicenseType == 7
-        BM_PurchaseCraftingLicense(SubtractGold)
-    elseIf LicenseType == 8
-        BM_PurchaseTravelPermit(SubtractGold)
-    elseIf LicenseType == 9
-        BM_PurchaseCollarExemption(SubtractGold)
-    elseIf LicenseType == 10
-        BM_PurchaseLifeInsurance(SubtractGold)
-    elseIf LicenseType == 11
-        BM_PurchaseCurfewExemption(SubtractGold)
-    elseIf LicenseType == 12
-        BM_PurchaseTradingLicense(SubtractGold)
-    elseIf LicenseType == 13
-        BM_PurchaseWhoreLicense(SubtractGold)
-    else
-        LogTrace("PurchaseLicense(): Invalid parameter(0)")
-        return false
-    endIf
-
-    return true
+    return BM_API.PurchaseLicense(LicenseType, SubtractGold, CheckSafety)
 EndFunction
 
-; Expire License
-; Parameter 1 asks for an integer corresponding to a license type.
-; Parameter 2 asks if you want to push to refresh mod-wide variables. If manually expiring multiple licenses in succession, pass true only with the last ExpireLicense call.
-; Note: This function prematurely ends active license cycles. If you want to steal a license, use RemoveItem() or RemoveLicense() below.
 bool Function ExpireLicense(int LicenseType, bool Push = true)
-    if LicenseType == 0
-        ; Empty
-        LogTrace("ExpireLicense(): Received integer 0 for parameter(0)")
-    elseIf LicenseType == 1
-        BM_ExpireArmorLicense()
-    elseIf LicenseType == 2
-        BM_ExpireBikiniLicense()
-    elseIf LicenseType == 3
-        BM_ExpireBikiniExemption()
-    elseIf LicenseType == 4
-        BM_ExpireClothingLicense()
-    elseIf LicenseType == 5
-        BM_ExpireMagicLicense()
-    elseIf LicenseType == 6
-        BM_ExpireWeaponLicense()
-    elseIf LicenseType == 7
-        BM_ExpireCraftingLicense()
-    elseIf LicenseType == 8
-        BM_ExpireTravelPermit()
-    elseIf LicenseType == 9
-        BM_ExpireCollarExemption()
-    elseIf LicenseType == 10
-        BM_ExpireLifeInsurance()
-    elseIf LicenseType == 11
-        BM_ExpireCurfewExemption()
-    elseIf LicenseType == 12
-        BM_ExpireTradingLicense()
-    elseIf LicenseType == 13
-        BM_ExpireWhoreLicense()
-    else
-        LogTrace("ExpireLicense(): Invalid parameter(0)")
-        return false
-    endIf
-
-    if Push
-        ModeratorUpdater()
-    else
-        LogTrace("ExpireLicense(): Push is required. Waiting for push...")
-    endIf
-
-    return true
+    return BM_API.ExpireLicense(LicenseType, Push)
 EndFunction
 
-; Remove License
-; Parameter 1 asks for an integer corresponding to a license type.
-; Parameter 2 asks for an integer corresponding to a license book amount.
-; Parameter 3 asks for a destination container.
-; Parameter 4 asks if you want to skip safety checks. Don't change this boolean from its default unless absolutely necessary.
-; Note: This function only removes license book items. If you want to end an active license cycle, use ExpireLicense().
-; Note: LPO catches book item add and remove events filtered only for enabled license features. Disabled licenses disable corresponding book item filters. 
-;       Item removals in such scenarios won't create hard issues but are likely counter-intuitive unless you're sure of what you're doing.
 bool Function RemoveLicense(int LicenseType, int LicenseCount = 0, ObjectReference DestinationContainer = None, bool CheckSafety = true)
-    Book LicenseToRemove = none
-
-    if LicenseType == 0
-        ; Empty
-        LogTrace("RemoveLicense(): Received integer 0 for parameter(0)")
-    elseIf LicenseType == 1
-        if !CheckSafety || bmlmcm.isArmorLicenseFeatureEnabled
-            LicenseToRemove = BM_ArmorLicense
-        endIf
-    elseIf LicenseType == 2
-        if !CheckSafety || bmlmcm.isBikiniLicenseFeatureEnabled == 1
-            LicenseToRemove = BM_BikiniLicense
-        endIf
-    elseIf LicenseType == 3
-        if !CheckSafety || bmlmcm.isBikiniLicenseFeatureEnabled == 2
-            LicenseToRemove = BM_BikiniExemption
-        endIf
-    elseIf LicenseType == 4
-        if !CheckSafety || bmlmcm.isClothingLicenseFeatureEnabled
-            LicenseToRemove = BM_ClothingLicense
-        endIf
-    elseIf LicenseType == 5
-        if !CheckSafety || bmlmcm.isMagicLicenseFeatureEnabled
-            LicenseToRemove = BM_MagicLicense
-        endIf
-    elseIf LicenseType == 6
-        if !CheckSafety || bmlmcm.isWeaponLicenseFeatureEnabled
-            LicenseToRemove = BM_WeaponLicense
-        endIf
-    elseIf LicenseType == 7
-        if !CheckSafety || bmlmcm.isCraftingLicenseFeatureEnabled
-            LicenseToRemove = BM_CraftingLicense
-        endIf
-    elseIf LicenseType == 8
-        if !CheckSafety || bmlmcm.isTravelPermitFeatureEnabled
-            LicenseToRemove = BM_TravelPermit
-        endIf
-    elseIf LicenseType == 9
-        if !CheckSafety || bmlmcm.isCollarExemptionFeatureEnabled
-            LicenseToRemove = BM_CollarExemption
-        endIf
-    elseIf LicenseType == 10
-        if !CheckSafety || bmlmcm.isInsuranceFeatureEnabled
-            LicenseToRemove = BM_Insurance
-        endIf
-    elseIf LicenseType == 11
-        if !CheckSafety || bmlmcm.isCurfewExemptionFeatureEnabled
-            LicenseToRemove = BM_CurfewExemption
-        endIf
-    elseIf LicenseType == 12
-        if !CheckSafety || bmlmcm.isTradingLicenseFeatureEnabled
-            LicenseToRemove = BM_TradingLicense
-        endIf
-    elseIf LicenseType == 13
-        if !CheckSafety || bmlmcm.isWhoreLicenseFeatureEnabled
-            LicenseToRemove = BM_WhoreLicense
-        endIf
-    else
-        LogTrace("RemoveLicense(): Invalid parameter(0)")
-        return false
-    endIf
-
-    if LicenseToRemove
-        if LicenseCount < 1
-            LicenseCount = PlayerActorRef.GetItemCount(LicenseToRemove)
-        endIf
-        if PlayerActorRef.GetItemCount(LicenseToRemove) > 0
-            PlayerActorRef.RemoveItem(LicenseToRemove, LicenseCount, true, DestinationContainer)
-        endIf
-    else
-        LogTrace("RemoveLicense(): Parameter(0) returned an invalid or ineligible license to remove: LicenseType " + LicenseType + " for book item " + LicenseToRemove)
-        return false
-    endIf
-
-    return true
+    return BM_API.RemoveLicense(LicenseType, LicenseCount, DestinationContainer, CheckSafety)
 EndFunction
 
 ; -------------------------------------------------- Common Tools --------------------------------------------------
-
 ; ---------- Startup ----------
 Function Startup(Bool abAutoLoad)
     LogNotification("Initializing Licenses...", true)
@@ -465,6 +133,7 @@ Function Shutdown()
     LogNotification("Completed termination sequence.", true)
     LogTrace("State Change - TERMINATED", true)
 EndFunction
+
 Function StopQuest(string asQuestName)
     Quest kQuest = Quest.GetQuest(asQuestName)
     kQuest.reset()
@@ -487,7 +156,7 @@ Function CheckLocation()
 EndFunction
 
 Function ValidateLocNested(Location akNewLoc, WorldSpace akNewSpace, FormList LocList, Keyword akKeyword = none)
-    Location validatedLoc = FindLocFromParent(akNewLoc, LocList, akKeyword)
+    Location validatedLoc = BM_API.FindLocFromParent(akNewLoc, LocList, akKeyword)
     if validatedLoc
         lastLoc = validatedLoc
         if !BM_LicensesIgnoreWorldspace.HasForm(akNewSpace)
@@ -496,80 +165,30 @@ Function ValidateLocNested(Location akNewLoc, WorldSpace akNewSpace, FormList Lo
     endIf
 EndFunction
 
-Location Function FindLocFromList(Location[] LocArray, FormList LocList)
-    int index = LocArray.length
-    while index
-        index -= 1
-        if LocList.HasForm(LocArray[index])
-            return LocArray[index]
-        endIf
-    endWhile
-    return none
-EndFunction
-
-Location Function FindLocFromParent(Location akLoc, FormList LocList, Keyword akKeyword = none)
-    int index = 0
-    While(index < LocList.GetSize())
-        If akLoc.IsSameLocation(LocList.GetAt(index) as location, akKeyword)
-            Return LocList.GetAt(index) as location
-        EndIf
-        index += 1
-    EndWhile
-    return none
-EndFunction
-
-WorldSpace Function FindWorldFromList(WorldSpace[] WorldArray, FormList WorldList, FormList ExclusionList)
-    int index = WorldArray.length
-    WorldSpace CachedSpace = none
-    while index
-        index -= 1
-        if WorldList.HasForm(WorldArray[index])
-            return WorldArray[index]
-        elseIf ExclusionList.HasForm(WorldArray[index])
-            CachedSpace = lastSpace
-        endIf
-    endWhile
-    return CachedSpace
-EndFunction
-
-WorldSpace Function FindWorldFromDoor(ObjectReference[] DoorArray, FormList WorldList, FormList ExclusionList)
-    int index = 0
-    WorldSpace CachedSpace = none
-    while index < DoorArray.Length
-        if DoorArray[index] && PO3_SKSEFunctions.IsLoadDoor(DoorArray[index])
-            WorldSpace CurrExteriorWorld = PO3_SKSEFunctions.GetDoorDestination(DoorArray[index]).GetWorldSpace()
-            if CurrExteriorWorld
-                if WorldList.HasForm(CurrExteriorWorld)
-                    return CurrExteriorWorld
-                elseIf ExclusionList.HasForm(CurrExteriorWorld)
-                    CachedSpace = lastSpace
-                endIf
-            endIf
-        endIf
-        index += 1
-    endWhile
-    return CachedSpace
-EndFunction
-
 WorldSpace Function GetWorldSpaceFromInterior(ObjectReference akObjRef)
     WorldSpace[] ExteriorWorldSpaces = SPE_Cell.GetExteriorWorldSpaces(akObjRef.GetParentCell())
+    WorldSpace cachedSpace = none
     if ExteriorWorldSpaces
-        return FindWorldFromList(ExteriorWorldSpaces, BM_WorldSpaces, BM_LicensesIgnoreWorldspace)
+        cachedSpace = BM_API.FindWorldFromList(ExteriorWorldSpaces, BM_WorldSpaces)
     else
         ObjectReference[] InteriorDoors = PO3_SKSEFunctions.FindAllReferencesOfFormType(akObjRef, 29, 0)
         if InteriorDoors
-            return FindWorldFromDoor(InteriorDoors, BM_WorldSpaces, BM_LicensesIgnoreWorldspace)
+            cachedSpace = BM_API.FindWorldFromDoor(InteriorDoors, BM_WorldSpaces)
         endIf
     endIf
-    return none
+
+    if cachedSpace && BM_LicensesIgnoreWorldspace.HasForm(cachedSpace)
+        cachedSpace = lastSpace
+    endIf
+    return cachedSpace
 EndFunction
 
 Bool Function GetIsInCity()
     Location[] ExteriorLocations = SPE_Cell.GetExteriorLocations(PlayerActorRef.GetParentCell())
     if ExteriorLocations
-        lastLoc = FindLocFromList(ExteriorLocations, BM_Cities)
+        lastLoc = BM_API.FindLocFromList(ExteriorLocations, BM_Cities)
     else
-        lastLoc = FindLocFromParent(PlayerActorRef.GetCurrentLocation(), BM_Cities, Keyword.GetKeyword("LocTypeCity"))
+        lastLoc = BM_API.FindLocFromParent(PlayerActorRef.GetCurrentLocation(), BM_Cities, Keyword.GetKeyword("LocTypeCity"))
     endIf
     return (!bmlmcm.isLimitToCitySpaceEnabled || GetIsInCitySpace()) && lastLoc
 EndFunction
@@ -593,9 +212,9 @@ EndFunction
 Bool Function GetIsInTown()
     Location[] ExteriorLocations = SPE_Cell.GetExteriorLocations(PlayerActorRef.GetParentCell())
     if ExteriorLocations
-        lastLoc = FindLocFromList(ExteriorLocations, BM_Towns)
+        lastLoc = BM_API.FindLocFromList(ExteriorLocations, BM_Towns)
     else
-        lastLoc = FindLocFromParent(PlayerActorRef.GetCurrentLocation(), BM_Towns, Keyword.GetKeyword("LocTypeTown"))
+        lastLoc = BM_API.FindLocFromParent(PlayerActorRef.GetCurrentLocation(), BM_Towns, Keyword.GetKeyword("LocTypeTown"))
     endIf
     return lastLoc
 EndFunction
@@ -659,7 +278,6 @@ Form[] Function FilterSensitive(Form[] arr)
 EndFunction
 
 Form[] Function FilterBikini(Form[] arr, int aiType)
-    Debug.Trace("BM_ arr pre: " + arr)
     if licenses.isInsured
         if aiType == 1
             if licenses.hasBikiniLicense
@@ -667,12 +285,15 @@ Form[] Function FilterBikini(Form[] arr, int aiType)
             endIf
         elseIf aiType == 2
             if !licenses.hasBikiniExemption
-                arr = FilterByComparison(arr, licenses.ItemTypeClothing, licenses.ItemTypeBikini)
-                arr = FilterByComparison(arr, licenses.ItemTypeArmor, licenses.ItemTypeBikini)
+                if licenses.hasClothingLicense
+                    arr = FilterByComparison(arr, licenses.ItemTypeClothing, licenses.ItemTypeBikini)
+                endIf
+                if licenses.hasArmorLicense
+                    arr = FilterByComparison(arr, licenses.ItemTypeArmor, licenses.ItemTypeBikini)
+                endIf
             endIf
         endIf
     endIf
-    Debug.Trace("BM_ arr post: " + arr)
     return arr
 EndFunction
 
@@ -731,7 +352,7 @@ Form[] Function FilterByComparison(Form[] arr, Keyword[] kwRemain, Keyword[] kwR
     arr, SPE_Utility.FilterFormsByKeyword(\
     SPE_Utility.FilterFormsByKeyword(\
     arr, kwRemain, false, false\
-    ), kwRemove, false, true\
+    ), kwRemove, false, false\
     )\
     )
 EndFunction
@@ -854,7 +475,7 @@ EndFunction
 Int Function CountActiveViolations()
     Bool[] ActiveViolations = new Bool[12]
     ActiveViolations[0] = licenses.isArmorViolation
-    ActiveViolations[1] = licenses.isBikiniViolation
+    ActiveViolations[1] = licenses.isBikiniViolation as bool
     ActiveViolations[2] = licenses.isClothingViolation
     ActiveViolations[3] = licenses.isMagicViolation
     ActiveViolations[4] = licenses.isWeaponViolation
@@ -871,7 +492,7 @@ EndFunction
 bool Function CheckViolationExists()
     Bool[] violations = new Bool[12]
     violations[0] = licenses.isArmorViolation
-    violations[1] = licenses.isBikiniViolation
+    violations[1] = licenses.isBikiniViolation as bool
     violations[2] = licenses.isClothingViolation
     violations[3] = licenses.isMagicViolation
     violations[4] = licenses.isWeaponViolation
@@ -976,7 +597,7 @@ EndFunction
 ; ------------------------------
 
 ; ---------- Misc Functions ----------
-Int Function ClampInt(int value, int minValue, int maxValue)
+Int Function ClampInt(int value, int minValue, int maxValue) Global
     If value < minValue
         Return minValue
     ElseIf value > maxValue
@@ -986,7 +607,7 @@ Int Function ClampInt(int value, int minValue, int maxValue)
     EndIf
 EndFunction
 
-Float Function ClampFloat(float value, float minValue, float maxValue)
+Float Function ClampFloat(float value, float minValue, float maxValue) Global
     If value < minValue
         Return minValue
     ElseIf value > maxValue
@@ -995,14 +616,6 @@ Float Function ClampFloat(float value, float minValue, float maxValue)
         Return value
     EndIf
 EndFunction
-
-bool Function IsInLocation(Location akLocation)
-	if currLoc == None
-		return false
-	else
-		return akLocation.IsChild(currLoc) || currLoc == akLocation
-	endif
-endFunction
 
 Function LogTrace(String LogMessage, Bool Force = False)
     if LogMessage
@@ -1057,7 +670,7 @@ Float Function GetFine()
     Float Percentage = bmlmcm.FinePercentage / 100.0
 
     Int ArmorFine = (licenses.isArmorViolation as int) * (bmlmcm.BM_ALCost.GetValue() as int)
-    Int BikiniFine = (licenses.isBikiniViolation as int) * (bmlmcm.BM_BLCost.GetValue() as int)
+    Int BikiniFine = ((licenses.isBikiniViolation as bool) as int) * (bmlmcm.BM_BLCost.GetValue() as int)
     Int ClothingFine = (licenses.isClothingViolation as int) * (bmlmcm.BM_CLCost.GetValue() as int)
     Int MagicFine = (licenses.isMagicViolation as int) * (bmlmcm.BM_MLCost.GetValue() as int)
     Int WeaponFine = (licenses.isWeaponViolation as int) * (bmlmcm.BM_WLCost.GetValue() as int)
@@ -1790,7 +1403,7 @@ Float Function insuranceModifierViolation()
     ; Define weights for each infraction (adjust as needed)
     Float[] ViolationWeight = new Float[12]
     ViolationWeight[0] = 0.1 * (licenses.isArmorViolation as float)
-    ViolationWeight[1] = 0.1 * (licenses.isBikiniViolation as float)
+    ViolationWeight[1] = 0.1 * ((licenses.isBikiniViolation as bool) as float)
     ViolationWeight[2] = 0.1 * (licenses.isClothingViolation as float)
     ViolationWeight[3] = 0.2 * (licenses.isMagicViolation as float)
     ViolationWeight[4] = 0.2 * (licenses.isWeaponViolation as float)
