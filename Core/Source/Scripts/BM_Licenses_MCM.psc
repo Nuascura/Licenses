@@ -185,20 +185,16 @@ bool Property allowJailQuestNodes = true auto conditional
 float Property standardEventDelay = 2.0 auto
 GlobalVariable Property BM_WICommentChance auto
 
-string Function GetModName(bool cache = true)
-	if cache
-		return modname
-	else
-		return "Licenses - Player Oppression"
-	endIf
+string Function GetModName()
+	return modname
 EndFunction
 
 string Function GetModVersion()
-	return "1.24.0"
+	return BM_API.GetModVersion()
 EndFunction
 
 int Function GetVersion()
-	return 20
+	return BM_API.GetConfigVersion()
 EndFunction
 
 bool Function CheckVersionConflict()
