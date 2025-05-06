@@ -197,7 +197,7 @@ Function ResetViolations(int type = 0)
         isCurfewViolation = false
     endIf
     isArmorViolation = false
-    isBikiniViolation = false
+    isBikiniViolation = 0
     isClothingViolation = false
     isMagicViolation = false
     isWeaponViolation = false
@@ -551,8 +551,7 @@ bool Property ArmorLicense
         Return hasArmorLicense
     EndFunction
     Function Set(bool value)
-        hasArmorLicense = (value && bmlmcm.isArmorLicenseFeatureEnabled) || !bmlmcm.isArmorLicenseFeatureEnabled
-        StorageUtil.SetIntValue(None, "LPO_ArmorLicense", (hasArmorLicense as int) - (2 * (!bmlmcm.isArmorLicenseFeatureEnabled) as int))
+        hasArmorLicense = BM_API.ActualizeValue("ArmorLicense", value, bmlmcm.isArmorLicenseFeatureEnabled)
     EndFunction
 EndProperty
 
@@ -562,8 +561,7 @@ bool Property BikiniLicense
         Return hasBikiniLicense
     EndFunction
     Function Set(bool value)
-        hasBikiniLicense = (value && bmlmcm.isBikiniLicenseFeatureEnabled == 1) || (bmlmcm.isBikiniLicenseFeatureEnabled != 1)
-        StorageUtil.SetIntValue(None, "LPO_BikiniLicense", (hasBikiniLicense as int) - (2 * (bmlmcm.isBikiniLicenseFeatureEnabled != 1) as int))
+        hasBikiniLicense = BM_API.ActualizeValue("BikiniLicense", value, bmlmcm.isBikiniLicenseFeatureEnabled == 1)
     EndFunction
 EndProperty
 bool Property hasBikiniExemption = true auto conditional
@@ -572,8 +570,7 @@ bool Property BikiniExemption
         Return hasBikiniExemption
     EndFunction
     Function Set(bool value)
-        hasBikiniExemption = (value && bmlmcm.isBikiniLicenseFeatureEnabled == 2) || (bmlmcm.isBikiniLicenseFeatureEnabled != 2)
-        StorageUtil.SetIntValue(None, "LPO_BikiniExemption", (hasBikiniExemption as int) - (2 * (bmlmcm.isBikiniLicenseFeatureEnabled != 2) as int))
+        hasBikiniExemption = BM_API.ActualizeValue("BikiniExemption", value, bmlmcm.isBikiniLicenseFeatureEnabled == 2)
     EndFunction
 EndProperty
 
@@ -583,8 +580,7 @@ bool Property ClothingLicense
         Return hasClothingLicense
     EndFunction
     Function Set(bool value)
-        hasClothingLicense = (value && bmlmcm.isClothingLicenseFeatureEnabled) || !bmlmcm.isClothingLicenseFeatureEnabled
-        StorageUtil.SetIntValue(None, "LPO_ClothingLicense", (hasClothingLicense as int) - (2 * (!bmlmcm.isClothingLicenseFeatureEnabled) as int))
+        hasClothingLicense = BM_API.ActualizeValue("ClothingLicense", value, bmlmcm.isClothingLicenseFeatureEnabled)
     EndFunction
 EndProperty
 
@@ -594,8 +590,7 @@ bool Property MagicLicense
         Return hasMagicLicense
     EndFunction
     Function Set(bool value)
-        hasMagicLicense = (value && bmlmcm.isMagicLicenseFeatureEnabled) || !bmlmcm.isMagicLicenseFeatureEnabled
-        StorageUtil.SetIntValue(None, "LPO_MagicLicense", (hasMagicLicense as int) - (2 * (!bmlmcm.isMagicLicenseFeatureEnabled) as int))
+        hasMagicLicense = BM_API.ActualizeValue("MagicLicense", value, bmlmcm.isMagicLicenseFeatureEnabled)
     EndFunction
 EndProperty
 
@@ -605,8 +600,7 @@ bool Property WeaponLicense
         Return hasWeaponLicense
     EndFunction
     Function Set(bool value)
-        hasWeaponLicense = (value && bmlmcm.isWeaponLicenseFeatureEnabled) || !bmlmcm.isWeaponLicenseFeatureEnabled
-        StorageUtil.SetIntValue(None, "LPO_WeaponLicense", (hasWeaponLicense as int) - (2 * (!bmlmcm.isWeaponLicenseFeatureEnabled) as int))
+        hasWeaponLicense = BM_API.ActualizeValue("WeaponLicense", value, bmlmcm.isWeaponLicenseFeatureEnabled)
     EndFunction
 EndProperty
 
@@ -616,8 +610,7 @@ bool Property CraftingLicense
         Return hasCraftingLicense
     EndFunction
     Function Set(bool value)
-        hasCraftingLicense = (value && bmlmcm.isCraftingLicenseFeatureEnabled) || !bmlmcm.isCraftingLicenseFeatureEnabled
-        StorageUtil.SetIntValue(None, "LPO_CraftingLicense", (hasCraftingLicense as int) - (2 * (!bmlmcm.isCraftingLicenseFeatureEnabled) as int))
+        hasCraftingLicense = BM_API.ActualizeValue("CraftingLicense", value, bmlmcm.isCraftingLicenseFeatureEnabled)
     EndFunction
 EndProperty
 
@@ -627,8 +620,7 @@ bool Property TradingLicense
         Return hasTradingLicense
     EndFunction
     Function Set(bool value)
-        hasTradingLicense = (value && bmlmcm.isTradingLicenseFeatureEnabled) || !bmlmcm.isTradingLicenseFeatureEnabled
-        StorageUtil.SetIntValue(None, "LPO_TradingLicense", (hasTradingLicense as int) - (2 * (!bmlmcm.isTradingLicenseFeatureEnabled) as int))
+        hasTradingLicense = BM_API.ActualizeValue("TradingLicense", value, bmlmcm.isTradingLicenseFeatureEnabled)
     EndFunction
 EndProperty
 
@@ -638,8 +630,7 @@ bool Property WhoreLicense
         Return hasWhoreLicense
     EndFunction
     Function Set(bool value)
-        hasWhoreLicense = (value && bmlmcm.isWhoreLicenseFeatureEnabled) || !bmlmcm.isWhoreLicenseFeatureEnabled
-        StorageUtil.SetIntValue(None, "LPO_WhoreLicense", (hasWhoreLicense as int) - (2 * (!bmlmcm.isWhoreLicenseFeatureEnabled) as int))
+        hasWhoreLicense = BM_API.ActualizeValue("WhoreLicense", value, bmlmcm.isWhoreLicenseFeatureEnabled)
     EndFunction
 EndProperty
 
@@ -649,8 +640,7 @@ bool Property TravelPermit
         Return hasTravelPermit
     EndFunction
     Function Set(bool value)
-        hasTravelPermit = (value && bmlmcm.isTravelPermitFeatureEnabled) || !bmlmcm.isTravelPermitFeatureEnabled
-        StorageUtil.SetIntValue(None, "LPO_TravelPermit", (hasTravelPermit as int) - (2 * (!bmlmcm.isTravelPermitFeatureEnabled) as int))
+        hasTravelPermit = BM_API.ActualizeValue("TravelPermit", value, bmlmcm.isTravelPermitFeatureEnabled)
     EndFunction
 EndProperty
 
@@ -660,8 +650,7 @@ bool Property CollarExemption
         Return hasCollarExemption
     EndFunction
     Function Set(bool value)
-        hasCollarExemption = (value && bmlmcm.isCollarExemptionFeatureEnabled) || !bmlmcm.isCollarExemptionFeatureEnabled
-        StorageUtil.SetIntValue(None, "LPO_CollarExemption", (hasCollarExemption as int) - (2 * (!bmlmcm.isCollarExemptionFeatureEnabled) as int))
+        hasCollarExemption = BM_API.ActualizeValue("CollarExemption", value, bmlmcm.isCollarExemptionFeatureEnabled)
     EndFunction
 EndProperty
 
@@ -671,8 +660,7 @@ bool Property Insurance
         Return hasInsurance
     EndFunction
     Function Set(bool value)
-        hasInsurance = (value && bmlmcm.isInsuranceFeatureEnabled) || !bmlmcm.isInsuranceFeatureEnabled
-        StorageUtil.SetIntValue(None, "LPO_Insurance", (hasInsurance as int) - (2 * (!bmlmcm.isInsuranceFeatureEnabled) as int))
+        hasInsurance = BM_API.ActualizeValue("Insurance", value, bmlmcm.isInsuranceFeatureEnabled)
     EndFunction
 EndProperty
 
@@ -682,13 +670,12 @@ bool Property CurfewExemption
         Return hasCurfewExemption
     EndFunction
     Function Set(bool value)
-        hasCurfewExemption = (value && bmlmcm.isCurfewExemptionFeatureEnabled) || !bmlmcm.isCurfewExemptionFeatureEnabled
-        StorageUtil.SetIntValue(None, "LPO_CurfewExemption", (hasCurfewExemption as int) - (2 * (!bmlmcm.isCurfewExemptionFeatureEnabled) as int))
+        hasCurfewExemption = BM_API.ActualizeValue("CurfewExemption", value, bmlmcm.isCurfewExemptionFeatureEnabled)
     EndFunction
 EndProperty
 
 bool Property isArmorViolation auto conditional
-bool Property isBikiniViolation auto conditional
+int Property isBikiniViolation auto conditional
 bool Property isClothingViolation auto conditional
 bool Property isMagicViolation auto conditional
 bool Property isWeaponViolation auto conditional
