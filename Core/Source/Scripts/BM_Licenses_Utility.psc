@@ -449,12 +449,15 @@ Int Function CountValidLicenses()
     LicenseArray[4] = licenses.hasMagicLicense
     LicenseArray[5] = licenses.hasWeaponLicense
     LicenseArray[6] = licenses.hasCraftingLicense
-    LicenseArray[7] = licenses.hasTradingLicense
-    LicenseArray[8] = licenses.hasWhoreLicense
-    LicenseArray[9] = licenses.hasTravelPermit
-    LicenseArray[10] = licenses.hasCollarExemption
-    LicenseArray[11] = licenses.hasInsurance
-    LicenseArray[12] = licenses.hasCurfewExemption
+    LicenseArray[7] = licenses.hasTravelPermit
+    LicenseArray[8] = licenses.hasCollarExemption
+    LicenseArray[9] = licenses.hasInsurance
+    LicenseArray[10] = licenses.hasCurfewExemption
+    LicenseArray[11] = licenses.hasTradingLicense
+    LicenseArray[12] = licenses.hasWhoreLicense
+    Debug.Trace("BM_ LicenseBooks.GetSize():" + BM_LicenseBooks.GetSize())
+    Debug.Trace("BM_ LicenseArray:" + LicenseArray)
+    Debug.Trace("BM_ CountBool(LicenseArray, True):" + PapyrusUtil.CountBool(LicenseArray, true))
     return PapyrusUtil.CountBool(LicenseArray, true)
 EndFunction
 
@@ -467,12 +470,12 @@ Int Function CountActiveLicenses()
     LicenseArray[4] = (licenses.magicLicenseExpirationTime != -1) && bmlmcm.isMagicLicenseFeatureEnabled
     LicenseArray[5] = (licenses.weaponLicenseExpirationTime != -1) && bmlmcm.isWeaponLicenseFeatureEnabled
     LicenseArray[6] = (licenses.craftingLicenseExpirationTime != -1) && bmlmcm.isCraftingLicenseFeatureEnabled
-    LicenseArray[7] = (licenses.tradingLicenseExpirationTime != -1) && bmlmcm.isTradingLicenseFeatureEnabled
-    LicenseArray[8] = (licenses.whoreLicenseExpirationTime != -1) && bmlmcm.isWhoreLicenseFeatureEnabled
-    LicenseArray[9] = (licenses.travelPermitExpirationTime != -1) && bmlmcm.isTravelPermitFeatureEnabled
-    LicenseArray[10] = (licenses.collarExemptionExpirationTime != -1) && bmlmcm.isCollarExemptionFeatureEnabled
-    LicenseArray[11] = (licenses.insuranceExpirationTime != -1) && bmlmcm.isInsuranceFeatureEnabled
-    LicenseArray[12] = (licenses.curfewExemptionExpirationTime != -1) && bmlmcm.isCurfewExemptionFeatureEnabled
+    LicenseArray[7] = (licenses.travelPermitExpirationTime != -1) && bmlmcm.isTravelPermitFeatureEnabled
+    LicenseArray[8] = (licenses.collarExemptionExpirationTime != -1) && bmlmcm.isCollarExemptionFeatureEnabled
+    LicenseArray[9] = (licenses.insuranceExpirationTime != -1) && bmlmcm.isInsuranceFeatureEnabled
+    LicenseArray[10] = (licenses.curfewExemptionExpirationTime != -1) && bmlmcm.isCurfewExemptionFeatureEnabled
+    LicenseArray[11] = (licenses.tradingLicenseExpirationTime != -1) && bmlmcm.isTradingLicenseFeatureEnabled
+    LicenseArray[12] = (licenses.whoreLicenseExpirationTime != -1) && bmlmcm.isWhoreLicenseFeatureEnabled
     return PapyrusUtil.CountBool(LicenseArray, true)
 EndFunction
 
@@ -1252,7 +1255,7 @@ EndFunction
 Function refreshActivationLimit()
     licenses.isLicenseLimit = false
     if bmlmcm.LicenseLimit == 0
-        licenses.isLicenseLimit = (CountValidLicenses() >= licenses.LicenseBooks.Length)
+        licenses.isLicenseLimit = (CountValidLicenses() >= BM_LicenseBooks.GetSize())
     else
         licenses.isLicenseLimit = (CountActiveLicenses() >= bmlmcm.LicenseLimit)
     endIf
@@ -1333,7 +1336,6 @@ EndFunction
 Function refreshArrays()
     licenses.PopulateKeywordConfiscationArray()
     licenses.PopulateKeywordExclusionArray()
-    licenses.PopulateLicenseBooksArray()
     licenses.PopulateCursedTattoosArray()
 
     licenses.FillItemTypeArray()

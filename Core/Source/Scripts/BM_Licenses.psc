@@ -502,22 +502,6 @@ Function PopulateKeywordExclusionArray()
     KeywordBarterItem[4] = VendorItemFoodRaw
 EndFunction
 
-Function PopulateLicenseBooksArray()
-    LicenseBooks = new Book[12]
-    LicenseBooks[0] = bmlUtility.BM_ArmorLicense
-    LicenseBooks[1] = bmlUtility.BM_BikiniLicense
-    LicenseBooks[2] = bmlUtility.BM_ClothingLicense
-    LicenseBooks[3] = bmlUtility.BM_MagicLicense
-    LicenseBooks[4] = bmlUtility.BM_WeaponLicense
-    LicenseBooks[5] = bmlUtility.BM_CraftingLicense
-    LicenseBooks[6] = bmlUtility.BM_TradingLicense
-    LicenseBooks[7] = bmlUtility.BM_WhoreLicense
-    LicenseBooks[8] = bmlUtility.BM_TravelPermit
-    LicenseBooks[9] = bmlUtility.BM_CollarExemption
-    LicenseBooks[10] = bmlUtility.BM_Insurance
-    LicenseBooks[11] = bmlUtility.BM_CurfewExemption
-EndFunction
-
 Function ValidateArmorSlotArray()
     if bmlmcm.ArmorSlotArray.Length != 32
         bmlmcm.ArmorSlotArray = Utility.CreateIntArray(32, 0)
