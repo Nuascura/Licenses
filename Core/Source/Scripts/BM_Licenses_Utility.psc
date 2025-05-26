@@ -455,9 +455,6 @@ Int Function CountValidLicenses()
     LicenseArray[10] = licenses.hasCurfewExemption
     LicenseArray[11] = licenses.hasTradingLicense
     LicenseArray[12] = licenses.hasWhoreLicense
-    Debug.Trace("BM_ LicenseBooks.GetSize():" + BM_LicenseBooks.GetSize())
-    Debug.Trace("BM_ LicenseArray:" + LicenseArray)
-    Debug.Trace("BM_ CountBool(LicenseArray, True):" + PapyrusUtil.CountBool(LicenseArray, true))
     return PapyrusUtil.CountBool(LicenseArray, true)
 EndFunction
 
