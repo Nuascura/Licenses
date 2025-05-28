@@ -437,67 +437,45 @@ EndFunction
 
 ; Toggle License Feature
 ; Parameter 1 asks for an integer corresponding to a license type.
-; Parameter 2 asks for a desired feature state. This input is compared against a feature's current state.
+; Parameter 2 asks for a desired feature state.
 ; Parameter 3 asks if you want to push to refresh mod-wide variables. If manually toggling multiple licenses in succession, pass true only with the last ToggleLicenseFeature call.
 bool Function ToggleLicenseFeature(int LicenseType, bool FeatureFlag, bool Push = true, BM_Licenses_Utility bmlUtility) Global
     BM_Licenses_MCM bmlmcm = bmlUtility.bmlmcm
 
     If LicenseType == 1
-        if FeatureFlag != bmlmcm.isArmorLicenseFeatureEnabled
-            bmlmcm.isArmorLicenseFeatureEnabled = !bmlmcm.isArmorLicenseFeatureEnabled
-        endIf
+        bmlmcm.isArmorLicenseFeatureEnabled = FeatureFlag
     elseIf LicenseType == 2
-        if FeatureFlag && !bmlmcm.isBikiniLicenseFeatureEnabled
+        if FeatureFlag
             bmlmcm.isBikiniLicenseFeatureEnabled = 1
         else
             bmlmcm.isBikiniLicenseFeatureEnabled = 0
         endIf
     elseIf LicenseType == 3
-        if FeatureFlag && !bmlmcm.isBikiniLicenseFeatureEnabled
+        if FeatureFlag
             bmlmcm.isBikiniLicenseFeatureEnabled = 2
         else
             bmlmcm.isBikiniLicenseFeatureEnabled = 0
         endIf
     elseIf LicenseType == 4
-        if FeatureFlag != bmlmcm.isClothingLicenseFeatureEnabled
-            bmlmcm.isClothingLicenseFeatureEnabled = !bmlmcm.isClothingLicenseFeatureEnabled
-        endIf
+        bmlmcm.isClothingLicenseFeatureEnabled = FeatureFlag
     elseIf LicenseType == 5
-        if FeatureFlag != bmlmcm.isMagicLicenseFeatureEnabled
-            bmlmcm.isMagicLicenseFeatureEnabled = !bmlmcm.isMagicLicenseFeatureEnabled
-        endIf
+        bmlmcm.isMagicLicenseFeatureEnabled = FeatureFlag
     elseIf LicenseType == 6
-        if FeatureFlag != bmlmcm.isWeaponLicenseFeatureEnabled
-            bmlmcm.isWeaponLicenseFeatureEnabled = !bmlmcm.isWeaponLicenseFeatureEnabled
-        endIf
+        bmlmcm.isWeaponLicenseFeatureEnabled = FeatureFlag
     elseIf LicenseType == 7
-        if FeatureFlag != bmlmcm.isCraftingLicenseFeatureEnabled
-            bmlmcm.isCraftingLicenseFeatureEnabled = !bmlmcm.isCraftingLicenseFeatureEnabled
-        endIf
+        bmlmcm.isCraftingLicenseFeatureEnabled = FeatureFlag
     elseIf LicenseType == 8
-        if FeatureFlag != bmlmcm.isTravelPermitFeatureEnabled
-            bmlmcm.isTravelPermitFeatureEnabled = !bmlmcm.isTravelPermitFeatureEnabled
-        endIf
+        bmlmcm.isTravelPermitFeatureEnabled = FeatureFlag
     elseIf LicenseType == 9
-        if FeatureFlag != bmlmcm.isCollarExemptionFeatureEnabled
-            bmlmcm.isCollarExemptionFeatureEnabled = !bmlmcm.isCollarExemptionFeatureEnabled
-        endIf
+        bmlmcm.isCollarExemptionFeatureEnabled = FeatureFlag
     elseIf LicenseType == 10
-        if FeatureFlag != bmlmcm.isInsuranceFeatureEnabled
-            bmlmcm.isInsuranceFeatureEnabled = !bmlmcm.isInsuranceFeatureEnabled
-        endIf
+        bmlmcm.isInsuranceFeatureEnabled = FeatureFlag
     elseIf LicenseType == 11
-        if FeatureFlag != bmlmcm.isCurfewExemptionFeatureEnabled
-            bmlmcm.isCurfewExemptionFeatureEnabled = !bmlmcm.isCurfewExemptionFeatureEnabled
-        endIf
+        bmlmcm.isCurfewExemptionFeatureEnabled = FeatureFlag
     elseIf LicenseType == 12
-        if FeatureFlag != bmlmcm.isTradingLicenseFeatureEnabled
-            bmlmcm.isTradingLicenseFeatureEnabled = !bmlmcm.isTradingLicenseFeatureEnabled
-        endIf
+        bmlmcm.isTradingLicenseFeatureEnabled = FeatureFlag
     elseIf LicenseType == 13
-        if FeatureFlag != bmlmcm.isWhoreLicenseFeatureEnabled
-            bmlmcm.isWhoreLicenseFeatureEnabled = !bmlmcm.isWhoreLicenseFeatureEnabled
-        endIf
+        bmlmcm.isWhoreLicenseFeatureEnabled = FeatureFlag
     else
         return false
     endIf
