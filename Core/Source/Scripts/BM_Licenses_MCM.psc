@@ -316,439 +316,314 @@ EndFunction
 Event OnPageReset(string page)
 	GoToState("")
 	if Licenses_State.GetValue() != 1 || (page == "$LPO_Pages0")
-		SetCursorFillMode(TOP_TO_BOTTOM)
-		SetTitleText("$LPO_Pages0")
-		AddHeaderOption("$LPO_Setup")
-		AddTextOptionST("Licenses_StateST", "$LPO_Licenses_State", GetModState())
-		AddEmptyOption()
-		AddHeaderOption("$LPO_ConfigurationFile")
-		AddTextOptionST("exportConfigST", "$LPO_exportConfig", "", (Licenses_State.GetValue() != 1) as int)
-		AddTextOptionST("importConfigST", "$LPO_importConfig", "", (Licenses_State.GetValue() != 1) as int)
-		SetCursorPosition(1)
-		AddHeaderOption("")
-		AddTextOption("$LPO_ModVersion", GetModVersion(), OPTION_FLAG_DISABLED)
-		AddTextOption("$LPO_Version", GetVersion(), OPTION_FLAG_DISABLED)
-		AddTextOption("$LPO_CacheIndexDiff1Int2", (PapyrusUtil.StringSplit(GetModVersion(), ".")[1] as int - ModVersionCache[1] as int) + "," + PapyrusUtil.StringSplit(GetModVersion(), ".")[2] as int, OPTION_FLAG_DISABLED)
-		if checkHardDependencies()
-			AddTextOption("$LPO_DependencyCheck", "$LPO_Safe", OPTION_FLAG_DISABLED)
-		else
-			AddTextOption("$LPO_DependencyCheck", "$LPO_Failed", OPTION_FLAG_DISABLED)
-		endIf
-		if bmlUtility.IsExceptionState()
-			AddTextOption("$LPO_ExceptionState", "$LPO_Active", OPTION_FLAG_DISABLED)
-		else
-			AddTextOption("$LPO_ExceptionState", "$LPO_Inactive", OPTION_FLAG_DISABLED)
-		endIf
+		ShowPage0()
 	elseIf (page == "")
-		SetCursorFillMode(LEFT_TO_RIGHT)
-		SetTitleText("$LPO_Monitor")
-		AddHeaderOption("$LPO_LicenseStatuses")
-		AddEmptyOption()
-		if (licenses.hasArmorLicense && isArmorLicenseFeatureEnabled)
-			AddTextOption("$LPO_ArmorLicense", "$LPO_Valid")
-		elseIf (!isArmorLicenseFeatureEnabled)
-			AddTextOption("$LPO_ArmorLicense",  "$LPO_Unnecessary")
-		else
-			AddTextOption("$LPO_ArmorLicense",  "$LPO_Invalid")
-		endIf
-		if licenses.armorLicenseExpirationTime != -1.0
-			AddTextOption("$LPO_ExpirationTime{" + Math.ceiling(24.0 * (licenses.armorLicenseExpirationTime - GameDaysPassed.GetValue())) + "}", "")
-		elseIf licenses.armorLicenseCooldownTime != -1.0
-			AddTextOption("$LPO_CooldownTime{" + Math.ceiling(24.0 * (licenses.armorLicenseCooldownTime - GameDaysPassed.GetValue())) + "}", "")
-		else
-			AddEmptyOption()
-		endIf
-
-		if (licenses.hasBikiniLicense && isBikiniLicenseFeatureEnabled == 1)
-			AddTextOption("$LPO_BikiniLicense",  "$LPO_Valid")
-		elseIf (isBikiniLicenseFeatureEnabled != 1)
-			AddTextOption("$LPO_BikiniLicense",  "$LPO_Unnecessary")
-		else
-			AddTextOption("$LPO_BikiniLicense",  "$LPO_Invalid")
-		endIf
-		if licenses.bikiniLicenseExpirationTime != -1.0
-			AddTextOption("$LPO_ExpirationTime{" + Math.ceiling(24.0 * (licenses.bikiniLicenseExpirationTime - GameDaysPassed.GetValue())) + "}", "")
-		elseIf licenses.bikiniLicenseCooldownTime != -1.0
-			AddTextOption("$LPO_CooldownTime{" + Math.ceiling(24.0 * (licenses.bikiniLicenseCooldownTime - GameDaysPassed.GetValue())) + "}", "")
-		else
-			AddEmptyOption()
-		endIf
-
-		if (licenses.hasBikiniExemption && isBikiniLicenseFeatureEnabled == 2)
-			AddTextOption("$LPO_BikiniExemption",  "$LPO_Valid")
-		elseIf (isBikiniLicenseFeatureEnabled != 2)
-			AddTextOption("$LPO_BikiniExemption",  "$LPO_Unnecessary")
-		else
-			AddTextOption("$LPO_BikiniExemption",  "$LPO_Invalid")
-		endIf
-		if licenses.bikiniExemptionExpirationTime != -1.0
-			AddTextOption("$LPO_ExpirationTime{" + Math.ceiling(24.0 * (licenses.bikiniExemptionExpirationTime - GameDaysPassed.GetValue())) + "}", "")
-		elseIf licenses.bikiniExemptionCooldownTime != -1.0
-			AddTextOption("$LPO_CooldownTime{" + Math.ceiling(24.0 * (licenses.bikiniExemptionCooldownTime - GameDaysPassed.GetValue())) + "}", "")
-		else
-			AddEmptyOption()
-		endIf
-
-		if (licenses.hasClothingLicense && isClothingLicenseFeatureEnabled)
-			AddTextOption("$LPO_ClothingLicense",  "$LPO_Valid")
-		elseIf (!isClothingLicenseFeatureEnabled)
-			AddTextOption("$LPO_ClothingLicense",  "$LPO_Unnecessary")
-		else
-			AddTextOption("$LPO_ClothingLicense",  "$LPO_Invalid")
-		endIf
-		if licenses.clothingLicenseExpirationTime != -1.0
-			AddTextOption("$LPO_ExpirationTime{" + Math.ceiling(24.0 * (licenses.clothingLicenseExpirationTime - GameDaysPassed.GetValue())) + "}", "")
-		elseIf licenses.clothingLicenseCooldownTime != -1.0
-			AddTextOption("$LPO_CooldownTime{" + Math.ceiling(24.0 * (licenses.clothingLicenseCooldownTime - GameDaysPassed.GetValue())) + "}", "")
-		else
-			AddEmptyOption()
-		endIf
-
-		if (licenses.hasMagicLicense && isMagicLicenseFeatureEnabled)
-			AddTextOption("$LPO_MagicLicense",  "$LPO_Valid")
-		elseIf (!isMagicLicenseFeatureEnabled)
-			AddTextOption("$LPO_MagicLicense",  "$LPO_Unnecessary")
-		else
-			AddTextOption("$LPO_MagicLicense",  "$LPO_Invalid")
-		endIf
-		if licenses.magicLicenseExpirationTime != -1.0
-			AddTextOption("$LPO_ExpirationTime{" + Math.ceiling(24.0 * (licenses.magicLicenseExpirationTime - GameDaysPassed.GetValue())) + "}", "")
-		elseIf licenses.magicLicenseCooldownTime != -1.0
-			AddTextOption("$LPO_CooldownTime{" + Math.ceiling(24.0 * (licenses.magicLicenseCooldownTime - GameDaysPassed.GetValue())) + "}", "")
-		else
-			AddEmptyOption()
-		endIf
-
-		if (licenses.hasWeaponLicense && isWeaponLicenseFeatureEnabled)
-			AddTextOption("$LPO_WeaponLicense",  "$LPO_Valid")
-		elseIf (!isWeaponLicenseFeatureEnabled)
-			AddTextOption("$LPO_WeaponLicense",  "$LPO_Unnecessary")
-		else
-			AddTextOption("$LPO_WeaponLicense",  "$LPO_Invalid")
-		endIf
-		if licenses.weaponLicenseExpirationTime != -1.0
-			AddTextOption("$LPO_ExpirationTime{" + Math.ceiling(24.0 * (licenses.weaponLicenseExpirationTime - GameDaysPassed.GetValue())) + "}", "")
-		elseIf licenses.weaponLicenseCooldownTime != -1.0
-			AddTextOption("$LPO_CooldownTime{" + Math.ceiling(24.0 * (licenses.weaponLicenseCooldownTime - GameDaysPassed.GetValue())) + "}", "")
-		else
-			AddEmptyOption()
-		endIf
-
-		if (licenses.hasCraftingLicense && isCraftingLicenseFeatureEnabled)
-			AddTextOption("$LPO_CraftingLicense",  "$LPO_Valid")
-		elseIf (!isCraftingLicenseFeatureEnabled)
-			AddTextOption("$LPO_CraftingLicense",  "$LPO_Unnecessary")
-		else
-			AddTextOption("$LPO_CraftingLicense",  "$LPO_Invalid")
-		endIf
-		if licenses.craftingLicenseExpirationTime != -1.0
-			AddTextOption("$LPO_ExpirationTime{" + Math.ceiling(24.0 * (licenses.craftingLicenseExpirationTime - GameDaysPassed.GetValue())) + "}", "")
-		elseIf licenses.craftingLicenseCooldownTime != -1.0
-			AddTextOption("$LPO_CooldownTime{" + Math.ceiling(24.0 * (licenses.craftingLicenseCooldownTime - GameDaysPassed.GetValue())) + "}", "")
-		else
-			AddEmptyOption()
-		endIf
-
-		if (licenses.hasTradingLicense && isTradingLicenseFeatureEnabled)
-			AddTextOption("$LPO_TradingLicense",  "$LPO_Valid")
-		elseIf (!isTradingLicenseFeatureEnabled)
-			AddTextOption("$LPO_TradingLicense",  "$LPO_Unnecessary")
-		else
-			AddTextOption("$LPO_TradingLicense",  "$LPO_Invalid")
-		endIf
-		if licenses.tradingLicenseExpirationTime != -1.0
-			AddTextOption("$LPO_ExpirationTime{" + Math.ceiling(24.0 * (licenses.tradingLicenseExpirationTime - GameDaysPassed.GetValue())) + "}", "")
-		elseIf licenses.tradingLicenseCooldownTime != -1.0
-			AddTextOption("$LPO_CooldownTime{" + Math.ceiling(24.0 * (licenses.tradingLicenseCooldownTime - GameDaysPassed.GetValue())) + "}", "")
-		else
-			AddEmptyOption()
-		endIf
-
-		if (licenses.hasCurfewExemption && isCurfewExemptionFeatureEnabled)
-			AddTextOption("$LPO_CurfewExemption",  "$LPO_Valid")
-		elseIf (!isCurfewExemptionFeatureEnabled)
-			AddTextOption("$LPO_CurfewExemption",  "$LPO_Unnecessary")
-		else
-			AddTextOption("$LPO_CurfewExemption",  "$LPO_Invalid")
-		endIf
-		if licenses.curfewExemptionExpirationTime != -1.0
-			AddTextOption("$LPO_ExpirationTime{" + Math.ceiling(24.0 * (licenses.curfewExemptionExpirationTime - GameDaysPassed.GetValue())) + "}", "")
-		elseIf licenses.curfewExemptionCooldownTime != -1.0
-			AddTextOption("$LPO_CooldownTime{" + Math.ceiling(24.0 * (licenses.curfewExemptionCooldownTime - GameDaysPassed.GetValue())) + "}", "")
-		else
-			AddEmptyOption()
-		endIf
-
-		if (licenses.hasTravelPermit && isTravelPermitFeatureEnabled)
-			AddTextOption("$LPO_TravelPermit",  "$LPO_Valid")
-		elseIf (!isTravelPermitFeatureEnabled)
-			AddTextOption("$LPO_TravelPermit",  "$LPO_Unnecessary")
-		else
-			AddTextOption("$LPO_TravelPermit",  "$LPO_Invalid")
-		endIf
-		if licenses.travelPermitExpirationTime != -1.0
-			AddTextOption("$LPO_ExpirationTime{" + Math.ceiling(24.0 * (licenses.travelPermitExpirationTime - GameDaysPassed.GetValue())) + "}", "")
-		elseIf licenses.travelPermitCooldownTime != -1.0
-			AddTextOption("$LPO_CooldownTime{" + Math.ceiling(24.0 * (licenses.travelPermitCooldownTime - GameDaysPassed.GetValue())) + "}", "")
-		else
-			AddEmptyOption()
-		endIf
-		
-		if (licenses.hasInsurance && isInsuranceFeatureEnabled)
-			AddTextOption("$LPO_Insurance",  "$LPO_Valid")
-		elseIf (!isInsuranceFeatureEnabled)
-			AddTextOption("$LPO_Insurance",  "$LPO_Unnecessary")
-		else
-			AddTextOption("$LPO_Insurance",  "$LPO_Invalid")
-		endIf
-		if licenses.insuranceExpirationTime != -1.0
-			AddTextOption("$LPO_ExpirationTime{" + Math.ceiling(24.0 * (licenses.insuranceExpirationTime - GameDaysPassed.GetValue())) + "}", "")
-		elseIf licenses.insuranceCooldownTime != -1.0
-			AddTextOption("$LPO_CooldownTime{" + Math.ceiling(24.0 * (licenses.insuranceCooldownTime - GameDaysPassed.GetValue())) + "}", "")
-		else
-			AddEmptyOption()
-		endIf
-
-		if (licenses.hasWhoreLicense && isWhoreLicenseFeatureEnabled)
-			AddTextOption("$LPO_WhoreLicense",  "$LPO_Valid")
-		elseIf (!isWhoreLicenseFeatureEnabled)
-			AddTextOption("$LPO_WhoreLicense",  "$LPO_Unnecessary")
-		else
-			AddTextOption("$LPO_WhoreLicense",  "$LPO_Invalid")
-		endIf
-		if licenses.whoreLicenseExpirationTime != -1.0
-			AddTextOption("$LPO_ExpirationTime{" + Math.ceiling(24.0 * (licenses.whoreLicenseExpirationTime - GameDaysPassed.GetValue())) + "}", "")
-		elseIf licenses.whoreLicenseCooldownTime != -1.0
-			AddTextOption("$LPO_CooldownTime{" + Math.ceiling(24.0 * (licenses.whoreLicenseCooldownTime - GameDaysPassed.GetValue())) + "}", "")
-		else
-			AddEmptyOption()
-		endIf
-
-		if (licenses.hasCollarExemption && isCollarExemptionFeatureEnabled)
-			AddTextOption("$LPO_CollarExemption",  "$LPO_Valid")
-		elseIf (!isCollarExemptionFeatureEnabled)
-			AddTextOption("$LPO_CollarExemption",  "$LPO_Unnecessary")
-		else
-			AddTextOption("$LPO_CollarExemption",  "$LPO_Invalid")
-		endIf
-		if licenses.collarExemptionExpirationTime != -1.0
-			AddTextOption("$LPO_ExpirationTime{" + Math.ceiling(24.0 * (licenses.collarExemptionExpirationTime - GameDaysPassed.GetValue())) + "}", "")
-		elseIf licenses.collarExemptionCooldownTime != -1.0
-			AddTextOption("$LPO_CooldownTime{" + Math.ceiling(24.0 * (licenses.collarExemptionCooldownTime - GameDaysPassed.GetValue())) + "}", "")
-		else
-			AddEmptyOption()
-		endIf
+		ShowPageSplash()
     elseIf (page == "$LPO_Pages1")
-		SetCursorFillMode(TOP_TO_BOTTOM)
-        AddHeaderOption("$LPO_BasicSettings")
-        AddToggleOptionST("isKinkyDialogueFeatureEnabledST", "$LPO_isKinkyDialogueFeatureEnabled", isKinkyDialogueFeatureEnabled)
-        AddToggleOptionST("isCheckIntervalFeatureEnabledST", "$LPO_isCheckIntervalFeatureEnabled", isCheckIntervalFeatureEnabled)
-		AddSliderOptionST("checkIntervalST", "$LPO_checkInterval", checkInterval, "{0} second(s)", (!isCheckIntervalFeatureEnabled) as int)
-		AddToggleOptionST("isCheckLOSFeatureEnabledST", "$LPO_isCheckLOSFeatureEnabled", isCheckLOSFeatureEnabled)
-		AddSliderOptionST("BM_WICommentChanceST", "$LPO_BM_WICommentChance", BM_WICommentChance.GetValue(), "{0}%")
-		AddEmptyOption()
-		AddHeaderOption("$LPO_AdditionalSettings")
-		AddMenuOptionST("licenseSellerST", "$LPO_licenseSeller", sellerList[licenseSellerFaction])
-		AddSliderOptionST("LicenseEnforcerCountST", "$LPO_LicenseEnforcerCount", LicenseEnforcerCount, "{0}")
-		AddSliderOptionST("LicenseLimitST", "$LPO_LicenseLimit", LicenseLimit, "{0}")
-		AddSliderOptionST("LicenseCooldownST", "$LPO_LicenseCooldown", LicenseCooldown, "{0} day(s)")
-		AddToggleOptionST("LicenseRenewalST", "$LPO_LicenseRenewal", LicenseRenewal)
-		AddToggleOptionST("isWaterDamageEnabledST", "$LPO_isWaterDamageEnabled", isWaterDamageEnabled)
-		AddToggleOptionST("thaneImmunityUniversalST", "$LPO_thaneImmunityUniversal", thaneImmunityUniversal)
-		AddToggleOptionST("ValidateEquipmentTradeST", "$LPO_ValidateEquipmentTrade", ValidateEquipmentTrade)
-
-		SetCursorPosition(1)
-		AddHeaderOption("$LPO_Filters")
-		AddToggleOptionST("isLimitToCityEnabledST", "$LPO_isLimitToCityEnabled", isLimitToCityEnabled)
-		AddToggleOptionST("isLimitToTownEnabledST", "$LPO_isLimitToTownEnabled", isLimitToTownEnabled)
-		AddToggleOptionST("isLimitToCitySpaceEnabledST", "$LPO_isLimitToCitySpaceEnabled", isLimitToCitySpaceEnabled)
-		AddToggleOptionST("BM_isMaleGuardEnabledST", "$LPO_BM_isMaleGuardEnabled", BM_isMaleGuardEnabled.GetValue() as bool)
-        AddToggleOptionST("BM_isFemaleGuardEnabledST", "$LPO_BM_isFemaleGuardEnabled", BM_isFemaleGuardEnabled.GetValue() as bool)
-		AddEmptyOption()
-		AddHeaderOption("$LPO_Punishments")
-        AddSliderOptionST("FineBaseST", "$LPO_FineBase", FineBase, "{0} gold")
-		AddSliderOptionST("FinePercentageST", "$LPO_FinePercentage", FinePercentage, "{1}%")
-        AddToggleOptionST("fineAddsToBountyST", "$LPO_fineAddsToBounty", fineAddsToBounty)
-        AddToggleOptionST("isConfiscateFeatureEnabledST", "$LPO_isConfiscateFeatureEnabled", isConfiscateFeatureEnabled)
-		AddToggleOptionST("isConfiscateInventoryFeatureEnabledST", "$LPO_isConfiscateInventoryFeatureEnabled", isConfiscateInventoryFeatureEnabled, (!isConfiscateFeatureEnabled) as int)
+		ShowPage1()
     elseIf (page == "$LPO_Pages2")
-		SetCursorFillMode(LEFT_TO_RIGHT)
-        AddHeaderOption("$LPO_ArmorLicense")
-        AddTextOptionST("isArmorLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isArmorLicenseFeatureEnabled))
-        AddSliderOptionST("BM_ALCostST", "$LPO_BM_ALCost", BM_ALCost.getValue(), "{0} gold")
-        AddSliderOptionST("BM_ALDurationST", "$LPO_BM_ALDuration", BM_ALDuration.getValue(), "{0} day(s)")
-        AddEmptyOption()
-        AddEmptyOption()
-        AddHeaderOption("$LPO_BikiniLicense")
-        AddMenuOptionST("isBikiniLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isBikiniLicenseFeatureEnabled, isBikiniLicenseFeatureEnabled))
-        AddSliderOptionST("BM_BLCostST", "$LPO_BM_BLCost", BM_BLCost.getValue(), "{0} gold")
-        AddSliderOptionST("BM_BLDurationST", "$LPO_BM_BLDuration", BM_BLDuration.getValue(), "{0} day(s)")
-		AddToggleOptionST("isBikiniArmorFeatureEnabledST", "$LPO_isBikiniArmorFeatureEnabled", isBikiniArmorFeatureEnabled)
-		AddToggleOptionST("isBikiniClothingFeatureEnabledST", "$LPO_isBikiniClothingFeatureEnabled", isBikiniClothingFeatureEnabled)
-        AddInputOptionST("bikiniKeywordStringST", "$LPO_bikiniKeywordString", "$LPO_InputModify")
-        AddEmptyOption()
-        AddEmptyOption()
-        AddEmptyOption()
-        AddHeaderOption("$LPO_ClothingLicense")
-        AddTextOptionST("isClothingLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isClothingLicenseFeatureEnabled))
-        AddSliderOptionST("BM_CLCostST", "$LPO_BM_CLCost", BM_CLCost.getValue(), "{0} gold")
-        AddSliderOptionST("BM_CLDurationST", "$LPO_BM_CLDuration", BM_CLDuration.getValue(), "{0} day(s)")
-        AddEmptyOption()
-        AddEmptyOption()
-        AddHeaderOption("$LPO_MagicLicense")
-        AddTextOptionST("isMagicLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isMagicLicenseFeatureEnabled))
-        AddSliderOptionST("BM_MLCostST", "$LPO_BM_MLCost", BM_MLCost.getValue(), "{0} gold")
-        AddSliderOptionST("BM_MLDurationST", "$LPO_BM_MLDuration", BM_MLDuration.getValue(), "{0} day(s)")
-		AddToggleOptionST("isEnchantedArmorFeatureEnabledST", "$LPO_isEnchantedArmorFeatureEnabled", isEnchantedArmorFeatureEnabled)
-        AddToggleOptionST("isEnchantedClothingFeatureEnabledST", "$LPO_isEnchantedClothingFeatureEnabled", isEnchantedClothingFeatureEnabled)
-		AddToggleOptionST("isEnchantedJewelryFeatureEnabledST", "$LPO_isEnchantedJewelryFeatureEnabled", isEnchantedJewelryFeatureEnabled)
-		AddToggleOptionST("isEnchantedWeaponryFeatureEnabledST", "$LPO_isEnchantedWeaponryFeatureEnabled", isEnchantedWeaponryFeatureEnabled)
-        AddMenuOptionST("NullifyMagickaSourceST", "$LPO_NullifyMagickaSource", NullifyMagickaSourceList[NullifyMagickaSource])
-        AddToggleOptionST("NullifyMagickaEnforceST", "$LPO_NullifyMagickaEnforce", NullifyMagickaEnforce, (!(NullifyMagickaSource as bool)) as int)
-		AddEmptyOption()
-		AddEmptyOption()
-        AddHeaderOption("$LPO_WeaponLicense")
-        AddTextOptionST("isWeaponLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isWeaponLicenseFeatureEnabled))
-        AddSliderOptionST("BM_WLCostST", "$LPO_BM_WLCost", BM_WLCost.getValue(), "{0} gold")
-        AddSliderOptionST("BM_WLDurationST", "$LPO_BM_WLDuration", BM_WLDuration.getValue(), "{0} day(s)")
-		AddToggleOptionST("isWeaponAmmoFeatureEnabledST", "$LPO_isWeaponAmmoFeatureEnabled", isWeaponAmmoFeatureEnabled)
+		ShowPage2()
 	elseIf (page == "$LPO_Pages3")
-		SetCursorFillMode(LEFT_TO_RIGHT)
-		AddHeaderOption("$LPO_CraftingLicense")
-        AddTextOptionST("isCraftingLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isCraftingLicenseFeatureEnabled))
-        AddSliderOptionST("BM_CrfLCostST", "$LPO_BM_CrfLCost", BM_CrfLCost.getValue(), "{0} gold")
-        AddSliderOptionST("BM_CrfLDurationST", "$LPO_BM_CrfLDuration", BM_CrfLDuration.getValue(), "{0} day(s)")
-		AddEmptyOption()
-        AddEmptyOption()
-		AddHeaderOption("$LPO_TradingLicense")
-        AddTextOptionST("isTradingLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isTradingLicenseFeatureEnabled))
-        AddSliderOptionST("BM_TLCostST", "$LPO_BM_TLCost", BM_TLCost.getValue(), "{0} gold")
-        AddSliderOptionST("BM_TLDurationST", "$LPO_BM_TLDuration", BM_TLDuration.getValue(), "{0} day(s)")
-		AddEmptyOption()
-        AddEmptyOption()
-		AddHeaderOption("$LPO_CurfewExemption")
-        AddTextOptionST("isCurfewExemptionFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isCurfewExemptionFeatureEnabled))
-        AddSliderOptionST("BM_CuECostST", "$LPO_BM_CuECost", BM_CuECost.getValue(), "{0} gold")
-        AddSliderOptionST("BM_CuEDurationST", "$LPO_BM_CuEDuration", BM_CuEDuration.getValue(), "{0} day(s)")
-		AddSliderOptionST("BM_CurfewStartST", "$LPO_BM_CurfewStart", BM_CurfewStart.getValue(), "{0}:00")
-		AddSliderOptionST("BM_CurfewEndST", "$LPO_BM_CurfewEnd", BM_CurfewEnd.getValue(), "{0}:00")
-		AddEmptyOption()
-		AddEmptyOption()
-		AddHeaderOption("$LPO_TravelPermit")
-		AddTextOptionST("isTravelPermitFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isTravelPermitFeatureEnabled))
-        AddSliderOptionST("BM_TPCostST", "$LPO_BM_TPCost", BM_TPCost.getValue(), "{0} gold")
-        AddSliderOptionST("BM_TPDurationST", "$LPO_BM_TPDuration", BM_TPDuration.getValue(), "{0} day(s)")
-		AddToggleOptionST("BM_FollowerMaleST", "$LPO_BM_FollowerMale", BM_FollowerMale.GetValue() as bool)
-		AddEmptyOption()
-        AddToggleOptionST("BM_FollowerFemaleST", "$LPO_BM_FollowerFemale", BM_FollowerFemale.GetValue() as bool)
-		AddEmptyOption()
-		AddEmptyOption()
-        AddEmptyOption()
-		AddHeaderOption("$LPO_Insurance")
-		AddTextOptionST("isInsuranceFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isInsuranceFeatureEnabled))
-        AddSliderOptionST("BM_InsurCostBaseST", "$LPO_BM_InsurCostBase", BM_InsurCostBase, "{0} gold")
-        AddSliderOptionST("BM_InsurDurationST", "$LPO_BM_InsurDuration", BM_InsurDuration.getValue(), "{0} day(s)")
-		AddTextOptionST("insuranceMisbehaviourMonitorST", "$LPO_MisbehaviourMultiplier", licenses.insuranceMisbehaviourMultiplier + "x")
-		AddEmptyOption()
-		AddTextOptionST("insurancePopularityMonitorST", "$LPO_PopularityMultiplier", licenses.insurancePopularityMultiplier + "x")
-		AddEmptyOption()
-		AddToggleOptionST("invertPopularityMultiplierST", "$LPO_invertPopularityMultiplier", invertPopularityMultiplier)
-		AddEmptyOption()
-		AddToggleOptionST("thaneImmunityInsuranceST", "$LPO_thaneImmunityInsurance", thaneImmunityInsurance)
+		ShowPage3()
 	elseIf (page == "$LPO_Pages4")
-		SetCursorFillMode(LEFT_TO_RIGHT)
-		AddHeaderOption("$LPO_WhoreLicense")
-        AddTextOptionST("isWhoreLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isWhoreLicenseFeatureEnabled))
-        AddSliderOptionST("BM_WhLCostST", "$LPO_BM_WhLCost", BM_WhLCost.getValue(), "{0} gold")
-        AddSliderOptionST("BM_WhLDurationST", "$LPO_BM_WhLDuration", BM_WhLDuration.getValue(), "{0} day(s)")
-		AddEmptyOption()
-        AddEmptyOption()
-		AddHeaderOption("$LPO_CollarExemption")
-		AddTextOptionST("isCollarExemptionFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isCollarExemptionFeatureEnabled), (!DeviousDevices_State) as int)
-        AddSliderOptionST("BM_CECostST", "$LPO_BM_CECost", BM_CECost.getValue(), "{0} gold", (!DeviousDevices_State) as int)
-        AddSliderOptionST("BM_CEDurationST", "$LPO_BM_CEDuration", BM_CEDuration.getValue(), "{0} day(s)", (!DeviousDevices_State) as int)
+		ShowPage4()
     elseIf (page == "$LPO_Pages5")
-		SetCursorFillMode(LEFT_TO_RIGHT)
-		GoToState("SlotFilteringST")
+		ShowPage5()
 	elseIf (page == "$LPO_Pages6")
-		SetCursorFillMode(TOP_TO_BOTTOM)
-		if !DeviousDevices_State && !SlaveTats_State
-			AddTextOption("$LPO_Integrations_Empty", "", OPTION_FLAG_DISABLED)
-		endIf
-
-		if DeviousDevices_State
-			AddHeaderOption("$LPO_DeviousDevices")
-			AddToggleOptionST("equipDDOnViolationST", "$LPO_equipDDOnViolation", equipDDOnViolation)
-			AddSliderOptionST("ddEquipChanceST", "$LPO_ddEquipChance", ddEquipChance, "{0}%", (!equipDDOnViolation) as int)
-			AddMenuOptionST("ddFilterST", "$LPO_ddFilter", ddFilterList[ddFilter])
-		endIf
-
-		SetCursorPosition(1)
-
-		if SlaveTats_State
-			AddHeaderOption("$LPO_SlaveTats")
-			AddToggleOptionST("ShowCurseTattoosST", "$LPO_ShowCurseTattoos", ShowCurseTattoos)
-			AddColorOptionST("Curse_ColorST", "$LPO_Curse_Color", Curse_Color, (!ShowCurseTattoos) as int)
-			AddColorOptionST("Curse_GlowST", "$LPO_Curse_Glow", Curse_Glow, (!ShowCurseTattoos) as int)
-			AddSliderOptionST("Curse_AlphaST", "$LPO_Curse_Alpha", Curse_Alpha, "{1}", (!ShowCurseTattoos) as int)
-			AddToggleOptionST("Curse_NeckST", "$LPO_Curse_Neck", Curse_Neck, (!ShowCurseTattoos) as int)
-			AddToggleOptionST("Curse_TorsoST", "$LPO_Curse_Torso", Curse_Torso, (!ShowCurseTattoos) as int)
-			AddToggleOptionST("Curse_ArmsST", "$LPO_Curse_Arms", Curse_Arms, (!ShowCurseTattoos) as int)
-			AddToggleOptionST("Curse_LegsST", "$LPO_Curse_Legs", Curse_Legs, (!ShowCurseTattoos) as int)
-			AddToggleOptionST("Curse_ReduceSlotUsageST", "$LPO_Curse_ReduceSlotUsage", Curse_ReduceSlotUsage, (!ShowCurseTattoos) as int)
-			AddTextOptionST("Curse_FormatOverrideST", "$LPO_Curse_FormatOverride", Curse_FormatOverride, (!ShowCurseTattoos) as int)
-		endIf
+		ShowPage6()
 	elseIf (page == "$LPO_Pages7")
-		SetCursorFillMode(TOP_TO_BOTTOM)
-		AddHeaderOption("$LPO_DebugFunctions")
-		AddTextOptionST("RefreshFeaturesST", "$LPO_RefreshFeatures", "")
-		AddTextOptionST("RefreshStatusST", "$LPO_RefreshStatus", "")
-		if SlaveTats_State
-			AddTextOptionST("RefreshTattoosST", "$LPO_RefreshTattoos", "")
-		endIf
-		AddTextOptionST("ResetMenuST", "$LPO_ResetMenu", "")
-		AddEmptyOption()
-		AddHeaderOption("$LPO_AdvancedSettings")
-		AddToggleOptionST("GameMessageST", "$LPO_GameMessage", GameMessage)
-		AddToggleOptionST("LogNotificationST", "$LPO_LogNotification", LogNotification)
-		AddToggleOptionST("LogTraceST", "$LPO_LogTrace", LogTrace)
-		AddToggleOptionST("ConfigWarnST", "$LPO_ConfigWarn", ConfigWarn)
-		AddToggleOptionST("allowJailQuestNodesST", "$LPO_allowJailQuestNodes", allowJailQuestNodes)
-		AddSliderOptionST("standardEventDelayST", "$LPO_standardEventDelay", standardEventDelay, "{0} seconds")
-
-		SetCursorPosition(1)
-		AddHeaderOption("$LPO_HardDependencies")
-		AddTextOption("$LPO_PapyrusExtender_State", PapyrusExtender_Status)
-		AddTextOption("$LPO_PapyrusUtil_State", PapyrusUtil_Status)
-		AddTextOption("$LPO_ScrabsPapyrusExtender_State", ScrabsPapyrusExtender_Status)
-		AddEmptyOption()
-		AddHeaderOption("$LPO_SoftDependencies")
-		AddTextOption("$LPO_DeviousDevices_State", DeviousDevices_Status, (!DeviousDevices_State) as int)
-		AddTextOption("$LPO_DeviousFollowers_State", DeviousFollowers_Status, (!DeviousFollowers_State) as int)
-		AddTextOption("$LPO_PrisonOverhaulPatched_State", PrisonOverhaulPatched_Status, (!PrisonOverhaulPatched_State) as int)
-		AddTextOption("$LPO_SexLabAroused_State", SexLabAroused_Status, (!SexLabAroused_State) as int)
-		AddTextOption("$LPO_SlaveTats_State", SlaveTats_Status, (!SlaveTats_State) as int)
-		if DeviousInterests_State || OStim_State || PrisonAlternative_State || SexLab_State || SimpleSlavery_State
-			AddEmptyOption()
-			AddHeaderOption("$LPO_Compatibility")
-			if DeviousInterests_State
-				AddTextOption("$LPO_DeviousInterests_State", DeviousInterests_Status)
-			endIf
-			if OStim_State
-				AddTextOption("$LPO_OStim_State", OStim_Status)
-			endIf
-			if PrisonAlternative_State
-				AddTextOption("$LPO_PrisonAlternative_State", PrisonAlternative_Status)
-			endIf
-			if SexLab_State
-				AddTextOption("$LPO_SexLab_State", SexLab_Status)
-			endIf
-			if SimpleSlavery_State
-				AddTextOption("$LPO_SimpleSlavery_State", SimpleSlavery_Status)
-			endIf
-		endIf
+		ShowPage7()
     endIf
 EndEvent
+
+Int Function AddFeatureState(String DisplayName, Bool FeatureFlag, Bool StateFlag, Float ExpirationTime, Float CooldownTime)
+	String DisplayState
+	if FeatureFlag
+		if StateFlag
+			DisplayState = "$LPO_Valid"
+		else
+			DisplayState = "$LPO_Invalid"
+		endIf
+	elseIf (ExpirationTime != -1.0) || (CooldownTime != -1.0)
+		DisplayState = "$LPO_Unnecessary"
+	endIf
+	if DisplayState
+		AddTextOption(DisplayName, DisplayState)
+		if ExpirationTime != -1.0
+			AddTextOption("$LPO_ExpirationTime{" + Math.ceiling(24.0 * (ExpirationTime - GameDaysPassed.GetValue())) + "}", "")
+		elseIf CooldownTime != -1.0
+			AddTextOption("$LPO_CooldownTime{" + Math.ceiling(24.0 * (CooldownTime - GameDaysPassed.GetValue())) + "}", "")
+		else
+			AddEmptyOption()
+		endIf
+		return 1
+	endIf
+	return 0
+EndFunction
+Function ShowPageSplash()
+	SetCursorFillMode(LEFT_TO_RIGHT)
+	SetTitleText("$LPO_Monitor")
+	AddHeaderOption("$LPO_LicenseStatuses")
+	AddEmptyOption()
+	Int iSplashFlag 
+	iSplashFlag += AddFeatureState("$LPO_ArmorLicense", isArmorLicenseFeatureEnabled, licenses.hasArmorLicense, licenses.armorLicenseExpirationTime, licenses.armorLicenseCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_BikiniLicense", isBikiniLicenseFeatureEnabled == 1, licenses.hasBikiniLicense, licenses.bikiniLicenseExpirationTime, licenses.bikiniLicenseCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_BikiniExemption", isBikiniLicenseFeatureEnabled == 2, licenses.hasBikiniExemption, licenses.bikiniExemptionExpirationTime, licenses.bikiniExemptionCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_ClothingLicense", isClothingLicenseFeatureEnabled, licenses.hasClothingLicense, licenses.clothingLicenseExpirationTime, licenses.clothingLicenseCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_MagicLicense", isMagicLicenseFeatureEnabled, licenses.hasMagicLicense, licenses.magicLicenseExpirationTime, licenses.magicLicenseCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_WeaponLicense", isWeaponLicenseFeatureEnabled, licenses.hasWeaponLicense, licenses.weaponLicenseExpirationTime, licenses.weaponLicenseCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_CraftingLicense", isCraftingLicenseFeatureEnabled, licenses.hasCraftingLicense, licenses.craftingLicenseExpirationTime, licenses.craftingLicenseCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_TradingLicense", isTradingLicenseFeatureEnabled, licenses.hasTradingLicense, licenses.tradingLicenseExpirationTime, licenses.tradingLicenseCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_CurfewExemption", isCurfewExemptionFeatureEnabled, licenses.hasCurfewExemption, licenses.curfewExemptionExpirationTime, licenses.curfewExemptionCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_TravelPermit", isTravelPermitFeatureEnabled, licenses.hasTravelPermit, licenses.travelPermitExpirationTime, licenses.travelPermitCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_Insurance", isInsuranceFeatureEnabled, licenses.hasInsurance, licenses.insuranceExpirationTime, licenses.insuranceCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_WhoreLicense", isWhoreLicenseFeatureEnabled, licenses.hasWhoreLicense, licenses.whoreLicenseExpirationTime, licenses.whoreLicenseCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_CollarExemption", isCollarExemptionFeatureEnabled, licenses.hasCollarExemption, licenses.collarExemptionExpirationTime, licenses.collarExemptionCooldownTime)
+	if iSplashFlag == 0
+		AddTextOption("$LPO_Splash_Empty", "", OPTION_FLAG_DISABLED)
+	endIf
+EndFunction
+Function ShowPage0()
+	SetCursorFillMode(TOP_TO_BOTTOM)
+	SetTitleText("$LPO_Pages0")
+	AddHeaderOption("$LPO_Setup")
+	AddTextOptionST("Licenses_StateST", "$LPO_Licenses_State", GetModState())
+	AddEmptyOption()
+	AddHeaderOption("$LPO_ConfigurationFile")
+	AddTextOptionST("exportConfigST", "$LPO_exportConfig", "", (Licenses_State.GetValue() != 1) as int)
+	AddTextOptionST("importConfigST", "$LPO_importConfig", "", (Licenses_State.GetValue() != 1) as int)
+	SetCursorPosition(1)
+	AddHeaderOption("")
+	AddTextOption("$LPO_ModVersion", GetModVersion(), OPTION_FLAG_DISABLED)
+	AddTextOption("$LPO_Version", GetVersion(), OPTION_FLAG_DISABLED)
+	AddTextOption("$LPO_CacheIndexDiff1Int2", (PapyrusUtil.StringSplit(GetModVersion(), ".")[1] as int - ModVersionCache[1] as int) + "," + PapyrusUtil.StringSplit(GetModVersion(), ".")[2] as int, OPTION_FLAG_DISABLED)
+	if checkHardDependencies()
+		AddTextOption("$LPO_DependencyCheck", "$LPO_Safe", OPTION_FLAG_DISABLED)
+	else
+		AddTextOption("$LPO_DependencyCheck", "$LPO_Failed", OPTION_FLAG_DISABLED)
+	endIf
+	if bmlUtility.IsExceptionState()
+		AddTextOption("$LPO_ExceptionState", "$LPO_Active", OPTION_FLAG_DISABLED)
+	else
+		AddTextOption("$LPO_ExceptionState", "$LPO_Inactive", OPTION_FLAG_DISABLED)
+	endIf
+EndFunction
+Function ShowPage1()
+	SetCursorFillMode(TOP_TO_BOTTOM)
+	AddHeaderOption("$LPO_BasicSettings")
+	AddToggleOptionST("isKinkyDialogueFeatureEnabledST", "$LPO_isKinkyDialogueFeatureEnabled", isKinkyDialogueFeatureEnabled)
+	AddToggleOptionST("isCheckIntervalFeatureEnabledST", "$LPO_isCheckIntervalFeatureEnabled", isCheckIntervalFeatureEnabled)
+	AddSliderOptionST("checkIntervalST", "$LPO_checkInterval", checkInterval, "{0} second(s)", (!isCheckIntervalFeatureEnabled) as int)
+	AddToggleOptionST("isCheckLOSFeatureEnabledST", "$LPO_isCheckLOSFeatureEnabled", isCheckLOSFeatureEnabled)
+	AddSliderOptionST("BM_WICommentChanceST", "$LPO_BM_WICommentChance", BM_WICommentChance.GetValue(), "{0}%")
+	AddEmptyOption()
+	AddHeaderOption("$LPO_AdditionalSettings")
+	AddMenuOptionST("licenseSellerST", "$LPO_licenseSeller", sellerList[licenseSellerFaction])
+	AddSliderOptionST("LicenseEnforcerCountST", "$LPO_LicenseEnforcerCount", LicenseEnforcerCount, "{0}")
+	AddSliderOptionST("LicenseLimitST", "$LPO_LicenseLimit", LicenseLimit, "{0}")
+	AddSliderOptionST("LicenseCooldownST", "$LPO_LicenseCooldown", LicenseCooldown, "{0} day(s)")
+	AddToggleOptionST("LicenseRenewalST", "$LPO_LicenseRenewal", LicenseRenewal)
+	AddToggleOptionST("isWaterDamageEnabledST", "$LPO_isWaterDamageEnabled", isWaterDamageEnabled)
+	AddToggleOptionST("thaneImmunityUniversalST", "$LPO_thaneImmunityUniversal", thaneImmunityUniversal)
+	AddToggleOptionST("ValidateEquipmentTradeST", "$LPO_ValidateEquipmentTrade", ValidateEquipmentTrade)
+
+	SetCursorPosition(1)
+	AddHeaderOption("$LPO_Filters")
+	AddToggleOptionST("isLimitToCityEnabledST", "$LPO_isLimitToCityEnabled", isLimitToCityEnabled)
+	AddToggleOptionST("isLimitToTownEnabledST", "$LPO_isLimitToTownEnabled", isLimitToTownEnabled)
+	AddToggleOptionST("isLimitToCitySpaceEnabledST", "$LPO_isLimitToCitySpaceEnabled", isLimitToCitySpaceEnabled)
+	AddToggleOptionST("BM_isMaleGuardEnabledST", "$LPO_BM_isMaleGuardEnabled", BM_isMaleGuardEnabled.GetValue() as bool)
+	AddToggleOptionST("BM_isFemaleGuardEnabledST", "$LPO_BM_isFemaleGuardEnabled", BM_isFemaleGuardEnabled.GetValue() as bool)
+	AddEmptyOption()
+	AddHeaderOption("$LPO_Punishments")
+	AddSliderOptionST("FineBaseST", "$LPO_FineBase", FineBase, "{0} gold")
+	AddSliderOptionST("FinePercentageST", "$LPO_FinePercentage", FinePercentage, "{1}%")
+	AddToggleOptionST("fineAddsToBountyST", "$LPO_fineAddsToBounty", fineAddsToBounty)
+	AddToggleOptionST("isConfiscateFeatureEnabledST", "$LPO_isConfiscateFeatureEnabled", isConfiscateFeatureEnabled)
+	AddToggleOptionST("isConfiscateInventoryFeatureEnabledST", "$LPO_isConfiscateInventoryFeatureEnabled", isConfiscateInventoryFeatureEnabled, (!isConfiscateFeatureEnabled) as int)
+EndFunction
+Function ShowPage2()
+	SetCursorFillMode(LEFT_TO_RIGHT)
+	AddHeaderOption("$LPO_ArmorLicense")
+	AddTextOptionST("isArmorLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isArmorLicenseFeatureEnabled))
+	AddSliderOptionST("BM_ALCostST", "$LPO_BM_ALCost", BM_ALCost.getValue(), "{0} gold")
+	AddSliderOptionST("BM_ALDurationST", "$LPO_BM_ALDuration", BM_ALDuration.getValue(), "{0} day(s)")
+	AddEmptyOption()
+	AddEmptyOption()
+	AddHeaderOption("$LPO_BikiniLicense")
+	AddMenuOptionST("isBikiniLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isBikiniLicenseFeatureEnabled, isBikiniLicenseFeatureEnabled))
+	AddSliderOptionST("BM_BLCostST", "$LPO_BM_BLCost", BM_BLCost.getValue(), "{0} gold")
+	AddSliderOptionST("BM_BLDurationST", "$LPO_BM_BLDuration", BM_BLDuration.getValue(), "{0} day(s)")
+	AddToggleOptionST("isBikiniArmorFeatureEnabledST", "$LPO_isBikiniArmorFeatureEnabled", isBikiniArmorFeatureEnabled)
+	AddToggleOptionST("isBikiniClothingFeatureEnabledST", "$LPO_isBikiniClothingFeatureEnabled", isBikiniClothingFeatureEnabled)
+	AddInputOptionST("bikiniKeywordStringST", "$LPO_bikiniKeywordString", "$LPO_InputModify")
+	AddEmptyOption()
+	AddEmptyOption()
+	AddEmptyOption()
+	AddHeaderOption("$LPO_ClothingLicense")
+	AddTextOptionST("isClothingLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isClothingLicenseFeatureEnabled))
+	AddSliderOptionST("BM_CLCostST", "$LPO_BM_CLCost", BM_CLCost.getValue(), "{0} gold")
+	AddSliderOptionST("BM_CLDurationST", "$LPO_BM_CLDuration", BM_CLDuration.getValue(), "{0} day(s)")
+	AddEmptyOption()
+	AddEmptyOption()
+	AddHeaderOption("$LPO_MagicLicense")
+	AddTextOptionST("isMagicLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isMagicLicenseFeatureEnabled))
+	AddSliderOptionST("BM_MLCostST", "$LPO_BM_MLCost", BM_MLCost.getValue(), "{0} gold")
+	AddSliderOptionST("BM_MLDurationST", "$LPO_BM_MLDuration", BM_MLDuration.getValue(), "{0} day(s)")
+	AddToggleOptionST("isEnchantedArmorFeatureEnabledST", "$LPO_isEnchantedArmorFeatureEnabled", isEnchantedArmorFeatureEnabled)
+	AddToggleOptionST("isEnchantedClothingFeatureEnabledST", "$LPO_isEnchantedClothingFeatureEnabled", isEnchantedClothingFeatureEnabled)
+	AddToggleOptionST("isEnchantedJewelryFeatureEnabledST", "$LPO_isEnchantedJewelryFeatureEnabled", isEnchantedJewelryFeatureEnabled)
+	AddToggleOptionST("isEnchantedWeaponryFeatureEnabledST", "$LPO_isEnchantedWeaponryFeatureEnabled", isEnchantedWeaponryFeatureEnabled)
+	AddMenuOptionST("NullifyMagickaSourceST", "$LPO_NullifyMagickaSource", NullifyMagickaSourceList[NullifyMagickaSource])
+	AddToggleOptionST("NullifyMagickaEnforceST", "$LPO_NullifyMagickaEnforce", NullifyMagickaEnforce, (!(NullifyMagickaSource as bool)) as int)
+	AddEmptyOption()
+	AddEmptyOption()
+	AddHeaderOption("$LPO_WeaponLicense")
+	AddTextOptionST("isWeaponLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isWeaponLicenseFeatureEnabled))
+	AddSliderOptionST("BM_WLCostST", "$LPO_BM_WLCost", BM_WLCost.getValue(), "{0} gold")
+	AddSliderOptionST("BM_WLDurationST", "$LPO_BM_WLDuration", BM_WLDuration.getValue(), "{0} day(s)")
+	AddToggleOptionST("isWeaponAmmoFeatureEnabledST", "$LPO_isWeaponAmmoFeatureEnabled", isWeaponAmmoFeatureEnabled)
+EndFunction
+Function ShowPage3()
+	SetCursorFillMode(LEFT_TO_RIGHT)
+	AddHeaderOption("$LPO_CraftingLicense")
+	AddTextOptionST("isCraftingLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isCraftingLicenseFeatureEnabled))
+	AddSliderOptionST("BM_CrfLCostST", "$LPO_BM_CrfLCost", BM_CrfLCost.getValue(), "{0} gold")
+	AddSliderOptionST("BM_CrfLDurationST", "$LPO_BM_CrfLDuration", BM_CrfLDuration.getValue(), "{0} day(s)")
+	AddEmptyOption()
+	AddEmptyOption()
+	AddHeaderOption("$LPO_TradingLicense")
+	AddTextOptionST("isTradingLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isTradingLicenseFeatureEnabled))
+	AddSliderOptionST("BM_TLCostST", "$LPO_BM_TLCost", BM_TLCost.getValue(), "{0} gold")
+	AddSliderOptionST("BM_TLDurationST", "$LPO_BM_TLDuration", BM_TLDuration.getValue(), "{0} day(s)")
+	AddEmptyOption()
+	AddEmptyOption()
+	AddHeaderOption("$LPO_CurfewExemption")
+	AddTextOptionST("isCurfewExemptionFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isCurfewExemptionFeatureEnabled))
+	AddSliderOptionST("BM_CuECostST", "$LPO_BM_CuECost", BM_CuECost.getValue(), "{0} gold")
+	AddSliderOptionST("BM_CuEDurationST", "$LPO_BM_CuEDuration", BM_CuEDuration.getValue(), "{0} day(s)")
+	AddSliderOptionST("BM_CurfewStartST", "$LPO_BM_CurfewStart", BM_CurfewStart.getValue(), "{0}:00")
+	AddSliderOptionST("BM_CurfewEndST", "$LPO_BM_CurfewEnd", BM_CurfewEnd.getValue(), "{0}:00")
+	AddEmptyOption()
+	AddEmptyOption()
+	AddHeaderOption("$LPO_TravelPermit")
+	AddTextOptionST("isTravelPermitFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isTravelPermitFeatureEnabled))
+	AddSliderOptionST("BM_TPCostST", "$LPO_BM_TPCost", BM_TPCost.getValue(), "{0} gold")
+	AddSliderOptionST("BM_TPDurationST", "$LPO_BM_TPDuration", BM_TPDuration.getValue(), "{0} day(s)")
+	AddToggleOptionST("BM_FollowerMaleST", "$LPO_BM_FollowerMale", BM_FollowerMale.GetValue() as bool)
+	AddEmptyOption()
+	AddToggleOptionST("BM_FollowerFemaleST", "$LPO_BM_FollowerFemale", BM_FollowerFemale.GetValue() as bool)
+	AddEmptyOption()
+	AddEmptyOption()
+	AddEmptyOption()
+	AddHeaderOption("$LPO_Insurance")
+	AddTextOptionST("isInsuranceFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isInsuranceFeatureEnabled))
+	AddSliderOptionST("BM_InsurCostBaseST", "$LPO_BM_InsurCostBase", BM_InsurCostBase, "{0} gold")
+	AddSliderOptionST("BM_InsurDurationST", "$LPO_BM_InsurDuration", BM_InsurDuration.getValue(), "{0} day(s)")
+	AddTextOptionST("insuranceMisbehaviourMonitorST", "$LPO_MisbehaviourMultiplier", licenses.insuranceMisbehaviourMultiplier + "x")
+	AddEmptyOption()
+	AddTextOptionST("insurancePopularityMonitorST", "$LPO_PopularityMultiplier", licenses.insurancePopularityMultiplier + "x")
+	AddEmptyOption()
+	AddToggleOptionST("invertPopularityMultiplierST", "$LPO_invertPopularityMultiplier", invertPopularityMultiplier)
+	AddEmptyOption()
+	AddToggleOptionST("thaneImmunityInsuranceST", "$LPO_thaneImmunityInsurance", thaneImmunityInsurance)
+EndFunction
+Function ShowPage4()
+	SetCursorFillMode(LEFT_TO_RIGHT)
+	AddHeaderOption("$LPO_WhoreLicense")
+	AddTextOptionST("isWhoreLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isWhoreLicenseFeatureEnabled))
+	AddSliderOptionST("BM_WhLCostST", "$LPO_BM_WhLCost", BM_WhLCost.getValue(), "{0} gold")
+	AddSliderOptionST("BM_WhLDurationST", "$LPO_BM_WhLDuration", BM_WhLDuration.getValue(), "{0} day(s)")
+	AddEmptyOption()
+	AddEmptyOption()
+	AddHeaderOption("$LPO_CollarExemption")
+	AddTextOptionST("isCollarExemptionFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isCollarExemptionFeatureEnabled), (!DeviousDevices_State) as int)
+	AddSliderOptionST("BM_CECostST", "$LPO_BM_CECost", BM_CECost.getValue(), "{0} gold", (!DeviousDevices_State) as int)
+	AddSliderOptionST("BM_CEDurationST", "$LPO_BM_CEDuration", BM_CEDuration.getValue(), "{0} day(s)", (!DeviousDevices_State) as int)
+EndFunction
+Function ShowPage5()
+	SetCursorFillMode(LEFT_TO_RIGHT)
+	GoToState("SlotFilteringST")
+EndFunction
+Function ShowPage6()
+	SetCursorFillMode(TOP_TO_BOTTOM)
+	if !DeviousDevices_State && !SlaveTats_State
+		AddTextOption("$LPO_Integrations_Empty", "", OPTION_FLAG_DISABLED)
+	endIf
+
+	if DeviousDevices_State
+		AddHeaderOption("$LPO_DeviousDevices")
+		AddToggleOptionST("equipDDOnViolationST", "$LPO_equipDDOnViolation", equipDDOnViolation)
+		AddSliderOptionST("ddEquipChanceST", "$LPO_ddEquipChance", ddEquipChance, "{0}%", (!equipDDOnViolation) as int)
+		AddMenuOptionST("ddFilterST", "$LPO_ddFilter", ddFilterList[ddFilter])
+	endIf
+
+	SetCursorPosition(1)
+
+	if SlaveTats_State
+		AddHeaderOption("$LPO_SlaveTats")
+		AddToggleOptionST("ShowCurseTattoosST", "$LPO_ShowCurseTattoos", ShowCurseTattoos)
+		AddColorOptionST("Curse_ColorST", "$LPO_Curse_Color", Curse_Color, (!ShowCurseTattoos) as int)
+		AddColorOptionST("Curse_GlowST", "$LPO_Curse_Glow", Curse_Glow, (!ShowCurseTattoos) as int)
+		AddSliderOptionST("Curse_AlphaST", "$LPO_Curse_Alpha", Curse_Alpha, "{1}", (!ShowCurseTattoos) as int)
+		AddToggleOptionST("Curse_NeckST", "$LPO_Curse_Neck", Curse_Neck, (!ShowCurseTattoos) as int)
+		AddToggleOptionST("Curse_TorsoST", "$LPO_Curse_Torso", Curse_Torso, (!ShowCurseTattoos) as int)
+		AddToggleOptionST("Curse_ArmsST", "$LPO_Curse_Arms", Curse_Arms, (!ShowCurseTattoos) as int)
+		AddToggleOptionST("Curse_LegsST", "$LPO_Curse_Legs", Curse_Legs, (!ShowCurseTattoos) as int)
+		AddToggleOptionST("Curse_ReduceSlotUsageST", "$LPO_Curse_ReduceSlotUsage", Curse_ReduceSlotUsage, (!ShowCurseTattoos) as int)
+		AddTextOptionST("Curse_FormatOverrideST", "$LPO_Curse_FormatOverride", Curse_FormatOverride, (!ShowCurseTattoos) as int)
+	endIf
+EndFunction
+Function ShowPage7()
+	SetCursorFillMode(TOP_TO_BOTTOM)
+	AddHeaderOption("$LPO_DebugFunctions")
+	AddTextOptionST("RefreshFeaturesST", "$LPO_RefreshFeatures", "")
+	AddTextOptionST("RefreshStatusST", "$LPO_RefreshStatus", "")
+	if SlaveTats_State
+		AddTextOptionST("RefreshTattoosST", "$LPO_RefreshTattoos", "")
+	endIf
+	AddTextOptionST("ResetMenuST", "$LPO_ResetMenu", "")
+	AddEmptyOption()
+	AddHeaderOption("$LPO_AdvancedSettings")
+	AddToggleOptionST("GameMessageST", "$LPO_GameMessage", GameMessage)
+	AddToggleOptionST("LogNotificationST", "$LPO_LogNotification", LogNotification)
+	AddToggleOptionST("LogTraceST", "$LPO_LogTrace", LogTrace)
+	AddToggleOptionST("ConfigWarnST", "$LPO_ConfigWarn", ConfigWarn)
+	AddToggleOptionST("allowJailQuestNodesST", "$LPO_allowJailQuestNodes", allowJailQuestNodes)
+	AddSliderOptionST("standardEventDelayST", "$LPO_standardEventDelay", standardEventDelay, "{0} seconds")
+
+	SetCursorPosition(1)
+	AddHeaderOption("$LPO_HardDependencies")
+	AddTextOption("$LPO_PapyrusExtender_State", PapyrusExtender_Status)
+	AddTextOption("$LPO_PapyrusUtil_State", PapyrusUtil_Status)
+	AddTextOption("$LPO_ScrabsPapyrusExtender_State", ScrabsPapyrusExtender_Status)
+	AddEmptyOption()
+	AddHeaderOption("$LPO_SoftDependencies")
+	AddTextOption("$LPO_DeviousDevices_State", DeviousDevices_Status, (!DeviousDevices_State) as int)
+	AddTextOption("$LPO_DeviousFollowers_State", DeviousFollowers_Status, (!DeviousFollowers_State) as int)
+	AddTextOption("$LPO_PrisonOverhaulPatched_State", PrisonOverhaulPatched_Status, (!PrisonOverhaulPatched_State) as int)
+	AddTextOption("$LPO_SexLabAroused_State", SexLabAroused_Status, (!SexLabAroused_State) as int)
+	AddTextOption("$LPO_SlaveTats_State", SlaveTats_Status, (!SlaveTats_State) as int)
+	if DeviousInterests_State || OStim_State || PrisonAlternative_State || SexLab_State || SimpleSlavery_State
+		AddEmptyOption()
+		AddHeaderOption("$LPO_Compatibility")
+		if DeviousInterests_State
+			AddTextOption("$LPO_DeviousInterests_State", DeviousInterests_Status)
+		endIf
+		if OStim_State
+			AddTextOption("$LPO_OStim_State", OStim_Status)
+		endIf
+		if PrisonAlternative_State
+			AddTextOption("$LPO_PrisonAlternative_State", PrisonAlternative_Status)
+		endIf
+		if SexLab_State
+			AddTextOption("$LPO_SexLab_State", SexLab_Status)
+		endIf
+		if SimpleSlavery_State
+			AddTextOption("$LPO_SimpleSlavery_State", SimpleSlavery_Status)
+		endIf
+	endIf
+EndFunction
 
 Int[] SlotFilteringOID
 state SlotFilteringST
