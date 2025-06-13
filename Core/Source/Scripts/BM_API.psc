@@ -33,7 +33,7 @@ Scriptname BM_API Hidden
 
 ; Get - Mod Version
 string Function GetModVersion() Global
-    return "1.24.0"
+    return "1.24.1"
 EndFunction
 
 ; Get - Config Version
@@ -43,7 +43,7 @@ EndFunction
 
 ; Get - Script Version
 int Function GetVersion() Global
-	return 0x01240020 ;0x01020304
+	return 0x01240120 ;0x01020304
 EndFunction
 
 ; Get - Mod Name
@@ -76,7 +76,7 @@ BM_Licenses Function GetLPO() Global
 EndFunction
 
 ; Get - License ID
-; Parameter 1 asks for a license or violation prefix as string.
+; Parameter 0 asks for a license or violation prefix as string.
 ; Note that Life Insurance uses "Insurance" as its prefix within scripts.
 ; If function returns -1, prefix couldn't retrieve an ID.
 int Function GetLicenseID(string LicensePrefix) Global
@@ -114,8 +114,8 @@ int Function GetLicenseID(string LicensePrefix) Global
 EndFunction
 
 ; Get - License SID
-; Parameter 1 asks for a license ID as int.
-; Parameter 2 asks for a license prefix as string.
+; Parameter 0 asks for a license ID as int.
+; Parameter 1 asks for a license prefix as string.
 ; Whereas prefixes are shorthands for mod authors, SIDs are included for internal use.
 string Function GetLicenseSID(int LicenseID = 0, string LicensePrefix = "") Global
     if LicenseID || LicensePrefix
@@ -152,7 +152,7 @@ string Function GetLicenseSID(int LicenseID = 0, string LicensePrefix = "") Glob
 EndFunction
 
 ; Get - License Time left
-; Parameter 1 asks for a license or violation prefix as string.
+; Parameter 0 asks for a license or violation prefix as string.
 ; This function returns a remaining time per in-game hours.
 ; If function returns a negative value, the subject license cycle is inactive.
 ; If function returns 0, either the subject license cycle is waiting for a refresh or function was given an invalid input.
@@ -192,9 +192,9 @@ float Function GetLicenseTimeLeft(int LicenseType, BM_Licenses_Utility bmlUtilit
 EndFunction
 
 ; Flag Violation
-; Parameter 1 asks for an integer corresponding to a violation type. 
-; Parameter 2 asks if you want to push to aggregate violations and invoke the bounty quest. If manually flagging multiple violations in succession, pass true only with the last FlagViolation call.
-; Parameter 3 asks if you want to skip safety checks. Don't change this boolean from its default unless absolutely necessary.
+; Parameter 0 asks for an integer corresponding to a violation type. 
+; Parameter 1 asks if you want to push to aggregate violations and invoke the bounty quest. If manually flagging multiple violations in succession, pass true only with the last FlagViolation call.
+; Parameter 2 asks if you want to skip safety checks. Don't change this boolean from its default unless absolutely necessary.
 bool Function FlagViolation(int ViolationType, bool Push = true, bool CheckSafety = true, BM_Licenses_Utility bmlUtility) Global
     BM_Licenses bml = bmlUtility.licenses
 
@@ -242,8 +242,8 @@ bool Function FlagViolation(int ViolationType, bool Push = true, bool CheckSafet
 EndFunction
 
 ; Clear Violations
-; Parameter 1 asks if you want to clear persistent violations.
-; Parameter 2 asks if you want to skip safety checks. Don't change this boolean from its default unless absolutely necessary.
+; Parameter 0 asks if you want to clear persistent violations.
+; Parameter 1 asks if you want to skip safety checks. Don't change this boolean from its default unless absolutely necessary.
 ; Note: This is an API layer above ResetViolations(). This function is intended to be called directly, outside LPO events, and will refresh LOS quest and active Fine amounts when run.
 ;       If you'd like to pass a Confrontation type, or require finer control over violation resetting, you should either call ResetViolations() directly or design your own function.
 bool Function ClearViolations(bool ClearPersistent = false, bool CheckSafety = true, BM_Licenses_Utility bmlUtility) Global
@@ -263,9 +263,9 @@ bool Function ClearViolations(bool ClearPersistent = false, bool CheckSafety = t
 EndFunction
 
 ; Purchase License
-; Parameter 1 asks for an integer corresponding to a license type.
-; Parameter 2 asks if you'd like to subtract a corresponding cost from player gold. Note that the function doesn't check whether the player has enough gold on-hand.
-; Parameter 3 asks if you want to skip safety checks. Don't change this boolean from its default unless absolutely necessary.
+; Parameter 0 asks for an integer corresponding to a license type.
+; Parameter 1 asks if you'd like to subtract a corresponding cost from player gold. Note that the function doesn't check whether the player has enough gold on-hand.
+; Parameter 2 asks if you want to skip safety checks. Don't change this boolean from its default unless absolutely necessary.
 bool Function PurchaseLicense(int LicenseType, bool SubtractGold = true, bool CheckSafety = true, BM_Licenses_Utility bmlUtility) Global
     if CheckSafety && bmlUtility.IsExceptionState()
         return false
@@ -307,8 +307,8 @@ bool Function PurchaseLicense(int LicenseType, bool SubtractGold = true, bool Ch
 EndFunction
 
 ; Expire License
-; Parameter 1 asks for an integer corresponding to a license type.
-; Parameter 2 asks if you want to push to refresh mod-wide variables. If manually expiring multiple licenses in succession, pass true only with the last ExpireLicense call.
+; Parameter 0 asks for an integer corresponding to a license type.
+; Parameter 1 asks if you want to push to refresh mod-wide variables. If manually expiring multiple licenses in succession, pass true only with the last ExpireLicense call.
 ; Note: This function prematurely ends active license cycles. If you want to steal a license, use RemoveItem() or RemoveLicense() below.
 bool Function ExpireLicense(int LicenseType, bool Push = true, BM_Licenses_Utility bmlUtility) Global
     if LicenseType == 0
@@ -351,10 +351,10 @@ bool Function ExpireLicense(int LicenseType, bool Push = true, BM_Licenses_Utili
 EndFunction
 
 ; Remove License
-; Parameter 1 asks for an integer corresponding to a license type.
-; Parameter 2 asks for an integer corresponding to a license book amount.
-; Parameter 3 asks for a destination container.
-; Parameter 4 asks if you want to skip safety checks. Don't change this boolean from its default unless absolutely necessary.
+; Parameter 0 asks for an integer corresponding to a license type.
+; Parameter 1 asks for an integer corresponding to a license book amount.
+; Parameter 2 asks for a destination container.
+; Parameter 3 asks if you want to skip safety checks. Don't change this boolean from its default unless absolutely necessary.
 ; Note: This function only removes license book items. If you want to end an active license cycle, use ExpireLicense().
 ; Note: LPO catches book item add and remove events filtered only for enabled license features. Disabled licenses disable corresponding book item filters. 
 ;       Item removals in such scenarios won't create hard issues but are likely counter-intuitive unless you're sure of what you're doing.
@@ -436,9 +436,9 @@ bool Function RemoveLicense(int LicenseType, int LicenseCount = 0, ObjectReferen
 EndFunction
 
 ; Toggle License Feature
-; Parameter 1 asks for an integer corresponding to a license type.
-; Parameter 2 asks for a desired feature state.
-; Parameter 3 asks if you want to push to refresh mod-wide variables. If manually toggling multiple licenses in succession, pass true only with the last ToggleLicenseFeature call.
+; Parameter 0 asks for an integer corresponding to a license type.
+; Parameter 1 asks for a desired feature state.
+; Parameter 2 asks if you want to push to refresh mod-wide variables. If manually toggling multiple licenses in succession, pass true only with the last ToggleLicenseFeature call.
 bool Function ToggleLicenseFeature(int LicenseType, bool FeatureFlag, bool Push = true, BM_Licenses_Utility bmlUtility) Global
     BM_Licenses_MCM bmlmcm = bmlUtility.bmlmcm
 
