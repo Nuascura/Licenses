@@ -133,7 +133,6 @@ bool Property Curse_Torso = true auto
 bool Property Curse_Arms = true auto
 bool Property Curse_Legs = true auto
 bool Property Curse_ReduceSlotUsage = false auto
-bool Property Curse_FormatOverride = false auto ; true = CBBE 3BA, false = BHUNP (UUNP)
 
 ; Page 7 - Auxiliary
 ; Dependency Check
@@ -572,7 +571,6 @@ Function ShowPage6()
 		AddToggleOptionST("Curse_ArmsST", "$LPO_Curse_Arms", Curse_Arms, (!ShowCurseTattoos) as int)
 		AddToggleOptionST("Curse_LegsST", "$LPO_Curse_Legs", Curse_Legs, (!ShowCurseTattoos) as int)
 		AddToggleOptionST("Curse_ReduceSlotUsageST", "$LPO_Curse_ReduceSlotUsage", Curse_ReduceSlotUsage, (!ShowCurseTattoos) as int)
-		AddTextOptionST("Curse_FormatOverrideST", "$LPO_Curse_FormatOverride", Curse_FormatOverride, (!ShowCurseTattoos) as int)
 	endIf
 EndFunction
 Function ShowPage7()
@@ -2048,8 +2046,7 @@ state ShowCurseTattoosST
 		SetOptionFlagsST((!ShowCurseTattoos) as int, true, "Curse_TorsoST")
 		SetOptionFlagsST((!ShowCurseTattoos) as int, true, "Curse_ArmsST")
 		SetOptionFlagsST((!ShowCurseTattoos) as int, true, "Curse_LegsST")
-		SetOptionFlagsST((!ShowCurseTattoos) as int, true, "Curse_ReduceSlotUsageST")
-		SetOptionFlagsST((!ShowCurseTattoos) as int, false, "Curse_FormatOverrideST")
+		SetOptionFlagsST((!ShowCurseTattoos) as int, false, "Curse_ReduceSlotUsageST")
 		SetToggleOptionValueST(ShowCurseTattoos)
 	endEvent
 endState
@@ -2150,17 +2147,6 @@ state Curse_ReduceSlotUsageST
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_Curse_ReduceSlotUsageHighlight")
-	endEvent
-endState
-
-state Curse_FormatOverrideST
-	event OnSelectST()
-		Curse_FormatOverride = !Curse_FormatOverride
-		licenses.PopulateCursedTattoosArray()
-		SetTextOptionValueST(Curse_FormatOverride)
-	endEvent
-	event OnHighlightST()
-		SetInfoText("$LPO_Curse_FormatOverrideHighlight")
 	endEvent
 endState
 
@@ -2328,7 +2314,6 @@ Bool Function exportConfig()
 	SetIntValue(config, "Curse_Arms", Curse_Arms as int)
 	SetIntValue(config, "Curse_Legs", Curse_Legs as int)
 	SetIntValue(config, "Curse_ReduceSlotUsage", Curse_ReduceSlotUsage as int)
-	SetIntValue(config, "Curse_FormatOverride", Curse_FormatOverride as int)
 
 	; Auxiliary - Advanced Settings
 	SetIntValue(config, "GameMessage", GameMessage as int)
@@ -2484,7 +2469,6 @@ Bool Function importConfig(Bool abSilent = false)
 	Curse_Arms = GetIntValue(config, "Curse_Arms", Curse_Arms as int) as Bool
 	Curse_Legs = GetIntValue(config, "Curse_Legs", Curse_Legs as int) as Bool
 	Curse_ReduceSlotUsage = GetIntValue(config, "Curse_ReduceSlotUsage", Curse_ReduceSlotUsage as int) as Bool
-	Curse_FormatOverride = GetIntValue(config, "Curse_FormatOverride", Curse_FormatOverride as int) as Bool
 
 	; Auxiliary - Advanced Settings
 	GameMessage = GetIntValue(config, "GameMessage", GameMessage as int) as Bool

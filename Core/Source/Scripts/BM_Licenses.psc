@@ -448,20 +448,11 @@ Function PopulateCursedTattoosArray()
     ; torso
     if bmlmcm.Curse_Torso
         if !bmlmcm.Curse_ReduceSlotUsage
-            if !bmlmcm.Curse_FormatOverride
-                PO3_SKSEFunctions.AddStringToArray("Torso Seal Gradient", CursedTattoos)
-                PO3_SKSEFunctions.AddStringToArray("Nipple Seal Gradient", CursedTattoos)
-            else
-                PO3_SKSEFunctions.AddStringToArray("Torso Seal Gradient BHUNP", CursedTattoos)
-                PO3_SKSEFunctions.AddStringToArray("Nipple Seal Gradient BHUNP", CursedTattoos)
-            endIf
+            PO3_SKSEFunctions.AddStringToArray("Torso Seal Gradient", CursedTattoos)
+            PO3_SKSEFunctions.AddStringToArray("Nipple Seal Gradient", CursedTattoos)
             PO3_SKSEFunctions.AddStringToArray("Spine Seal Gradient", CursedTattoos)
         else
-            if !bmlmcm.Curse_FormatOverride
-                PO3_SKSEFunctions.AddStringToArray("Body Seal Gradient", CursedTattoos)
-            else
-                PO3_SKSEFunctions.AddStringToArray("Body Seal Gradient BHUNP", CursedTattoos)
-            endIf
+            PO3_SKSEFunctions.AddStringToArray("Body Seal Gradient", CursedTattoos)
         endIf
     endIf
     ; wrists
@@ -473,11 +464,7 @@ Function PopulateCursedTattoosArray()
         if !bmlmcm.Curse_ReduceSlotUsage
             PO3_SKSEFunctions.AddStringToArray("Thigh Seal Gradient", CursedTattoos)
         endIf
-        if !bmlmcm.Curse_FormatOverride
-            PO3_SKSEFunctions.AddStringToArray("Ankle Seal Gradient", CursedTattoos)
-        else
-            PO3_SKSEFunctions.AddStringToArray("Ankle Seal Gradient BHUNP", CursedTattoos)
-        endIf
+        PO3_SKSEFunctions.AddStringToArray("Ankle Seal Gradient", CursedTattoos)
     endIf
     CursedTattoos = PapyrusUtil.ClearEmpty(CursedTattoos)
 EndFunction
