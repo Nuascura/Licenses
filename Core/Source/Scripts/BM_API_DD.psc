@@ -1,8 +1,8 @@
 Scriptname BM_API_DD
 
-Function equipRestraint(Quest kLibs, Quest kDeviceLists, actor player, int ddEquipChance, int ddFilter) global
-    zadLibs libs = kLibs as zadLibs
-    zadDeviceLists DeviceLists = kDeviceLists as zadDeviceLists
+Function equipRestraint(Quest kAPI, Quest kxAPI, actor player, int ddEquipChance, int ddFilter) global
+    zadLibs libs = kAPI as zadLibs
+    zadDeviceLists DeviceLists = kxAPI as zadDeviceLists
     int random = 0
     int randomDeviceList = 0
     armor randomDevice = None
@@ -65,9 +65,9 @@ Function equipRestraint(Quest kLibs, Quest kDeviceLists, actor player, int ddEqu
     endIf
 EndFunction
 
-Function RefreshCollar(Quest kLibs, actor player, enchantment effect = none) global
+Function RefreshCollar(Quest kAPI, actor player, enchantment effect = none) global
     ; this equips a new collar of the same kind
-    zadLibs libs = kLibs as zadLibs
+    zadLibs libs = kAPI as zadLibs
     armor WornDevice = none
     if player.WornHasKeyword(libs.zad_DeviousCollar)
         WornDevice = libs.GetWornDevice(player, libs.zad_DeviousCollar)
@@ -87,10 +87,10 @@ Function RefreshCollar(Quest kLibs, actor player, enchantment effect = none) glo
     endIf
 EndFunction
 
-Function RenewCollar(Quest kLibs, Quest kDeviceLists, actor player, enchantment effect = none, int ddFilter) global
+Function RenewCollar(Quest kAPI, Quest kxAPI, actor player, enchantment effect = none, int ddFilter) global
     ; this equips a totally new collar
-    zadLibs libs = kLibs as zadLibs
-    zadDeviceLists DeviceLists = kDeviceLists as zadDeviceLists
+    zadLibs libs = kAPI as zadLibs
+    zadDeviceLists DeviceLists = kxAPI as zadDeviceLists
     armor randomDevice = None
     if player.WornHasKeyword(libs.zad_DeviousCollar)
         UnlockDeviceAndWait(libs, player, libs.GetWornDevice(player, libs.zad_DeviousCollar), zad_DeviousDevice = libs.zad_DeviousCollar, destroyDevice = true)
@@ -114,16 +114,16 @@ Function RenewCollar(Quest kLibs, Quest kDeviceLists, actor player, enchantment 
     endIf
 EndFunction
 
-Function RemoveCollar(Quest kLibs, actor player) global
-    zadLibs libs = kLibs as zadLibs
+Function RemoveCollar(Quest kAPI, actor player) global
+    zadLibs libs = kAPI as zadLibs
     if player.WornHasKeyword(libs.zad_DeviousCollar)
         libs.UnlockDeviceByKeyword(player, libs.zad_DeviousCollar, true)
     endIf
 EndFunction
 
-Function equipCollar(Quest kLibs, Quest kDeviceLists, actor player, int ddFilter) global
-    zadLibs libs = kLibs as zadLibs
-    zadDeviceLists DeviceLists = kDeviceLists as zadDeviceLists
+Function equipCollar(Quest kAPI, Quest kxAPI, actor player, int ddFilter) global
+    zadLibs libs = kAPI as zadLibs
+    zadDeviceLists DeviceLists = kxAPI as zadDeviceLists
     armor randomDevice = None
     if ddFilter == 1
         randomDevice = libs.cuffsPaddedCollar
@@ -135,8 +135,8 @@ Function equipCollar(Quest kLibs, Quest kDeviceLists, actor player, int ddFilter
     endIf
 EndFunction
 
-Bool Function hasCollarEquipped(Quest kLibs, actor player) global
-    zadLibs libs = kLibs as zadLibs
+Bool Function hasCollarEquipped(Quest kAPI, actor player) global
+    zadLibs libs = kAPI as zadLibs
     if player.WornHasKeyword(libs.zad_deviousCollar)
         return true
     endIf

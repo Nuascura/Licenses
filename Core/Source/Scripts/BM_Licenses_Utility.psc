@@ -1384,7 +1384,7 @@ EndFunction
 
 Function CheckDeviousDevicesStatus()
     if bmlmcm.DeviousDevices_State
-        BM_IsPlayerCollared.SetValue(BM_API_DD.HasCollarEquipped(bmlInit.kzadLibs, PlayerActorRef) as int)
+        BM_IsPlayerCollared.SetValue(BM_API_DD.HasCollarEquipped(bmlInit.kzadAPI, PlayerActorRef) as int)
     endIf
 EndFunction
 ; ------------------------------
