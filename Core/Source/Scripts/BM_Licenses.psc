@@ -378,25 +378,30 @@ Function PopulateKeywordConfiscationArray()
     KeywordConfiscation = new Keyword[12]
     KeywordConfiscationEnch = new Keyword[8]
 
-    if (!hasClothingLicense || !isInsured) && bmlmcm.isClothingLicenseFeatureEnabled
+    if bmlmcm.isClothingLicenseFeatureEnabled && (!hasClothingLicense || !isInsured)
         KeywordConfiscation[0] = BM_LicensesClothingItem
         KeywordConfiscation[1] = VendorItemClothing
     endIf
-    if (!hasArmorLicense || !isInsured) && bmlmcm.isArmorLicenseFeatureEnabled
-        KeywordConfiscation[2] = BM_LicensesArmorItem
-        KeywordConfiscation[3] = VendorItemArmor
+    if bmlmcm.isArmorLicenseFeatureEnabled
+        if (!hasArmorLicense || !isInsured)
+            KeywordConfiscation[2] = BM_LicensesArmorItem
+            KeywordConfiscation[3] = VendorItemArmor
+        elseIf bmlmcm.ALClothingImmunity
+            KeywordConfiscation[0] = none
+            KeywordConfiscation[1] = none
+        endIf
     endIf
 
     if (bmlmcm.isBikiniLicenseFeatureEnabled == 1)
-        if (!hasClothingLicense || !bmlmcm.isClothingLicenseFeatureEnabled) && bmlmcm.isBikiniClothingFeatureEnabled
+        if bmlmcm.isBikiniClothingFeatureEnabled && (!hasClothingLicense || !bmlmcm.isClothingLicenseFeatureEnabled)
             KeywordConfiscation[0] = BM_LicensesClothingItem
             KeywordConfiscation[1] = VendorItemClothing
         endIf
-        if (!hasArmorLicense || !bmlmcm.isArmorLicenseFeatureEnabled) && bmlmcm.isBikiniArmorFeatureEnabled
+        if bmlmcm.isBikiniArmorFeatureEnabled && (!hasArmorLicense || !bmlmcm.isArmorLicenseFeatureEnabled)
             KeywordConfiscation[2] = BM_LicensesArmorItem
             KeywordConfiscation[3] = VendorItemArmor
         endIf
-    elseIf (!hasBikiniExemption || !isInsured) && (bmlmcm.isBikiniLicenseFeatureEnabled == 2)
+    elseIf (bmlmcm.isBikiniLicenseFeatureEnabled == 2) && (!hasBikiniExemption || !isInsured) 
         if bmlmcm.isBikiniClothingFeatureEnabled
             KeywordConfiscation[0] = BM_LicensesClothingItem
             KeywordConfiscation[1] = VendorItemClothing
@@ -407,7 +412,7 @@ Function PopulateKeywordConfiscationArray()
         endIf
     endIf
 
-    if (!hasWeaponLicense || !isInsured) && bmlmcm.isWeaponLicenseFeatureEnabled
+    if bmlmcm.isWeaponLicenseFeatureEnabled && (!hasWeaponLicense || !isInsured)
         KeywordConfiscation[4] = BM_LicensesWeaponItem
         KeywordConfiscation[5] = VendorItemWeapon
         if bmlmcm.isWeaponAmmoFeatureEnabled
@@ -415,7 +420,7 @@ Function PopulateKeywordConfiscationArray()
             KeywordConfiscation[7] = VendorItemArrow
         endIf
     endIf
-    if (!hasMagicLicense || !isInsured) && bmlmcm.isMagicLicenseFeatureEnabled
+    if bmlmcm.isMagicLicenseFeatureEnabled && (!hasMagicLicense || !isInsured)
         KeywordConfiscation[8] = BM_LicensesMagicItem
         KeywordConfiscation[9] = VendorItemSpellTome
         KeywordConfiscation[10] = VendorItemScroll

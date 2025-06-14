@@ -47,6 +47,7 @@ bool Property isConfiscateInventoryFeatureEnabled = false auto
 bool Property isArmorLicenseFeatureEnabled = true auto conditional
 GlobalVariable Property BM_ALCost Auto
 GlobalVariable Property BM_ALDuration Auto
+bool Property ALClothingImmunity Auto
 
 int Property isBikiniLicenseFeatureEnabled = 0 auto conditional
 string[] BikiniLicenseFeatureState
@@ -448,6 +449,8 @@ Function ShowPage2()
 	AddTextOptionST("isArmorLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isArmorLicenseFeatureEnabled))
 	AddSliderOptionST("BM_ALCostST", "$LPO_BM_ALCost", BM_ALCost.getValue(), "{0} gold")
 	AddSliderOptionST("BM_ALDurationST", "$LPO_BM_ALDuration", BM_ALDuration.getValue(), "{0} day(s)")
+	AddToggleOptionST("ALClothingImmunityST", "$LPO_ALClothingImmunityHighlight", ALClothingImmunity)
+	AddEmptyOption()
 	AddEmptyOption()
 	AddEmptyOption()
 	AddHeaderOption("$LPO_BikiniLicense")
@@ -1165,6 +1168,17 @@ state BM_ALDurationST
 	event OnDefaultST()
 		BM_ALDuration.SetValue(5.0)
 		SetSliderOptionValueST(BM_ALDuration.GetValue(), "{0} day(s)")
+	endEvent
+endState
+
+state ALClothingImmunityST
+	event OnSelectST()
+		ALClothingImmunity = !ALClothingImmunity
+		SetToggleOptionValueST(ALClothingImmunity)
+		SessionModified = true
+	endEvent
+	event OnHighlightST()
+		SetInfoText("$LPO_ALClothingImmunityHighlight")
 	endEvent
 endState
 
@@ -2242,6 +2256,7 @@ Bool Function exportConfig()
 	SetIntValue(config, "isArmorLicenseFeatureEnabled", isArmorLicenseFeatureEnabled as int)
 	SetFloatValue(config, "BM_ALCost", BM_ALCost.getValue())
 	SetFloatValue(config, "BM_ALDuration", BM_ALDuration.getValue())
+	SetIntValue(config, "ALClothingImmunity", ALClothingImmunity as int)
 	SetIntValue(config, "isBikiniLicenseFeatureEnabled", isBikiniLicenseFeatureEnabled as int)
 	SetFloatValue(config, "BM_BLCost", BM_BLCost.getValue())
 	SetFloatValue(config, "BM_BLDuration", BM_BLDuration.getValue())
@@ -2397,6 +2412,7 @@ Bool Function importConfig(Bool abSilent = false)
 	isArmorLicenseFeatureEnabled = GetIntValue(config, "isArmorLicenseFeatureEnabled", isArmorLicenseFeatureEnabled as int) as Bool
 	BM_ALCost.SetValue(GetFloatValue(config, "BM_ALCost", BM_ALCost.getValue()))
 	BM_ALDuration.SetValue(GetFloatValue(config, "BM_ALDuration", BM_ALDuration.getValue()))
+	ALClothingImmunity = GetIntValue(config, "ALClothingImmunity", ALClothingImmunity as int) as Bool
 	isBikiniLicenseFeatureEnabled = GetIntValue(config, "isBikiniLicenseFeatureEnabled", isBikiniLicenseFeatureEnabled)
 	BM_BLCost.SetValue(GetFloatValue(config, "BM_BLCost", BM_BLCost.getValue()))
 	BM_BLDuration.SetValue(GetFloatValue(config, "BM_BLDuration", BM_BLDuration.getValue()))
