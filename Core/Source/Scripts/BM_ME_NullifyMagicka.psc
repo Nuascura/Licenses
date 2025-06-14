@@ -1,14 +1,15 @@
 Scriptname BM_ME_NullifyMagicka extends activemagiceffect  
 
 BM_Licenses Property licenses auto
+BM_Licenses_MCM Property bmlmcm auto
 Actor Property akCursed auto
 Message Property MessageSpell  Auto  
 Message Property MessageVoice  Auto  
 
 Event OnEffectStart(Actor akTarget, Actor akCaster)
 	if akTarget == licenses.PlayerActorRef
-		if licenses.bmlmcm.SlaveTats_State && licenses.bmlmcm.ShowCurseTattoos
-			licenses.CursedTattoosActive = BM_API_ST.LockCursedTattoos(akTarget, licenses.CursedTattoos)
+		if bmlmcm.SlaveTats_State && bmlmcm.ShowCurseTattoos
+			licenses.CursedTattoosActive = BM_API_ST.LockCursedTattoos(akTarget, licenses.CursedTattoos, bmlmcm)
 		endIf
 	endIf
 	akCursed = akTarget
@@ -30,7 +31,7 @@ EndEvent
 
 Event OnEffectFinish(Actor akTarget, Actor akCaster)
 	if akTarget == licenses.PlayerActorRef
-		if licenses.bmlmcm.SlaveTats_State
+		if bmlmcm.SlaveTats_State
 			licenses.CursedTattoosActive = BM_API_ST.UnlockCursedTattoos(akTarget, licenses.CursedTattoosActive)
 		endIf
 	endIf

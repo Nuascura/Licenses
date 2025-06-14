@@ -53,7 +53,6 @@ Function Startup(Bool abAutoLoad)
 
     ; Start Core Quests
     licenses.start()
-    licenseBarterQuest.start()
     if licenseModeratorQuest.start()
         bmlModeratorAlias.OnLoad()
     endIf
@@ -1209,7 +1208,7 @@ Function RefreshTattoos()
     if bmlmcm.SlaveTats_State
         licenses.CursedTattoosActive = BM_API_ST.UnlockCursedTattoos(PlayerActorRef, licenses.CursedTattoosActive)
         if licenses.CheckNullifyMagickaCurse(PlayerActorRef) == 1 && bmlmcm.ShowCurseTattoos
-            licenses.CursedTattoosActive = BM_API_ST.LockCursedTattoos(PlayerActorRef, licenses.CursedTattoos)
+            licenses.CursedTattoosActive = BM_API_ST.LockCursedTattoos(PlayerActorRef, licenses.CursedTattoos, bmlmcm)
         endIf
     endIf
 EndFunction
@@ -1360,10 +1359,10 @@ Function ResetMCM()
 EndFunction
 
 Function ReloadMCMVariables(bool abSilent = false)
-    if !bmlmcm.checkHardDependencies() && abSilent
+    if !bmlInit.CheckHardDependencies(bmlmcm) && abSilent
         LogNotification("Detected missing dependencies. Check Auxiliary tab for details.", true)
     endIf
-	bmlmcm.checkSoftDependencies()
+	bmlInit.CheckSoftDependencies(bmlmcm)
 	bmlmcm.updateGlobals()
 EndFunction
 ; ------------------------------
@@ -1385,7 +1384,7 @@ EndFunction
 
 Function CheckDeviousDevicesStatus()
     if bmlmcm.DeviousDevices_State
-        BM_IsPlayerCollared.SetValue(BM_API_DD.HasCollarEquipped(PlayerActorRef) as int)
+        BM_IsPlayerCollared.SetValue(BM_API_DD.HasCollarEquipped(bmlInit.kzadLibs, PlayerActorRef) as int)
     endIf
 EndFunction
 ; ------------------------------
@@ -1538,12 +1537,13 @@ EndFunction
 Actor PlayerActorRef
 
 BM_Licenses Property licenses auto
-BM_Licenses_MCM Property bmlmcm auto
-BM_Licenses_Detection Property bmlDetection auto
-BM_Licenses_ViolationCheck Property bmlViolationCheck auto
 BM_Licenses_Bounty Property bmlBounty auto
-BM_Player Property bmPlayer auto
+BM_Licenses_Detection Property bmlDetection auto
+BM_Licenses_Init Property bmlInit auto
+BM_Licenses_MCM Property bmlmcm auto
 BM_Licenses_Moderator_Alias Property bmlModeratorAlias auto
+BM_Licenses_ViolationCheck Property bmlViolationCheck auto
+BM_Player Property bmPlayer auto
 
 Book Property BM_ArmorLicense Auto
 Book Property BM_BikiniLicense Auto
@@ -1563,7 +1563,6 @@ Quest Property licenseViolationCheckQuest auto
 Quest Property licenseThaneshipCheckQuest auto
 Quest Property licenseDetectionQuest auto
 Quest Property licenseBountyQuest auto
-Quest Property licenseBarterQuest auto
 Quest Property licenseModeratorQuest auto
 
 ; -- Vanilla

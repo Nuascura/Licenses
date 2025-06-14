@@ -135,13 +135,13 @@ Function ApplyNullifyMagicka(bool force = false)
         bmlUtility.LogTrace("ApplyNullifyMagicka passed conditions")
         if bmlmcm.NullifyMagickaSource == 1
             PlayerActorRef.AddSpell(NullifyMagickaSpell, false)
-        elseIf bmlmcm.NullifyMagickaSource == 2 && bmlmcm.DeviousDevices_State
+        elseIf bmlmcm.DeviousDevices_State && bmlmcm.NullifyMagickaSource == 2
             if bmlUtility.BM_IsPlayerCollared.GetValue() as bool
                 bmlUtility.LogTrace("RefreshCollar")
-                BM_API_DD.RefreshCollar(PlayerActorRef, NullifyMagickaEnchantment)
+                BM_API_DD.RefreshCollar(bmlInit.kzadLibs, PlayerActorRef, NullifyMagickaEnchantment)
             else
                 bmlUtility.LogTrace("RenewCollar")
-                BM_API_DD.RenewCollar(PlayerActorRef, NullifyMagickaEnchantment, bmlmcm.ddFilter)
+                BM_API_DD.RenewCollar(bmlInit.kzadLibs, bmlInit.kzadDeviceLists, PlayerActorRef, NullifyMagickaEnchantment, bmlmcm.ddFilter)
             endIf
         endIf
     else
@@ -155,9 +155,9 @@ Function RemoveNullifyMagicka(bool force = false)
             PlayerActorRef.RemoveSpell(NullifyMagickaSpell)
         elseIf bmlmcm.DeviousDevices_State
             if hasCollarExemption || force
-                BM_API_DD.RemoveCollar(PlayerActorRef)
+                BM_API_DD.RemoveCollar(bmlInit.kzadLibs, PlayerActorRef)
             else
-                BM_API_DD.RefreshCollar(PlayerActorRef)
+                BM_API_DD.RefreshCollar(bmlInit.kzadLibs, PlayerActorRef)
             endIf
         else
             bmlUtility.LogTrace("Licenses could not find or estimate a source for the Nullify Magicka Magic Effect.")
@@ -169,11 +169,11 @@ Function ApplyDeviousDevices()
     if bmlmcm.DeviousDevices_State
         if !hasCollarExemption
             bmlUtility.LogTrace("equipCollar")
-            BM_API_DD.equipCollar(PlayerActorRef, bmlmcm.ddFilter)
+            BM_API_DD.equipCollar(bmlInit.kzadLibs, bmlInit.kzadDeviceLists, PlayerActorRef, bmlmcm.ddFilter)
         endIf
         if bmlmcm.equipDDOnViolation
             bmlUtility.LogTrace("equipRestraint")
-            BM_API_DD.equipRestraint(PlayerActorRef, bmlmcm.ddEquipChance, bmlmcm.ddFilter)
+            BM_API_DD.equipRestraint(bmlInit.kzadLibs, bmlInit.kzadDeviceLists, PlayerActorRef, bmlmcm.ddEquipChance, bmlmcm.ddFilter)
         endIf
     endIf
 EndFunction
@@ -183,7 +183,7 @@ Function RemoveDeviousDevicesCollar()
     if !hasMagicLicense && SourceList.Find(NullifyMagickaEnchantment) > -1
         return
     elseIf bmlmcm.DeviousDevices_State
-        BM_API_DD.RemoveCollar(PlayerActorRef)
+        BM_API_DD.RemoveCollar(bmlInit.kzadLibs, PlayerActorRef)
     endIf
 EndFunction
 
@@ -524,6 +524,7 @@ EndFunction
 Actor Property PlayerActorRef auto hidden
 
 ReferenceAlias Property playerRef auto
+BM_Licenses_Init Property bmlInit auto
 BM_Licenses_MCM Property bmlmcm auto
 BM_Licenses_Utility Property bmlUtility Auto
 MiscObject Property Gold001  Auto

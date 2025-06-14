@@ -83,9 +83,9 @@ int Function GetLicenseID(string LicensePrefix) Global
     if LicensePrefix
         if LicensePrefix == "Armor"
             return 1
-        elseIf LicensePrefix == "Bikini_L"
+        elseIf LicensePrefix == "Bikini1"
             return 2
-        elseIf LicensePrefix == "Bikini_E"
+        elseIf LicensePrefix == "Bikini2"
             return 3
         elseIf LicensePrefix == "Clothing"
             return 4
@@ -116,14 +116,14 @@ EndFunction
 ; Get - License SID
 ; Parameter 0 asks for a license ID as int.
 ; Parameter 1 asks for a license prefix as string.
-; Whereas prefixes are shorthands for mod authors, SIDs are included for internal use.
+; Whereas prefixes are shorthands for mod authors, SIDs have an internal use.
 string Function GetLicenseSID(int LicenseID = 0, string LicensePrefix = "") Global
     if LicenseID || LicensePrefix
         if LicenseID == 1 || LicensePrefix == "Armor"
             return "ArmorLicense"
-        elseIf LicenseID == 2 || LicensePrefix == "Bikini_L"
+        elseIf LicenseID == 2 || LicensePrefix == "Bikini1"
             return "BikiniLicense"
-        elseIf LicenseID == 3 || LicensePrefix == "Bikini_E"
+        elseIf LicenseID == 3 || LicensePrefix == "Bikini2"
             return "BikiniExemption"
         elseIf LicenseID == 4 || LicensePrefix == "Clothing"
             return "ClothingLicense"

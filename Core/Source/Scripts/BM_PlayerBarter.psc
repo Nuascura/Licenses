@@ -1,4 +1,4 @@
-Scriptname BM_Licenses_Barter_Alias extends ReferenceAlias  
+Scriptname BM_PlayerBarter extends ReferenceAlias  
 
 BM_Licenses_Utility Property bmlUtility Auto
 BM_Licenses Property licenses auto
@@ -10,7 +10,7 @@ FormList Property BM_PotentialBarterExclusions Auto
 Faction Property JobFenceFaction Auto
 Faction Property KhajiitCaravanFaction Auto
 
-Actor property Vendor auto 
+Actor property Vendor auto Hidden
 
 Event OnInit()
     RegisterForMenu("BarterMenu")

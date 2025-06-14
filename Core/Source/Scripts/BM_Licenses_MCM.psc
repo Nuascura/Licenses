@@ -1,6 +1,7 @@
 Scriptname BM_Licenses_MCM extends SKI_ConfigBase conditional
 
 BM_Licenses Property licenses auto
+BM_Licenses_Init Property bmlInit auto
 BM_Licenses_Utility Property bmlUtility Auto
 GlobalVariable Property GameDaysPassed auto
 bool Property SessionModified auto
@@ -137,20 +138,20 @@ bool Property Curse_FormatOverride = false auto ; true = CBBE 3BA, false = BHUNP
 ; Page 7 - Auxiliary
 ; Dependency Check
 ; Hard dependency - PapyrusExtender
-string Property PapyrusExtender_Status = "$LPO_Null" auto
+string Property PapyrusExtender_Status = "$LPO_Null" auto Hidden
 ; Hard dependency - PapyrusUtil
-string Property PapyrusUtil_Status = "$LPO_Null" auto
+string Property PapyrusUtil_Status = "$LPO_Null" auto Hidden
 ; Hard dependency - ScrabsPapyrusExtender
-string Property ScrabsPapyrusExtender_Status = "$LPO_Null" auto
+string Property ScrabsPapyrusExtender_Status = "$LPO_Null" auto Hidden
 ; Soft dependency - Devious Devices - Assets.esm
 ; Soft dependency - Devious Devices - Expansion.esm
 ; Soft dependency - Devious Devices - Integration.esm
 ; Soft dependency - Devious Devices - Contraptions.esm
-bool Property DeviousDevices_State = false auto
-string Property DeviousDevices_Status = "" auto
+bool Property DeviousDevices_State = false auto Hidden
+string Property DeviousDevices_Status = "" auto Hidden
 ; Soft dependency - DeviousFollowers.esp
-bool Property DeviousFollowers_State = false auto
-string Property DeviousFollowers_Status = "" auto
+bool Property DeviousFollowers_State = false auto Hidden
+string Property DeviousFollowers_Status = "" auto Hidden
 ; Soft dependency - xazPrisonOverhaulPatched.esp
 bool Property PrisonOverhaulPatched_State = false auto conditional
 string Property PrisonOverhaulPatched_Status = "" auto
@@ -397,7 +398,7 @@ Function ShowPage0()
 	AddTextOption("$LPO_ModVersion", GetModVersion(), OPTION_FLAG_DISABLED)
 	AddTextOption("$LPO_Version", GetVersion(), OPTION_FLAG_DISABLED)
 	AddTextOption("$LPO_CacheIndexDiff1Int2", (PapyrusUtil.StringSplit(GetModVersion(), ".")[1] as int - ModVersionCache[1] as int) + "," + PapyrusUtil.StringSplit(GetModVersion(), ".")[2] as int, OPTION_FLAG_DISABLED)
-	if checkHardDependencies()
+	if bmlInit.CheckHardDependencies(self)
 		AddTextOption("$LPO_DependencyCheck", "$LPO_Safe", OPTION_FLAG_DISABLED)
 	else
 		AddTextOption("$LPO_DependencyCheck", "$LPO_Failed", OPTION_FLAG_DISABLED)
@@ -2184,96 +2185,6 @@ String Function GetBoolString(Bool varb, String id = "")
 	else
 		return "$LPO_Disabled"
 	endIf
-EndFunction
-
-Bool Function checkHardDependencies()
-	if SKSE.GetPluginVersion("powerofthree's Papyrus Extender") != -1 && (PO3_SKSEFunctions.GetPapyrusExtenderVersion()[0] >= 5)
-		PapyrusExtender_Status = "$LPO_Installed"
-	else
-		PapyrusExtender_Status = "$LPO_Null"
-	endIf
-	if (SKSE.GetPluginVersion("PapyrusUtil") != -1 || SKSE.GetPluginVersion("papyrusutil plugin") != -1) && (PapyrusUtil.GetVersion() >= 30)
-		PapyrusUtil_Status = "$LPO_Installed"
-	else
-		PapyrusUtil_Status = "$LPO_Null"
-	endIf
-	if SKSE.GetPluginVersion("ScrabsPapyrusExtender") >= 0x01020000
-		ScrabsPapyrusExtender_Status = "$LPO_Installed"
-	else
-		ScrabsPapyrusExtender_Status = "$LPO_Null"
-	endIf
-
-	if PapyrusExtender_Status == "$LPO_Installed" && PapyrusUtil_Status == "$LPO_Installed" && ScrabsPapyrusExtender_Status == "$LPO_Installed"
-		return true
-	else
-		return false
-	endIf
-EndFunction
-
-Function checkSoftDependencies()
-    DeviousDevices_State = false
-	DeviousDevices_Status = ""
-    if(Game.GetModByName("Devious Devices - Assets.esm") != 255) \ 
-	&& (Game.GetModByName("Devious Devices - Integration.esm") != 255) \ 
-	&& (Game.GetModByName("Devious Devices - Expansion.esm") != 255) \
-	&& (Game.GetModByName("Devious Devices - Contraptions.esm") != 255)
-        DeviousDevices_State = true
-		DeviousDevices_Status = "$LPO_Installed"
-    endIf
-	DeviousFollowers_State = false
-	DeviousFollowers_Status = ""
-    if(Game.GetModByName("DeviousFollowers.esp") != 255)
-        DeviousFollowers_State = true
-		DeviousFollowers_Status = "$LPO_Installed"
-    endIf
-	PrisonOverhaulPatched_State = false
-	PrisonOverhaulPatched_Status = ""
-    if(Game.GetModByName("xazPrisonOverhaulPatched.esp") != 255)
-        PrisonOverhaulPatched_State = true
-		PrisonOverhaulPatched_Status = "$LPO_Installed"
-    endIf
-	SexLabAroused_State = false
-	SexLabAroused_Status = ""
-	if(Game.GetModByName("SexLabAroused.esm") != 255)
-        SexLabAroused_State = true
-		SexLabAroused_Status = "$LPO_Installed"
-    endIf
-	SlaveTats_State = false
-	SlaveTats_Status = ""
-	if(Game.GetModByName("SlaveTats.esp") != 255)
-        SlaveTats_State = true
-		SlaveTats_Status = "$LPO_Installed"
-    endIf
-	DeviousInterests_State = false
-	DeviousInterests_Status = ""
-    if(Game.GetModByName("DeviousInterests.esp") != 255)
-        DeviousInterests_State = true
-		DeviousInterests_Status = "$LPO_Installed"
-    endIf
-	OStim_State = false
-	OStim_Status = ""
-    if(Game.GetModByName("OStim.esp") != 255)
-        OStim_State = true
-		OStim_Status = "$LPO_Installed"
-    endIf
-	PrisonAlternative_State = false
-	PrisonAlternative_Status = ""
-	if(Game.GetModByName("PamaPrisonAlternative.esm") != 255)
-        PrisonAlternative_State = true
-		PrisonAlternative_Status = "$LPO_Installed"
-    endIf
-	SexLab_State = false
-	SexLab_Status = ""
-	if(Game.GetModByName("SexLab.esm") != 255)
-        SexLab_State = true
-		SexLab_Status = "$LPO_Installed"
-    endIf
-	SimpleSlavery_State = false
-	SimpleSlavery_Status = ""
-	if(Game.GetModByName("SimpleSlavery.esp") != 255)
-        SimpleSlavery_State = true
-		SimpleSlavery_Status = "$LPO_Installed"
-    endIf
 EndFunction
 
 Function updateGlobals()

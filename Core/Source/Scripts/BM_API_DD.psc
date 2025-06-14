@@ -1,9 +1,8 @@
 Scriptname BM_API_DD
 
-Function equipRestraint(actor player, int ddEquipChance, int ddFilter) global
-    zadLibs libs = (Game.GetFormFromFile(0x00F624, "Devious Devices - Integration.esm") as Quest) as zadLibs
-    zadDeviceLists DeviceLists = (Game.GetFormFromFile(0x00CA01, "Devious Devices - Expansion.esm") as Quest) as zadDeviceLists
-    BM_Licenses_Utility bmlUtility = Quest.GetQuest("BM_Licenses_Utility") as BM_Licenses_Utility
+Function equipRestraint(Quest kLibs, Quest kDeviceLists, actor player, int ddEquipChance, int ddFilter) global
+    zadLibs libs = kLibs as zadLibs
+    zadDeviceLists DeviceLists = kDeviceLists as zadDeviceLists
     int random = 0
     int randomDeviceList = 0
     armor randomDevice = None
@@ -61,18 +60,14 @@ Function equipRestraint(actor player, int ddEquipChance, int ddFilter) global
         endIf
 
         if (deviceValidator(libs, player, randomDevice))
-            bmlUtility.LogTrace("Device Validated: " + randomDevice.GetName() + ", " + randomDevice.GetFormID())
             LockDeviceAndWait(libs, player, randomDevice, libs.GetDeviceKeyword(randomDevice))
-            bmlUtility.LogTrace("devicekeyword: " + libs.GetDeviceKeyword(randomDevice))
-        else
-            bmlUtility.LogTrace("Device Failed to Validate: " + randomDevice.GetName() + ", " + randomDevice.GetFormID())
         endIf
     endIf
 EndFunction
 
-Function RefreshCollar(actor player, enchantment effect = none) global
+Function RefreshCollar(Quest kLibs, actor player, enchantment effect = none) global
     ; this equips a new collar of the same kind
-    zadLibs libs = (Game.GetFormFromFile(0x00F624, "Devious Devices - Integration.esm") as Quest) as zadLibs
+    zadLibs libs = kLibs as zadLibs
     armor WornDevice = none
     if player.WornHasKeyword(libs.zad_DeviousCollar)
         WornDevice = libs.GetWornDevice(player, libs.zad_DeviousCollar)
@@ -92,10 +87,10 @@ Function RefreshCollar(actor player, enchantment effect = none) global
     endIf
 EndFunction
 
-Function RenewCollar(actor player, enchantment effect = none, int ddFilter) global
+Function RenewCollar(Quest kLibs, Quest kDeviceLists, actor player, enchantment effect = none, int ddFilter) global
     ; this equips a totally new collar
-    zadLibs libs = (Game.GetFormFromFile(0x00F624, "Devious Devices - Integration.esm") as Quest) as zadLibs
-    zadDeviceLists DeviceLists = (Game.GetFormFromFile(0x00CA01, "Devious Devices - Expansion.esm") as Quest) as zadDeviceLists
+    zadLibs libs = kLibs as zadLibs
+    zadDeviceLists DeviceLists = kDeviceLists as zadDeviceLists
     armor randomDevice = None
     if player.WornHasKeyword(libs.zad_DeviousCollar)
         UnlockDeviceAndWait(libs, player, libs.GetWornDevice(player, libs.zad_DeviousCollar), zad_DeviousDevice = libs.zad_DeviousCollar, destroyDevice = true)
@@ -119,16 +114,16 @@ Function RenewCollar(actor player, enchantment effect = none, int ddFilter) glob
     endIf
 EndFunction
 
-Function RemoveCollar(actor player) global
-    zadLibs libs = (Game.GetFormFromFile(0x00F624, "Devious Devices - Integration.esm") as Quest) as zadLibs
+Function RemoveCollar(Quest kLibs, actor player) global
+    zadLibs libs = kLibs as zadLibs
     if player.WornHasKeyword(libs.zad_DeviousCollar)
         libs.UnlockDeviceByKeyword(player, libs.zad_DeviousCollar, true)
     endIf
 EndFunction
 
-Function equipCollar(actor player, int ddFilter) global
-    zadLibs libs = (Game.GetFormFromFile(0x00F624, "Devious Devices - Integration.esm") as Quest) as zadLibs
-    zadDeviceLists DeviceLists = (Game.GetFormFromFile(0x00CA01, "Devious Devices - Expansion.esm") as Quest) as zadDeviceLists
+Function equipCollar(Quest kLibs, Quest kDeviceLists, actor player, int ddFilter) global
+    zadLibs libs = kLibs as zadLibs
+    zadDeviceLists DeviceLists = kDeviceLists as zadDeviceLists
     armor randomDevice = None
     if ddFilter == 1
         randomDevice = libs.cuffsPaddedCollar
@@ -140,13 +135,15 @@ Function equipCollar(actor player, int ddFilter) global
     endIf
 EndFunction
 
-Bool Function hasCollarEquipped(actor player) global
-    zadLibs libs = (Game.GetFormFromFile(0x00F624, "Devious Devices - Integration.esm") as Quest) as zadLibs
+Bool Function hasCollarEquipped(Quest kLibs, actor player) global
+    zadLibs libs = kLibs as zadLibs
     if player.WornHasKeyword(libs.zad_deviousCollar)
         return true
     endIf
     return false
 EndFunction
+
+; -------------------- internal tools --------------------
 
 Bool Function deviceValidator(zadLibs libs, actor player, armor device) global
     

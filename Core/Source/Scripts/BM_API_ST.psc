@@ -1,8 +1,6 @@
 Scriptname BM_API_ST
 
-String[] Function LockCursedTattoos(Actor target, String[] CursedTattoos) global
-    BM_Licenses_MCM bmlmcm = Quest.GetQuest("BM_Licenses_MCM") as BM_Licenses_MCM
-
+String[] Function LockCursedTattoos(Actor target, String[] CursedTattoos, BM_Licenses_MCM bmlmcm) global
     int template = 0
     int matches = 0
     int tattoo = 0
