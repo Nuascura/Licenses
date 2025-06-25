@@ -1,3 +1,17 @@
+1.25.0
+Primary
+- Add: Ondine's first person messages patch.
+- Add: Toggle to provide Clothing Immunity via Armor License.
+- Change: Cache mod objects under Init quest.
+- Change: Attach Barter alias under primary Player reference alias.
+- Change: License monitor display behavior.
+- Improve: API script usability.
+- Remove: Curse format override toggle. Texture type should now be selected via the FOMOD installer.
+- Update: Localization files.
+- Update: SEQ.
+
+
+
 1.24.0
 Primary
 - Add: Bikini Exemption feature.
