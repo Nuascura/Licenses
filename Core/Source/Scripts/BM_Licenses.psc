@@ -773,7 +773,6 @@ Message Property MessageItemUnequipped  Auto
 
 String[] Property CursedTattoos Auto
 String[] Property CursedTattoosActive Auto
-Book[] Property LicenseBooks Auto
 Keyword[] Property KeywordQuestItem Auto
 Keyword[] Property KeywordModItem Auto
 Keyword[] Property KeywordBarterItem Auto
