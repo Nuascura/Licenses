@@ -1027,7 +1027,7 @@ state LicenseLimitST
 	event OnSliderOpenST()
 		SetSliderDialogStartValue(LicenseLimit)
 		SetSliderDialogDefaultValue(0.0)
-		SetSliderDialogRange(0.0, licenses.LicenseBooks.Length - 1.0)
+		SetSliderDialogRange(0.0, bmlUtility.BM_LicenseBooks.GetSize() - 1.0)
 		SetSliderDialogInterval(1.0)
 	endEvent
 	event OnSliderAcceptST(float value)
