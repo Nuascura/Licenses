@@ -1,3 +1,10 @@
+1.25.1
+Primary
+- Fix: Inoperable Activation Limit setting.
+- Remove: Deprecated LicenseBooks property.
+
+
+
 1.25.0
 Primary
 - Add: Ondine's first person messages patch.
