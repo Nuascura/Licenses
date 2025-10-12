@@ -1,3 +1,7 @@
+1.25.1.2
+Primary
+- Add: Lorebox localization tokens.
+
 1.25.1.1
 Primary
 - Change: Remove unused SexLab master for Ambience extension.
