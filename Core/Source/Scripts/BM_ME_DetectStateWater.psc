@@ -26,11 +26,10 @@ Function CheckWaterDamage()
 EndFunction
 
 Function DestroyRandomLicense()
-    int randomLicense = 0
-    randomLicense = Utility.RandomInt(0, licenses.LicenseBooks.Length - 1)
-    if playerActor.getItemCount(licenses.LicenseBooks[randomLicense]) > 0
-        playerActor.removeItem(licenses.LicenseBooks[randomLicense], 1, true)
+    Form kRandomLicense = bmlUtility.BM_LicenseBooks.GetAt(Utility.RandomInt(0, bmlUtility.BM_LicenseBooks.GetSize() - 1))
+    if playerActor.getItemCount(kRandomLicense) > 0
+        playerActor.removeItem(kRandomLicense, 1, true)
         bmlUtility.GameMessage(BM_Licenses_MessageWaterWarn)
-        bmlUtility.LogNotification("Water damage destroyed your " + licenses.LicenseBooks[randomLicense].GetName() + ".")
+        bmlUtility.LogNotification("Water damage destroyed your " + kRandomLicense.GetName() + ".")
     endIf
 Endfunction  
