@@ -1,7 +1,16 @@
-1.25.2
+1.26.0
 Primary
 - Fix: Water state license book removal.
+- Fix: Dialogue conditions for active curse enforcement: 878, 96C.
+- Fix: API call GetLicenseID redirection failure, leading to a function call loop.
 - Add: Lorebox localization tokens.
+- Add: Lifetime License purchase dialogue.
+- Add: Modularized MGEF license tracking.
+- Improve: Reduce redundant function calls under MCM script.
+- Change: Reduce OnConfigInit burnden.
+- Remove: ApplyPunishment() call under PA release event.
+- Update: Localization files.
+- Update: Dialogue Patch.
 
 
 
