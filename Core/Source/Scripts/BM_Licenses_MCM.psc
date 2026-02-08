@@ -364,7 +364,11 @@ Int Function AddFeatureState(String DisplayName, Bool FeatureFlag, Bool StateFla
 	if DisplayState
 		AddTextOption(DisplayName, DisplayState)
 		if ExpirationTime != -1.0
-			AddTextOption("$LPO_ExpirationTime{" + Math.ceiling(24.0 * (ExpirationTime - GameDaysPassed.GetValue())) + "}", "")
+			if ExpirationTime == -2.0
+				AddEmptyOption()
+			else
+				AddTextOption("$LPO_ExpirationTime{" + Math.ceiling(24.0 * (ExpirationTime - GameDaysPassed.GetValue())) + "}", "")
+			endIf
 		elseIf CooldownTime != -1.0
 			AddTextOption("$LPO_CooldownTime{" + Math.ceiling(24.0 * (CooldownTime - GameDaysPassed.GetValue())) + "}", "")
 		else
