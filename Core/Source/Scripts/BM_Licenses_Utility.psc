@@ -10,7 +10,7 @@ string Function GetModVersion()
 EndFunction
 
 int Function GetLicenseID(string LicensePrefix)
-    return GetLicenseID(LicensePrefix)
+    return BM_API.GetLicenseID(LicensePrefix)
 EndFunction
 
 Float Function GetLicenseTimeLeft(int LicenseType)
@@ -25,8 +25,8 @@ bool Function ClearViolations(bool ClearPersistent = false, bool CheckSafety = t
     return BM_API.ClearViolations(ClearPersistent, CheckSafety, self)
 EndFunction
 
-bool Function PurchaseLicense(int LicenseType, bool SubtractGold = true, bool CheckSafety = true)
-    return BM_API.PurchaseLicense(LicenseType, SubtractGold, CheckSafety, self)
+bool Function PurchaseLicense(int LicenseType, bool SubtractGold = true, bool Lifetime = false, bool CheckSafety = true)
+    return BM_API.PurchaseLicense(LicenseType, SubtractGold, Lifetime, CheckSafety, self)
 EndFunction
 
 bool Function ExpireLicense(int LicenseType, bool Push = true)
@@ -693,177 +693,177 @@ EndFunction
 ; ------------------------------
 
 ; ---------- License Purchase Functions ----------
-Function BM_PurchaseArmorLicense(bool pay = true)
-    bmlModeratorAlias.AddInventoryEventFilter(BM_ArmorLicense)
+Function BM_PurchaseArmorLicense(bool pay = true, bool lifetime = false)
+    SendModEvent("BM-LPO_ArmorLicense_" + PlayerActorRef.GetFormID() + "_Activate")
     if pay
         PlayerActorRef.removeItem(Gold001, BM_ALCost.GetValueInt())
     endIf
-    licenses.armorLicenseExpirationTime = (GameDaysPassed.getValue() + BM_ALDuration.GetValue()) as int
-    if PlayerActorRef.getItemCount(BM_ArmorLicense) < 1
-        PlayerActorRef.addItem(BM_ArmorLicense, 1)
+    if lifetime
+        licenses.armorLicenseExpirationTime = -2
+    else
+        licenses.armorLicenseExpirationTime = (GameDaysPassed.getValue() + BM_ALDuration.GetValue()) as int
     endIf
-    licenses.ArmorLicense = true
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 1)
 EndFunction
 
-Function BM_PurchaseBikiniLicense(bool pay = true)
-    bmlModeratorAlias.AddInventoryEventFilter(BM_BikiniLicense)
+Function BM_PurchaseBikiniLicense(bool pay = true, bool lifetime = false)
+    SendModEvent("BM-LPO_BikiniLicense_" + PlayerActorRef.GetFormID() + "_Activate")
     if pay
         PlayerActorRef.removeItem(Gold001, BM_BLCost.GetValueInt())
     endIf
-    licenses.bikiniLicenseExpirationTime = (GameDaysPassed.getValue() + BM_BLDuration.getValue()) as int
-    if PlayerActorRef.getItemCount(BM_BikiniLicense) < 1
-        PlayerActorRef.addItem(BM_BikiniLicense, 1)
+    if lifetime
+        licenses.bikiniLicenseExpirationTime = -2
+    else
+        licenses.bikiniLicenseExpirationTime = (GameDaysPassed.getValue() + BM_BLDuration.getValue()) as int
     endIf
-    licenses.BikiniLicense = true
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 2)
 EndFunction
 
-Function BM_PurchaseBikiniExemption(bool pay = true)
-    bmlModeratorAlias.AddInventoryEventFilter(BM_BikiniExemption)
+Function BM_PurchaseBikiniExemption(bool pay = true, bool lifetime = false)
+    SendModEvent("BM-LPO_BikiniExemption_" + PlayerActorRef.GetFormID() + "_Activate")
     if pay
         PlayerActorRef.removeItem(Gold001, BM_BLCost.GetValueInt())
     endIf
-    licenses.bikiniExemptionExpirationTime = (GameDaysPassed.getValue() + BM_BLDuration.getValue()) as int
-    if PlayerActorRef.getItemCount(BM_BikiniExemption) < 1
-        PlayerActorRef.addItem(BM_BikiniExemption, 1)
+    if lifetime
+        licenses.bikiniExemptionExpirationTime = -2
+    else
+        licenses.bikiniExemptionExpirationTime = (GameDaysPassed.getValue() + BM_BLDuration.getValue()) as int
     endIf
-    licenses.BikiniExemption = true
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 3)
 EndFunction
 
-Function BM_PurchaseClothingLicense(bool pay = true)
-    bmlModeratorAlias.AddInventoryEventFilter(BM_ClothingLicense)
+Function BM_PurchaseClothingLicense(bool pay = true, bool lifetime = false)
+    SendModEvent("BM-LPO_ClothingLicense_" + PlayerActorRef.GetFormID() + "_Activate")
     if pay
         PlayerActorRef.removeItem(Gold001, BM_CLCost.GetValueInt())
     endIf
-    licenses.clothingLicenseExpirationTime = (GameDaysPassed.getValue() + BM_CLDuration.getValue()) as int
-    if PlayerActorRef.getItemCount(BM_ClothingLicense) < 1
-        PlayerActorRef.addItem(BM_ClothingLicense, 1)
+    if lifetime
+        licenses.clothingLicenseExpirationTime = -2
+    else
+        licenses.clothingLicenseExpirationTime = (GameDaysPassed.getValue() + BM_CLDuration.getValue()) as int
     endIf
-    licenses.ClothingLicense = true
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 4)
 EndFunction
 
-Function BM_PurchaseMagicLicense(bool pay = true)
-    bmlModeratorAlias.AddInventoryEventFilter(BM_MagicLicense)
+Function BM_PurchaseMagicLicense(bool pay = true, bool lifetime = false)
+    SendModEvent("BM-LPO_MagicLicense_" + PlayerActorRef.GetFormID() + "_Activate")
     if pay
         PlayerActorRef.removeItem(Gold001, BM_MLCost.GetValueInt())
     endIf
-    licenses.magicLicenseExpirationTime = (GameDaysPassed.getValue() + BM_MLDuration.getValue()) as int
-    if PlayerActorRef.getItemCount(BM_MagicLicense) < 1
-        PlayerActorRef.addItem(BM_MagicLicense, 1)
+    if lifetime
+        licenses.magicLicenseExpirationTime = -2
+    else
+        licenses.magicLicenseExpirationTime = (GameDaysPassed.getValue() + BM_MLDuration.getValue()) as int
     endIf
-    licenses.MagicLicense = true
     licenses.RemoveNullifyMagicka()
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 5)
 EndFunction
 
-Function BM_PurchaseWeaponLicense(bool pay = true)
-    bmlModeratorAlias.AddInventoryEventFilter(BM_WeaponLicense)
+Function BM_PurchaseWeaponLicense(bool pay = true, bool lifetime = false)
+    SendModEvent("BM-LPO_WeaponLicense_" + PlayerActorRef.GetFormID() + "_Activate")
     if pay
         PlayerActorRef.removeItem(Gold001, BM_WLCost.GetValueInt())
     endIf
-    licenses.weaponLicenseExpirationTime = (GameDaysPassed.getValue() + BM_WLDuration.getValue()) as int
-    if PlayerActorRef.getItemCount(BM_WeaponLicense) < 1
-        PlayerActorRef.addItem(BM_WeaponLicense, 1)
+    if lifetime
+        licenses.weaponLicenseExpirationTime = -2
+    else
+        licenses.weaponLicenseExpirationTime = (GameDaysPassed.getValue() + BM_WLDuration.getValue()) as int
     endIf
-    licenses.WeaponLicense = true
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 6)
 Endfunction
 
-Function BM_PurchaseCraftingLicense(bool pay = true)
-    bmlModeratorAlias.AddInventoryEventFilter(BM_CraftingLicense)
+Function BM_PurchaseCraftingLicense(bool pay = true, bool lifetime = false)
+    SendModEvent("BM-LPO_CraftingLicense_" + PlayerActorRef.GetFormID() + "_Activate")
     if pay
         PlayerActorRef.removeItem(Gold001, BM_CrfLCost.GetValueInt())
     endIf
-    licenses.craftingLicenseExpirationTime = (GameDaysPassed.getValue() + BM_CrfLDuration.getValue()) as int
-    if PlayerActorRef.getItemCount(BM_CraftingLicense) < 1
-        PlayerActorRef.addItem(BM_CraftingLicense, 1)
+    if lifetime
+        licenses.craftingLicenseExpirationTime = -2
+    else
+        licenses.craftingLicenseExpirationTime = (GameDaysPassed.getValue() + BM_CrfLDuration.getValue()) as int
     endIf
-    licenses.CraftingLicense = true
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 7)
 EndFunction
 
-Function BM_PurchaseTravelPermit(bool pay = true)
-    bmlModeratorAlias.AddInventoryEventFilter(BM_TravelPermit)
+Function BM_PurchaseTravelPermit(bool pay = true, bool lifetime = false)
+    SendModEvent("BM-LPO_TravelPermit_" + PlayerActorRef.GetFormID() + "_Activate")
     if pay
         PlayerActorRef.removeItem(Gold001, BM_TPCost.GetValueInt())
     endIf
-    licenses.travelPermitExpirationTime = (GameDaysPassed.getValue() + BM_TPDuration.getValue()) as int
-    if PlayerActorRef.getItemCount(BM_TravelPermit) < 1
-        PlayerActorRef.addItem(BM_TravelPermit, 1)
+    if lifetime
+        licenses.travelPermitExpirationTime = -2
+    else
+        licenses.travelPermitExpirationTime = (GameDaysPassed.getValue() + BM_TPDuration.getValue()) as int
     endIf
-    licenses.TravelPermit = true
     savedLoc = None
     savedSpace = None
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 8)
 EndFunction
 
-Function BM_PurchaseCollarExemption(bool pay = true)
-    bmlModeratorAlias.AddInventoryEventFilter(BM_CollarExemption)
+Function BM_PurchaseCollarExemption(bool pay = true, bool lifetime = false)
+    SendModEvent("BM-LPO_CollarExemption_" + PlayerActorRef.GetFormID() + "_Activate")
     if pay
         PlayerActorRef.removeItem(Gold001, BM_CECost.GetValueInt())
     endIf
-    licenses.collarExemptionExpirationTime = (GameDaysPassed.getValue() + BM_CEDuration.getValue()) as int
-    if PlayerActorRef.getItemCount(BM_CollarExemption) < 1
-        PlayerActorRef.addItem(BM_CollarExemption, 1)
+    if lifetime
+        licenses.collarExemptionExpirationTime = -2
+    else
+        licenses.collarExemptionExpirationTime = (GameDaysPassed.getValue() + BM_CEDuration.getValue()) as int
     endIf
-    licenses.CollarExemption = true
     licenses.RemoveDeviousDevicesCollar()
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 9)
 EndFunction
 
-Function BM_PurchaseLifeInsurance(bool pay = true)
-    bmlModeratorAlias.AddInventoryEventFilter(BM_Insurance)
+Function BM_PurchaseLifeInsurance(bool pay = true, bool lifetime = false)
+    SendModEvent("BM-LPO_Insurance_" + PlayerActorRef.GetFormID() + "_Activate")
     if pay
         PlayerActorRef.removeItem(Gold001, BM_InsurCost.GetValueInt())
     endIf
-    licenses.insuranceExpirationTime = (GameDaysPassed.getValue() + BM_InsurDuration.getValue()) as int
-    if PlayerActorRef.getItemCount(BM_Insurance) < 1
-        PlayerActorRef.addItem(BM_Insurance, 1)
+    if lifetime
+        licenses.insuranceExpirationTime = -2
+    else
+        licenses.insuranceExpirationTime = (GameDaysPassed.getValue() + BM_InsurDuration.getValue()) as int
     endIf
-    licenses.Insurance = true
     licenses.RemoveNullifyMagicka()
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 10)
 EndFunction
 
-Function BM_PurchaseCurfewExemption(bool pay = true)
-    bmlModeratorAlias.AddInventoryEventFilter(BM_CurfewExemption)
+Function BM_PurchaseCurfewExemption(bool pay = true, bool lifetime = false)
+    SendModEvent("BM-LPO_CurfewExemption_" + PlayerActorRef.GetFormID() + "_Activate")
     if pay
         PlayerActorRef.removeItem(Gold001, BM_CuECost.GetValueInt())
     endIf
-    licenses.curfewExemptionExpirationTime = (GameDaysPassed.getValue() + BM_CuEDuration.GetValue()) as int
-    if PlayerActorRef.getItemCount(BM_CurfewExemption) < 1
-        PlayerActorRef.addItem(BM_CurfewExemption, 1)
+    if lifetime
+        licenses.curfewExemptionExpirationTime = -2
+    else
+        licenses.curfewExemptionExpirationTime = (GameDaysPassed.getValue() + BM_CuEDuration.GetValue()) as int
     endIf
-    licenses.CurfewExemption = true
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 11)
 EndFunction
 
-Function BM_PurchaseTradingLicense(bool pay = true)
-    bmlModeratorAlias.AddInventoryEventFilter(BM_TradingLicense)
+Function BM_PurchaseTradingLicense(bool pay = true, bool lifetime = false)
+    SendModEvent("BM-LPO_TradingLicense_" + PlayerActorRef.GetFormID() + "_Activate")
     if pay
         PlayerActorRef.removeItem(Gold001, BM_TLCost.GetValueInt())
     endIf
-    licenses.tradingLicenseExpirationTime = (GameDaysPassed.getValue() + BM_TLDuration.GetValue()) as int
-    if PlayerActorRef.getItemCount(BM_TradingLicense) < 1
-        PlayerActorRef.addItem(BM_TradingLicense, 1)
+    if lifetime
+        licenses.tradingLicenseExpirationTime = -2
+    else
+        licenses.tradingLicenseExpirationTime = (GameDaysPassed.getValue() + BM_TLDuration.GetValue()) as int
     endIf
-    licenses.TradingLicense = true
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 12)
 EndFunction
 
-Function BM_PurchaseWhoreLicense(bool pay = true)
-    bmlModeratorAlias.AddInventoryEventFilter(BM_WhoreLicense)
+Function BM_PurchaseWhoreLicense(bool pay = true, bool lifetime = false)
+    SendModEvent("BM-LPO_WhoreLicense_" + PlayerActorRef.GetFormID() + "_Activate")
     if pay
         PlayerActorRef.removeItem(Gold001, BM_WhLCost.GetValueInt())
     endIf
-    licenses.whoreLicenseExpirationTime = (GameDaysPassed.getValue() + BM_WhLDuration.getValue()) as int
-    if PlayerActorRef.getItemCount(BM_WhoreLicense) < 1
-        PlayerActorRef.addItem(BM_WhoreLicense, 1)
+    if lifetime
+        licenses.whoreLicenseExpirationTime = -2
+    else
+        licenses.whoreLicenseExpirationTime = (GameDaysPassed.getValue() + BM_WhLDuration.getValue()) as int
     endIf
-    licenses.WhoreLicense = true
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 13)
 EndFunction
 ; ------------------------------
@@ -872,173 +872,121 @@ EndFunction
 ; These are manual expiration calls that can run independent of the usual daily checker
 ; Call ModeratorUpdater() after license expirations if they are run outside daily checker
 Function BM_ExpireArmorLicense()
-    bmlModeratorAlias.RemoveInventoryEventFilter(BM_ArmorLicense)
+    SendModEvent("BM-LPO_ArmorLicense_" + PlayerActorRef.GetFormID() + "_Deactivate")
     licenses.armorLicenseExpirationTime = -1.0
-    if PlayerActorRef.getItemCount(BM_ArmorLicense) > 0
-        PlayerActorRef.removeItem(BM_ArmorLicense, 1, true)
-    endIf
     if bmlmcm.LicenseCooldown != 0
         licenses.armorLicenseCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_ALDuration.GetValue())) as int
     endIf
-    licenses.ArmorLicense = false
     SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 1)
 EndFunction
 
 Function BM_ExpireBikiniLicense()
-    bmlModeratorAlias.RemoveInventoryEventFilter(BM_BikiniLicense)
+    SendModEvent("BM-LPO_BikiniLicense_" + PlayerActorRef.GetFormID() + "_Deactivate")
     licenses.bikiniLicenseExpirationTime = -1.0
-    if PlayerActorRef.getItemCount(BM_BikiniLicense) > 0
-        PlayerActorRef.removeItem(BM_BikiniLicense, 1, true)
-    endIf
     if bmlmcm.LicenseCooldown != 0
         licenses.bikiniLicenseCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_BLDuration.GetValue())) as int
     endIf
-    licenses.BikiniLicense = false
     SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 2)
 EndFunction
 
 Function BM_ExpireBikiniExemption()
-    bmlModeratorAlias.RemoveInventoryEventFilter(BM_BikiniExemption)
+    SendModEvent("BM-LPO_BikiniExemption_" + PlayerActorRef.GetFormID() + "_Deactivate")
     licenses.bikiniExemptionExpirationTime = -1.0
-    if PlayerActorRef.getItemCount(BM_BikiniExemption) > 0
-        PlayerActorRef.removeItem(BM_BikiniExemption, 1, true)
-    endIf
     if bmlmcm.LicenseCooldown != 0
         licenses.bikiniExemptionCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_BLDuration.GetValue())) as int
     endIf
-    licenses.BikiniExemption = false
     SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 3)
 EndFunction
 
 Function BM_ExpireClothingLicense()
-    bmlModeratorAlias.RemoveInventoryEventFilter(BM_ClothingLicense)
+    SendModEvent("BM-LPO_ClothingLicense_" + PlayerActorRef.GetFormID() + "_Deactivate")
     licenses.clothingLicenseExpirationTime = -1.0
-    if PlayerActorRef.getItemCount(BM_ClothingLicense) > 0
-        PlayerActorRef.removeItem(BM_ClothingLicense, 1, true)
-    endIf
     if bmlmcm.LicenseCooldown != 0
         licenses.clothingLicenseCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_CLDuration.GetValue())) as int
     endIf
-    licenses.ClothingLicense = false
     SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 4)
 EndFunction
 
 Function BM_ExpireMagicLicense()
-    bmlModeratorAlias.RemoveInventoryEventFilter(BM_MagicLicense)
+    SendModEvent("BM-LPO_MagicLicense_" + PlayerActorRef.GetFormID() + "_Deactivate")
     licenses.magicLicenseExpirationTime = -1.0
-    if PlayerActorRef.getItemCount(BM_MagicLicense) > 0
-        PlayerActorRef.removeItem(BM_MagicLicense, 1, true)
-    endIf
     if bmlmcm.LicenseCooldown != 0
         licenses.magicLicenseCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_MLDuration.GetValue())) as int
     endIf
-    licenses.MagicLicense = false
     BM_LenientCurseViolation.SetValue(1.0)
     SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 5)
 EndFunction
 
 Function BM_ExpireWeaponLicense()
-    bmlModeratorAlias.RemoveInventoryEventFilter(BM_WeaponLicense)
+    SendModEvent("BM-LPO_WeaponLicense_" + PlayerActorRef.GetFormID() + "_Deactivate")
     licenses.weaponLicenseExpirationTime = -1.0
-    if PlayerActorRef.getItemCount(BM_WeaponLicense) > 0
-        PlayerActorRef.removeItem(BM_WeaponLicense, 1, true)
-    endIf
     if bmlmcm.LicenseCooldown != 0
         licenses.weaponLicenseCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_WLDuration.GetValue())) as int
     endIf
-    licenses.WeaponLicense = false
     SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 6)
 Endfunction
 
 Function BM_ExpireCraftingLicense()
-    bmlModeratorAlias.RemoveInventoryEventFilter(BM_CraftingLicense)
+    SendModEvent("BM-LPO_CraftingLicense_" + PlayerActorRef.GetFormID() + "_Deactivate")
     licenses.craftingLicenseExpirationTime = -1.0
-    if PlayerActorRef.getItemCount(BM_CraftingLicense) > 0
-        PlayerActorRef.removeItem(BM_CraftingLicense, 1, true)
-    endIf
     if bmlmcm.LicenseCooldown != 0
         licenses.craftingLicenseCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_CrfLDuration.GetValue())) as int
     endIf
-    licenses.CraftingLicense = false
     SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 7)
 EndFunction
 
 Function BM_ExpireTravelPermit()
-    bmlModeratorAlias.RemoveInventoryEventFilter(BM_TravelPermit)
+    SendModEvent("BM-LPO_TravelPermit_" + PlayerActorRef.GetFormID() + "_Deactivate")
     licenses.travelPermitExpirationTime = -1.0
-    if PlayerActorRef.getItemCount(BM_TravelPermit) > 0
-        PlayerActorRef.removeItem(BM_TravelPermit, 1, true)
-    endIf
     if bmlmcm.LicenseCooldown != 0
         licenses.travelPermitCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_TPDuration.GetValue())) as int
     endIf
-    licenses.TravelPermit = false
     SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 8)
 EndFunction
 
 Function BM_ExpireCollarExemption()
-    bmlModeratorAlias.RemoveInventoryEventFilter(BM_CollarExemption)
+    SendModEvent("BM-LPO_CollarExemption_" + PlayerActorRef.GetFormID() + "_Deactivate")
     licenses.collarExemptionExpirationTime = -1.0
-    if PlayerActorRef.getItemCount(BM_CollarExemption) > 0
-        PlayerActorRef.removeItem(BM_CollarExemption, 1, true)
-    endIf
     if bmlmcm.LicenseCooldown != 0
         licenses.collarExemptionCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_CEDuration.GetValue())) as int
     endIf
-    licenses.hasCollarExemption = false
     SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 9)
 EndFunction
 
 Function BM_ExpireLifeInsurance()
-    bmlModeratorAlias.RemoveInventoryEventFilter(BM_Insurance)
+    SendModEvent("BM-LPO_Insurance_" + PlayerActorRef.GetFormID() + "_Deactivate")
     licenses.insuranceExpirationTime = -1.0
-    if PlayerActorRef.getItemCount(BM_Insurance) > 0
-        PlayerActorRef.removeItem(BM_Insurance, 1, true)
-    endIf
     if bmlmcm.LicenseCooldown != 0
         licenses.insuranceCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_InsurDuration.GetValue())) as int
     endIf
-    licenses.Insurance = false
     SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 10)
 EndFunction
 
 Function BM_ExpireCurfewExemption()
-    bmlModeratorAlias.RemoveInventoryEventFilter(BM_CurfewExemption)
+    SendModEvent("BM-LPO_CurfewExemption_" + PlayerActorRef.GetFormID() + "_Deactivate")
     licenses.curfewExemptionExpirationTime = -1.0
-    if PlayerActorRef.getItemCount(BM_CurfewExemption) > 0
-        PlayerActorRef.removeItem(BM_CurfewExemption, 1, true)
-    endIf
     if bmlmcm.LicenseCooldown != 0
         licenses.curfewExemptionCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_CuEDuration.GetValue())) as int
     endIf
-    licenses.CurfewExemption = false
     BM_LenientCurfewViolation.SetValue(1.0)
     SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 11)
 EndFunction
 
 Function BM_ExpireTradingLicense()
-    bmlModeratorAlias.RemoveInventoryEventFilter(BM_TradingLicense)
+    SendModEvent("BM-LPO_TradingLicense_" + PlayerActorRef.GetFormID() + "_Deactivate")
     licenses.tradingLicenseExpirationTime = -1.0
-    if PlayerActorRef.getItemCount(BM_TradingLicense) > 0
-        PlayerActorRef.removeItem(BM_TradingLicense, 1, true)
-    endIf
     if bmlmcm.LicenseCooldown != 0
         licenses.tradingLicenseCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_TLDuration.GetValue())) as int
     endIf
-    licenses.TradingLicense = false
     SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 12)
 EndFunction
 
 Function BM_ExpireWhoreLicense()
-    bmlModeratorAlias.RemoveInventoryEventFilter(BM_WhoreLicense)
+    SendModEvent("BM-LPO_WhoreLicense_" + PlayerActorRef.GetFormID() + "_Deactivate")
     licenses.whoreLicenseExpirationTime = -1.0
-    if PlayerActorRef.getItemCount(BM_WhoreLicense) > 0
-        PlayerActorRef.removeItem(BM_WhoreLicense, 1, true)
-    endIf
     if bmlmcm.LicenseCooldown != 0
         licenses.whoreLicenseCooldownTime = (GameDaysPassed.getValue() + GetCooldown(bmlmcm.LicenseCooldown, bmlmcm.BM_WhLDuration.GetValue())) as int
     endIf
-    licenses.WhoreLicense = false
     SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", 13)
 EndFunction
 ; ------------------------------
@@ -1216,7 +1164,6 @@ EndFunction
 ; Refresh Licenses
 Function RefreshLicenses()
     refreshLicenseFeatures()
-    refreshInventoryEventFilters()
     bmlModeratorAlias.RefreshLicenseValidity()
 EndFunction
 
@@ -1228,7 +1175,6 @@ Function RefreshFeatures()
 	refreshLicenseSeller()
     refreshLicenseFeatures()
     refreshActivationLimit()
-    refreshInventoryEventFilters()
     refreshArrays()
 EndFunction
 
@@ -1254,50 +1200,6 @@ Function refreshActivationLimit()
         licenses.isLicenseLimit = (CountValidLicenses() >= BM_LicenseBooks.GetSize())
     else
         licenses.isLicenseLimit = (CountActiveLicenses() >= bmlmcm.LicenseLimit)
-    endIf
-EndFunction
-
-Function refreshInventoryEventFilters()
-    bmlModeratorAlias.RemoveAllInventoryEventFilters()
-    bmlModeratorAlias.AddInventoryEventFilter(BM_Empty)
-    if bmlmcm.isArmorLicenseFeatureEnabled && licenses.armorLicenseExpirationTime >= 0
-        bmlModeratorAlias.AddInventoryEventFilter(BM_ArmorLicense)
-    endIf
-    if bmlmcm.isBikiniLicenseFeatureEnabled == 1 && licenses.bikiniLicenseExpirationTime >= 0
-        bmlModeratorAlias.AddInventoryEventFilter(BM_BikiniLicense)
-    endIf
-    if bmlmcm.isBikiniLicenseFeatureEnabled == 2 && licenses.bikiniExemptionExpirationTime >= 0
-        bmlModeratorAlias.AddInventoryEventFilter(BM_BikiniExemption)
-    endIf
-    if bmlmcm.isClothingLicenseFeatureEnabled && licenses.clothingLicenseExpirationTime >= 0
-        bmlModeratorAlias.AddInventoryEventFilter(BM_ClothingLicense)
-    endIf
-    if bmlmcm.isMagicLicenseFeatureEnabled && licenses.magicLicenseExpirationTime >= 0
-        bmlModeratorAlias.AddInventoryEventFilter(BM_MagicLicense)
-    endIf
-    if bmlmcm.isWeaponLicenseFeatureEnabled && licenses.weaponLicenseExpirationTime >= 0
-        bmlModeratorAlias.AddInventoryEventFilter(BM_WeaponLicense)
-    endIf
-    if bmlmcm.isCraftingLicenseFeatureEnabled && licenses.craftingLicenseExpirationTime >= 0
-        bmlModeratorAlias.AddInventoryEventFilter(BM_CraftingLicense)
-    endIf
-    if bmlmcm.isTradingLicenseFeatureEnabled && licenses.tradingLicenseExpirationTime >= 0
-        bmlModeratorAlias.AddInventoryEventFilter(BM_TradingLicense)
-    endIf
-    if bmlmcm.isWhoreLicenseFeatureEnabled && licenses.whoreLicenseExpirationTime >= 0
-        bmlModeratorAlias.AddInventoryEventFilter(BM_WhoreLicense)
-    endIf
-    if bmlmcm.isTravelPermitFeatureEnabled && licenses.travelPermitExpirationTime >= 0
-        bmlModeratorAlias.AddInventoryEventFilter(BM_TravelPermit)
-    endIf
-    if bmlmcm.isCollarExemptionFeatureEnabled && licenses.collarExemptionExpirationTime >= 0
-        bmlModeratorAlias.AddInventoryEventFilter(BM_CollarExemption)
-    endIf
-    if bmlmcm.isInsuranceFeatureEnabled && licenses.insuranceExpirationTime >= 0
-        bmlModeratorAlias.AddInventoryEventFilter(BM_Insurance)
-    endIf
-    if bmlmcm.isCurfewExemptionFeatureEnabled && licenses.curfewExemptionExpirationTime >= 0
-        bmlModeratorAlias.AddInventoryEventFilter(BM_CurfewExemption)
     endIf
 EndFunction
 
@@ -1531,7 +1433,7 @@ EndFunction
 ; ------------------------------
 
 ; ----------------------------------------------------------------------------------------------------
-; -------------------------------------------------- End API
+; -------------------------------------------------- End Utility
 ; ----------------------------------------------------------------------------------------------------
 
 Actor PlayerActorRef
@@ -1565,7 +1467,7 @@ Quest Property licenseDetectionQuest auto
 Quest Property licenseBountyQuest auto
 Quest Property licenseModeratorQuest auto
 
-; -- Vanilla
+; -- Vanilla Vars
 GlobalVariable Property GameDaysPassed auto
 ; -- License Vars
 GlobalVariable Property BM_ALCost Auto
@@ -1592,15 +1494,15 @@ GlobalVariable Property BM_WhLCost Auto
 GlobalVariable Property BM_WhLDuration Auto
 GlobalVariable Property BM_CECost Auto
 GlobalVariable Property BM_CEDuration Auto
-; -- Exception State
+; -- Exception Vars
 GlobalVariable Property BM_IsInSSLV Auto
 GlobalVariable Property BM_IsInDHLPEvent Auto
 GlobalVariable Property BM_IsInPlayerHome Auto
 GlobalVariable Property BM_IsInJail Auto
 GlobalVariable Property BM_IsInAnimation Auto
-; -- Violation State
+; -- Violation Vars
 GlobalVariable Property BM_IsViolatingCurfew Auto
-; -- Others
+; -- Misc Vars
 GlobalVariable Property BM_IsPlayerCollared auto
 GlobalVariable Property BM_FineAmount auto
 GlobalVariable Property BM_FirstTimeViolation auto
@@ -1613,7 +1515,6 @@ FormList Property BM_WorldSpaces  Auto
 FormList Property BM_Cities  Auto 
 FormList Property BM_Towns  Auto
 FormList Property BM_LicenseBooks  Auto
-FormList Property BM_Empty auto
 
 Location Property currLoc auto
 Location Property savedLoc auto
@@ -1636,3 +1537,6 @@ Quest Property C06 auto
 Quest Property MG08 auto
 Quest Property CWSiegeObj auto
 FavorJarlsMakeFriendsScript Property FJMF auto
+
+; unused
+FormList Property BM_Empty auto

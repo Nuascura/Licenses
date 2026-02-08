@@ -29,6 +29,18 @@ float Property LicenseCooldown = 0.0 auto conditional
 bool Property LicenseRenewal = false auto conditional
 bool Property isWaterDamageEnabled = false auto conditional
 bool Property thaneImmunityUniversal = false auto
+float Property LifetimeMultiplier = 1.0 auto
+GlobalVariable Property BM_ALCostLT Auto
+GlobalVariable Property BM_BLCostLT Auto
+GlobalVariable Property BM_CLCostLT Auto
+GlobalVariable Property BM_MLCostLT Auto
+GlobalVariable Property BM_WLCostLT Auto
+GlobalVariable Property BM_CrfLCostLT Auto
+GlobalVariable Property BM_TLCostLT Auto
+GlobalVariable Property BM_WhLCostLT Auto
+GlobalVariable Property BM_TPCostLT Auto
+GlobalVariable Property BM_CECostLT Auto
+GlobalVariable Property BM_CuECostLT Auto
 ; Filters
 bool Property isLimitToCityEnabled = true auto
 bool Property isLimitToCitySpaceEnabled = false auto conditional
@@ -70,7 +82,7 @@ bool Property isEnchantedJewelryFeatureEnabled = false auto
 bool Property isEnchantedWeaponryFeatureEnabled = false auto
 int Property NullifyMagickaSource = 0 auto conditional
 string[] NullifyMagickaSourceList
-bool Property NullifyMagickaEnforce = false auto
+bool Property NullifyMagickaEnforce = false auto conditional
 
 bool Property isWeaponLicenseFeatureEnabled = true auto conditional
 GlobalVariable Property BM_WLCost Auto
@@ -258,15 +270,16 @@ Event OnConfigInit()
 	BikiniLicenseFeatureState[2] = "$LPO_BikiniLicenseFeatureState2"
 
 	ModVersionCache = PapyrusUtil.StringSplit(GetModVersion(), ".")
+EndEvent
+
+Event OnConfigRegister()
 	if JsonExists(config)
 		Load(config)
 	endIf
-	if CurrentVersion == 0
-		bmlUtility.LogNotification("Installed Licenses " + GetModVersion(), true)
-		bmlUtility.LogTrace("Installed Licenses " + GetModVersion(), true)
-		if Licenses_State.GetValue() == 0 && GetIntValue(config, "!!doautostart") == 1
-			GoToState("AutoStartST")
-		endIf
+	bmlUtility.LogNotification("Installed Licenses " + GetModVersion(), true)
+	bmlUtility.LogTrace("Installed Licenses " + GetModVersion(), true)
+	if Licenses_State.GetValue() == 0 && GetIntValue(config, "!!doautostart") == 1
+		GoToState("AutoStartST")
 	endIf
 EndEvent
 
@@ -427,6 +440,7 @@ Function ShowPage1()
 	AddToggleOptionST("isWaterDamageEnabledST", "$LPO_isWaterDamageEnabled", isWaterDamageEnabled)
 	AddToggleOptionST("thaneImmunityUniversalST", "$LPO_thaneImmunityUniversal", thaneImmunityUniversal)
 	AddToggleOptionST("ValidateEquipmentTradeST", "$LPO_ValidateEquipmentTrade", ValidateEquipmentTrade)
+	AddSliderOptionST("LifetimeMultiplierST", "$LPO_LifetimeMultiplier", LifetimeMultiplier, "{1}x")
 
 	SetCursorPosition(1)
 	AddHeaderOption("$LPO_Filters")
@@ -1064,6 +1078,27 @@ state LicenseCooldownST
 	endEvent
 endState
 
+state LifetimeMultiplierST
+	event OnSliderOpenST()
+		SetSliderDialogStartValue(LifetimeMultiplier)
+		SetSliderDialogDefaultValue(1.0)
+		SetSliderDialogRange(1.0, 10.0)
+		SetSliderDialogInterval(0.1)
+	endEvent
+	event OnSliderAcceptST(float value)
+		LifetimeMultiplier = value
+		SetSliderOptionValueST(LifetimeMultiplier, "{1}x")
+		recalculateCosts()
+	endEvent
+	event OnDefaultST()
+		LifetimeMultiplier = 1.0
+		SetSliderOptionValueST(LifetimeMultiplier, "{1}x")
+	endEvent
+	event OnHighlightST()
+		SetInfoText("$LPO_LifetimeMultiplierHighlight")
+	endEvent
+endState
+
 state LicenseRenewalST
 	event OnSelectST()
 		LicenseRenewal = !LicenseRenewal
@@ -1145,6 +1180,7 @@ state BM_ALCostST
 	event OnSliderAcceptST(float value)
 		BM_ALCost.setValue(value)
 		SetSliderOptionValueST(BM_ALCost.getValue(), "{0} gold")
+		recalculateCosts()
         updateGlobals()
 	endEvent
 	event OnDefaultST()
@@ -1163,7 +1199,6 @@ state BM_ALDurationST
 	event OnSliderAcceptST(float value)
 		BM_ALDuration.SetValue(value)
 		SetSliderOptionValueST(BM_ALDuration.GetValue(), "{0} day(s)")
-        updateGlobals()
 	endEvent
 	event OnDefaultST()
 		BM_ALDuration.SetValue(5.0)
@@ -1210,6 +1245,7 @@ state BM_BLCostST
 	event OnSliderAcceptST(float value)
 		BM_BLCost.setValue(value)
 		SetSliderOptionValueST(BM_BLCost.getValue(), "{0} gold")
+		recalculateCosts()
         updateGlobals()
 	endEvent
 	event OnDefaultST()
@@ -1228,7 +1264,6 @@ state BM_BLDurationST
 	event OnSliderAcceptST(float value)
 		BM_BLDuration.SetValue(value)
 		SetSliderOptionValueST(BM_BLDuration.GetValue(), "{0} day(s)")
-        updateGlobals()
 	endEvent
 	event OnDefaultST()
 		BM_BLDuration.SetValue(5.0)
@@ -1293,6 +1328,7 @@ state BM_CLCostST
 	event OnSliderAcceptST(float value)
 		BM_CLCost.setValue(value)
 		SetSliderOptionValueST(BM_CLCost.getValue(), "{0} gold")
+		recalculateCosts()
         updateGlobals()
 	endEvent
 	event OnDefaultST()
@@ -1311,7 +1347,6 @@ state BM_CLDurationST
 	event OnSliderAcceptST(float value)
 		BM_CLDuration.SetValue(value)
 		SetSliderOptionValueST(BM_CLDuration.GetValue(), "{0} day(s)")
-        updateGlobals()
 	endEvent
 	event OnDefaultST()
 		BM_CLDuration.SetValue(5.0)
@@ -1340,6 +1375,7 @@ state BM_MLCostST
 	event OnSliderAcceptST(float value)
 		BM_MLCost.setValue(value)
 		SetSliderOptionValueST(BM_MLCost.getValue(), "{0} gold")
+		recalculateCosts()
         updateGlobals()
 	endEvent
 	event OnDefaultST()
@@ -1358,7 +1394,6 @@ state BM_MLDurationST
 	event OnSliderAcceptST(float value)
 		BM_MLDuration.SetValue(value)
 		SetSliderOptionValueST(BM_MLDuration.GetValue(), "{0} day(s)")
-        updateGlobals()
 	endEvent
 	event OnDefaultST()
 		BM_MLDuration.SetValue(5.0)
@@ -1457,6 +1492,7 @@ state BM_WLCostST
 	event OnSliderAcceptST(float value)
 		BM_WLCost.setValue(value)
 		SetSliderOptionValueST(BM_WLCost.getValue(), "{0} gold")
+		recalculateCosts()
         updateGlobals()
 	endEvent
 	event OnDefaultST()
@@ -1475,7 +1511,6 @@ state BM_WLDurationST
 	event OnSliderAcceptST(float value)
 		BM_WLDuration.SetValue(value)
 		SetSliderOptionValueST(BM_WLDuration.GetValue(), "{0} day(s)")
-        updateGlobals()
 	endEvent
 	event OnDefaultST()
 		BM_WLDuration.SetValue(5.0)
@@ -1515,6 +1550,7 @@ state BM_CrfLCostST
 	event OnSliderAcceptST(float value)
 		BM_CrfLCost.setValue(value)
 		SetSliderOptionValueST(BM_CrfLCost.getValue(), "{0} gold")
+		recalculateCosts()
         updateGlobals()
 	endEvent
 	event OnDefaultST()
@@ -1533,7 +1569,6 @@ state BM_CrfLDurationST
 	event OnSliderAcceptST(float value)
 		BM_CrfLDuration.SetValue(value)
 		SetSliderOptionValueST(BM_CrfLDuration.GetValue(), "{0} day(s)")
-        updateGlobals()
 	endEvent
 	event OnDefaultST()
 		BM_CrfLDuration.SetValue(5.0)
@@ -1562,6 +1597,7 @@ state BM_TLCostST
 	event OnSliderAcceptST(float value)
 		BM_TLCost.setValue(value)
 		SetSliderOptionValueST(BM_TLCost.getValue(), "{0} gold")
+		recalculateCosts()
         updateGlobals()
 	endEvent
 	event OnDefaultST()
@@ -1580,7 +1616,6 @@ state BM_TLDurationST
 	event OnSliderAcceptST(float value)
 		BM_TLDuration.SetValue(value)
 		SetSliderOptionValueST(BM_TLDuration.GetValue(), "{0} day(s)")
-        updateGlobals()
 	endEvent
 	event OnDefaultST()
 		BM_TLDuration.SetValue(5.0)
@@ -1609,6 +1644,7 @@ state BM_CuECostST
 	event OnSliderAcceptST(float value)
 		BM_CuECost.setValue(value)
 		SetSliderOptionValueST(BM_CuECost.getValue(), "{0} gold")
+		recalculateCosts()
         updateGlobals()
 	endEvent
 	event OnDefaultST()
@@ -1627,7 +1663,6 @@ state BM_CuEDurationST
 	event OnSliderAcceptST(float value)
 		BM_CuEDuration.SetValue(value)
 		SetSliderOptionValueST(BM_CuEDuration.GetValue(), "{0} day(s)")
-        updateGlobals()
 	endEvent
 	event OnDefaultST()
 		BM_CuEDuration.SetValue(5.0)
@@ -1645,7 +1680,6 @@ state BM_CurfewStartST
 	event OnSliderAcceptST(float value)
 		BM_CurfewStart.SetValue(value)
 		SetSliderOptionValueST(BM_CurfewStart.GetValue(), "{0}:00")
-        updateGlobals()
 	endEvent
 	event OnDefaultST()
 		BM_CurfewStart.SetValue(20.0)
@@ -1666,7 +1700,6 @@ state BM_CurfewEndST
 	event OnSliderAcceptST(float value)
 		BM_CurfewEnd.SetValue(value)
 		SetSliderOptionValueST(BM_CurfewEnd.GetValue(), "{0}:00")
-        updateGlobals()
 	endEvent
 	event OnDefaultST()
 		BM_CurfewEnd.SetValue(6.0)
@@ -1698,6 +1731,7 @@ state BM_WhLCostST
 	event OnSliderAcceptST(float value)
 		BM_WhLCost.setValue(value)
 		SetSliderOptionValueST(BM_WhLCost.getValue(), "{0} gold")
+		recalculateCosts()
         updateGlobals()
 	endEvent
 	event OnDefaultST()
@@ -1716,7 +1750,6 @@ state BM_WhLDurationST
 	event OnSliderAcceptST(float value)
 		BM_WhLDuration.SetValue(value)
 		SetSliderOptionValueST(BM_WhLDuration.GetValue(), "{0} day(s)")
-        updateGlobals()
 	endEvent
 	event OnDefaultST()
 		BM_WhLDuration.SetValue(5.0)
@@ -1750,6 +1783,7 @@ state BM_TPCostST
 	event OnSliderAcceptST(float value)
 		BM_TPCost.setValue(value)
 		SetSliderOptionValueST(BM_TPCost.getValue(), "{0} gold")
+		recalculateCosts()
         updateGlobals()
 	endEvent
 	event OnDefaultST()
@@ -1768,7 +1802,6 @@ state BM_TPDurationST
 	event OnSliderAcceptST(float value)
 		BM_TPDuration.SetValue(value)
 		SetSliderOptionValueST(BM_TPDuration.GetValue(), "{0} day(s)")
-        updateGlobals()
 	endEvent
 	event OnDefaultST()
 		BM_TPDuration.SetValue(5.0)
@@ -1819,6 +1852,7 @@ state BM_CECostST
 	event OnSliderAcceptST(float value)
 		BM_CECost.setValue(value)
 		SetSliderOptionValueST(BM_CECost.getValue(), "{0} gold")
+		recalculateCosts()
         updateGlobals()
 	endEvent
 	event OnDefaultST()
@@ -1837,7 +1871,6 @@ state BM_CEDurationST
 	event OnSliderAcceptST(float value)
 		BM_CEDuration.SetValue(value)
 		SetSliderOptionValueST(BM_CEDuration.GetValue(), "{0} day(s)")
-        updateGlobals()
 	endEvent
 	event OnDefaultST()
 		BM_CEDuration.SetValue(5.0)
@@ -1889,7 +1922,6 @@ state BM_InsurDurationST
 	event OnSliderAcceptST(float value)
 		BM_InsurDuration.SetValue(value)
 		SetSliderOptionValueST(BM_InsurDuration.GetValue(), "{0} day(s)")
-        updateGlobals()
 	endEvent
 	event OnDefaultST()
 		BM_InsurDuration.SetValue(5.0)
@@ -1941,7 +1973,6 @@ state FineBaseST
 	event OnSliderAcceptST(float value)
 		FineBase = value as int
 		SetSliderOptionValueST(FineBase, "{0} gold")
-		updateGlobals()
 	endEvent
 	event OnDefaultST()
 		FineBase = 250
@@ -1962,7 +1993,6 @@ state FinePercentageST
 	event OnSliderAcceptST(float value)
 		FinePercentage = value
 		SetSliderOptionValueST(FinePercentage, "{1}%")
-		updateGlobals()
 	endEvent
 	event OnDefaultST()
 		FinePercentage = 25.0
@@ -2187,6 +2217,19 @@ String Function GetBoolString(Bool varb, String id = "")
 	endIf
 EndFunction
 
+Function recalculateCosts()
+	BM_ALCostLT.SetValue(BM_ALCost.GetValue() * LifetimeMultiplier)
+	BM_BLCostLT.SetValue(BM_BLCost.GetValue() * LifetimeMultiplier)
+	BM_CLCostLT.SetValue(BM_CLCost.GetValue() * LifetimeMultiplier)
+	BM_MLCostLT.SetValue(BM_MLCost.GetValue() * LifetimeMultiplier)
+	BM_WLCostLT.SetValue(BM_WLCost.GetValue() * LifetimeMultiplier)
+	BM_CrfLCostLT.SetValue(BM_CrfLCost.GetValue() * LifetimeMultiplier)
+	BM_TLCostLT.SetValue(BM_TLCost.GetValue() * LifetimeMultiplier)
+	BM_WhLCostLT.SetValue(BM_WhLCost.GetValue() * LifetimeMultiplier)
+	BM_TPCostLT.SetValue(BM_TPCost.GetValue() * LifetimeMultiplier)
+	BM_CuECostLT.SetValue(BM_CuECost.GetValue() * LifetimeMultiplier)
+EndFunction
+
 Function updateGlobals()
     licenses.UpdateCurrentInstanceGlobal(BM_ALCost)
     licenses.UpdateCurrentInstanceGlobal(BM_BLCost)
@@ -2200,6 +2243,18 @@ Function updateGlobals()
 	licenses.UpdateCurrentInstanceGlobal(BM_CECost)
 	licenses.UpdateCurrentInstanceGlobal(BM_InsurCost)
 	licenses.UpdateCurrentInstanceGlobal(BM_CuECost)
+
+	licenses.UpdateCurrentInstanceGlobal(BM_ALCostLT)
+    licenses.UpdateCurrentInstanceGlobal(BM_BLCostLT)
+    licenses.UpdateCurrentInstanceGlobal(BM_CLCostLT)
+    licenses.UpdateCurrentInstanceGlobal(BM_MLCostLT)
+    licenses.UpdateCurrentInstanceGlobal(BM_WLCostLT)
+	licenses.UpdateCurrentInstanceGlobal(BM_CrfLCostLT)
+	licenses.UpdateCurrentInstanceGlobal(BM_TLCostLT)
+	licenses.UpdateCurrentInstanceGlobal(BM_WhLCostLT)
+	licenses.UpdateCurrentInstanceGlobal(BM_TPCostLT)
+	licenses.UpdateCurrentInstanceGlobal(BM_CECostLT)
+	licenses.UpdateCurrentInstanceGlobal(BM_CuECostLT)
 EndFunction
 
 Bool Function exportConfig()
@@ -2237,6 +2292,7 @@ Bool Function exportConfig()
 	SetIntValue(config, "isWaterDamageEnabled", isWaterDamageEnabled as int)
 	SetIntValue(config, "thaneImmunityUniversal", thaneImmunityUniversal as int)
 	SetIntValue(config, "ValidateEquipmentTrade", ValidateEquipmentTrade as int)
+	SetFloatValue(config, "LifetimeMultiplier", LifetimeMultiplier)
 
 	; General - Filters
 	SetIntValue(config, "isLimitToCityEnabled", isLimitToCityEnabled as int)
@@ -2393,6 +2449,7 @@ Bool Function importConfig(Bool abSilent = false)
 	isWaterDamageEnabled = GetIntValue(config, "isWaterDamageEnabled", isWaterDamageEnabled as int) as Bool
 	thaneImmunityUniversal = GetIntValue(config, "thaneImmunityUniversal", thaneImmunityUniversal as int) as Bool
 	ValidateEquipmentTrade = GetIntValue(config, "ValidateEquipmentTrade", ValidateEquipmentTrade as int) as Bool
+	LifetimeMultiplier = GetFloatValue(config, "LifetimeMultiplier", LifetimeMultiplier)
 
 	; General - Filters
 	isLimitToCityEnabled = GetIntValue(config, "isLimitToCityEnabled", isLimitToCityEnabled as int) as Bool
@@ -2497,6 +2554,7 @@ Bool Function importConfig(Bool abSilent = false)
 	; Import done
 	; Activate and refresh settings
 	bmlUtility.RefreshFeatures()
+	recalculateCosts()
 	updateGlobals()
 
 	if !abSilent

@@ -33,7 +33,7 @@ Scriptname BM_API Hidden
 
 ; Get - Mod Version
 string Function GetModVersion() Global
-    return "1.25.2"
+    return "1.26.0"
 EndFunction
 
 ; Get - Config Version
@@ -275,8 +275,9 @@ EndFunction
 ; Purchase License
 ; Parameter 0 asks for an integer corresponding to a license type.
 ; Parameter 1 asks if you'd like to subtract a corresponding cost from player gold. Note that the function doesn't check whether the player has enough gold on-hand.
-; Parameter 2 asks if you want to skip safety checks. Don't change this boolean from its default unless absolutely necessary.
-bool Function PurchaseLicense(int LicenseType, bool SubtractGold = true, bool CheckSafety = true, BM_Licenses_Utility bmlUtility = none) Global
+; Parameter 2 asks if you want the license to never expire.
+; Parameter 3 asks if you want to skip safety checks. Don't change this boolean from its default unless absolutely necessary.
+bool Function PurchaseLicense(int LicenseType, bool SubtractGold = true, bool Lifetime = false, bool CheckSafety = true, BM_Licenses_Utility bmlUtility = none) Global
     if !bmlUtility
         bmlUtility = GetUtility()
     endIf
@@ -288,31 +289,31 @@ bool Function PurchaseLicense(int LicenseType, bool SubtractGold = true, bool Ch
     if LicenseType == 0
         ; Empty
     elseIf LicenseType == 1
-        bmlUtility.BM_PurchaseArmorLicense(SubtractGold)
+        bmlUtility.BM_PurchaseArmorLicense(SubtractGold, Lifetime)
     elseIf LicenseType == 2
-        bmlUtility.BM_PurchaseBikiniLicense(SubtractGold)
+        bmlUtility.BM_PurchaseBikiniLicense(SubtractGold, Lifetime)
     elseIf LicenseType == 3
-        bmlUtility.BM_PurchaseBikiniExemption(SubtractGold)
+        bmlUtility.BM_PurchaseBikiniExemption(SubtractGold, Lifetime)
     elseIf LicenseType == 4
-        bmlUtility.BM_PurchaseClothingLicense(SubtractGold)
+        bmlUtility.BM_PurchaseClothingLicense(SubtractGold, Lifetime)
     elseIf LicenseType == 5
-        bmlUtility.BM_PurchaseMagicLicense(SubtractGold)
+        bmlUtility.BM_PurchaseMagicLicense(SubtractGold, Lifetime)
     elseIf LicenseType == 6
-        bmlUtility.BM_PurchaseWeaponLicense(SubtractGold)
+        bmlUtility.BM_PurchaseWeaponLicense(SubtractGold, Lifetime)
     elseIf LicenseType == 7
-        bmlUtility.BM_PurchaseCraftingLicense(SubtractGold)
+        bmlUtility.BM_PurchaseCraftingLicense(SubtractGold, Lifetime)
     elseIf LicenseType == 8
-        bmlUtility.BM_PurchaseTravelPermit(SubtractGold)
+        bmlUtility.BM_PurchaseTravelPermit(SubtractGold, Lifetime)
     elseIf LicenseType == 9
-        bmlUtility.BM_PurchaseCollarExemption(SubtractGold)
+        bmlUtility.BM_PurchaseCollarExemption(SubtractGold, Lifetime)
     elseIf LicenseType == 10
-        bmlUtility.BM_PurchaseLifeInsurance(SubtractGold)
+        bmlUtility.BM_PurchaseLifeInsurance(SubtractGold, Lifetime)
     elseIf LicenseType == 11
-        bmlUtility.BM_PurchaseCurfewExemption(SubtractGold)
+        bmlUtility.BM_PurchaseCurfewExemption(SubtractGold, Lifetime)
     elseIf LicenseType == 12
-        bmlUtility.BM_PurchaseTradingLicense(SubtractGold)
+        bmlUtility.BM_PurchaseTradingLicense(SubtractGold, Lifetime)
     elseIf LicenseType == 13
-        bmlUtility.BM_PurchaseWhoreLicense(SubtractGold)
+        bmlUtility.BM_PurchaseWhoreLicense(SubtractGold, Lifetime)
     else
         return false
     endIf

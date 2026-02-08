@@ -674,8 +674,8 @@ bool Property isInsured
     EndFunction
 EndProperty
 
-; if expiration time == -1.0 -> not purchased yet
-; resets after license runs out
+; if expiration time == -1.0 -> license expired
+; if expiration time == -2.0 -> license perpetual
 float property armorLicenseExpirationTime = -1.0 auto conditional
 float property bikiniLicenseExpirationTime = -1.0 auto conditional
 float property bikiniExemptionExpirationTime = -1.0 auto conditional
