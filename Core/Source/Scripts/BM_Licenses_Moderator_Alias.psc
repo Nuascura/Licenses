@@ -193,12 +193,12 @@ EndFunction
 Event LPO_OnConfrontationEnd(int aiArg1)
     bmlUtility.LogTrace("LPO_OnConfrontationEnd")
     if aiArg1 == 1 && bmlUtility.CountValidLicenses() != 0
-        bmlUtility.DF_AdjustResistance(8.0 * (1.0 + (bmlUtility.CountActiveViolations() / bmlUtility.CountValidLicenses())))
+        bmlUtility.DF_AdjustResistance(8.0 * (1.0 + (bmlUtility.ViolationActiveCount_CachedAmt / bmlUtility.LicenseValidCount_CachedAmt)))
     endIf
 EndEvent
 
 Event LPO_OnLicensePurchased(int aiArg1)
     bmlUtility.LogTrace("LPO_OnLicensePurchased")
-    bmlUtility.DF_AdjustResistance(2.0 * bmlUtility.CountActiveLicenses())
+    bmlUtility.DF_AdjustResistance(2.0 * bmlUtility.LicenseActiveCount_CachedAmt)
 EndEvent
 ; ------------------------------

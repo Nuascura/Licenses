@@ -99,9 +99,7 @@ Function Shutdown()
     bmlmcm.allowJailQuestNodes = false
     bmlmcm.ConfigWarn = true
 
-    ; Reset Additional Variables
-    savedLoc = None
-	savedSpace = None
+    ; Reset Global Variables
     BM_IsInSSLV.SetValue(0.0)
     BM_IsInDHLPEvent.SetValue(0.0)
     BM_IsInPlayerHome.SetValue(0.0)
@@ -113,6 +111,13 @@ Function Shutdown()
     BM_FirstTimeViolation.SetValue(1.0) ; true by default
 	BM_LenientCurseViolation.SetValue(1.0) ; true by default
     BM_LenientCurfewViolation.SetValue(1.0) ; true by default
+
+    ; Reset Local Variables
+    savedLoc = None
+	savedSpace = None
+    LicenseActiveCount_CachedAmt = 0
+    LicenseValidCount_CachedAmt = 0
+    ViolationActiveCount_CachedAmt = 0
 
     ; Stop Add-on Quests
     if Game.GetModByName("Licenses - Ambience.esp") != 255
@@ -565,6 +570,8 @@ Endfunction
 Function startBountyQuest()
     LogTrace("Attempting to start Bounty Quest.")
     BM_FineAmount.SetValue(GetFine())
+    ViolationActiveCount_CachedAmt = CountActiveViolations()
+
     licenseDetectionQuest.stop()
     if licenseBountyQuest.start() && bmlBounty.Setup()
         insuranceModifier("infamy", insuranceModifierViolation())
@@ -706,6 +713,7 @@ Function BM_PurchaseArmorLicense(bool pay = true, bool lifetime = false)
             PlayerActorRef.removeItem(Gold001, BM_ALCost.GetValue() as int)
         endIf
     endIf
+    ModeratorUpdater()
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 1)
 EndFunction
 
@@ -722,6 +730,7 @@ Function BM_PurchaseBikiniLicense(bool pay = true, bool lifetime = false)
             PlayerActorRef.removeItem(Gold001, BM_BLCost.GetValue() as int)
         endIf
     endIf
+    ModeratorUpdater()
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 2)
 EndFunction
 
@@ -738,6 +747,7 @@ Function BM_PurchaseBikiniExemption(bool pay = true, bool lifetime = false)
             PlayerActorRef.removeItem(Gold001, BM_BLCost.GetValue() as int)
         endIf
     endIf
+    ModeratorUpdater()
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 3)
 EndFunction
 
@@ -754,6 +764,7 @@ Function BM_PurchaseClothingLicense(bool pay = true, bool lifetime = false)
             PlayerActorRef.removeItem(Gold001, BM_CLCost.GetValue() as int)
         endIf
     endIf
+    ModeratorUpdater()
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 4)
 EndFunction
 
@@ -771,6 +782,7 @@ Function BM_PurchaseMagicLicense(bool pay = true, bool lifetime = false)
         endIf
     endIf
     licenses.RemoveNullifyMagicka()
+    ModeratorUpdater()
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 5)
 EndFunction
 
@@ -787,6 +799,7 @@ Function BM_PurchaseWeaponLicense(bool pay = true, bool lifetime = false)
             PlayerActorRef.removeItem(Gold001, BM_WLCost.GetValue() as int)
         endIf
     endIf
+    ModeratorUpdater()
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 6)
 Endfunction
 
@@ -803,6 +816,7 @@ Function BM_PurchaseCraftingLicense(bool pay = true, bool lifetime = false)
             PlayerActorRef.removeItem(Gold001, BM_CrfLCost.GetValue() as int)
         endIf
     endIf
+    ModeratorUpdater()
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 7)
 EndFunction
 
@@ -821,6 +835,7 @@ Function BM_PurchaseTravelPermit(bool pay = true, bool lifetime = false)
     endIf
     savedLoc = None
     savedSpace = None
+    ModeratorUpdater()
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 8)
 EndFunction
 
@@ -838,6 +853,7 @@ Function BM_PurchaseCollarExemption(bool pay = true, bool lifetime = false)
         endIf
     endIf
     licenses.RemoveDeviousDevicesCollar()
+    ModeratorUpdater()
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 9)
 EndFunction
 
@@ -855,6 +871,7 @@ Function BM_PurchaseLifeInsurance(bool pay = true, bool lifetime = false)
         endIf
     endIf
     licenses.RemoveNullifyMagicka()
+    ModeratorUpdater()
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 10)
 EndFunction
 
@@ -871,6 +888,7 @@ Function BM_PurchaseCurfewExemption(bool pay = true, bool lifetime = false)
             PlayerActorRef.removeItem(Gold001, BM_CuECost.GetValue() as int)
         endIf
     endIf
+    ModeratorUpdater()
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 11)
 EndFunction
 
@@ -887,6 +905,7 @@ Function BM_PurchaseTradingLicense(bool pay = true, bool lifetime = false)
             PlayerActorRef.removeItem(Gold001, BM_TLCost.GetValue() as int)
         endIf
     endIf
+    ModeratorUpdater()
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 12)
 EndFunction
 
@@ -903,6 +922,7 @@ Function BM_PurchaseWhoreLicense(bool pay = true, bool lifetime = false)
             PlayerActorRef.removeItem(Gold001, BM_WhLCost.GetValue() as int)
         endIf
     endIf
+    ModeratorUpdater()
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 13)
 EndFunction
 ; ------------------------------
@@ -1235,10 +1255,12 @@ EndFunction
 
 Function refreshActivationLimit()
     licenses.isLicenseLimit = false
+    LicenseActiveCount_CachedAmt = CountActiveLicenses()
+    LicenseValidCount_CachedAmt = CountValidLicenses()
     if bmlmcm.LicenseLimit == 0
-        licenses.isLicenseLimit = (CountValidLicenses() >= BM_LicenseBooks.GetSize())
+        licenses.isLicenseLimit = (LicenseValidCount_CachedAmt >= BM_LicenseBooks.GetSize())
     else
-        licenses.isLicenseLimit = (CountActiveLicenses() >= bmlmcm.LicenseLimit)
+        licenses.isLicenseLimit = (LicenseActiveCount_CachedAmt >= bmlmcm.LicenseLimit)
     endIf
 EndFunction
 
@@ -1569,6 +1591,9 @@ WorldSpace Property lastSpace auto
 
 GlobalVariable Property Licenses_State auto
 Bool Property Licenses_CachedState auto hidden
+Int Property LicenseActiveCount_CachedAmt auto hidden
+Int Property LicenseValidCount_CachedAmt auto hidden
+Int Property ViolationActiveCount_CachedAmt auto hidden
 
 ; Vanilla Quests
 Quest Property MQ104 auto
