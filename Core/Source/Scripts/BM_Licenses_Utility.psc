@@ -695,65 +695,80 @@ EndFunction
 ; ---------- License Purchase Functions ----------
 Function BM_PurchaseArmorLicense(bool pay = true, bool lifetime = false)
     SendModEvent("BM-LPO_ArmorLicense_" + PlayerActorRef.GetFormID() + "_Activate")
-    if pay
-        PlayerActorRef.removeItem(Gold001, BM_ALCost.GetValueInt())
-    endIf
     if lifetime
         licenses.armorLicenseExpirationTime = -2
+        if pay
+            PlayerActorRef.removeItem(Gold001, (BM_ALCost.GetValue() * bmlmcm.LifetimeMultiplier) as int)
+        endIf
     else
         licenses.armorLicenseExpirationTime = (GameDaysPassed.getValue() + BM_ALDuration.GetValue()) as int
+        if pay
+            PlayerActorRef.removeItem(Gold001, BM_ALCost.GetValue() as int)
+        endIf
     endIf
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 1)
 EndFunction
 
 Function BM_PurchaseBikiniLicense(bool pay = true, bool lifetime = false)
     SendModEvent("BM-LPO_BikiniLicense_" + PlayerActorRef.GetFormID() + "_Activate")
-    if pay
-        PlayerActorRef.removeItem(Gold001, BM_BLCost.GetValueInt())
-    endIf
     if lifetime
         licenses.bikiniLicenseExpirationTime = -2
+        if pay
+            PlayerActorRef.removeItem(Gold001, (BM_BLCost.GetValue() * bmlmcm.LifetimeMultiplier) as int)
+        endIf
     else
         licenses.bikiniLicenseExpirationTime = (GameDaysPassed.getValue() + BM_BLDuration.getValue()) as int
+        if pay
+            PlayerActorRef.removeItem(Gold001, BM_BLCost.GetValue() as int)
+        endIf
     endIf
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 2)
 EndFunction
 
 Function BM_PurchaseBikiniExemption(bool pay = true, bool lifetime = false)
     SendModEvent("BM-LPO_BikiniExemption_" + PlayerActorRef.GetFormID() + "_Activate")
-    if pay
-        PlayerActorRef.removeItem(Gold001, BM_BLCost.GetValueInt())
-    endIf
     if lifetime
         licenses.bikiniExemptionExpirationTime = -2
+        if pay
+            PlayerActorRef.removeItem(Gold001, (BM_BLCost.GetValue() * bmlmcm.LifetimeMultiplier) as int)
+        endIf
     else
         licenses.bikiniExemptionExpirationTime = (GameDaysPassed.getValue() + BM_BLDuration.getValue()) as int
+        if pay
+            PlayerActorRef.removeItem(Gold001, BM_BLCost.GetValue() as int)
+        endIf
     endIf
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 3)
 EndFunction
 
 Function BM_PurchaseClothingLicense(bool pay = true, bool lifetime = false)
     SendModEvent("BM-LPO_ClothingLicense_" + PlayerActorRef.GetFormID() + "_Activate")
-    if pay
-        PlayerActorRef.removeItem(Gold001, BM_CLCost.GetValueInt())
-    endIf
     if lifetime
         licenses.clothingLicenseExpirationTime = -2
+        if pay
+            PlayerActorRef.removeItem(Gold001, (BM_CLCost.GetValue() * bmlmcm.LifetimeMultiplier) as int)
+        endIf
     else
         licenses.clothingLicenseExpirationTime = (GameDaysPassed.getValue() + BM_CLDuration.getValue()) as int
+        if pay
+            PlayerActorRef.removeItem(Gold001, BM_CLCost.GetValue() as int)
+        endIf
     endIf
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 4)
 EndFunction
 
 Function BM_PurchaseMagicLicense(bool pay = true, bool lifetime = false)
     SendModEvent("BM-LPO_MagicLicense_" + PlayerActorRef.GetFormID() + "_Activate")
-    if pay
-        PlayerActorRef.removeItem(Gold001, BM_MLCost.GetValueInt())
-    endIf
     if lifetime
         licenses.magicLicenseExpirationTime = -2
+        if pay
+            PlayerActorRef.removeItem(Gold001, (BM_MLCost.GetValue() * bmlmcm.LifetimeMultiplier) as int)
+        endIf
     else
         licenses.magicLicenseExpirationTime = (GameDaysPassed.getValue() + BM_MLDuration.getValue()) as int
+        if pay
+            PlayerActorRef.removeItem(Gold001, BM_MLCost.GetValue() as int)
+        endIf
     endIf
     licenses.RemoveNullifyMagicka()
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 5)
@@ -761,39 +776,48 @@ EndFunction
 
 Function BM_PurchaseWeaponLicense(bool pay = true, bool lifetime = false)
     SendModEvent("BM-LPO_WeaponLicense_" + PlayerActorRef.GetFormID() + "_Activate")
-    if pay
-        PlayerActorRef.removeItem(Gold001, BM_WLCost.GetValueInt())
-    endIf
     if lifetime
         licenses.weaponLicenseExpirationTime = -2
+        if pay
+            PlayerActorRef.removeItem(Gold001, (BM_WLCost.GetValue() * bmlmcm.LifetimeMultiplier) as int)
+        endIf
     else
         licenses.weaponLicenseExpirationTime = (GameDaysPassed.getValue() + BM_WLDuration.getValue()) as int
+        if pay
+            PlayerActorRef.removeItem(Gold001, BM_WLCost.GetValue() as int)
+        endIf
     endIf
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 6)
 Endfunction
 
 Function BM_PurchaseCraftingLicense(bool pay = true, bool lifetime = false)
     SendModEvent("BM-LPO_CraftingLicense_" + PlayerActorRef.GetFormID() + "_Activate")
-    if pay
-        PlayerActorRef.removeItem(Gold001, BM_CrfLCost.GetValueInt())
-    endIf
     if lifetime
         licenses.craftingLicenseExpirationTime = -2
+        if pay
+            PlayerActorRef.removeItem(Gold001, (BM_CrfLCost.GetValue() * bmlmcm.LifetimeMultiplier) as int)
+        endIf
     else
         licenses.craftingLicenseExpirationTime = (GameDaysPassed.getValue() + BM_CrfLDuration.getValue()) as int
+        if pay
+            PlayerActorRef.removeItem(Gold001, BM_CrfLCost.GetValue() as int)
+        endIf
     endIf
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 7)
 EndFunction
 
 Function BM_PurchaseTravelPermit(bool pay = true, bool lifetime = false)
     SendModEvent("BM-LPO_TravelPermit_" + PlayerActorRef.GetFormID() + "_Activate")
-    if pay
-        PlayerActorRef.removeItem(Gold001, BM_TPCost.GetValueInt())
-    endIf
     if lifetime
         licenses.travelPermitExpirationTime = -2
+        if pay
+            PlayerActorRef.removeItem(Gold001, (BM_TPCost.GetValue() * bmlmcm.LifetimeMultiplier) as int)
+        endIf
     else
         licenses.travelPermitExpirationTime = (GameDaysPassed.getValue() + BM_TPDuration.getValue()) as int
+        if pay
+            PlayerActorRef.removeItem(Gold001, BM_TPCost.GetValue() as int)
+        endIf
     endIf
     savedLoc = None
     savedSpace = None
@@ -802,13 +826,16 @@ EndFunction
 
 Function BM_PurchaseCollarExemption(bool pay = true, bool lifetime = false)
     SendModEvent("BM-LPO_CollarExemption_" + PlayerActorRef.GetFormID() + "_Activate")
-    if pay
-        PlayerActorRef.removeItem(Gold001, BM_CECost.GetValueInt())
-    endIf
     if lifetime
         licenses.collarExemptionExpirationTime = -2
+        if pay
+            PlayerActorRef.removeItem(Gold001, (BM_CECost.GetValue() * bmlmcm.LifetimeMultiplier) as int)
+        endIf
     else
         licenses.collarExemptionExpirationTime = (GameDaysPassed.getValue() + BM_CEDuration.getValue()) as int
+        if pay
+            PlayerActorRef.removeItem(Gold001, BM_CECost.GetValue() as int)
+        endIf
     endIf
     licenses.RemoveDeviousDevicesCollar()
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 9)
@@ -816,13 +843,16 @@ EndFunction
 
 Function BM_PurchaseLifeInsurance(bool pay = true, bool lifetime = false)
     SendModEvent("BM-LPO_Insurance_" + PlayerActorRef.GetFormID() + "_Activate")
-    if pay
-        PlayerActorRef.removeItem(Gold001, BM_InsurCost.GetValueInt())
-    endIf
     if lifetime
         licenses.insuranceExpirationTime = -2
+        if pay
+            PlayerActorRef.removeItem(Gold001, (BM_InsurCost.GetValue() * bmlmcm.LifetimeMultiplier) as int)
+        endIf
     else
         licenses.insuranceExpirationTime = (GameDaysPassed.getValue() + BM_InsurDuration.getValue()) as int
+        if pay
+            PlayerActorRef.removeItem(Gold001, BM_InsurCost.GetValue() as int)
+        endIf
     endIf
     licenses.RemoveNullifyMagicka()
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 10)
@@ -830,39 +860,48 @@ EndFunction
 
 Function BM_PurchaseCurfewExemption(bool pay = true, bool lifetime = false)
     SendModEvent("BM-LPO_CurfewExemption_" + PlayerActorRef.GetFormID() + "_Activate")
-    if pay
-        PlayerActorRef.removeItem(Gold001, BM_CuECost.GetValueInt())
-    endIf
     if lifetime
         licenses.curfewExemptionExpirationTime = -2
+        if pay
+            PlayerActorRef.removeItem(Gold001, (BM_CuECost.GetValue() * bmlmcm.LifetimeMultiplier) as int)
+        endIf
     else
         licenses.curfewExemptionExpirationTime = (GameDaysPassed.getValue() + BM_CuEDuration.GetValue()) as int
+        if pay
+            PlayerActorRef.removeItem(Gold001, BM_CuECost.GetValue() as int)
+        endIf
     endIf
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 11)
 EndFunction
 
 Function BM_PurchaseTradingLicense(bool pay = true, bool lifetime = false)
     SendModEvent("BM-LPO_TradingLicense_" + PlayerActorRef.GetFormID() + "_Activate")
-    if pay
-        PlayerActorRef.removeItem(Gold001, BM_TLCost.GetValueInt())
-    endIf
     if lifetime
         licenses.tradingLicenseExpirationTime = -2
+        if pay
+            PlayerActorRef.removeItem(Gold001, (BM_TLCost.GetValue() * bmlmcm.LifetimeMultiplier) as int)
+        endIf
     else
         licenses.tradingLicenseExpirationTime = (GameDaysPassed.getValue() + BM_TLDuration.GetValue()) as int
+        if pay
+            PlayerActorRef.removeItem(Gold001, BM_TLCost.GetValue() as int)
+        endIf
     endIf
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 12)
 EndFunction
 
 Function BM_PurchaseWhoreLicense(bool pay = true, bool lifetime = false)
     SendModEvent("BM-LPO_WhoreLicense_" + PlayerActorRef.GetFormID() + "_Activate")
-    if pay
-        PlayerActorRef.removeItem(Gold001, BM_WhLCost.GetValueInt())
-    endIf
     if lifetime
         licenses.whoreLicenseExpirationTime = -2
+        if pay
+            PlayerActorRef.removeItem(Gold001, (BM_WhLCost.GetValue() * bmlmcm.LifetimeMultiplier) as int)
+        endIf
     else
         licenses.whoreLicenseExpirationTime = (GameDaysPassed.getValue() + BM_WhLDuration.getValue()) as int
+        if pay
+            PlayerActorRef.removeItem(Gold001, BM_WhLCost.GetValue() as int)
+        endIf
     endIf
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 13)
 EndFunction
