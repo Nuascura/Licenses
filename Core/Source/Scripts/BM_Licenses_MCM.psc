@@ -365,7 +365,7 @@ Int Function AddFeatureState(String DisplayName, Bool FeatureFlag, Bool StateFla
 		AddTextOption(DisplayName, DisplayState)
 		if ExpirationTime != -1.0
 			if ExpirationTime == -2.0
-				AddEmptyOption()
+				AddTextOption("$LPO_ExpirationTime_DNE", "")
 			else
 				AddTextOption("$LPO_ExpirationTime{" + Math.ceiling(24.0 * (ExpirationTime - GameDaysPassed.GetValue())) + "}", "")
 			endIf
