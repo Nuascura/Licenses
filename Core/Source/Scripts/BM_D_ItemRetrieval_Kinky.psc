@@ -6,7 +6,7 @@ Scriptname BM_D_ItemRetrieval_Kinky Extends TopicInfo Hidden
 Function Fragment_0(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
-licenses.BM_ItemConfiscationChest.RemoveAllItems(ItemRetrievalActor, false, true)
+ItemConfiscationChest.RemoveAllItems(ItemRetrievalActor, false, true)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -15,8 +15,8 @@ EndFunction
 Function Fragment_1(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
-Form[] ValidatedForms = licenses.bmlUtility.GetViolatingItemsAll(ItemRetrievalActor, false)
-SPE_ObjectRef.RemoveItems(ItemRetrievalActor, ValidatedForms, licenses.BM_ItemConfiscationChest)
+Form[] ValidatedForms = bmlUtility.GetViolatingItemsAll(ItemRetrievalActor, false)
+SPE_ObjectRef.RemoveItems(ItemRetrievalActor, ValidatedForms, ItemConfiscationChest)
 ItemRetrievalActor.ShowGiftMenu(false, none, true, false)
 ;END CODE
 EndFunction
@@ -24,5 +24,6 @@ EndFunction
 
 ;END FRAGMENT CODE - Do not edit anything between this and the begin comment
 
-BM_Licenses Property licenses Auto
+BM_Licenses_Utility Property bmlUtility Auto
 Actor Property ItemRetrievalActor Auto
+ObjectReference Property ItemConfiscationChest Auto

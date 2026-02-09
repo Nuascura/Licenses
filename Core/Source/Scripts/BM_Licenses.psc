@@ -221,7 +221,7 @@ Function ConfiscateItems(Bool Confiscate = false, bool ConfiscateInventory = fal
         ; Merge two lists, remove dupes
         Form[] ValidatedForms = bmlUtility.GetViolatingItemsAll(PlayerActorRef, !ConfiscateInventory)
         ; Remove items
-        if SPE_ObjectRef.RemoveItems(PlayerActorRef, ValidatedForms, BM_ItemConfiscationChest) > 0
+        if SPE_ObjectRef.RemoveItems(PlayerActorRef, ValidatedForms, ItemConfiscationChest) > 0
             bmlUtility.GameMessage(MessageItemConfiscated)
         endIf
     else
@@ -520,7 +520,7 @@ BM_Licenses_Init Property bmlInit auto
 BM_Licenses_MCM Property bmlmcm auto
 BM_Licenses_Utility Property bmlUtility Auto
 MiscObject Property Gold001  Auto
-ObjectReference Property BM_ItemConfiscationChest Auto
+ObjectReference Property ItemConfiscationChest Auto
 
 bool Property hasArmorLicense = true auto conditional
 bool Property ArmorLicense
@@ -707,9 +707,6 @@ float property curfewExemptionCooldownTime = -1.0 auto conditional
 
 float property insuranceMisbehaviourMultiplier = 1.0 auto
 float property insurancePopularityMultiplier = 1.0 auto
-
-float property NextStatusCheck = 0.0 auto conditional
-float property previousLicenseStatusCheckTime auto
 
 Keyword Property VendorItemWeapon Auto
 Keyword Property VendorItemArmor Auto

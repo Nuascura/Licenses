@@ -100,6 +100,8 @@ Function Shutdown()
     bmlmcm.ConfigWarn = true
 
     ; Reset Global Variables
+    BM_NextStatusCheck.SetValue(0.0)
+    BM_NextStorageClear.SetValue(0.0)
     BM_IsInSSLV.SetValue(0.0)
     BM_IsInDHLPEvent.SetValue(0.0)
     BM_IsInPlayerHome.SetValue(0.0)
@@ -405,6 +407,16 @@ EndFunction
 ; ------------------------------
 
 ; ---------- Core Licenses Updaters ----------
+Function CheckStorageStatus()
+    Debug.Trace("BM_ CheckStorageStatus()")
+    if BM_NextStorageClear.GetValue()
+        ItemRetrievalActor.RemoveAllItems()
+        ItemConfiscationChest.RemoveAllItems()
+    endIf
+
+    BM_NextStorageClear.SetValue((BM_NextStatusCheck.GetValue() + 7.0) as int)
+EndFunction
+
 Function CheckLicenseStatus()
     Debug.Trace("BM_ CheckLicenseStatus()")
     float currentTime = GameDaysPassed.GetValue()
@@ -412,14 +424,14 @@ Function CheckLicenseStatus()
     RefreshLicenseStatus(currentTime)
 
     ; Set values for next check
-    licenses.previousLicenseStatusCheckTime = currentTime
+    LastStatusCheck = currentTime
     ; currentTime as 4.0 indicates midnight between day 3 and day 4
     ; so, all we need to do is add 1.0 to the current time and cast it as an int, which auto 'floors' the value
     ; example: if currentTime is 3.5, which indicates halfway through day 3, we add 1.0 to 3.5, giving us 4.5. Casting this float as int gives us 4.0
-    licenses.NextStatusCheck = (currentTime + 1.0) as int
+    BM_NextStatusCheck.SetValue((currentTime + 1.0) as int)
 
     LogTrace("Current Time: " + CurrentTime)
-    LogTrace("Next Status Check: " + licenses.NextStatusCheck)
+    LogTrace("Next Status Check: " + BM_NextStatusCheck)
 
     ModeratorUpdater()
 EndFunction
@@ -1047,6 +1059,7 @@ Function RefreshStatus()
     CheckThaneship()
     CheckExceptionState()
     CheckLicenseStatus()
+    CheckStorageStatus()
     CheckDeviousDevicesStatus()
 EndFunction
 
@@ -1149,7 +1162,7 @@ Function RefreshLicenseStatus(float currentTime)
         endIf
     endif
     insuranceModifier("fame", insuranceModifierFame())
-    insuranceRateDegradation(currentTime - licenses.previousLicenseStatusCheckTime)
+    insuranceRateDegradation(currentTime - LastStatusCheck)
     if (licenses.curfewExemptionExpirationTime >= 0)
         if (currentTime >= licenses.curfewExemptionExpirationTime)
             GameMessage(licenses.MessageCurfewExpired)
@@ -1571,8 +1584,13 @@ GlobalVariable Property BM_FineAmount auto
 GlobalVariable Property BM_FirstTimeViolation auto
 GlobalVariable Property BM_LenientCurseViolation auto
 GlobalVariable Property BM_LenientCurfewViolation auto
+GlobalVariable Property BM_NextStatusCheck auto
+GlobalVariable Property BM_NextStorageClear auto
 
+; Objects
 MiscObject Property Gold001  Auto 
+ObjectReference Property ItemConfiscationChest Auto
+Actor Property ItemRetrievalActor Auto
 
 FormList Property BM_WorldSpaces  Auto
 FormList Property BM_Cities  Auto 
@@ -1591,11 +1609,13 @@ WorldSpace Property currSpace auto
 WorldSpace Property savedSpace auto
 WorldSpace Property lastSpace auto
 
+;Caches
 GlobalVariable Property Licenses_State auto
 Bool Property Licenses_CachedState auto hidden
 Int Property LicenseActiveCount_CachedAmt auto hidden
 Int Property LicenseValidCount_CachedAmt auto hidden
 Int Property ViolationActiveCount_CachedAmt auto hidden
+Float Property LastStatusCheck auto hidden
 
 ; Vanilla Quests
 Quest Property MQ104 auto
