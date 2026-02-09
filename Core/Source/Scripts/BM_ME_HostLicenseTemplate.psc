@@ -51,19 +51,15 @@ EndEvent
 ; ------------------------------
 
 Function StartLicense()
-    if TargetActor.getItemCount(TargetBook) == 0
-        TargetActor.addItem(TargetBook, 1)
-    endIf
-
     TemplateBridge.GoToState("LicenseBridge_" + TargetInteger)
-
-    if TargetActor.GetItemCount(TargetBook) > 0
-        TemplateBridge.InventoryStateChange(true)
-        GoToState("InventoryActive")
-    else
-        TemplateBridge.InventoryStateChange(false)
+    if TargetActor.getItemCount(TargetBook) == 0
         GoToState("InventoryInactive")
+        Utility.Wait(0.5)
+        TargetActor.addItem(TargetBook, 1)
+    else
+        GoToState("InventoryActive")
     endIf
+    
 EndFunction
 
 Function EndLicense()
@@ -71,7 +67,6 @@ Function EndLicense()
     if TargetActor.getItemCount(TargetBook) > 0
         TargetActor.removeItem(TargetBook, 1, true)
     endIf
-    TemplateBridge.InventoryStateChange(false)
     TemplateBridge.GoToState("")
     
     ;TargetActor.RemoveSpell(PO3_SKSEFunctions.GetActiveEffectSpell(self) as spell)
