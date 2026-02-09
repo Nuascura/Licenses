@@ -407,11 +407,16 @@ EndFunction
 ; ------------------------------
 
 ; ---------- Core Licenses Updaters ----------
-Function CheckStorageStatus()
+Function CheckStorageStatus(Bool NoQuestItem = true)
     Debug.Trace("BM_ CheckStorageStatus()")
     if BM_NextStorageClear.GetValue()
-        ItemRetrievalActor.RemoveAllItems()
-        ItemConfiscationChest.RemoveAllItems()
+        ItemRetrievalActor.RemoveAllItems(ItemConfiscationChest, false, true)
+
+        if BM_ExpiringItems.GetSize()
+            PO3_SKSEFunctions.RemoveListFromContainer(ItemConfiscationChest, BM_ExpiringItems, abNoQuestItem = NoQuestItem)
+        endIf
+
+        PO3_SKSEFunctions.AddAllItemsToList(ItemConfiscationChest, BM_ExpiringItems, abNoQuestItem = NoQuestItem)
     endIf
 
     BM_NextStorageClear.SetValue((BM_NextStatusCheck.GetValue() + 7.0) as int)
@@ -1059,7 +1064,7 @@ Function RefreshStatus()
     CheckThaneship()
     CheckExceptionState()
     CheckLicenseStatus()
-    CheckStorageStatus()
+    CheckStorageStatus(false)
     CheckDeviousDevicesStatus()
 EndFunction
 
@@ -1592,19 +1597,19 @@ MiscObject Property Gold001  Auto
 ObjectReference Property ItemConfiscationChest Auto
 Actor Property ItemRetrievalActor Auto
 
+; Utility forms
 FormList Property BM_WorldSpaces  Auto
 FormList Property BM_Cities  Auto 
 FormList Property BM_Towns  Auto
 FormList Property BM_LicenseBooks  Auto
-
-Location Property currLoc auto
-Location Property savedLoc auto
-Location Property lastLoc auto
+FormList Property BM_ExpiringItems auto
 FormList Property BM_PotentialViolations  Auto
 FormList Property BM_PotentialViolations_Ench  Auto
 FormList Property BM_LicensesIgnoreSpell  Auto
 FormList Property BM_LicensesIgnoreWorldspace  Auto
-
+Location Property currLoc auto
+Location Property savedLoc auto
+Location Property lastLoc auto
 WorldSpace Property currSpace auto
 WorldSpace Property savedSpace auto
 WorldSpace Property lastSpace auto
@@ -1623,6 +1628,3 @@ Quest Property C06 auto
 Quest Property MG08 auto
 Quest Property CWSiegeObj auto
 FavorJarlsMakeFriendsScript Property FJMF auto
-
-; unused
-FormList Property BM_Empty auto
