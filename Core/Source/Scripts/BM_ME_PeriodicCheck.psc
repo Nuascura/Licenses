@@ -6,7 +6,9 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
     if Utility.IsInMenuMode()
         Utility.Wait(2.5) ; buffer if inside menu mode
     endIf
-    licenses.bmlUtility.CheckLicenseStatus()
+    if licenses.NextStatusCheck
+        licenses.bmlUtility.CheckLicenseStatus()
+    endIf
     ; this magic effect will automatically stop when NextStatusCheck updates, thus invalidating the host spell's condition.
     ; using dispel() will instead prohibit the spell from enabling this magic effect for the next cycle
 EndEvent
