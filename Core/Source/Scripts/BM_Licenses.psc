@@ -1,5 +1,12 @@
 Scriptname BM_Licenses extends Quest conditional
 
+import PO3_SKSEFunctions
+import PapyrusUtil
+import SPE_Utility
+import SPE_ObjectRef
+import BM_API
+import BM_API_DD
+
 ; ----------------------------------------------------------------------------------------------------
 ; -------------------------------------------------- Internal Tools
 ; ----------------------------------------------------------------------------------------------------
@@ -138,10 +145,10 @@ Function ApplyNullifyMagicka(bool force = false)
         elseIf bmlmcm.DeviousDevices_State && bmlmcm.NullifyMagickaSource == 2
             if bmlUtility.BM_IsPlayerCollared.GetValue() as bool
                 bmlUtility.LogTrace("RefreshCollar")
-                BM_API_DD.RefreshCollar(bmlInit.kzadAPI, PlayerActorRef, NullifyMagickaEnchantment)
+                RefreshCollar(bmlInit.kzadAPI, PlayerActorRef, NullifyMagickaEnchantment)
             else
                 bmlUtility.LogTrace("RenewCollar")
-                BM_API_DD.RenewCollar(bmlInit.kzadAPI, bmlInit.kzadxAPI, PlayerActorRef, NullifyMagickaEnchantment, bmlmcm.ddFilter)
+                RenewCollar(bmlInit.kzadAPI, bmlInit.kzadxAPI, PlayerActorRef, NullifyMagickaEnchantment, bmlmcm.ddFilter)
             endIf
         endIf
     else
@@ -155,9 +162,9 @@ Function RemoveNullifyMagicka(bool force = false)
             PlayerActorRef.RemoveSpell(NullifyMagickaSpell)
         elseIf bmlmcm.DeviousDevices_State
             if hasCollarExemption || force
-                BM_API_DD.RemoveCollar(bmlInit.kzadAPI, PlayerActorRef)
+                RemoveCollar(bmlInit.kzadAPI, PlayerActorRef)
             else
-                BM_API_DD.RefreshCollar(bmlInit.kzadAPI, PlayerActorRef)
+                RefreshCollar(bmlInit.kzadAPI, PlayerActorRef)
             endIf
         else
             bmlUtility.LogTrace("Licenses could not find or estimate a source for the Nullify Magicka Magic Effect.")
@@ -169,21 +176,21 @@ Function ApplyDeviousDevices()
     if bmlmcm.DeviousDevices_State
         if !hasCollarExemption
             bmlUtility.LogTrace("equipCollar")
-            BM_API_DD.equipCollar(bmlInit.kzadAPI, bmlInit.kzadxAPI, PlayerActorRef, bmlmcm.ddFilter)
+            equipCollar(bmlInit.kzadAPI, bmlInit.kzadxAPI, PlayerActorRef, bmlmcm.ddFilter)
         endIf
         if bmlmcm.equipDDOnViolation
             bmlUtility.LogTrace("equipRestraint")
-            BM_API_DD.equipRestraint(bmlInit.kzadAPI, bmlInit.kzadxAPI, PlayerActorRef, bmlmcm.ddEquipChance, bmlmcm.ddFilter)
+            equipRestraint(bmlInit.kzadAPI, bmlInit.kzadxAPI, PlayerActorRef, bmlmcm.ddEquipChance, bmlmcm.ddFilter)
         endIf
     endIf
 EndFunction
 
 Function RemoveDeviousDevicesCollar()
-    Form[] SourceList = PO3_SKSEFunctions.GetMagicEffectSource(PlayerActorRef, NullifyMagickaMagicEffect)
+    Form[] SourceList = GetMagicEffectSource(PlayerActorRef, NullifyMagickaMagicEffect)
     if !hasMagicLicense && SourceList.Find(NullifyMagickaEnchantment) > -1
         return
     elseIf bmlmcm.DeviousDevices_State
-        BM_API_DD.RemoveCollar(bmlInit.kzadAPI, PlayerActorRef)
+        RemoveCollar(bmlInit.kzadAPI, PlayerActorRef)
     endIf
 EndFunction
 
@@ -221,7 +228,7 @@ Function ConfiscateItems(Bool Confiscate = false, bool ConfiscateInventory = fal
         ; Merge two lists, remove dupes
         Form[] ValidatedForms = bmlUtility.GetViolatingItemsAll(PlayerActorRef, !ConfiscateInventory)
         ; Remove items
-        if SPE_ObjectRef.RemoveItems(PlayerActorRef, ValidatedForms, ItemConfiscationChest) > 0
+        if RemoveItems(PlayerActorRef, ValidatedForms, ItemConfiscationChest) > 0
             bmlUtility.GameMessage(MessageItemConfiscated)
         endIf
     else
@@ -324,22 +331,22 @@ Function ConfiscateItems_Simple()
         endIf
     endIf
     ; Get Armor, selecting by slot
-    Form[] PotentialForms = bmlUtility.FilterByOccupiedSlotmask(PO3_SKSEFunctions.AddItemsOfTypeToArray(PlayerActorRef, 26, false), bmlmcm.ArmorSlotArray)
+    Form[] PotentialForms = bmlUtility.FilterByOccupiedSlotmask(AddItemsOfTypeToArray(PlayerActorRef, 26, false), bmlmcm.ArmorSlotArray)
     ; Get Weapons
-    PotentialForms = PapyrusUtil.MergeFormArray(PotentialForms, PO3_SKSEFunctions.AddItemsOfTypeToArray(PlayerActorRef, 41, false), true)
+    PotentialForms = MergeFormArray(PotentialForms, AddItemsOfTypeToArray(PlayerActorRef, 41, false), true)
     ; Get Ammo
-    PotentialForms = PapyrusUtil.MergeFormArray(PotentialForms, PO3_SKSEFunctions.AddItemsOfTypeToArray(PlayerActorRef, 42, false), true)
+    PotentialForms = MergeFormArray(PotentialForms, AddItemsOfTypeToArray(PlayerActorRef, 42, false), true)
     ; Filter by KeywordConfiscation_Simple
-    Form[] array1 = SPE_Utility.IntersectArray_Form(PotentialForms, SPE_ObjectRef.GetItemsByKeyword(PlayerActorRef, KeywordConfiscation_Simple, false))
+    Form[] array1 = IntersectArray_Form(PotentialForms, GetItemsByKeyword(PlayerActorRef, KeywordConfiscation_Simple, false))
     ; Filter by KeywordConfiscationEnch_Simple
-    Form[] array2 = SPE_Utility.IntersectArray_Form(PotentialForms, SPE_ObjectRef.GetItemsByKeyword(PlayerActorRef, KeywordConfiscationEnch_Simple, false))
-    array2 = SPE_Utility.IntersectArray_Form(array2, SPE_ObjectRef.GetEnchantedItems(PlayerActorRef, true, true, false))
+    Form[] array2 = IntersectArray_Form(PotentialForms, GetItemsByKeyword(PlayerActorRef, KeywordConfiscationEnch_Simple, false))
+    array2 = IntersectArray_Form(array2, GetEnchantedItems(PlayerActorRef, true, true, false))
     ; Merge Arrays
-    PotentialForms = PapyrusUtil.MergeFormArray(array1, array2, true)
+    PotentialForms = MergeFormArray(array1, array2, true)
     ; Overrides
     PotentialForms = bmlUtility.FilterSensitive(PotentialForms)
     ; Remove items
-    SPE_ObjectRef.RemoveItems(PlayerActorRef, PotentialForms, none)
+    RemoveItems(PlayerActorRef, PotentialForms, none)
 EndFunction
 ; ------------------------------
 
@@ -363,8 +370,8 @@ Function FillItemTypeArrayClothing()
 EndFunction
 
 Function FillItemTypeArrayBikini()
-	String[] BikiniKeyword = PapyrusUtil.StringSplit(bmlmcm.bikiniKeywordString, ",")
-    BikiniKeyword = PapyrusUtil.ClearEmpty(BikiniKeyword)
+	String[] BikiniKeyword = StringSplit(bmlmcm.bikiniKeywordString, ",")
+    BikiniKeyword = ClearEmpty(BikiniKeyword)
     ItemTypeBikini = new Keyword[32] ; limit to 32 for performance
     ItemTypeBikini[0] = BM_LicensesBikiniItem
     int i = 0
@@ -448,30 +455,30 @@ Function PopulateCursedTattoosArray()
     CursedTattoos = new String[7]
     ; neck
     if bmlmcm.Curse_Neck
-        PO3_SKSEFunctions.AddStringToArray("Neck Lower Seal Gradient", CursedTattoos)
+        AddStringToArray("Neck Lower Seal Gradient", CursedTattoos)
     endIf
     ; torso
     if bmlmcm.Curse_Torso
         if !bmlmcm.Curse_ReduceSlotUsage
-            PO3_SKSEFunctions.AddStringToArray("Torso Seal Gradient", CursedTattoos)
-            PO3_SKSEFunctions.AddStringToArray("Nipple Seal Gradient", CursedTattoos)
-            PO3_SKSEFunctions.AddStringToArray("Spine Seal Gradient", CursedTattoos)
+            AddStringToArray("Torso Seal Gradient", CursedTattoos)
+            AddStringToArray("Nipple Seal Gradient", CursedTattoos)
+            AddStringToArray("Spine Seal Gradient", CursedTattoos)
         else
-            PO3_SKSEFunctions.AddStringToArray("Body Seal Gradient", CursedTattoos)
+            AddStringToArray("Body Seal Gradient", CursedTattoos)
         endIf
     endIf
     ; wrists
     if bmlmcm.Curse_Arms
-        PO3_SKSEFunctions.AddStringToArray("Wrist Seal Gradient", CursedTattoos)
+        AddStringToArray("Wrist Seal Gradient", CursedTattoos)
     endIf
     ; legs
     if bmlmcm.Curse_Legs
         if !bmlmcm.Curse_ReduceSlotUsage
-            PO3_SKSEFunctions.AddStringToArray("Thigh Seal Gradient", CursedTattoos)
+            AddStringToArray("Thigh Seal Gradient", CursedTattoos)
         endIf
-        PO3_SKSEFunctions.AddStringToArray("Ankle Seal Gradient", CursedTattoos)
+        AddStringToArray("Ankle Seal Gradient", CursedTattoos)
     endIf
-    CursedTattoos = PapyrusUtil.ClearEmpty(CursedTattoos)
+    CursedTattoos = ClearEmpty(CursedTattoos)
 EndFunction
 
 Function PopulateKeywordExclusionArray()
@@ -528,7 +535,7 @@ bool Property ArmorLicense
         Return hasArmorLicense
     EndFunction
     Function Set(bool value)
-        hasArmorLicense = BM_API.ActualizeValue("ArmorLicense", value, bmlmcm.isArmorLicenseFeatureEnabled)
+        hasArmorLicense = ActualizeValue("ArmorLicense", value, bmlmcm.isArmorLicenseFeatureEnabled)
     EndFunction
 EndProperty
 
@@ -538,7 +545,7 @@ bool Property BikiniLicense
         Return hasBikiniLicense
     EndFunction
     Function Set(bool value)
-        hasBikiniLicense = BM_API.ActualizeValue("BikiniLicense", value, bmlmcm.isBikiniLicenseFeatureEnabled == 1)
+        hasBikiniLicense = ActualizeValue("BikiniLicense", value, bmlmcm.isBikiniLicenseFeatureEnabled == 1)
     EndFunction
 EndProperty
 bool Property hasBikiniExemption = true auto conditional
@@ -547,7 +554,7 @@ bool Property BikiniExemption
         Return hasBikiniExemption
     EndFunction
     Function Set(bool value)
-        hasBikiniExemption = BM_API.ActualizeValue("BikiniExemption", value, bmlmcm.isBikiniLicenseFeatureEnabled == 2)
+        hasBikiniExemption = ActualizeValue("BikiniExemption", value, bmlmcm.isBikiniLicenseFeatureEnabled == 2)
     EndFunction
 EndProperty
 
@@ -557,7 +564,7 @@ bool Property ClothingLicense
         Return hasClothingLicense
     EndFunction
     Function Set(bool value)
-        hasClothingLicense = BM_API.ActualizeValue("ClothingLicense", value, bmlmcm.isClothingLicenseFeatureEnabled)
+        hasClothingLicense = ActualizeValue("ClothingLicense", value, bmlmcm.isClothingLicenseFeatureEnabled)
     EndFunction
 EndProperty
 
@@ -567,7 +574,7 @@ bool Property MagicLicense
         Return hasMagicLicense
     EndFunction
     Function Set(bool value)
-        hasMagicLicense = BM_API.ActualizeValue("MagicLicense", value, bmlmcm.isMagicLicenseFeatureEnabled)
+        hasMagicLicense = ActualizeValue("MagicLicense", value, bmlmcm.isMagicLicenseFeatureEnabled)
     EndFunction
 EndProperty
 
@@ -577,7 +584,7 @@ bool Property WeaponLicense
         Return hasWeaponLicense
     EndFunction
     Function Set(bool value)
-        hasWeaponLicense = BM_API.ActualizeValue("WeaponLicense", value, bmlmcm.isWeaponLicenseFeatureEnabled)
+        hasWeaponLicense = ActualizeValue("WeaponLicense", value, bmlmcm.isWeaponLicenseFeatureEnabled)
     EndFunction
 EndProperty
 
@@ -587,7 +594,7 @@ bool Property CraftingLicense
         Return hasCraftingLicense
     EndFunction
     Function Set(bool value)
-        hasCraftingLicense = BM_API.ActualizeValue("CraftingLicense", value, bmlmcm.isCraftingLicenseFeatureEnabled)
+        hasCraftingLicense = ActualizeValue("CraftingLicense", value, bmlmcm.isCraftingLicenseFeatureEnabled)
     EndFunction
 EndProperty
 
@@ -597,7 +604,7 @@ bool Property TradingLicense
         Return hasTradingLicense
     EndFunction
     Function Set(bool value)
-        hasTradingLicense = BM_API.ActualizeValue("TradingLicense", value, bmlmcm.isTradingLicenseFeatureEnabled)
+        hasTradingLicense = ActualizeValue("TradingLicense", value, bmlmcm.isTradingLicenseFeatureEnabled)
     EndFunction
 EndProperty
 
@@ -607,7 +614,7 @@ bool Property WhoreLicense
         Return hasWhoreLicense
     EndFunction
     Function Set(bool value)
-        hasWhoreLicense = BM_API.ActualizeValue("WhoreLicense", value, bmlmcm.isWhoreLicenseFeatureEnabled)
+        hasWhoreLicense = ActualizeValue("WhoreLicense", value, bmlmcm.isWhoreLicenseFeatureEnabled)
     EndFunction
 EndProperty
 
@@ -617,7 +624,7 @@ bool Property TravelPermit
         Return hasTravelPermit
     EndFunction
     Function Set(bool value)
-        hasTravelPermit = BM_API.ActualizeValue("TravelPermit", value, bmlmcm.isTravelPermitFeatureEnabled)
+        hasTravelPermit = ActualizeValue("TravelPermit", value, bmlmcm.isTravelPermitFeatureEnabled)
     EndFunction
 EndProperty
 
@@ -627,7 +634,7 @@ bool Property CollarExemption
         Return hasCollarExemption
     EndFunction
     Function Set(bool value)
-        hasCollarExemption = BM_API.ActualizeValue("CollarExemption", value, bmlmcm.isCollarExemptionFeatureEnabled)
+        hasCollarExemption = ActualizeValue("CollarExemption", value, bmlmcm.isCollarExemptionFeatureEnabled)
     EndFunction
 EndProperty
 
@@ -637,7 +644,7 @@ bool Property Insurance
         Return hasInsurance
     EndFunction
     Function Set(bool value)
-        hasInsurance = BM_API.ActualizeValue("Insurance", value, bmlmcm.isInsuranceFeatureEnabled)
+        hasInsurance = ActualizeValue("Insurance", value, bmlmcm.isInsuranceFeatureEnabled)
     EndFunction
 EndProperty
 
@@ -647,7 +654,7 @@ bool Property CurfewExemption
         Return hasCurfewExemption
     EndFunction
     Function Set(bool value)
-        hasCurfewExemption = BM_API.ActualizeValue("CurfewExemption", value, bmlmcm.isCurfewExemptionFeatureEnabled)
+        hasCurfewExemption = ActualizeValue("CurfewExemption", value, bmlmcm.isCurfewExemptionFeatureEnabled)
     EndFunction
 EndProperty
 

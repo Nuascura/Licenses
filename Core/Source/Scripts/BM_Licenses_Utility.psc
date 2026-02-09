@@ -1,5 +1,13 @@
 Scriptname BM_Licenses_Utility extends Quest  
 
+import PO3_SKSEFunctions
+import PapyrusUtil
+import SPE_Cell
+import SPE_Utility
+import SPE_ObjectRef
+import BM_API
+import BM_API_DD
+
 ; ----------------------------------------------------------------------------------------------------
 ; -------------------------------------------------- Utility
 ; ----------------------------------------------------------------------------------------------------
@@ -166,7 +174,7 @@ Function CheckLocation()
 EndFunction
 
 Function ValidateLocNested(Location akNewLoc, WorldSpace akNewSpace, FormList LocList, Keyword akKeyword = none)
-    Location validatedLoc = BM_API.FindLocFromParent(akNewLoc, LocList, akKeyword)
+    Location validatedLoc = FindLocFromParent(akNewLoc, LocList, akKeyword)
     if validatedLoc
         lastLoc = validatedLoc
         if !BM_LicensesIgnoreWorldspace.HasForm(akNewSpace)
@@ -176,14 +184,14 @@ Function ValidateLocNested(Location akNewLoc, WorldSpace akNewSpace, FormList Lo
 EndFunction
 
 WorldSpace Function GetWorldSpaceFromInterior(ObjectReference akObjRef)
-    WorldSpace[] ExteriorWorldSpaces = SPE_Cell.GetExteriorWorldSpaces(akObjRef.GetParentCell())
+    WorldSpace[] ExteriorWorldSpaces = GetExteriorWorldSpaces(akObjRef.GetParentCell())
     WorldSpace cachedSpace = none
     if ExteriorWorldSpaces
-        cachedSpace = BM_API.FindWorldFromList(ExteriorWorldSpaces, BM_WorldSpaces)
+        cachedSpace = FindWorldFromList(ExteriorWorldSpaces, BM_WorldSpaces)
     else
-        ObjectReference[] InteriorDoors = PO3_SKSEFunctions.FindAllReferencesOfFormType(akObjRef, 29, 0)
+        ObjectReference[] InteriorDoors = FindAllReferencesOfFormType(akObjRef, 29, 0)
         if InteriorDoors
-            cachedSpace = BM_API.FindWorldFromDoor(InteriorDoors, BM_WorldSpaces)
+            cachedSpace = FindWorldFromDoor(InteriorDoors, BM_WorldSpaces)
         endIf
     endIf
 
@@ -194,11 +202,11 @@ WorldSpace Function GetWorldSpaceFromInterior(ObjectReference akObjRef)
 EndFunction
 
 Bool Function GetIsInCity()
-    Location[] ExteriorLocations = SPE_Cell.GetExteriorLocations(PlayerActorRef.GetParentCell())
+    Location[] ExteriorLocations = GetExteriorLocations(PlayerActorRef.GetParentCell())
     if ExteriorLocations
-        lastLoc = BM_API.FindLocFromList(ExteriorLocations, BM_Cities)
+        lastLoc = FindLocFromList(ExteriorLocations, BM_Cities)
     else
-        lastLoc = BM_API.FindLocFromParent(PlayerActorRef.GetCurrentLocation(), BM_Cities, Keyword.GetKeyword("LocTypeCity"))
+        lastLoc = FindLocFromParent(PlayerActorRef.GetCurrentLocation(), BM_Cities, Keyword.GetKeyword("LocTypeCity"))
     endIf
     return (!bmlmcm.isLimitToCitySpaceEnabled || GetIsInCitySpace()) && lastLoc
 EndFunction
@@ -220,11 +228,11 @@ Bool Function GetIsInCitySpace()
 EndFunction
 
 Bool Function GetIsInTown()
-    Location[] ExteriorLocations = SPE_Cell.GetExteriorLocations(PlayerActorRef.GetParentCell())
+    Location[] ExteriorLocations = GetExteriorLocations(PlayerActorRef.GetParentCell())
     if ExteriorLocations
-        lastLoc = BM_API.FindLocFromList(ExteriorLocations, BM_Towns)
+        lastLoc = FindLocFromList(ExteriorLocations, BM_Towns)
     else
-        lastLoc = BM_API.FindLocFromParent(PlayerActorRef.GetCurrentLocation(), BM_Towns, Keyword.GetKeyword("LocTypeTown"))
+        lastLoc = FindLocFromParent(PlayerActorRef.GetCurrentLocation(), BM_Towns, Keyword.GetKeyword("LocTypeTown"))
     endIf
     return lastLoc
 EndFunction
@@ -282,8 +290,8 @@ EndFunction
 ; ---------- Inventory Scanners ----------
 Form[] Function FilterSensitive(Form[] arr)
     ; Filter out items matching keyword combinations
-    arr = SPE_Utility.FilterFormsByKeyword(arr, licenses.KeywordQuestItem, true, true)
-    arr = SPE_Utility.FilterFormsByKeyword(arr, licenses.KeywordModItem, false, true)
+    arr = FilterFormsByKeyword(arr, licenses.KeywordQuestItem, true, true)
+    arr = FilterFormsByKeyword(arr, licenses.KeywordModItem, false, true)
     return arr
 EndFunction
 
@@ -291,7 +299,7 @@ Form[] Function FilterBikini(Form[] arr, int aiType)
     if licenses.isInsured
         if aiType == 1
             if licenses.hasBikiniLicense
-                arr = SPE_Utility.FilterFormsByKeyword(arr, licenses.ItemTypeBikini, false, true)
+                arr = FilterFormsByKeyword(arr, licenses.ItemTypeBikini, false, true)
             endIf
         elseIf aiType == 2
             if !licenses.hasBikiniExemption
@@ -309,22 +317,22 @@ EndFunction
 
 Form[] Function GetViolatingItems(ObjectReference akObjRef, Bool abEquippedOnly, Bool abEnchantedOnly = false)
     ; Get Armor by Slot
-    Form[] PotentialForms = FilterByOccupiedSlotmask(PO3_SKSEFunctions.AddItemsOfTypeToArray(akObjRef, 26, false), bmlmcm.ArmorSlotArray)
+    Form[] PotentialForms = FilterByOccupiedSlotmask(AddItemsOfTypeToArray(akObjRef, 26, false), bmlmcm.ArmorSlotArray)
     ; Get Weapons
-    PotentialForms = PapyrusUtil.MergeFormArray(PotentialForms, PO3_SKSEFunctions.AddItemsOfTypeToArray(akObjRef, 41, false), true)
+    PotentialForms = MergeFormArray(PotentialForms, AddItemsOfTypeToArray(akObjRef, 41, false), true)
     ; Get Ammo
-    PotentialForms = PapyrusUtil.MergeFormArray(PotentialForms, PO3_SKSEFunctions.AddItemsOfTypeToArray(akObjRef, 42, false), true)
+    PotentialForms = MergeFormArray(PotentialForms, AddItemsOfTypeToArray(akObjRef, 42, false), true)
     ; Filter by Keywords
     if abEnchantedOnly
-        PotentialForms = SPE_Utility.IntersectArray_Form(PotentialForms, SPE_ObjectRef.GetItemsByKeyword(akObjRef, licenses.KeywordConfiscationEnch, false))
-        PotentialForms = SPE_Utility.IntersectArray_Form(PotentialForms, SPE_ObjectRef.GetEnchantedItems(akObjRef, true, true, abEquippedOnly))
+        PotentialForms = IntersectArray_Form(PotentialForms, GetItemsByKeyword(akObjRef, licenses.KeywordConfiscationEnch, false))
+        PotentialForms = IntersectArray_Form(PotentialForms, GetEnchantedItems(akObjRef, true, true, abEquippedOnly))
     else
-        PotentialForms = SPE_Utility.IntersectArray_Form(PotentialForms, SPE_ObjectRef.GetItemsByKeyword(akObjRef, licenses.KeywordConfiscation, false))
+        PotentialForms = IntersectArray_Form(PotentialForms, GetItemsByKeyword(akObjRef, licenses.KeywordConfiscation, false))
         PotentialForms = FilterBikini(PotentialForms, bmlmcm.isBikiniLicenseFeatureEnabled)
     endIf
     ; Filter by Equipped
     if abEquippedOnly && (akObjRef as Actor)
-        PotentialForms = SPE_Utility.IntersectArray_Form(PotentialForms, PO3_SKSEFunctions.AddAllEquippedItemsToArray(akObjRef as Actor))
+        PotentialForms = IntersectArray_Form(PotentialForms, AddAllEquippedItemsToArray(akObjRef as Actor))
     endIf
     ; Overrides
     PotentialForms = FilterSensitive(PotentialForms)
@@ -332,11 +340,11 @@ Form[] Function GetViolatingItems(ObjectReference akObjRef, Bool abEquippedOnly,
 EndFunction
 
 Form[] Function GetViolatingItemsAll(ObjectReference akObjRef, Bool abEquippedOnly)
-    return PapyrusUtil.MergeFormArray(GetViolatingItems(akObjRef, abEquippedOnly), GetViolatingItems(akObjRef, abEquippedOnly, true), true)
+    return MergeFormArray(GetViolatingItems(akObjRef, abEquippedOnly), GetViolatingItems(akObjRef, abEquippedOnly, true), true)
 EndFunction
 
 Int Function GetCombinedSlotMask(int[] aiSlotArray)
-	aiSlotArray = PapyrusUtil.RemoveInt(aiSlotArray, 0)
+	aiSlotArray = RemoveInt(aiSlotArray, 0)
 	int slotMask = 0
 	int index = aiSlotArray.length
 	while index
@@ -347,7 +355,7 @@ Int Function GetCombinedSlotMask(int[] aiSlotArray)
 EndFunction
 
 Form[] Function FilterByOccupiedSlotmask(Form[] akForms, int[] aiSlotArray, bool abAll = false)
-    Armor[] armors = SPE_Utility.FilterBySlotmask(akForms, GetCombinedSlotMask(aiSlotArray), abAll)
+    Armor[] armors = FilterBySlotmask(akForms, GetCombinedSlotMask(aiSlotArray), abAll)
     Form[] ret = Utility.CreateFormArray(armors.Length)
     int i = 0
     While (i < armors.Length)
@@ -358,9 +366,9 @@ Form[] Function FilterByOccupiedSlotmask(Form[] akForms, int[] aiSlotArray, bool
 EndFunction
 
 Form[] Function FilterByComparison(Form[] arr, Keyword[] kwRemain, Keyword[] kwRemove)
-    return SPE_Utility.FilterArray_Form(\
-    arr, SPE_Utility.FilterFormsByKeyword(\
-    SPE_Utility.FilterFormsByKeyword(\
+    return FilterArray_Form(\
+    arr, FilterFormsByKeyword(\
+    FilterFormsByKeyword(\
     arr, kwRemain, false, false\
     ), kwRemove, false, false\
     )\
@@ -413,10 +421,10 @@ Function CheckStorageStatus(Bool NoQuestItem = true)
         ItemRetrievalActor.RemoveAllItems(ItemConfiscationChest, false, true)
 
         if BM_ExpiringItems.GetSize()
-            PO3_SKSEFunctions.RemoveListFromContainer(ItemConfiscationChest, BM_ExpiringItems, abNoQuestItem = NoQuestItem)
+            RemoveListFromContainer(ItemConfiscationChest, BM_ExpiringItems, abNoQuestItem = NoQuestItem)
         endIf
 
-        PO3_SKSEFunctions.AddAllItemsToList(ItemConfiscationChest, BM_ExpiringItems, abNoQuestItem = NoQuestItem)
+        AddAllItemsToList(ItemConfiscationChest, BM_ExpiringItems, abNoQuestItem = NoQuestItem)
     endIf
 
     BM_NextStorageClear.SetValue((BM_NextStatusCheck.GetValue() + 7.0) as int)
@@ -479,7 +487,7 @@ Int Function CountValidLicenses()
     LicenseArray[10] = licenses.hasCurfewExemption
     LicenseArray[11] = licenses.hasTradingLicense
     LicenseArray[12] = licenses.hasWhoreLicense
-    return PapyrusUtil.CountBool(LicenseArray, true)
+    return CountBool(LicenseArray, true)
 EndFunction
 
 Int Function CountActiveLicenses()
@@ -497,7 +505,7 @@ Int Function CountActiveLicenses()
     LicenseArray[10] = (licenses.curfewExemptionExpirationTime != -1) && bmlmcm.isCurfewExemptionFeatureEnabled
     LicenseArray[11] = (licenses.tradingLicenseExpirationTime != -1) && bmlmcm.isTradingLicenseFeatureEnabled
     LicenseArray[12] = (licenses.whoreLicenseExpirationTime != -1) && bmlmcm.isWhoreLicenseFeatureEnabled
-    return PapyrusUtil.CountBool(LicenseArray, true)
+    return CountBool(LicenseArray, true)
 EndFunction
 
 Int Function CountActiveViolations()
@@ -514,7 +522,7 @@ Int Function CountActiveViolations()
     ActiveViolations[9] = licenses.isCurfewViolation
     ActiveViolations[10] = licenses.isTradingViolation
     ActiveViolations[11] = licenses.isWhoreViolation
-    return PapyrusUtil.CountBool(ActiveViolations, true)
+    return CountBool(ActiveViolations, true)
 EndFunction
 
 bool Function CheckViolationExists()
@@ -713,7 +721,7 @@ Float Function GetFine()
     FineList[10] = (licenses.isTradingViolation as int) * (bmlmcm.BM_TLCost.GetValue() as int)
     FineList[11] = (licenses.isWhoreViolation as int) * (bmlmcm.BM_WhLCost.GetValue() as int)
 
-    Fine = Base + (Percentage * PapyrusUtil.AddIntValues(FineList))
+    Fine = Base + (Percentage * AddIntValues(FineList))
     LogTrace("Generated Fine Total: " + Fine)
     return Fine
 EndFunction
@@ -1355,7 +1363,7 @@ EndFunction
 
 Function CheckDeviousDevicesStatus()
     if bmlmcm.DeviousDevices_State
-        BM_IsPlayerCollared.SetValue(BM_API_DD.HasCollarEquipped(bmlInit.kzadAPI, PlayerActorRef) as int)
+        BM_IsPlayerCollared.SetValue(HasCollarEquipped(bmlInit.kzadAPI, PlayerActorRef) as int)
     endIf
 EndFunction
 ; ------------------------------
@@ -1394,7 +1402,7 @@ Float Function insuranceModifierViolation()
     ViolationWeight[10] = 0.1 * (licenses.isTradingViolation as float)
     ViolationWeight[11] = 0.1 * (licenses.isWhoreViolation as float)
 
-    Return PapyrusUtil.AddFloatValues(ViolationWeight)
+    Return AddFloatValues(ViolationWeight)
 EndFunction
 
 Float Function insuranceModifierFame()
@@ -1419,8 +1427,8 @@ Float Function insuranceModifierFame()
     ThaneshipFame[7] = FJMF.FalkreathImpGetOutofJail + FJMF.FalkreathSonsGetOutofJail
     ThaneshipFame[8] = FJMF.EastmarchImpGetOutofJail + FJMF.EastmarchSonsGetOutofJail
 
-    return (((PapyrusUtil.CountBool(TitleFame, true) * 4.5) / TitleFame.Length) \
-    + ((PapyrusUtil.CountBool(ThaneshipFame, true) * 1.7) / ThaneshipFame.Length))
+    return (((CountBool(TitleFame, true) * 4.5) / TitleFame.Length) \
+    + ((CountBool(ThaneshipFame, true) * 1.7) / ThaneshipFame.Length))
 EndFunction
 
 Float Function insuranceModifierJail()
