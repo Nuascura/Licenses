@@ -422,8 +422,9 @@ Function CheckStorageStatus(Bool NoQuestItem = true)
 
         if BM_ExpiringItems.GetSize()
             RemoveListFromContainer(ItemConfiscationChest, BM_ExpiringItems, abNoQuestItem = NoQuestItem)
+            BM_ExpiringItems.Revert()
         endIf
-
+        
         AddAllItemsToList(ItemConfiscationChest, BM_ExpiringItems, abNoQuestItem = NoQuestItem)
     endIf
 
