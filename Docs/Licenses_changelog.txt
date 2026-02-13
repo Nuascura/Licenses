@@ -1,3 +1,17 @@
+1.26.1
+Primary
+- Add: Routine confiscation storage maintanence.
+- Change: Floor LT license costs.
+- Change: Attach direct LT global vars to utility script.
+- Change: Allow renewal of LT licenses.
+- Improve: Reduce ModeratorUpdater() duplicate calls when initializing mod variables.
+- Improve: Reactivity of Crafting State detector.
+- Fix: Curfew State detector using outdated mod events.
+- Update: Localization files with improved wording.
+- Update: Dialogue Patch with new lines for lifetime, trading, and crafting license purchase dialog.
+
+
+
 1.26.0
 Primary
 - Fix: Water state license book removal.
