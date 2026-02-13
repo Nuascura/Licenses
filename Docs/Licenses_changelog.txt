@@ -1,6 +1,6 @@
 1.26.1
 Primary
-- Add: Routine confiscation storage maintanence.
+- Add: Routine confiscation storage maintenance.
 - Change: Floor LT license costs.
 - Change: Attach direct LT global vars to utility script.
 - Change: Allow renewal of LT licenses.
@@ -21,7 +21,7 @@ Primary
 - Add: Lifetime License purchase dialogue.
 - Add: Modularized MGEF license tracking.
 - Improve: Reduce redundant function calls under MCM script.
-- Change: Reduce OnConfigInit burnden.
+- Change: Reduce OnConfigInit burden.
 - Remove: ApplyPunishment() call under PA release event.
 - Update: Localization files.
 - Update: Dialogue Patch.
