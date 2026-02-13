@@ -1,6 +1,7 @@
 Scriptname BM_PlayerBarter extends ReferenceAlias  
 
 import PO3_SKSEFunctions
+import UI
 
 BM_Licenses_Utility Property bmlUtility Auto
 BM_Licenses_MCM Property bmlmcm auto
@@ -64,7 +65,7 @@ Event OnItemAdded(Form item, int count, ObjectReference itemRef, ObjectReference
                 OnTradingViolation()
             endIf
         endIf
-        if UI.IsMenuOpen("BarterMenu")
+        if IsMenuOpen("BarterMenu")
             RemoveAllInventoryEventFilters()
         endIf
     endIf
@@ -77,7 +78,7 @@ Event OnItemRemoved(Form item, int count, ObjectReference itemRef, ObjectReferen
         if IsItemViolation_Player(item)
             OnTradingViolation()
         endIf
-        if UI.IsMenuOpen("BarterMenu")
+        if IsMenuOpen("BarterMenu")
             RemoveAllInventoryEventFilters()
         endIf
     endIf
