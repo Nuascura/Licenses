@@ -4,11 +4,11 @@ Actor Property TargetActor Auto
 String Property TargetString Auto
 Int Property TargetInteger Auto
 Book Property TargetBook Auto
-BM_ME_HostLicenseTemplate_sub1 TemplateBridge
+BM_ME_HostLicenseTemplateBridge TemplateBridge
 
 Event OnEffectStart(Actor akTarget, Actor akCaster)
     TargetActor = akTarget
-    TemplateBridge = (self as activemagiceffect) as BM_ME_HostLicenseTemplate_sub1
+    TemplateBridge = (self as activemagiceffect) as BM_ME_HostLicenseTemplateBridge
     RegisterEvents()
 EndEvent
 

@@ -1,4 +1,4 @@
-Scriptname BM_ME_HostLicenseTemplate_sub1 extends activemagiceffect  
+Scriptname BM_ME_HostLicenseTemplateBridge extends activemagiceffect  
 
 BM_Licenses Property licenses Auto
 BM_Licenses_Utility Property bmlUtility Auto
