@@ -29,11 +29,11 @@ Scriptname BM_API Hidden
 ; BM-LPO_LicenseExpired
 
 ; -------------------------------------------------- Interface Tools --------------------------------------------------
-; By and large, these are template functions, though some may be used as is by my own scripts, now or in the future.
+; These are mostly template functions, though you may still use them as is.
 
 ; Get - Mod Version
 string Function GetModVersion() Global
-    return "1.26.1"
+    return "1.26.2"
 EndFunction
 
 ; Get - Config Version

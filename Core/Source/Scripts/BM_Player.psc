@@ -1,23 +1,32 @@
 Scriptname BM_Player extends ReferenceAlias
 
+import UI
+
 BM_Licenses Property licenses auto
 BM_Licenses_Utility Property bmlUtility Auto
 BM_Licenses_MCM Property bmlmcm auto
 
+Actor PlayerRef
+
 Event OnPlayerLoadGame()
-    RegisterForAnimationEvent(self.GetActorRef(), "MRh_SpellFire_Event")
-    RegisterForAnimationEvent(self.GetActorRef(), "MLh_SpellFire_Event")
+    OnLoad()
 EndEvent
 
+Function OnLoad()
+    PlayerRef = self.GetActorRef()
+
+    RegisterForAnimationEvent(PlayerRef, "MRh_SpellFire_Event")
+    RegisterForAnimationEvent(PlayerRef, "MLh_SpellFire_Event")
+EndFunction
+
 Event OnAnimationEvent(ObjectReference akSource, string asEventName)
-    Actor playerActor = self.GetActorRef()
     if !licenses.isMagicViolation && (licenses.hasMagicLicense == false || licenses.isInsured == false)
-        if bmlUtility.ValidateSpellForms(playerActor, playerActor.GetEquippedSpell(0), playerActor.GetEquippedSpell(1))
+        if bmlUtility.ValidateSpellForms(PlayerRef, PlayerRef.GetEquippedSpell(0), PlayerRef.GetEquippedSpell(1))
             if (licenses.hasMagicLicense == true && licenses.isInsured == false)
                 licenses.isUninsuredViolation = true
             endIf
             licenses.isMagicViolation = true
-            bmlUtility.LogTrace("Detected Magic Violation (Spell): " + playerActor.GetEquippedSpell(0) + ", " + playerActor.GetEquippedSpell(1))
+            bmlUtility.LogTrace("Detected Magic Violation (Spell): " + PlayerRef.GetEquippedSpell(0) + ", " + PlayerRef.GetEquippedSpell(1))
             bmlUtility.AggregateViolations()
         endIf
     endIf

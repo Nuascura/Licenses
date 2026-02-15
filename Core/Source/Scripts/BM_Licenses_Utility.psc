@@ -60,7 +60,10 @@ Function Startup(Bool abAutoLoad)
     bmlmcm.ConfigWarn = true
 
     ; Start Core Quests
-    licenses.start()
+    if licenses.start()
+        bmPlayer.OnLoad()
+        bmBarterController.OnLoad()
+    endIf
     if licenseModeratorQuest.start()
         bmlModeratorAlias.OnLoad()
     endIf
@@ -416,7 +419,6 @@ EndFunction
 
 ; ---------- Core Licenses Updaters ----------
 Function CheckStorageStatus(Bool NoQuestItem = true)
-    Debug.Trace("BM_ CheckStorageStatus()")
     if BM_NextStorageClear.GetValue()
         ItemRetrievalActor.RemoveAllItems(ItemConfiscationChest, false, true)
 
@@ -432,7 +434,6 @@ Function CheckStorageStatus(Bool NoQuestItem = true)
 EndFunction
 
 Function CheckLicenseStatus()
-    Debug.Trace("BM_ CheckLicenseStatus()")
     float currentTime = GameDaysPassed.GetValue()
 
     RefreshLicenseStatus(currentTime)
@@ -451,13 +452,11 @@ Function CheckLicenseStatus()
 EndFunction
 
 Function ModeratorMaintanence()
-    Debug.Trace("BM_ ModeratorMaintanence()")
     CheckThaneship()
     ModeratorUpdater()
 EndFunction
 
 Function ModeratorUpdater()
-    Debug.Trace("BM_ ModeratorUpdater()")
     refreshActivationLimit()
     licenses.PopulateKeywordConfiscationArray()
 EndFunction
@@ -1524,6 +1523,7 @@ BM_Licenses_MCM Property bmlmcm auto
 BM_Licenses_Moderator_Alias Property bmlModeratorAlias auto
 BM_Licenses_ViolationCheck Property bmlViolationCheck auto
 BM_Player Property bmPlayer auto
+BM_BarterController Property bmBarterController auto
 
 Book Property BM_ArmorLicense Auto
 Book Property BM_BikiniLicense Auto
