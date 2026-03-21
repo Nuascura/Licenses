@@ -1,18 +1,21 @@
 Scriptname BM_ME_DetectLocCity extends activemagiceffect  
 
+Actor Property TargetActor Auto
+Keyword Property LocTypeCity Auto
 BM_Licenses_Utility Property bmlUtility Auto
+BM_Licenses Property licenses auto
 
 Event OnEffectStart(Actor akTarget, Actor akCaster)
-    bmlUtility.licenses.isInCity = true
-    bmlUtility.lastLoc = akTarget.GetCurrentLocation()
+    licenses.isInCity = true
+    bmlUtility.lastLoc = TargetActor.GetCurrentLocation()
 EndEvent
 
 Event OnLocationChange(Location akOldLoc, Location akNewLoc)
     if akNewLoc
-        bmlUtility.ValidateLocNested(akNewLoc, GetTargetActor().GetWorldSpace(), bmlUtility.BM_Cities, Keyword.GetKeyword("LocTypeCity"))
+        bmlUtility.ValidateLocNested(akNewLoc, TargetActor.GetWorldSpace(), bmlUtility.BM_Cities, LocTypeCity)
     endIf
 EndEvent
 
 Event OnEffectFinish(Actor akTarget, Actor akCaster)
-    bmlUtility.licenses.isInCity = false
+    licenses.isInCity = false
 EndEvent

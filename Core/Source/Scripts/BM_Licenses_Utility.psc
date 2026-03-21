@@ -115,7 +115,7 @@ Function Shutdown()
     BM_NextStorageClear.SetValue(0.0)
     BM_IsInSSLV.SetValue(0.0)
     BM_IsInDHLPEvent.SetValue(0.0)
-    BM_IsInPlayerHome.SetValue(0.0)
+    BM_IsInLocExcluded.SetValue(0.0)
     BM_IsInJail.SetValue(0.0)
     BM_IsInAnimation.SetValue(0.0)
     BM_IsViolatingCurfew.SetValue(0.0)
@@ -240,8 +240,8 @@ Bool Function GetIsInTown()
     return lastLoc
 EndFunction
 
-Bool Function GetIsInPlayerHome(location targetLoc)
-    return targetLoc && targetLoc.HasKeyword(LocTypePlayerHouse)
+Bool Function GetIsInLocExcluded(location targetLoc)
+    return targetLoc && (targetLoc.HasKeyword(LocTypePlayerHouse) || targetLoc.HasKeyword(BM_LicensesIgnoreLocation))
 EndFunction
 
 Bool Function GetIsInJail(location targetLoc, bool ignoreLoc = false)
@@ -382,7 +382,7 @@ EndFunction
 ; ---------- Exception State Functions ----------
 ; Check Exception State
 Function CheckExceptionState()
-    BM_IsInPlayerHome.SetValue(GetIsInPlayerHome(currLoc) as float)
+    BM_IsInLocExcluded.SetValue(GetIsInLocExcluded(currLoc) as float)
     BM_IsInJail.SetValue(GetIsInJail(currLoc) as float)
 EndFunction
 
@@ -401,8 +401,8 @@ bool Function IsExceptionState()
     elseIf BM_IsInJail.GetValue() as bool
         LogTrace("Player is a prisoner")
         return true
-    elseIf BM_IsInPlayerHome.GetValue() as bool
-        LogTrace("Player is at home")
+    elseIf BM_IsInLocExcluded.GetValue() as bool
+        LogTrace("Player is in Excluded Location")
         return true
     elseIf BM_IsInDHLPEvent.GetValue() as bool
         LogTrace("Player is in DHLP event")
@@ -1587,7 +1587,7 @@ GlobalVariable Property BM_CuECostLT Auto
 ; -- Exception Vars
 GlobalVariable Property BM_IsInSSLV Auto
 GlobalVariable Property BM_IsInDHLPEvent Auto
-GlobalVariable Property BM_IsInPlayerHome Auto
+GlobalVariable Property BM_IsInLocExcluded Auto
 GlobalVariable Property BM_IsInJail Auto
 GlobalVariable Property BM_IsInAnimation Auto
 ; -- Violation Vars
@@ -1616,18 +1616,13 @@ FormList Property BM_PotentialViolations  Auto
 FormList Property BM_PotentialViolations_Ench  Auto
 FormList Property BM_LicensesIgnoreSpell  Auto
 FormList Property BM_LicensesIgnoreWorldspace  Auto
+Keyword Property BM_LicensesIgnoreLocation Auto
 Location Property currLoc auto
 Location Property savedLoc auto
 Location Property lastLoc auto
 WorldSpace Property currSpace auto
 WorldSpace Property savedSpace auto
 WorldSpace Property lastSpace auto
-
-; Keyword forms
-Keyword Property LocTypeCity Auto
-Keyword Property LocTypeTown Auto
-Keyword Property LocTypePlayerHouse Auto
-Keyword Property LocTypeJail Auto
 
 ; Caches
 GlobalVariable Property Licenses_State auto
@@ -1636,6 +1631,12 @@ Int Property LicenseActiveCount_CachedAmt auto hidden
 Int Property LicenseValidCount_CachedAmt auto hidden
 Int Property ViolationActiveCount_CachedAmt auto hidden
 Float Property LastStatusCheck auto hidden
+
+; Vanilla Keywords
+Keyword Property LocTypeCity Auto
+Keyword Property LocTypeTown Auto
+Keyword Property LocTypePlayerHouse Auto
+Keyword Property LocTypeJail Auto
 
 ; Vanilla Quests
 Quest Property MQ104 auto
