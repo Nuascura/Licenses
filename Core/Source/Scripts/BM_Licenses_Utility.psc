@@ -209,7 +209,7 @@ Bool Function GetIsInCity()
     if ExteriorLocations
         lastLoc = FindLocFromList(ExteriorLocations, BM_Cities)
     else
-        lastLoc = FindLocFromParent(PlayerActorRef.GetCurrentLocation(), BM_Cities, Keyword.GetKeyword("LocTypeCity"))
+        lastLoc = FindLocFromParent(PlayerActorRef.GetCurrentLocation(), BM_Cities, LocTypeCity)
     endIf
     return (!bmlmcm.isLimitToCitySpaceEnabled || GetIsInCitySpace()) && lastLoc
 EndFunction
@@ -235,20 +235,20 @@ Bool Function GetIsInTown()
     if ExteriorLocations
         lastLoc = FindLocFromList(ExteriorLocations, BM_Towns)
     else
-        lastLoc = FindLocFromParent(PlayerActorRef.GetCurrentLocation(), BM_Towns, Keyword.GetKeyword("LocTypeTown"))
+        lastLoc = FindLocFromParent(PlayerActorRef.GetCurrentLocation(), BM_Towns, LocTypeTown)
     endIf
     return lastLoc
 EndFunction
 
 Bool Function GetIsInPlayerHome(location targetLoc)
-    return targetLoc && targetLoc.HasKeywordString("LocTypePlayerHouse")
+    return targetLoc && targetLoc.HasKeyword(LocTypePlayerHouse)
 EndFunction
 
 Bool Function GetIsInJail(location targetLoc, bool ignoreLoc = false)
     if (bmlmcm.PrisonAlternative_State || bmlmcm.PrisonOverhaulPatched_State || bmlmcm.DeviousInterests_State)
         return BM_IsInJail.GetValue()
     elseIf BM_IsInJail.GetValue() > 0
-        return !(ignoreLoc || (targetLoc && !targetLoc.HasKeywordString("LocTypeJail")))
+        return !(ignoreLoc || (targetLoc && !targetLoc.HasKeyword(LocTypeJail)))
     endIf
     return false
 EndFunction
@@ -1623,7 +1623,13 @@ WorldSpace Property currSpace auto
 WorldSpace Property savedSpace auto
 WorldSpace Property lastSpace auto
 
-;Caches
+; Keyword forms
+Keyword Property LocTypeCity Auto
+Keyword Property LocTypeTown Auto
+Keyword Property LocTypePlayerHouse Auto
+Keyword Property LocTypeJail Auto
+
+; Caches
 GlobalVariable Property Licenses_State auto
 Bool Property Licenses_CachedState auto hidden
 Int Property LicenseActiveCount_CachedAmt auto hidden
