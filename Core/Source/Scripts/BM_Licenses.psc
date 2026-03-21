@@ -690,12 +690,12 @@ float property clothingLicenseExpirationTime = -1.0 auto conditional
 float property magicLicenseExpirationTime = -1.0 auto conditional
 float property weaponLicenseExpirationTime = -1.0 auto conditional
 float property craftingLicenseExpirationTime = -1.0 auto conditional
-float property tradingLicenseExpirationTime = -1.0 auto conditional
-float property whoreLicenseExpirationTime = -1.0 auto conditional
 float property travelPermitExpirationTime = -1.0 auto conditional
 float property collarExemptionExpirationTime = -1.0 auto conditional
 float property insuranceExpirationTime = -1.0 auto conditional
 float property curfewExemptionExpirationTime = -1.0 auto conditional
+float property tradingLicenseExpirationTime = -1.0 auto conditional
+float property whoreLicenseExpirationTime = -1.0 auto conditional
 
 ; if cooldown time == -1.0 -> delay inactive
 float property armorLicenseCooldownTime = -1.0 auto conditional
@@ -705,12 +705,12 @@ float property clothingLicenseCooldownTime = -1.0 auto conditional
 float property magicLicenseCooldownTime = -1.0 auto conditional
 float property weaponLicenseCooldownTime = -1.0 auto conditional
 float property craftingLicenseCooldownTime = -1.0 auto conditional
-float property tradingLicenseCooldownTime = -1.0 auto conditional
-float property whoreLicenseCooldownTime = -1.0 auto conditional
 float property travelPermitCooldownTime = -1.0 auto conditional
 float property collarExemptionCooldownTime = -1.0 auto conditional
 float property insuranceCooldownTime = -1.0 auto conditional
 float property curfewExemptionCooldownTime = -1.0 auto conditional
+float property tradingLicenseCooldownTime = -1.0 auto conditional
+float property whoreLicenseCooldownTime = -1.0 auto conditional
 
 float property insuranceMisbehaviourMultiplier = 1.0 auto
 float property insurancePopularityMultiplier = 1.0 auto
