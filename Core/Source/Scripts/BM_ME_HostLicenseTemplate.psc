@@ -10,10 +10,11 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
     TargetActor = akTarget
     TemplateBridge = (self as activemagiceffect) as BM_ME_HostLicenseTemplateBridge
     RegisterEvents()
-EndEvent
 
-Event OnEffectFinish(Actor akTarget, Actor akCaster)
-    EndLicense()
+    TemplateBridge.GoToState("LicenseBridge_" + TargetInteger)
+    If TemplateBridge.IsLicenseActive()
+        StartLicense(false)
+    EndIf
 EndEvent
 
 State InventoryInactive
@@ -50,26 +51,24 @@ EndEvent
 
 ; ------------------------------
 
-Function StartLicense()
-    TemplateBridge.GoToState("LicenseBridge_" + TargetInteger)
+Function StartLicense(Bool abAddItem = True)
     if TargetActor.getItemCount(TargetBook) == 0
         GoToState("InventoryInactive")
-        Utility.Wait(0.5)
-        TargetActor.addItem(TargetBook, 1)
+        if abAddItem
+            Utility.Wait(0.5)
+            TargetActor.addItem(TargetBook, 1)
+        endIf
     else
         GoToState("InventoryActive")
     endIf
-    
 EndFunction
 
 Function EndLicense()
-    GoToState("")
     if TargetActor.getItemCount(TargetBook) > 0
         TargetActor.removeItem(TargetBook, 1, true)
+        Utility.Wait(0.5)
     endIf
-    TemplateBridge.GoToState("")
-    
-    ;TargetActor.RemoveSpell(PO3_SKSEFunctions.GetActiveEffectSpell(self) as spell)
+    GoToState("")
 EndFunction
 
 Function RegisterEvents()
