@@ -67,6 +67,7 @@ Function Startup(Bool abAutoLoad)
     if licenseModeratorQuest.start()
         bmlModeratorAlias.OnLoad()
     endIf
+    licenseEnforcerQuest_PD.start()
 
     ; Start Add-on Quests
     if Game.GetModByName("Licenses - Ambience.esp") != 255
@@ -147,6 +148,7 @@ Function Shutdown()
     StopQuest("BM_Licenses_Barter")
     StopQuest("BM_Licenses_Detection")
     StopQuest("BM_Licenses_Moderator")
+    StopQuest("BM_Licenses_Enforcer_PD")
 
     ; Cache State
     Licenses_CachedState = false
@@ -1544,6 +1546,7 @@ Quest Property licenseThaneshipCheckQuest auto
 Quest Property licenseDetectionQuest auto
 Quest Property licenseBountyQuest auto
 Quest Property licenseModeratorQuest auto
+Quest Property licenseEnforcerQuest_PD auto
 
 ; -- Vanilla Vars
 GlobalVariable Property GameDaysPassed auto
@@ -1617,12 +1620,12 @@ FormList Property BM_PotentialViolations_Ench  Auto
 FormList Property BM_LicensesIgnoreSpell  Auto
 FormList Property BM_LicensesIgnoreWorldspace  Auto
 Keyword Property BM_LicensesIgnoreLocation Auto
-Location Property currLoc auto
-Location Property savedLoc auto
-Location Property lastLoc auto
-WorldSpace Property currSpace auto
-WorldSpace Property savedSpace auto
-WorldSpace Property lastSpace auto
+Location Property currLoc auto hidden
+Location Property savedLoc auto hidden
+Location Property lastLoc auto hidden
+WorldSpace Property currSpace auto hidden
+WorldSpace Property savedSpace auto hidden
+WorldSpace Property lastSpace auto hidden
 
 ; Caches
 GlobalVariable Property Licenses_State auto
