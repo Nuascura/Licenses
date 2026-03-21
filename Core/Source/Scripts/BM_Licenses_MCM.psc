@@ -414,7 +414,6 @@ Function ShowPage0()
 	AddHeaderOption("")
 	AddTextOption("$LPO_ModVersion", GetModVersion(), OPTION_FLAG_DISABLED)
 	AddTextOption("$LPO_Version", GetVersion(), OPTION_FLAG_DISABLED)
-	AddTextOption("$LPO_CacheIndexDiff1Int2", (PapyrusUtil.StringSplit(GetModVersion(), ".")[1] as int - ModVersionCache[1] as int) + "," + PapyrusUtil.StringSplit(GetModVersion(), ".")[2] as int, OPTION_FLAG_DISABLED)
 	if bmlInit.CheckHardDependencies(self)
 		AddTextOption("$LPO_DependencyCheck", "$LPO_Safe", OPTION_FLAG_DISABLED)
 	else
