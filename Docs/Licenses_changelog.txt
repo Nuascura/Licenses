@@ -1,3 +1,29 @@
+1.26.3
+Primary
+- Add: Keyword BM_LicensesIgnoreLocation.
+- Add: Conversation topic to opt-in player compliance.
+- Add: Dialog option to remove curse as Thane.
+- Fix: Missing licenses after actor transformation.
+- Fix: Unable to remove curse via dialogue in Bruma.
+- Change: Optimize Utility script keyword retrieval.
+- Change: Reimplement DetectLocHome MGEF as DetectLocExcluded.
+- Change: Rename IsInPlayerHome global as IsInLocExcluded.
+- Change: Separated Guard-specific dialogue to separate dialogue quest.
+- Remove: CacheIndex.
+- Update: Bruma Patch.
+- Update: Localization files.
+
+
+
+1.26.2
+Primary
+- Improve: Barter validation responsiveness and efficiency.
+- Fix: Storage Clear function missing call to Revert list.
+- Fix: PeriodicCheck MGEF missing linked properties.
+- Change: Rename script Template_sub1 to TemplateBridge.
+
+
+
 1.26.1
 Primary
 - Add: Routine confiscation storage maintenance.
