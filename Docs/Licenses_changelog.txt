@@ -1,3 +1,11 @@
+1.26.4
+Primary
+- Change: Allow mutual co-existence of Renewal and Cooldown.
+- Update: Dialogue patch.
+- Update: Localization files.
+
+
+
 1.26.3
 Primary
 - Add: Keyword BM_LicensesIgnoreLocation.
