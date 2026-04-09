@@ -674,7 +674,7 @@ bool Property isWhoreViolation auto conditional
 bool Property isInCity = false auto conditional
 bool Property isInTown = false auto conditional
 bool Property isLicenseLimit = false auto conditional
-bool Property isThane = false auto
+bool Property isThane = false auto conditional
 bool Property isInsured
     bool Function Get()
         return hasInsurance || (bmlmcm.isInsuranceFeatureEnabled && bmlmcm.thaneImmunityInsurance && isThane)
