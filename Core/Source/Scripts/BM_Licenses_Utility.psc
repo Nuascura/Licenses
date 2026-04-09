@@ -807,7 +807,7 @@ Function BM_PurchaseMagicLicense(bool pay = true, bool lifetime = false)
             PlayerActorRef.removeItem(Gold001, BM_MLCost.GetValue() as int)
         endIf
     endIf
-    licenses.RemoveNullifyMagicka()
+    licenses.RemoveNullifyMagicka(true)
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 5)
 EndFunction
 
