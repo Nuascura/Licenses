@@ -26,7 +26,9 @@ EndFunction
 
 State LicenseBridge_1
     Function InventoryStateChange(Bool heldState)
-        licenses.ArmorLicense = heldState
+        If heldState != licenses.hasArmorLicense
+            licenses.ArmorLicense = heldState
+        EndIf
     EndFunction
     Bool Function IsLicenseActive()
         return (licenses.armorLicenseExpirationTime != -1.0)
@@ -34,7 +36,9 @@ State LicenseBridge_1
 EndState
 State LicenseBridge_2
     Function InventoryStateChange(Bool heldState)
-        licenses.BikiniLicense = heldState
+        If heldState != licenses.hasBikiniLicense
+            licenses.BikiniLicense = heldState
+        EndIf
     EndFunction
     Bool Function IsLicenseActive()
         return (licenses.bikiniLicenseExpirationTime != -1.0)
@@ -42,7 +46,9 @@ State LicenseBridge_2
 EndState
 State LicenseBridge_3
     Function InventoryStateChange(Bool heldState)
-        licenses.BikiniExemption = heldState
+        If heldState != licenses.hasBikiniExemption
+            licenses.BikiniExemption = heldState
+        EndIf
     EndFunction
     Bool Function IsLicenseActive()
         return (licenses.bikiniExemptionExpirationTime != -1.0)
@@ -50,7 +56,9 @@ State LicenseBridge_3
 EndState
 State LicenseBridge_4
     Function InventoryStateChange(Bool heldState)
-        licenses.ClothingLicense = heldState
+        If heldState != licenses.hasClothingLicense
+            licenses.ClothingLicense = heldState
+        EndIf
     EndFunction
     Bool Function IsLicenseActive()
         return (licenses.clothingLicenseExpirationTime != -1.0)
@@ -58,7 +66,9 @@ State LicenseBridge_4
 EndState
 State LicenseBridge_5
     Function InventoryStateChange(Bool heldState)
-        licenses.MagicLicense = heldState
+        If heldState != licenses.hasMagicLicense
+            licenses.MagicLicense = heldState
+        EndIf
     EndFunction
     Bool Function IsLicenseActive()
         return (licenses.magicLicenseExpirationTime != -1.0)
@@ -66,7 +76,9 @@ State LicenseBridge_5
 EndState
 State LicenseBridge_6
     Function InventoryStateChange(Bool heldState)
-        licenses.WeaponLicense = heldState
+        If heldState != licenses.hasWeaponLicense
+            licenses.WeaponLicense = heldState
+        EndIf
     EndFunction
     Bool Function IsLicenseActive()
         return (licenses.weaponLicenseExpirationTime != -1.0)
@@ -74,7 +86,9 @@ State LicenseBridge_6
 EndState
 State LicenseBridge_7
     Function InventoryStateChange(Bool heldState)
-        licenses.CraftingLicense = heldState
+        If heldState != licenses.hasCraftingLicense
+            licenses.CraftingLicense = heldState
+        EndIf
     EndFunction
     Bool Function IsLicenseActive()
         return (licenses.craftingLicenseExpirationTime != -1.0)
@@ -82,7 +96,9 @@ State LicenseBridge_7
 EndState
 State LicenseBridge_8
     Function InventoryStateChange(Bool heldState)
-        licenses.TravelPermit = heldState
+        If heldState != licenses.hasTravelPermit
+            licenses.TravelPermit = heldState
+        EndIf
     EndFunction
     Bool Function IsLicenseActive()
         return (licenses.travelPermitExpirationTime != -1.0)
@@ -90,7 +106,9 @@ State LicenseBridge_8
 EndState
 State LicenseBridge_9
     Function InventoryStateChange(Bool heldState)
-        licenses.CollarExemption = heldState
+        If heldState != licenses.hasCollarExemption
+            licenses.CollarExemption = heldState
+        EndIf
     EndFunction
     Bool Function IsLicenseActive()
         return (licenses.collarExemptionExpirationTime != -1.0)
@@ -98,7 +116,9 @@ State LicenseBridge_9
 EndState
 State LicenseBridge_10
     Function InventoryStateChange(Bool heldState)
-        licenses.Insurance = heldState
+        If heldState != licenses.hasInsurance
+            licenses.Insurance = heldState
+        EndIf
     EndFunction
     Bool Function IsLicenseActive()
         return (licenses.insuranceExpirationTime != -1.0)
@@ -106,7 +126,9 @@ State LicenseBridge_10
 EndState
 State LicenseBridge_11
     Function InventoryStateChange(Bool heldState)
-        licenses.CurfewExemption = heldState
+        If heldState != licenses.hasCurfewExemption
+            licenses.CurfewExemption = heldState
+        EndIf
     EndFunction
     Bool Function IsLicenseActive()
         return (licenses.curfewExemptionExpirationTime != -1.0)
@@ -114,7 +136,9 @@ State LicenseBridge_11
 EndState
 State LicenseBridge_12
     Function InventoryStateChange(Bool heldState)
-        licenses.TradingLicense = heldState
+        If heldState != licenses.hasTradingLicense
+            licenses.TradingLicense = heldState
+        EndIf
     EndFunction
     Bool Function IsLicenseActive()
         return (licenses.tradingLicenseExpirationTime != -1.0)
@@ -122,7 +146,9 @@ State LicenseBridge_12
 EndState
 State LicenseBridge_13
     Function InventoryStateChange(Bool heldState)
-        licenses.WhoreLicense = heldState
+        If heldState != licenses.hasWhoreLicense
+            licenses.WhoreLicense = heldState
+        EndIf
     EndFunction
     Bool Function IsLicenseActive()
         return (licenses.whoreLicenseExpirationTime != -1.0)

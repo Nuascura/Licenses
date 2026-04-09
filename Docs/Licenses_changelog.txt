@@ -1,5 +1,6 @@
 1.26.5
 Primary
+- Change: Improve variable change immediacy.
 - Fix: Nullify Magicka curse isn't removed after license purchase.
 
 

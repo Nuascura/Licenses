@@ -743,6 +743,7 @@ Function BM_PurchaseArmorLicense(bool pay = true, bool lifetime = false)
             PlayerActorRef.removeItem(Gold001, BM_ALCost.GetValue() as int)
         endIf
     endIf
+    licenses.ArmorLicense = true
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 1)
 EndFunction
 
@@ -759,6 +760,7 @@ Function BM_PurchaseBikiniLicense(bool pay = true, bool lifetime = false)
             PlayerActorRef.removeItem(Gold001, BM_BLCost.GetValue() as int)
         endIf
     endIf
+    licenses.BikiniLicense = true
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 2)
 EndFunction
 
@@ -775,6 +777,7 @@ Function BM_PurchaseBikiniExemption(bool pay = true, bool lifetime = false)
             PlayerActorRef.removeItem(Gold001, BM_BLCost.GetValue() as int)
         endIf
     endIf
+    licenses.BikiniExemption = true
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 3)
 EndFunction
 
@@ -791,6 +794,7 @@ Function BM_PurchaseClothingLicense(bool pay = true, bool lifetime = false)
             PlayerActorRef.removeItem(Gold001, BM_CLCost.GetValue() as int)
         endIf
     endIf
+    licenses.ClothingLicense = true
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 4)
 EndFunction
 
@@ -807,7 +811,8 @@ Function BM_PurchaseMagicLicense(bool pay = true, bool lifetime = false)
             PlayerActorRef.removeItem(Gold001, BM_MLCost.GetValue() as int)
         endIf
     endIf
-    licenses.RemoveNullifyMagicka(true)
+    licenses.MagicLicense = true
+    licenses.RemoveNullifyMagicka()
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 5)
 EndFunction
 
@@ -824,6 +829,7 @@ Function BM_PurchaseWeaponLicense(bool pay = true, bool lifetime = false)
             PlayerActorRef.removeItem(Gold001, BM_WLCost.GetValue() as int)
         endIf
     endIf
+    licenses.WeaponLicense = true
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 6)
 Endfunction
 
@@ -840,6 +846,7 @@ Function BM_PurchaseCraftingLicense(bool pay = true, bool lifetime = false)
             PlayerActorRef.removeItem(Gold001, BM_CrfLCost.GetValue() as int)
         endIf
     endIf
+    licenses.CraftingLicense = true
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 7)
 EndFunction
 
@@ -856,6 +863,7 @@ Function BM_PurchaseTravelPermit(bool pay = true, bool lifetime = false)
             PlayerActorRef.removeItem(Gold001, BM_TPCost.GetValue() as int)
         endIf
     endIf
+    licenses.TravelPermit = true
     savedLoc = None
     savedSpace = None
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 8)
@@ -874,6 +882,7 @@ Function BM_PurchaseCollarExemption(bool pay = true, bool lifetime = false)
             PlayerActorRef.removeItem(Gold001, BM_CECost.GetValue() as int)
         endIf
     endIf
+    licenses.CollarExemption = true
     licenses.RemoveDeviousDevicesCollar()
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 9)
 EndFunction
@@ -891,6 +900,7 @@ Function BM_PurchaseLifeInsurance(bool pay = true, bool lifetime = false)
             PlayerActorRef.removeItem(Gold001, BM_InsurCost.GetValue() as int)
         endIf
     endIf
+    licenses.Insurance = true
     licenses.RemoveNullifyMagicka()
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 10)
 EndFunction
@@ -908,6 +918,7 @@ Function BM_PurchaseCurfewExemption(bool pay = true, bool lifetime = false)
             PlayerActorRef.removeItem(Gold001, BM_CuECost.GetValue() as int)
         endIf
     endIf
+    licenses.CurfewExemption = true
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 11)
 EndFunction
 
@@ -924,6 +935,7 @@ Function BM_PurchaseTradingLicense(bool pay = true, bool lifetime = false)
             PlayerActorRef.removeItem(Gold001, BM_TLCost.GetValue() as int)
         endIf
     endIf
+    licenses.TradingLicense = true
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 12)
 EndFunction
 
@@ -940,6 +952,7 @@ Function BM_PurchaseWhoreLicense(bool pay = true, bool lifetime = false)
             PlayerActorRef.removeItem(Gold001, BM_WhLCost.GetValue() as int)
         endIf
     endIf
+    licenses.WhoreLicense = true
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 13)
 EndFunction
 ; ------------------------------
