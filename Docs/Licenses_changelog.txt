@@ -1,6 +1,7 @@
 1.26.5.1
 Primary
 - Fix: Dialogue patch doesn't forward ItemRetrieval linked properties.
+- Fix: Bruma patch doesn't forward ItemRetrieval linked properties.
 
 1.26.5
 Primary
