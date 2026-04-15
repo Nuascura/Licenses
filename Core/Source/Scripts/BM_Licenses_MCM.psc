@@ -28,7 +28,7 @@ int Property LicenseLimit = 0 auto
 float Property LicenseCooldown = 0.0 auto conditional
 bool Property LicenseRenewal = false auto conditional
 bool Property isWaterDamageEnabled = false auto conditional
-bool Property thaneImmunityUniversal = false auto
+bool Property thaneImmunityUniversal = false auto conditional
 float Property LifetimeMultiplier = 1.0 auto
 GlobalVariable Property BM_ALCostLT Auto
 GlobalVariable Property BM_BLCostLT Auto
