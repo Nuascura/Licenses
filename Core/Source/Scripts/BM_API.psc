@@ -33,7 +33,7 @@ Scriptname BM_API Hidden
 
 ; Get - Mod Version
 string Function GetModVersion() Global
-    return "1.26.5"
+    return "1.26.6"
 EndFunction
 
 ; Get - Config Version
@@ -43,7 +43,7 @@ EndFunction
 
 ; Get - Script Version
 int Function GetVersion() Global
-	return 0x01260521 ; 0x01020304
+	return 0x01260621 ; 0x01020304
 EndFunction
 
 ; Get - Mod Name
