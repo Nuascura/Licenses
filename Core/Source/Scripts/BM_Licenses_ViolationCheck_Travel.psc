@@ -74,14 +74,16 @@ Function SetTravelViolation()
     bmlUtility.GameMessage(licenses.MessageTravelMissing)
 EndFunction
 
-bool Function IsAccompanied()
-    if (bmlmcm.BM_FollowerMale.GetValue() as bool) || (bmlmcm.BM_FollowerFemale.GetValue() as bool)
+Bool Function IsAccompanied()
+    Bool AllowMaleTeammate = bmlmcm.BM_FollowerMale.GetValue() as Bool
+    Bool AllowFemaleTeammate = bmlmcm.BM_FollowerFemale.GetValue() as Bool
+    if AllowMaleTeammate || AllowFemaleTeammate
         Actor[] PlayerFollowers = PO3_SKSEFunctions.GetPlayerFollowers()
         int arrayLength = PlayerFollowers.Length
         int i = 0
         while i < arrayLength
-            if (PlayerFollowers[i].GetBaseObject() as ActorBase).GetSex() == 0 && (bmlmcm.BM_FollowerMale.GetValue() as bool) \
-            || (PlayerFollowers[i].GetBaseObject() as ActorBase).GetSex() == 1 && (bmlmcm.BM_FollowerFemale.GetValue() as bool)
+            Bool TeammateIsFemale = (PlayerFollowers[i].GetBaseObject() as ActorBase).GetSex() as Bool
+            if (!TeammateIsFemale && AllowMaleTeammate) || (TeammateIsFemale && AllowFemaleTeammate)
                 return true
             endIf
             i += 1
