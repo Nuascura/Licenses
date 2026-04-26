@@ -1,3 +1,11 @@
+1.26.6
+Primary
+- Fix: Missing linked topic for Curse_Ask.
+- Fix: Curse removal for Thanes show even if Immunity option is disabled.
+- Change: Optimize IsAccompanied() reference retrieval.
+
+
+
 1.26.5.1
 Primary
 - Fix: Dialogue patch doesn't forward ItemRetrieval linked properties.
