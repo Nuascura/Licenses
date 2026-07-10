@@ -1,3 +1,13 @@
+1.26.7
+Primary
+- Change: Add Master - Hearthfires.esm.
+- Change: Whitelist CraftingOvenMarker furnitureObj.
+- Change: Relax PurchaseLicense condition checks.
+- Fix: Debug log NextStatusCheck retrieval.
+- Fix: Bad enchantment retrieval for non-refs.
+
+
+
 1.26.6
 Primary
 - Fix: Missing linked topic for Curse_Ask.
