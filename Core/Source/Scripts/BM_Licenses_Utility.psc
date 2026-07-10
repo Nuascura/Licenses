@@ -448,7 +448,7 @@ Function CheckLicenseStatus()
     BM_NextStatusCheck.SetValue((currentTime + 1.0) as int)
 
     LogTrace("Current Time: " + CurrentTime)
-    LogTrace("Next Status Check: " + BM_NextStatusCheck)
+    LogTrace("Next Status Check: " + BM_NextStatusCheck.GetValue())
 
     ModeratorUpdater()
 EndFunction
