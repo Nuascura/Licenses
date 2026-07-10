@@ -25,7 +25,7 @@ State Active_Selective
 
         AddInventoryEventFilter(BM_Empty)
 
-        if IsItemViolation(item, sourceContainer)
+        if IsItemViolation(item, itemRef, sourceContainer)
             bmlUtility.LogTrace("OnItemAdded: Trading Violation (Buy, Selective) Found")
             RegisterForSingleUpdate(1.0)
         else
@@ -76,19 +76,19 @@ State Active_General
     EndEvent
 EndState
 
-Bool Function IsItemViolation(Form item, ObjectReference sourceContainer)
+Bool Function IsItemViolation(Form item, ObjectReference itemRef, ObjectReference sourceContainer)
     if sourceContainer
         return IsItemViolation_Vendor(item)
     endIf
-    return IsItemViolation_Form(item)
+    return IsItemViolation_Form(item, itemRef)
 EndFunction
 
-Bool Function IsItemViolation_Form(Form item)
+Bool Function IsItemViolation_Form(Form item, ObjectReference itemRef)
     if !licenses.hasTradingLicense
-        Return (item as ObjectReference).GetEnchantment() || !FormHasKeywords(item, licenses.KeywordBarterItem, false)
+        Return IsItemEnchanted(item, itemRef) || !FormHasKeywords(item, licenses.KeywordBarterItem, false)
     endIf
 
-    if (item as ObjectReference).GetEnchantment()
+    if IsItemEnchanted(item, itemRef)
         Return FormHasKeywords(item, licenses.KeywordConfiscationEnch, false)
     else
         Return FormHasKeywords(item, licenses.KeywordConfiscation, false)
@@ -101,4 +101,22 @@ Bool Function IsItemViolation_Vendor(Form item)
     endIf
 
     Return BM_PotentialVendorBarterViolations.HasForm(item)
+EndFunction
+
+Bool Function IsItemEnchanted(Form item, ObjectReference itemRef = None)
+    if itemRef
+        Return itemRef.GetEnchantment()
+    else
+        Armor armorRef = item as Armor
+        if armorRef
+            Return armorRef.GetEnchantment()
+        endIf
+
+        Weapon weaponRef = item as Weapon
+        if weaponRef
+            Return weaponRef.GetEnchantment()
+        endIf
+    endIf
+    
+    Return False
 EndFunction
