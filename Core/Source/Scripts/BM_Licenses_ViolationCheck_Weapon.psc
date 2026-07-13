@@ -16,13 +16,13 @@ Auto State Run
         ; Check for equipped weapons / ammo
         if !licenses.isWeaponViolation
             if licenses.PlayerActorRef.GetEquippedWeapon(false) && (bmlUtility.BM_PotentialViolations.HasForm(licenses.PlayerActorRef.GetEquippedWeapon(false)))
-                licenses.isWeaponViolation = true
+                licenses.isWeaponViolation = 1
                 bmlUtility.LogTrace("Detected Weapon Violation: " + licenses.PlayerActorRef.GetEquippedWeapon(false))
             elseIf licenses.PlayerActorRef.GetEquippedWeapon(true) && (bmlUtility.BM_PotentialViolations.HasForm(licenses.PlayerActorRef.GetEquippedWeapon(true)))
-                licenses.isWeaponViolation = true
+                licenses.isWeaponViolation = 1
                 bmlUtility.LogTrace("Detected Weapon Violation: " + licenses.PlayerActorRef.GetEquippedWeapon(true))
             elseIf PO3_SKSEFunctions.GetEquippedAmmo(licenses.PlayerActorRef) && (bmlUtility.BM_PotentialViolations.HasForm(PO3_SKSEFunctions.GetEquippedAmmo(licenses.PlayerActorRef)))
-                licenses.isWeaponViolation = true
+                licenses.isWeaponViolation = 1
                 bmlUtility.LogTrace("Detected Weapon Violation: " + PO3_SKSEFunctions.GetEquippedAmmo(licenses.PlayerActorRef))
             endif
         endif
@@ -31,7 +31,7 @@ Auto State Run
         if !licenses.isUninsuredViolation && !licenses.isInsured
             if licenses.isWeaponViolation && licenses.hasWeaponLicense
                 bmlUtility.LogTrace("Detected Uninsured Violation: Weapon Type")
-                licenses.isUninsuredViolation = true
+                licenses.isUninsuredViolation = 1
             endIf
         endIf
     

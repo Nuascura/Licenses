@@ -64,7 +64,7 @@ Auto State Run
 EndState
 
 Function SetTravelViolation()
-    licenses.isTravelViolation = true
+    licenses.isTravelViolation = 1
 
     bmlUtility.LogTrace("Debug: savedLoc (" + bmlUtility.savedLoc + "), lastLoc (" + bmlUtility.lastLoc + "), currLoc (" + bmlUtility.currLoc + ")")
     bmlUtility.LogTrace("Debug: savedSpace (" + bmlUtility.savedSpace + "), lastSpace (" + bmlUtility.lastSpace + "), currSpace (" + bmlUtility.currSpace + ")")

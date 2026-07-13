@@ -198,21 +198,21 @@ Function ResetViolations(int type = 0)
     bmlUtility.LogTrace("ResetViolations() Type: " + type)
 
     if type > -1
-        isTravelViolation = false
+        isTravelViolation = 0
     endIf
     if type > -1 || !(bmlUtility.BM_IsViolatingCurfew.GetValue() as bool)
-        isCurfewViolation = false
+        isCurfewViolation = 0
     endIf
-    isArmorViolation = false
+    isArmorViolation = 0
     isBikiniViolation = 0
-    isClothingViolation = false
-    isMagicViolation = false
-    isWeaponViolation = false
-    isCraftingViolation = false
-    isCollarViolation = false
-    isUninsuredViolation = false
-    isTradingViolation = false
-    isWhoreViolation = false
+    isClothingViolation = 0
+    isMagicViolation = 0
+    isWeaponViolation = 0
+    isCraftingViolation = 0
+    isCollarViolation = 0
+    isUninsuredViolation = 0
+    isTradingViolation = 0
+    isWhoreViolation = 0
 
     bmlUtility.BM_FineAmount.SetValue(0.0)
 EndFunction
@@ -658,18 +658,18 @@ bool Property CurfewExemption
     EndFunction
 EndProperty
 
-bool Property isArmorViolation auto conditional
+int Property isArmorViolation auto conditional
 int Property isBikiniViolation auto conditional
-bool Property isClothingViolation auto conditional
-bool Property isMagicViolation auto conditional
-bool Property isWeaponViolation auto conditional
-bool Property isCraftingViolation auto conditional
-bool Property isTravelViolation auto conditional
-bool Property isCollarViolation auto conditional
-bool Property isUninsuredViolation auto conditional
-bool Property isCurfewViolation auto conditional
-bool Property isTradingViolation auto conditional
-bool Property isWhoreViolation auto conditional
+int Property isClothingViolation auto conditional
+int Property isMagicViolation auto conditional
+int Property isWeaponViolation auto conditional
+int Property isCraftingViolation auto conditional
+int Property isTravelViolation auto conditional
+int Property isCollarViolation auto conditional
+int Property isUninsuredViolation auto conditional
+int Property isCurfewViolation auto conditional
+int Property isTradingViolation auto conditional
+int Property isWhoreViolation auto conditional
 
 bool Property isInCity = false auto conditional
 bool Property isInTown = false auto conditional

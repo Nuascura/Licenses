@@ -11,9 +11,9 @@ Function CheckWeaponViolation(Actor player)
     if !licenses.hasWeaponLicense || !licenses.isInsured
 		if bmlUtility.ValidateWeaponForms(player.GetEquippedWeapon(true), player.GetEquippedWeapon(false))
 			if (licenses.hasWeaponLicense == true && licenses.isInsured == false)
-				licenses.isUninsuredViolation = true
+				licenses.isUninsuredViolation = 1
 			endIf
-			licenses.isWeaponViolation = true
+			licenses.isWeaponViolation = 1
 			bmlUtility.LogTrace("Detected Weapon Violation: Unsheathed Weapon")
 			bmlUtility.AggregateViolations()
 		endIf

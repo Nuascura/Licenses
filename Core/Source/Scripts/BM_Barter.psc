@@ -35,7 +35,7 @@ State Active_Selective
 
     Event OnUpdate()
         if !licenses.isTradingViolation
-            licenses.isTradingViolation = True
+            licenses.isTradingViolation = 1
             bmPlayer.CheckViolations()
         endIf
         If IsMenuOpen("BarterMenu")
@@ -58,7 +58,7 @@ State Active_General
         AddInventoryEventFilter(BM_Empty)
         bmlUtility.LogTrace("OnItemRemoved: Trading Violation (Buy, General) Found")
         if !licenses.isTradingViolation
-            licenses.isTradingViolation = True
+            licenses.isTradingViolation = 1
             bmPlayer.CheckViolations()
         endIf
         RegisterForSingleUpdate(10.0)

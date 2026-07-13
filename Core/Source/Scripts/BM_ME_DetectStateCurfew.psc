@@ -36,7 +36,7 @@ Event OnEffectFinish(Actor akTarget, Actor akCaster)
 	bmlUtility.GameMessage(BM_Licenses_MessageCurfewInactive)
 	BM_IsViolatingCurfew.SetValue(0.0)
 	if !licenseBountyQuest.IsRunning()
-		licenses.isCurfewViolation = false
+		licenses.isCurfewViolation = 0
 	endIf
 EndEvent
 
@@ -58,7 +58,7 @@ State ActiveViolation
 	EndEvent
 	Event OnUpdate()
 		If !licenses.isCurfewViolation
-			licenses.isCurfewViolation = true
+			licenses.isCurfewViolation = 1
 			bmPlayer.CheckViolations()
 		EndIf
 		RegisterForSingleUpdate(30.0)

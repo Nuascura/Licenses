@@ -16,7 +16,7 @@ Auto State Run
         if bmlmcm.DeviousDevices_State
             if !licenses.isCollarViolation && !licenses.hasCollarExemption
                 if !(bmlUtility.BM_IsPlayerCollared.GetValue() as bool)
-                    licenses.isCollarViolation = true
+                    licenses.isCollarViolation = 1
                     bmlUtility.LogTrace("Detected Collar Violation: Missing Collar")
                 endIf
             endIf

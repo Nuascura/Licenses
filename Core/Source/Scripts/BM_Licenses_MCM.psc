@@ -1767,7 +1767,7 @@ state isTravelPermitFeatureEnabledST
 		if !isTravelPermitFeatureEnabled
 			bmlUtility.savedLoc = None
 			bmlUtility.savedSpace = None
-			licenses.isTravelViolation = false
+			licenses.isTravelViolation = 0
 		endIf
 		SessionModified = true
 	endEvent

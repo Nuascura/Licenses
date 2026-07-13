@@ -11,9 +11,9 @@ Function CheckMagicViolation(Actor player)
     if (!licenses.hasMagicLicense || !licenses.isInsured) && licenses.CheckNullifyMagickaCurse(player) < 1
         if (bmlUtility.ValidateSpellForms(player, player.GetEquippedSpell(0), player.GetEquippedSpell(1)))
             if (licenses.hasMagicLicense == true && licenses.isInsured == false)
-                licenses.isUninsuredViolation = true
+                licenses.isUninsuredViolation = 1
             endIf
-            licenses.isMagicViolation = true
+            licenses.isMagicViolation = 1
             bmlUtility.LogTrace("Detected Magic Violation: Unsheathed Spell")
             bmlUtility.AggregateViolations()
         endIf

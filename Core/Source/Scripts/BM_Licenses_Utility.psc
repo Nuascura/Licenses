@@ -511,37 +511,28 @@ Int Function CountActiveLicenses()
 EndFunction
 
 Int Function CountActiveViolations()
-    Bool[] ActiveViolations = new Bool[12]
-    ActiveViolations[0] = licenses.isArmorViolation
-    ActiveViolations[1] = licenses.isBikiniViolation as bool
-    ActiveViolations[2] = licenses.isClothingViolation
-    ActiveViolations[3] = licenses.isMagicViolation
-    ActiveViolations[4] = licenses.isWeaponViolation
-    ActiveViolations[5] = licenses.isCraftingViolation
-    ActiveViolations[6] = licenses.isTravelViolation
-    ActiveViolations[7] = licenses.isCollarViolation
-    ActiveViolations[8] = licenses.isUninsuredViolation
-    ActiveViolations[9] = licenses.isCurfewViolation
-    ActiveViolations[10] = licenses.isTradingViolation
-    ActiveViolations[11] = licenses.isWhoreViolation
-    return CountBool(ActiveViolations, true)
+    return CountBool(GetActiveViolations(), true)
 EndFunction
 
-bool Function CheckViolationExists()
-    Bool[] violations = new Bool[12]
-    violations[0] = licenses.isArmorViolation
-    violations[1] = licenses.isBikiniViolation as bool
-    violations[2] = licenses.isClothingViolation
-    violations[3] = licenses.isMagicViolation
-    violations[4] = licenses.isWeaponViolation
-    violations[5] = licenses.isCraftingViolation
-    violations[6] = licenses.isTravelViolation
-    violations[7] = licenses.isCollarViolation
-    violations[8] = licenses.isUninsuredViolation
-    violations[9] = licenses.isCurfewViolation
-    violations[10] = licenses.isTradingViolation
-    violations[11] = licenses.isWhoreViolation
-    return violations.Find(true) != -1
+Bool Function CheckViolationExists()
+    return GetActiveViolations().Find(true) != -1
+EndFunction
+
+Bool[] Function GetActiveViolations()
+    Bool[] ActiveViolations = new Bool[12]
+    ActiveViolations[0] = licenses.isArmorViolation as bool
+    ActiveViolations[1] = licenses.isBikiniViolation as bool
+    ActiveViolations[2] = licenses.isClothingViolation as bool
+    ActiveViolations[3] = licenses.isMagicViolation as bool
+    ActiveViolations[4] = licenses.isWeaponViolation as bool
+    ActiveViolations[5] = licenses.isCraftingViolation as bool
+    ActiveViolations[6] = licenses.isTravelViolation as bool
+    ActiveViolations[7] = licenses.isCollarViolation as bool
+    ActiveViolations[8] = licenses.isUninsuredViolation as bool
+    ActiveViolations[9] = licenses.isCurfewViolation as bool
+    ActiveViolations[10] = licenses.isTradingViolation as bool
+    ActiveViolations[11] = licenses.isWhoreViolation as bool
+    return ActiveViolations
 EndFunction
 ; ------------------------------
 
@@ -710,18 +701,18 @@ Float Function GetFine()
     Float Percentage = bmlmcm.FinePercentage / 100.0
 
     Int[] FineList = new Int[12]
-    FineList[0] = (licenses.isArmorViolation as int) * (bmlmcm.BM_ALCost.GetValue() as int)
+    FineList[0] = ((licenses.isArmorViolation as bool) as int) * (bmlmcm.BM_ALCost.GetValue() as int)
     FineList[1] = ((licenses.isBikiniViolation as bool) as int) * (bmlmcm.BM_BLCost.GetValue() as int)
-    FineList[2] = (licenses.isClothingViolation as int) * (bmlmcm.BM_CLCost.GetValue() as int)
-    FineList[3] = (licenses.isMagicViolation as int) * (bmlmcm.BM_MLCost.GetValue() as int)
-    FineList[4] = (licenses.isWeaponViolation as int) * (bmlmcm.BM_WLCost.GetValue() as int)
-    FineList[5] = (licenses.isCraftingViolation as int) * (bmlmcm.BM_CrfLCost.GetValue() as int)
-    FineList[6] = (licenses.isTravelViolation as int) * (bmlmcm.BM_TPCost.GetValue() as int)
-    FineList[7] = (licenses.isCollarViolation as int) * (bmlmcm.BM_CECost.GetValue() as int)
-    FineList[8] = (licenses.isUninsuredViolation as int) * (bmlmcm.BM_InsurCost.GetValue() as int)
-    FineList[9] = (licenses.isCurfewViolation as int) * (bmlmcm.BM_CuECost.GetValue() as int)
-    FineList[10] = (licenses.isTradingViolation as int) * (bmlmcm.BM_TLCost.GetValue() as int)
-    FineList[11] = (licenses.isWhoreViolation as int) * (bmlmcm.BM_WhLCost.GetValue() as int)
+    FineList[2] = ((licenses.isClothingViolation as bool) as int) * (bmlmcm.BM_CLCost.GetValue() as int)
+    FineList[3] = ((licenses.isMagicViolation as bool) as int) * (bmlmcm.BM_MLCost.GetValue() as int)
+    FineList[4] = ((licenses.isWeaponViolation as bool) as int) * (bmlmcm.BM_WLCost.GetValue() as int)
+    FineList[5] = ((licenses.isCraftingViolation as bool) as int) * (bmlmcm.BM_CrfLCost.GetValue() as int)
+    FineList[6] = ((licenses.isTravelViolation as bool) as int) * (bmlmcm.BM_TPCost.GetValue() as int)
+    FineList[7] = ((licenses.isCollarViolation as bool) as int) * (bmlmcm.BM_CECost.GetValue() as int)
+    FineList[8] = ((licenses.isUninsuredViolation as bool) as int) * (bmlmcm.BM_InsurCost.GetValue() as int)
+    FineList[9] = ((licenses.isCurfewViolation as bool) as int) * (bmlmcm.BM_CuECost.GetValue() as int)
+    FineList[10] = ((licenses.isTradingViolation as bool) as int) * (bmlmcm.BM_TLCost.GetValue() as int)
+    FineList[11] = ((licenses.isWhoreViolation as bool) as int) * (bmlmcm.BM_WhLCost.GetValue() as int)
 
     Fine = Base + (Percentage * AddIntValues(FineList))
     LogTrace("Generated Fine Total: " + Fine)
@@ -1404,18 +1395,18 @@ EndFunction
 Float Function insuranceModifierViolation()
     ; Define weights for each infraction (adjust as needed)
     Float[] ViolationWeight = new Float[12]
-    ViolationWeight[0] = 0.1 * (licenses.isArmorViolation as float)
+    ViolationWeight[0] = 0.1 * ((licenses.isArmorViolation as bool) as float)
     ViolationWeight[1] = 0.1 * ((licenses.isBikiniViolation as bool) as float)
-    ViolationWeight[2] = 0.1 * (licenses.isClothingViolation as float)
-    ViolationWeight[3] = 0.2 * (licenses.isMagicViolation as float)
-    ViolationWeight[4] = 0.2 * (licenses.isWeaponViolation as float)
-    ViolationWeight[5] = 0.1 * (licenses.isCraftingViolation as float)
-    ViolationWeight[6] = 0.1 * (licenses.isTravelViolation as float)
-    ViolationWeight[7] = 0.2 * (licenses.isCollarViolation as float)
-    ViolationWeight[8] = 0.1 * (licenses.isUninsuredViolation as float)
-    ViolationWeight[9] = 0.1 * (licenses.isCurfewViolation as float)
-    ViolationWeight[10] = 0.1 * (licenses.isTradingViolation as float)
-    ViolationWeight[11] = 0.1 * (licenses.isWhoreViolation as float)
+    ViolationWeight[2] = 0.1 * ((licenses.isClothingViolation as bool) as float)
+    ViolationWeight[3] = 0.2 * ((licenses.isMagicViolation as bool) as float)
+    ViolationWeight[4] = 0.2 * ((licenses.isWeaponViolation as bool) as float)
+    ViolationWeight[5] = 0.1 * ((licenses.isCraftingViolation as bool) as float)
+    ViolationWeight[6] = 0.1 * ((licenses.isTravelViolation as bool) as float)
+    ViolationWeight[7] = 0.2 * ((licenses.isCollarViolation as bool) as float)
+    ViolationWeight[8] = 0.1 * ((licenses.isUninsuredViolation as bool) as float)
+    ViolationWeight[9] = 0.1 * ((licenses.isCurfewViolation as bool) as float)
+    ViolationWeight[10] = 0.1 * ((licenses.isTradingViolation as bool) as float)
+    ViolationWeight[11] = 0.1 * ((licenses.isWhoreViolation as bool) as float)
 
     Return AddFloatValues(ViolationWeight)
 EndFunction

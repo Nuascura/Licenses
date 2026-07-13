@@ -15,7 +15,7 @@ Auto State Run
         if !licenses.isUninsuredViolation && !licenses.isInsured
             if hasViolation
                 bmlUtility.LogTrace("Detected Uninsured Violation: Armor Type")
-                licenses.isUninsuredViolation = true
+                licenses.isUninsuredViolation = 1
             endIf
         endIf
     
@@ -41,7 +41,7 @@ Bool Function GetViolation()
                     bmlUtility.LogTrace("Detected Bikini Violation (Armor Restriction): " + equippedArmor)
                 endIf
             else
-                licenses.isArmorViolation = true
+                licenses.isArmorViolation = 1
                 bmlUtility.LogTrace("Detected Armor Violation: " + equippedArmor)
             endIf
         endIf
@@ -57,7 +57,7 @@ Bool Function GetViolation()
                     bmlUtility.LogTrace("Detected Bikini Violation (Clothing Restriction): " + equippedClothing)
                 endIf
             else
-                licenses.isClothingViolation = true
+                licenses.isClothingViolation = 1
                 bmlUtility.LogTrace("Detected Clothing Violation: " + equippedClothing)
             endIf
         endIf

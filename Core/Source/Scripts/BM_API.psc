@@ -33,7 +33,7 @@ Scriptname BM_API Hidden
 
 ; Get - Mod Version
 string Function GetModVersion() Global
-    return "1.26.7"
+    return "1.27.0"
 EndFunction
 
 ; Get - Config Version
@@ -43,7 +43,7 @@ EndFunction
 
 ; Get - Script Version
 int Function GetVersion() Global
-	return 0x01260721 ; 0x01020304
+	return 0x01270022 ; 0x01020304
 EndFunction
 
 ; Get - Mod Name
@@ -212,31 +212,31 @@ bool Function FlagViolation(int ViolationType, bool Push = true, bool CheckSafet
     if ViolationType == 0
         ; Empty
     elseIf ViolationType == 1
-        bml.isArmorViolation = true
+        bml.isArmorViolation = 1
     elseIf ViolationType == 2
         bml.isBikiniViolation = 1
     elseIf ViolationType == 3
         bml.isBikiniViolation = 2
     elseIf ViolationType == 4
-        bml.isClothingViolation = true
+        bml.isClothingViolation = 1
     elseIf ViolationType == 5
-        bml.isMagicViolation = true
+        bml.isMagicViolation = 1
     elseIf ViolationType == 6
-        bml.isWeaponViolation = true
+        bml.isWeaponViolation = 1
     elseIf ViolationType == 7
-        bml.isCraftingViolation = true
+        bml.isCraftingViolation = 1
     elseIf ViolationType == 8
-        bml.isTravelViolation = true
+        bml.isTravelViolation = 1
     elseIf ViolationType == 9
-        bml.isCollarViolation = true
+        bml.isCollarViolation = 1
     elseIf ViolationType == 10
-        bml.isUninsuredViolation = true
+        bml.isUninsuredViolation = 1
     elseIf ViolationType == 11
-        bml.isCurfewViolation = true
+        bml.isCurfewViolation = 1
     elseIf ViolationType == 12
-        bml.isTradingViolation = true
+        bml.isTradingViolation = 1
     elseIf ViolationType == 13
-        bml.isWhoreViolation = true
+        bml.isWhoreViolation = 1
     else
         return false
     endIf

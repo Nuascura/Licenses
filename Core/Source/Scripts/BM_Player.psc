@@ -23,9 +23,9 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
     if !licenses.isMagicViolation && (licenses.hasMagicLicense == false || licenses.isInsured == false)
         if bmlUtility.ValidateSpellForms(PlayerRef, PlayerRef.GetEquippedSpell(0), PlayerRef.GetEquippedSpell(1))
             if (licenses.hasMagicLicense == true && licenses.isInsured == false)
-                licenses.isUninsuredViolation = true
+                licenses.isUninsuredViolation = 1
             endIf
-            licenses.isMagicViolation = true
+            licenses.isMagicViolation = 1
             bmlUtility.LogTrace("Detected Magic Violation (Spell): " + PlayerRef.GetEquippedSpell(0) + ", " + PlayerRef.GetEquippedSpell(1))
             bmlUtility.AggregateViolations()
         endIf
@@ -37,9 +37,9 @@ Event OnSpellCast(Form akSpell)
     if SpellCast && PO3_SKSEFunctions.GetSpellType(SpellCast) == 11
         if !licenses.isMagicViolation && (licenses.hasMagicLicense == false || licenses.isInsured == false)
             if (licenses.hasMagicLicense == true && licenses.isInsured == false)
-                licenses.isUninsuredViolation = true
+                licenses.isUninsuredViolation = 1
             endIf
-            licenses.isMagicViolation = true
+            licenses.isMagicViolation = 1
             bmlUtility.LogTrace("Detected Magic Violation (Shout): " + akSpell)
             bmlUtility.AggregateViolations()
         endIf

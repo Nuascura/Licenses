@@ -16,7 +16,7 @@ Auto State Run
         if !licenses.isMagicViolation
             Form[] equippedObjects = SPE_Utility.IntersectArray_Form(PO3_SKSEFunctions.AddItemsOfTypeToArray(licenses.PlayerActorRef, 26, false, false, true), bmlUtility.BM_PotentialViolations_Ench.ToArray())
             if (equippedObjects)
-                licenses.isMagicViolation = true
+                licenses.isMagicViolation = 1
                 bmlUtility.LogTrace("Detected Magic Violation (Armor): " + equippedObjects)
             endIf
         endIf
@@ -24,10 +24,10 @@ Auto State Run
         ; Check for equipped enchanted weapons in both hands
         if !licenses.isMagicViolation
             if licenses.PlayerActorRef.GetEquippedWeapon(false) && (bmlUtility.BM_PotentialViolations_Ench.HasForm(licenses.PlayerActorRef.GetEquippedWeapon(false)))
-                licenses.isMagicViolation = true
+                licenses.isMagicViolation = 1
                 bmlUtility.LogTrace("Detected Magic Violation (Weapon): " + licenses.PlayerActorRef.GetEquippedWeapon(false))
             elseIf licenses.PlayerActorRef.GetEquippedWeapon(true) && (bmlUtility.BM_PotentialViolations_Ench.HasForm(licenses.PlayerActorRef.GetEquippedWeapon(true)))
-                licenses.isMagicViolation = true
+                licenses.isMagicViolation = 1
                 bmlUtility.LogTrace("Detected Magic Violation (Weapon): " + licenses.PlayerActorRef.GetEquippedWeapon(true))
             endIf
         endif
@@ -38,12 +38,12 @@ Auto State Run
             if licenses.CheckNullifyMagickaCurse(licenses.PlayerActorRef) == 0 && (!licenses.hasMagicLicense || !licenses.isInsured)
                 if licenses.PlayerActorRef.IsWeaponDrawn()
                     if bmlUtility.ValidateSpellForms(licenses.PlayerActorRef, licenses.PlayerActorRef.GetEquippedSpell(0), licenses.PlayerActorRef.GetEquippedSpell(1))
-                        licenses.isMagicViolation = true
+                        licenses.isMagicViolation = 1
                         bmlUtility.LogTrace("Detected Magic Violation (Spell): " + licenses.PlayerActorRef.GetEquippedSpell(0) + ", " + licenses.PlayerActorRef.GetEquippedSpell(1))
                     endIf
                 endIf
                 if bmlmcm.NullifyMagickaEnforce
-                    licenses.isMagicViolation = true
+                    licenses.isMagicViolation = 1
                     bmlUtility.LogTrace("Detected Magic Violation (Curse): Missing Curse")
                 endIf
             endIf
@@ -53,7 +53,7 @@ Auto State Run
         if !licenses.isUninsuredViolation && !licenses.isInsured
             if licenses.isMagicViolation && licenses.hasMagicLicense
                 bmlUtility.LogTrace("Detected Uninsured Violation: Magic Type")
-                licenses.isUninsuredViolation = true
+                licenses.isUninsuredViolation = 1
             endIf
         endIf
     

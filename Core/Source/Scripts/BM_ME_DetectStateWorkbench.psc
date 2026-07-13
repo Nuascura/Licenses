@@ -16,7 +16,7 @@ EndEvent
 
 Function CheckFurnitureViolation()
     if !(licenses.hasCraftingLicense || licenses.isCraftingViolation)
-		licenses.isCraftingViolation = true
+		licenses.isCraftingViolation = 1
 		bmlUtility.ConsiderViolationCheck()
     EndIf
 EndFunction
