@@ -56,7 +56,7 @@ bool Property isConfiscateFeatureEnabled = false auto conditional
 bool Property isConfiscateInventoryFeatureEnabled = false auto
 
 ; Page 2 - Licenses - Primary
-bool Property isArmorLicenseFeatureEnabled = true auto conditional
+int Property isArmorLicenseFeatureEnabled = 1 auto conditional
 GlobalVariable Property BM_ALCost Auto
 GlobalVariable Property BM_ALDuration Auto
 bool Property ALClothingImmunity Auto
@@ -69,11 +69,11 @@ bool Property isBikiniArmorFeatureEnabled = true auto
 bool Property isBikiniClothingFeatureEnabled = true auto
 String Property bikiniKeywordString = "EroticArmor" auto
 
-bool Property isClothingLicenseFeatureEnabled = false auto conditional
+int Property isClothingLicenseFeatureEnabled = 0 auto conditional
 GlobalVariable Property BM_CLCost Auto
 GlobalVariable Property BM_CLDuration Auto
 
-bool Property isMagicLicenseFeatureEnabled = true auto conditional
+int Property isMagicLicenseFeatureEnabled = 1 auto conditional
 GlobalVariable Property BM_MLCost Auto
 GlobalVariable Property BM_MLDuration Auto
 bool Property isEnchantedArmorFeatureEnabled = false auto
@@ -84,33 +84,33 @@ int Property NullifyMagickaSource = 0 auto conditional
 string[] NullifyMagickaSourceList
 bool Property NullifyMagickaEnforce = false auto conditional
 
-bool Property isWeaponLicenseFeatureEnabled = true auto conditional
+int Property isWeaponLicenseFeatureEnabled = 1 auto conditional
 GlobalVariable Property BM_WLCost Auto
 GlobalVariable Property BM_WLDuration Auto
 bool Property isWeaponAmmoFeatureEnabled = true auto
 
 ; Page 3 - Licenses - Secondary
-bool Property isCraftingLicenseFeatureEnabled = true auto conditional
+int Property isCraftingLicenseFeatureEnabled = 1 auto conditional
 GlobalVariable Property BM_CrfLCost Auto
 GlobalVariable Property BM_CrfLDuration Auto
 
-bool Property isTradingLicenseFeatureEnabled = true auto conditional
+int Property isTradingLicenseFeatureEnabled = 1 auto conditional
 GlobalVariable Property BM_TLCost Auto
 GlobalVariable Property BM_TLDuration Auto
 
-bool Property isCurfewExemptionFeatureEnabled = false auto conditional
+int Property isCurfewExemptionFeatureEnabled = 0 auto conditional
 GlobalVariable Property BM_CuECost Auto
 GlobalVariable Property BM_CuEDuration Auto
 GlobalVariable Property BM_CurfewStart Auto
 GlobalVariable Property BM_CurfewEnd Auto
 
-bool Property isTravelPermitFeatureEnabled = false auto conditional
+int Property isTravelPermitFeatureEnabled = 0 auto conditional
 GlobalVariable Property BM_TPCost Auto
 GlobalVariable Property BM_TPDuration Auto
 GlobalVariable Property BM_FollowerMale  Auto
 GlobalVariable Property BM_FollowerFemale  Auto
 
-bool Property isInsuranceFeatureEnabled = false auto conditional
+int Property isInsuranceFeatureEnabled = 0 auto conditional
 GlobalVariable Property BM_InsurCost Auto
 float Property BM_InsurCostBase = 3500.0 Auto
 GlobalVariable Property BM_InsurDuration Auto
@@ -118,11 +118,11 @@ bool property invertPopularityMultiplier = false auto
 bool property thaneImmunityInsurance = false auto
 
 ; Page 4 - Licenses - Tertiary
-bool Property isWhoreLicenseFeatureEnabled = false auto conditional
+int Property isWhoreLicenseFeatureEnabled = 0 auto conditional
 GlobalVariable Property BM_WhLCost Auto
 GlobalVariable Property BM_WhLDuration Auto
 
-bool Property isCollarExemptionFeatureEnabled = false auto conditional
+int Property isCollarExemptionFeatureEnabled = 0 auto conditional
 GlobalVariable Property BM_CECost Auto
 GlobalVariable Property BM_CEDuration Auto
 
@@ -384,19 +384,19 @@ Function ShowPageSplash()
 	AddHeaderOption("$LPO_LicenseStatuses")
 	AddEmptyOption()
 	Int iSplashFlag 
-	iSplashFlag += AddFeatureState("$LPO_ArmorLicense", isArmorLicenseFeatureEnabled, licenses.hasArmorLicense, licenses.armorLicenseExpirationTime, licenses.armorLicenseCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_ArmorLicense", isArmorLicenseFeatureEnabled == 1, licenses.hasArmorLicense, licenses.armorLicenseExpirationTime, licenses.armorLicenseCooldownTime)
 	iSplashFlag += AddFeatureState("$LPO_BikiniLicense", isBikiniLicenseFeatureEnabled == 1, licenses.hasBikiniLicense, licenses.bikiniLicenseExpirationTime, licenses.bikiniLicenseCooldownTime)
 	iSplashFlag += AddFeatureState("$LPO_BikiniExemption", isBikiniLicenseFeatureEnabled == 2, licenses.hasBikiniExemption, licenses.bikiniExemptionExpirationTime, licenses.bikiniExemptionCooldownTime)
-	iSplashFlag += AddFeatureState("$LPO_ClothingLicense", isClothingLicenseFeatureEnabled, licenses.hasClothingLicense, licenses.clothingLicenseExpirationTime, licenses.clothingLicenseCooldownTime)
-	iSplashFlag += AddFeatureState("$LPO_MagicLicense", isMagicLicenseFeatureEnabled, licenses.hasMagicLicense, licenses.magicLicenseExpirationTime, licenses.magicLicenseCooldownTime)
-	iSplashFlag += AddFeatureState("$LPO_WeaponLicense", isWeaponLicenseFeatureEnabled, licenses.hasWeaponLicense, licenses.weaponLicenseExpirationTime, licenses.weaponLicenseCooldownTime)
-	iSplashFlag += AddFeatureState("$LPO_CraftingLicense", isCraftingLicenseFeatureEnabled, licenses.hasCraftingLicense, licenses.craftingLicenseExpirationTime, licenses.craftingLicenseCooldownTime)
-	iSplashFlag += AddFeatureState("$LPO_TradingLicense", isTradingLicenseFeatureEnabled, licenses.hasTradingLicense, licenses.tradingLicenseExpirationTime, licenses.tradingLicenseCooldownTime)
-	iSplashFlag += AddFeatureState("$LPO_CurfewExemption", isCurfewExemptionFeatureEnabled, licenses.hasCurfewExemption, licenses.curfewExemptionExpirationTime, licenses.curfewExemptionCooldownTime)
-	iSplashFlag += AddFeatureState("$LPO_TravelPermit", isTravelPermitFeatureEnabled, licenses.hasTravelPermit, licenses.travelPermitExpirationTime, licenses.travelPermitCooldownTime)
-	iSplashFlag += AddFeatureState("$LPO_Insurance", isInsuranceFeatureEnabled, licenses.hasInsurance, licenses.insuranceExpirationTime, licenses.insuranceCooldownTime)
-	iSplashFlag += AddFeatureState("$LPO_WhoreLicense", isWhoreLicenseFeatureEnabled, licenses.hasWhoreLicense, licenses.whoreLicenseExpirationTime, licenses.whoreLicenseCooldownTime)
-	iSplashFlag += AddFeatureState("$LPO_CollarExemption", isCollarExemptionFeatureEnabled, licenses.hasCollarExemption, licenses.collarExemptionExpirationTime, licenses.collarExemptionCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_ClothingLicense", isClothingLicenseFeatureEnabled == 1, licenses.hasClothingLicense, licenses.clothingLicenseExpirationTime, licenses.clothingLicenseCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_MagicLicense", isMagicLicenseFeatureEnabled == 1, licenses.hasMagicLicense, licenses.magicLicenseExpirationTime, licenses.magicLicenseCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_WeaponLicense", isWeaponLicenseFeatureEnabled == 1, licenses.hasWeaponLicense, licenses.weaponLicenseExpirationTime, licenses.weaponLicenseCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_CraftingLicense", isCraftingLicenseFeatureEnabled == 1, licenses.hasCraftingLicense, licenses.craftingLicenseExpirationTime, licenses.craftingLicenseCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_TradingLicense", isTradingLicenseFeatureEnabled == 1, licenses.hasTradingLicense, licenses.tradingLicenseExpirationTime, licenses.tradingLicenseCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_CurfewExemption", isCurfewExemptionFeatureEnabled == 1, licenses.hasCurfewExemption, licenses.curfewExemptionExpirationTime, licenses.curfewExemptionCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_TravelPermit", isTravelPermitFeatureEnabled == 1, licenses.hasTravelPermit, licenses.travelPermitExpirationTime, licenses.travelPermitCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_Insurance", isInsuranceFeatureEnabled == 1, licenses.hasInsurance, licenses.insuranceExpirationTime, licenses.insuranceCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_WhoreLicense", isWhoreLicenseFeatureEnabled == 1, licenses.hasWhoreLicense, licenses.whoreLicenseExpirationTime, licenses.whoreLicenseCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_CollarExemption", isCollarExemptionFeatureEnabled == 1, licenses.hasCollarExemption, licenses.collarExemptionExpirationTime, licenses.collarExemptionCooldownTime)
 	if iSplashFlag == 0
 		AddTextOption("$LPO_Splash_Empty", "", OPTION_FLAG_DISABLED)
 	endIf
@@ -1164,7 +1164,7 @@ endState
 
 state isArmorLicenseFeatureEnabledST
 	event OnSelectST()
-		isArmorLicenseFeatureEnabled = !isArmorLicenseFeatureEnabled
+		isArmorLicenseFeatureEnabled = (!isArmorLicenseFeatureEnabled) as int
 		SetTextOptionValueST(GetBoolString(isArmorLicenseFeatureEnabled))
 		SessionModified = true
 	endEvent
@@ -1312,7 +1312,7 @@ endState
 
 state isClothingLicenseFeatureEnabledST
 	event OnSelectST()
-		isClothingLicenseFeatureEnabled = !isClothingLicenseFeatureEnabled
+		isClothingLicenseFeatureEnabled = (!isClothingLicenseFeatureEnabled) as int
 		SetTextOptionValueST(GetBoolString(isClothingLicenseFeatureEnabled))
 		SessionModified = true
 	endEvent
@@ -1359,7 +1359,7 @@ endState
 
 state isMagicLicenseFeatureEnabledST
 	event OnSelectST()
-		isMagicLicenseFeatureEnabled = !isMagicLicenseFeatureEnabled
+		isMagicLicenseFeatureEnabled = (!isMagicLicenseFeatureEnabled) as int
 		SetTextOptionValueST(GetBoolString(isMagicLicenseFeatureEnabled))
 		SessionModified = true
 	endEvent
@@ -1476,7 +1476,7 @@ endState
 
 state isWeaponLicenseFeatureEnabledST
 	event OnSelectST()
-		isWeaponLicenseFeatureEnabled = !isWeaponLicenseFeatureEnabled
+		isWeaponLicenseFeatureEnabled = (!isWeaponLicenseFeatureEnabled) as int
 		SetTextOptionValueST(GetBoolString(isWeaponLicenseFeatureEnabled))
 		SessionModified = true
 	endEvent
@@ -1534,7 +1534,7 @@ endState
 
 state isCraftingLicenseFeatureEnabledST
 	event OnSelectST()
-		isCraftingLicenseFeatureEnabled = !isCraftingLicenseFeatureEnabled
+		isCraftingLicenseFeatureEnabled = (!isCraftingLicenseFeatureEnabled) as int
 		SetTextOptionValueST(GetBoolString(isCraftingLicenseFeatureEnabled))
 		SessionModified = true
 	endEvent
@@ -1581,7 +1581,7 @@ endState
 
 state isTradingLicenseFeatureEnabledST
 	event OnSelectST()
-		isTradingLicenseFeatureEnabled = !isTradingLicenseFeatureEnabled
+		isTradingLicenseFeatureEnabled = (!isTradingLicenseFeatureEnabled) as int
 		SetTextOptionValueST(GetBoolString(isTradingLicenseFeatureEnabled))
 		SessionModified = true
 	endEvent
@@ -1628,7 +1628,7 @@ endState
 
 state isCurfewExemptionFeatureEnabledST
 	event OnSelectST()
-		isCurfewExemptionFeatureEnabled = !isCurfewExemptionFeatureEnabled
+		isCurfewExemptionFeatureEnabled = (!isCurfewExemptionFeatureEnabled) as int
 		SetTextOptionValueST(GetBoolString(isCurfewExemptionFeatureEnabled))
 		SessionModified = true
 	endEvent
@@ -1715,7 +1715,7 @@ endState
 
 state isWhoreLicenseFeatureEnabledST
 	event OnSelectST()
-		isWhoreLicenseFeatureEnabled = !isWhoreLicenseFeatureEnabled
+		isWhoreLicenseFeatureEnabled = (!isWhoreLicenseFeatureEnabled) as int
 		SetTextOptionValueST(GetBoolString(isWhoreLicenseFeatureEnabled))
 		SessionModified = true
 	endEvent
@@ -1762,7 +1762,7 @@ endState
 
 state isTravelPermitFeatureEnabledST
 	event OnSelectST()
-		isTravelPermitFeatureEnabled = !isTravelPermitFeatureEnabled
+		isTravelPermitFeatureEnabled = (!isTravelPermitFeatureEnabled) as int
 		SetTextOptionValueST(GetBoolString(isTravelPermitFeatureEnabled))
 		if !isTravelPermitFeatureEnabled
 			bmlUtility.savedLoc = None
@@ -1836,7 +1836,7 @@ endState
 
 state isCollarExemptionFeatureEnabledST
 	event OnSelectST()
-		isCollarExemptionFeatureEnabled = !isCollarExemptionFeatureEnabled
+		isCollarExemptionFeatureEnabled = (!isCollarExemptionFeatureEnabled) as int
 		SetTextOptionValueST(GetBoolString(isCollarExemptionFeatureEnabled))
 		SessionModified = true
 	endEvent
@@ -1883,7 +1883,7 @@ endState
 
 state isInsuranceFeatureEnabledST
 	event OnSelectST()
-		isInsuranceFeatureEnabled = !isInsuranceFeatureEnabled
+		isInsuranceFeatureEnabled = (!isInsuranceFeatureEnabled) as int
 		SetTextOptionValueST(GetBoolString(isInsuranceFeatureEnabled))
 		SessionModified = true
 	endEvent
@@ -2312,20 +2312,20 @@ Bool Function exportConfig()
 	SetIntValue(config, "isConfiscateInventoryFeatureEnabled", isConfiscateInventoryFeatureEnabled as int)
 
 	; Primary Licenses
-	SetIntValue(config, "isArmorLicenseFeatureEnabled", isArmorLicenseFeatureEnabled as int)
+	SetIntValue(config, "isArmorLicenseFeatureEnabled", isArmorLicenseFeatureEnabled)
 	SetFloatValue(config, "BM_ALCost", BM_ALCost.getValue())
 	SetFloatValue(config, "BM_ALDuration", BM_ALDuration.getValue())
 	SetIntValue(config, "ALClothingImmunity", ALClothingImmunity as int)
-	SetIntValue(config, "isBikiniLicenseFeatureEnabled", isBikiniLicenseFeatureEnabled as int)
+	SetIntValue(config, "isBikiniLicenseFeatureEnabled", isBikiniLicenseFeatureEnabled)
 	SetFloatValue(config, "BM_BLCost", BM_BLCost.getValue())
 	SetFloatValue(config, "BM_BLDuration", BM_BLDuration.getValue())
 	SetIntValue(config, "isBikiniArmorFeatureEnabled", isBikiniArmorFeatureEnabled as int)
 	SetIntValue(config, "isBikiniClothingFeatureEnabled", isBikiniClothingFeatureEnabled as int)
 	SetStringValue(config, "bikiniKeywordString", bikiniKeywordString)
-	SetIntValue(config, "isClothingLicenseFeatureEnabled", isClothingLicenseFeatureEnabled as int)
+	SetIntValue(config, "isClothingLicenseFeatureEnabled", isClothingLicenseFeatureEnabled)
 	SetFloatValue(config, "BM_CLCost", BM_CLCost.getValue())
 	SetFloatValue(config, "BM_CLDuration", BM_CLDuration.getValue())
-	SetIntValue(config, "isMagicLicenseFeatureEnabled", isMagicLicenseFeatureEnabled as int)
+	SetIntValue(config, "isMagicLicenseFeatureEnabled", isMagicLicenseFeatureEnabled)
 	SetFloatValue(config, "BM_MLCost", BM_MLCost.getValue())
 	SetFloatValue(config, "BM_MLDuration", BM_MLDuration.getValue())
 	SetIntValue(config, "isEnchantedArmorFeatureEnabled", isEnchantedArmorFeatureEnabled as int)
@@ -2334,39 +2334,39 @@ Bool Function exportConfig()
 	SetIntValue(config, "isEnchantedWeaponryFeatureEnabled", isEnchantedWeaponryFeatureEnabled as int)
 	SetIntValue(config, "NullifyMagickaSource", NullifyMagickaSource)
 	SetIntValue(config, "NullifyMagickaEnforce", NullifyMagickaEnforce as int)
-	SetIntValue(config, "isWeaponLicenseFeatureEnabled", isWeaponLicenseFeatureEnabled as int)
+	SetIntValue(config, "isWeaponLicenseFeatureEnabled", isWeaponLicenseFeatureEnabled)
 	SetFloatValue(config, "BM_WLCost", BM_WLCost.getValue())
 	SetFloatValue(config, "BM_WLDuration", BM_WLDuration.getValue())
 	SetIntValue(config, "isWeaponAmmoFeatureEnabled", isWeaponAmmoFeatureEnabled as int)
 
 	; Secondary Licenses
-	SetIntValue(config, "isCraftingLicenseFeatureEnabled", isCraftingLicenseFeatureEnabled as int)
+	SetIntValue(config, "isCraftingLicenseFeatureEnabled", isCraftingLicenseFeatureEnabled)
 	SetFloatValue(config, "BM_CrfLCost", BM_CrfLCost.getValue())
 	SetFloatValue(config, "BM_CrfLDuration", BM_CrfLDuration.getValue())
-	SetIntValue(config, "isTradingLicenseFeatureEnabled", isTradingLicenseFeatureEnabled as int)
+	SetIntValue(config, "isTradingLicenseFeatureEnabled", isTradingLicenseFeatureEnabled)
 	SetFloatValue(config, "BM_TLCost", BM_TLCost.getValue())
 	SetFloatValue(config, "BM_TLDuration", BM_TLDuration.getValue())
-	SetIntValue(config, "isCurfewExemptionFeatureEnabled", isCurfewExemptionFeatureEnabled as int)
+	SetIntValue(config, "isCurfewExemptionFeatureEnabled", isCurfewExemptionFeatureEnabled)
 	SetFloatValue(config, "BM_CuECost", BM_CuECost.getValue())
 	SetFloatValue(config, "BM_CuEDuration", BM_CuEDuration.getValue())
 	SetFloatValue(config, "BM_CurfewStart", BM_CurfewStart.getValue())
 	SetFloatValue(config, "BM_CurfewEnd", BM_CurfewEnd.getValue())
-	SetIntValue(config, "isTravelPermitFeatureEnabled", isTravelPermitFeatureEnabled as int)
+	SetIntValue(config, "isTravelPermitFeatureEnabled", isTravelPermitFeatureEnabled)
 	SetFloatValue(config, "BM_TPCost", BM_TPCost.getValue())
 	SetFloatValue(config, "BM_TPDuration", BM_TPDuration.getValue())
 	SetFloatValue(config, "BM_FollowerMale", BM_FollowerMale.GetValue())
 	SetFloatValue(config, "BM_FollowerFemale", BM_FollowerFemale.GetValue())
-	SetIntValue(config, "isInsuranceFeatureEnabled", isInsuranceFeatureEnabled as int)
+	SetIntValue(config, "isInsuranceFeatureEnabled", isInsuranceFeatureEnabled)
 	SetFloatValue(config, "BM_InsurCostBase", BM_InsurCostBase)
 	SetFloatValue(config, "BM_InsurDuration", BM_InsurDuration.getValue())
 	SetIntValue(config, "invertPopularityMultiplier", invertPopularityMultiplier as int)
 	SetIntValue(config, "thaneImmunityInsurance", thaneImmunityInsurance as int)
 
 	; Tertiary Licenses
-	SetIntValue(config, "isWhoreLicenseFeatureEnabled", isWhoreLicenseFeatureEnabled as int)
+	SetIntValue(config, "isWhoreLicenseFeatureEnabled", isWhoreLicenseFeatureEnabled)
 	SetFloatValue(config, "BM_WhLCost", BM_WhLCost.getValue())
 	SetFloatValue(config, "BM_WhLDuration", BM_WhLDuration.getValue())
-	SetIntValue(config, "isCollarExemptionFeatureEnabled", isCollarExemptionFeatureEnabled as int)
+	SetIntValue(config, "isCollarExemptionFeatureEnabled", isCollarExemptionFeatureEnabled)
 	SetFloatValue(config, "BM_CECost", BM_CECost.getValue())
 	SetFloatValue(config, "BM_CEDuration", BM_CEDuration.getValue())
 
@@ -2469,20 +2469,20 @@ Bool Function importConfig(Bool abSilent = false)
 	isConfiscateInventoryFeatureEnabled = GetIntValue(config, "isConfiscateInventoryFeatureEnabled", isConfiscateInventoryFeatureEnabled as int) as Bool
 
 	; Primary Licenses
-	isArmorLicenseFeatureEnabled = GetIntValue(config, "isArmorLicenseFeatureEnabled", isArmorLicenseFeatureEnabled as int) as Bool
+	isArmorLicenseFeatureEnabled = GetIntValue(config, "isArmorLicenseFeatureEnabled", isArmorLicenseFeatureEnabled)
 	BM_ALCost.SetValue(GetFloatValue(config, "BM_ALCost", BM_ALCost.getValue()))
 	BM_ALDuration.SetValue(GetFloatValue(config, "BM_ALDuration", BM_ALDuration.getValue()))
 	ALClothingImmunity = GetIntValue(config, "ALClothingImmunity", ALClothingImmunity as int) as Bool
 	isBikiniLicenseFeatureEnabled = GetIntValue(config, "isBikiniLicenseFeatureEnabled", isBikiniLicenseFeatureEnabled)
 	BM_BLCost.SetValue(GetFloatValue(config, "BM_BLCost", BM_BLCost.getValue()))
 	BM_BLDuration.SetValue(GetFloatValue(config, "BM_BLDuration", BM_BLDuration.getValue()))
-	isBikiniArmorFeatureEnabled = GetIntValue(config, "isBikiniArmorFeatureEnabled", isBikiniArmorFeatureEnabled as int) as Bool
+	isBikiniArmorFeatureEnabled = GetFloatValue(config, "isBikiniArmorFeatureEnabled", isBikiniArmorFeatureEnabled as int) as Bool
 	isBikiniClothingFeatureEnabled = GetIntValue(config, "isBikiniClothingFeatureEnabled", isBikiniClothingFeatureEnabled as int) as Bool
 	bikiniKeywordString = GetStringValue(config, "bikiniKeywordString", bikiniKeywordString)
-	isClothingLicenseFeatureEnabled = GetIntValue(config, "isClothingLicenseFeatureEnabled", isClothingLicenseFeatureEnabled as int) as Bool
+	isClothingLicenseFeatureEnabled = GetIntValue(config, "isClothingLicenseFeatureEnabled", isClothingLicenseFeatureEnabled)
 	BM_CLCost.SetValue(GetFloatValue(config, "BM_CLCost", BM_CLCost.getValue()))
 	BM_CLDuration.SetValue(GetFloatValue(config, "BM_CLDuration", BM_CLDuration.getValue()))
-	isMagicLicenseFeatureEnabled = GetIntValue(config, "isMagicLicenseFeatureEnabled", isMagicLicenseFeatureEnabled as int) as Bool
+	isMagicLicenseFeatureEnabled = GetIntValue(config, "isMagicLicenseFeatureEnabled", isMagicLicenseFeatureEnabled)
 	BM_MLCost.SetValue(GetFloatValue(config, "BM_MLCost", BM_MLCost.getValue()))
 	BM_MLDuration.SetValue(GetFloatValue(config, "BM_MLDuration", BM_MLDuration.getValue()))
 	isEnchantedArmorFeatureEnabled = GetIntValue(config, "isEnchantedArmorFeatureEnabled", isEnchantedArmorFeatureEnabled as int) as Bool
@@ -2491,39 +2491,39 @@ Bool Function importConfig(Bool abSilent = false)
 	isEnchantedWeaponryFeatureEnabled = GetIntValue(config, "isEnchantedWeaponryFeatureEnabled", isEnchantedWeaponryFeatureEnabled as int) as Bool
 	NullifyMagickaSource = GetIntValue(config, "NullifyMagickaSource", NullifyMagickaSource)
 	NullifyMagickaEnforce = GetIntValue(config, "NullifyMagickaEnforce", NullifyMagickaEnforce as int)
-	isWeaponLicenseFeatureEnabled = GetIntValue(config, "isWeaponLicenseFeatureEnabled", isWeaponLicenseFeatureEnabled as int) as Bool
+	isWeaponLicenseFeatureEnabled = GetIntValue(config, "isWeaponLicenseFeatureEnabled", isWeaponLicenseFeatureEnabled)
 	BM_WLCost.SetValue(GetFloatValue(config, "BM_WLCost", BM_WLCost.getValue()))
 	BM_WLDuration.SetValue(GetFloatValue(config, "BM_WLDuration", BM_WLDuration.getValue()))
 	isWeaponAmmoFeatureEnabled = SetIntValue(config, "isWeaponAmmoFeatureEnabled", isWeaponAmmoFeatureEnabled as int) as Bool
 
 	; Secondary Licenses
-	isCraftingLicenseFeatureEnabled = GetIntValue(config, "isCraftingLicenseFeatureEnabled", isCraftingLicenseFeatureEnabled as int) as Bool
+	isCraftingLicenseFeatureEnabled = GetIntValue(config, "isCraftingLicenseFeatureEnabled", isCraftingLicenseFeatureEnabled)
 	BM_CrfLCost.SetValue(GetFloatValue(config, "BM_CrfLCost", BM_CrfLCost.getValue()))
 	BM_CrfLDuration.SetValue(GetFloatValue(config, "BM_CrfLDuration", BM_CrfLDuration.getValue()))
-	isTradingLicenseFeatureEnabled = GetIntValue(config, "isTradingLicenseFeatureEnabled", isTradingLicenseFeatureEnabled as int) as Bool
+	isTradingLicenseFeatureEnabled = GetIntValue(config, "isTradingLicenseFeatureEnabled", isTradingLicenseFeatureEnabled)
 	BM_TLCost.SetValue(GetFloatValue(config, "BM_TLCost", BM_TLCost.getValue()))
 	BM_TLDuration.SetValue(GetFloatValue(config, "BM_TLDuration", BM_TLDuration.getValue()))
-	isCurfewExemptionFeatureEnabled = GetIntValue(config, "isCurfewExemptionFeatureEnabled", isCurfewExemptionFeatureEnabled as int) as Bool
+	isCurfewExemptionFeatureEnabled = GetIntValue(config, "isCurfewExemptionFeatureEnabled", isCurfewExemptionFeatureEnabled)
 	BM_CuECost.SetValue(GetFloatValue(config, "BM_CuECost", BM_CuECost.getValue()))
 	BM_CuEDuration.SetValue(GetFloatValue(config, "BM_CuEDuration", BM_CuEDuration.getValue()))
 	BM_CurfewStart.SetValue(GetFloatValue(config, "BM_CurfewStart", BM_CurfewStart.getValue()))
 	BM_CurfewEnd.SetValue(GetFloatValue(config, "BM_CurfewEnd", BM_CurfewEnd.getValue()))
-	isTravelPermitFeatureEnabled = GetIntValue(config, "isTravelPermitFeatureEnabled", isTravelPermitFeatureEnabled as int) as Bool
+	isTravelPermitFeatureEnabled = GetIntValue(config, "isTravelPermitFeatureEnabled", isTravelPermitFeatureEnabled)
 	BM_TPCost.SetValue(GetFloatValue(config, "BM_TPCost", BM_TPCost.getValue()))
 	BM_TPDuration.SetValue(GetFloatValue(config, "BM_TPDuration", BM_TPDuration.getValue()))
 	BM_FollowerMale.SetValue(GetFloatValue(config, "BM_FollowerMale", BM_FollowerMale.GetValue()))
 	BM_FollowerFemale.SetValue(GetFloatValue(config, "BM_FollowerFemale", BM_FollowerFemale.GetValue()))
-	isInsuranceFeatureEnabled = GetIntValue(config, "isInsuranceFeatureEnabled", isInsuranceFeatureEnabled as int) as Bool
+	isInsuranceFeatureEnabled = GetIntValue(config, "isInsuranceFeatureEnabled", isInsuranceFeatureEnabled)
 	BM_InsurCostBase = GetFloatValue(config, "BM_InsurCostBase", BM_InsurCostBase)
 	BM_InsurDuration.SetValue(GetFloatValue(config, "BM_InsurDuration", BM_InsurDuration.getValue()))
 	invertPopularityMultiplier = GetIntValue(config, "invertPopularityMultiplier", invertPopularityMultiplier as int) as Bool
 	thaneImmunityInsurance = GetIntValue(config, "thaneImmunityInsurance", thaneImmunityInsurance as int) as Bool
 
 	; Tertiary Licenses
-	isWhoreLicenseFeatureEnabled = GetIntValue(config, "isWhoreLicenseFeatureEnabled", isWhoreLicenseFeatureEnabled as int) as Bool
+	isWhoreLicenseFeatureEnabled = GetIntValue(config, "isWhoreLicenseFeatureEnabled", isWhoreLicenseFeatureEnabled)
 	BM_WhLCost.SetValue(GetFloatValue(config, "BM_WhLCost", BM_WhLCost.getValue()))
 	BM_WhLDuration.SetValue(GetFloatValue(config, "BM_WhLDuration", BM_WhLDuration.getValue()))
-	isCollarExemptionFeatureEnabled = GetIntValue(config, "isCollarExemptionFeatureEnabled", isCollarExemptionFeatureEnabled as int) as Bool
+	isCollarExemptionFeatureEnabled = GetIntValue(config, "isCollarExemptionFeatureEnabled", isCollarExemptionFeatureEnabled)
 	BM_CECost.SetValue(GetFloatValue(config, "BM_CECost", BM_CECost.getValue()))
 	BM_CEDuration.SetValue(GetFloatValue(config, "BM_CEDuration", BM_CEDuration.getValue()))
 

@@ -467,8 +467,10 @@ bool Function ToggleLicenseFeature(int LicenseType, bool FeatureFlag, bool Push 
     endIf
     BM_Licenses_MCM bmlmcm = bmlUtility.bmlmcm
 
+    int iFlag = FeatureFlag as int
+
     If LicenseType == 1
-        bmlmcm.isArmorLicenseFeatureEnabled = FeatureFlag
+        bmlmcm.isArmorLicenseFeatureEnabled = iFlag
     elseIf LicenseType == 2
         if FeatureFlag
             bmlmcm.isBikiniLicenseFeatureEnabled = 1
@@ -482,25 +484,25 @@ bool Function ToggleLicenseFeature(int LicenseType, bool FeatureFlag, bool Push 
             bmlmcm.isBikiniLicenseFeatureEnabled = 0
         endIf
     elseIf LicenseType == 4
-        bmlmcm.isClothingLicenseFeatureEnabled = FeatureFlag
+        bmlmcm.isClothingLicenseFeatureEnabled = iFlag
     elseIf LicenseType == 5
-        bmlmcm.isMagicLicenseFeatureEnabled = FeatureFlag
+        bmlmcm.isMagicLicenseFeatureEnabled = iFlag
     elseIf LicenseType == 6
-        bmlmcm.isWeaponLicenseFeatureEnabled = FeatureFlag
+        bmlmcm.isWeaponLicenseFeatureEnabled = iFlag
     elseIf LicenseType == 7
-        bmlmcm.isCraftingLicenseFeatureEnabled = FeatureFlag
+        bmlmcm.isCraftingLicenseFeatureEnabled = iFlag
     elseIf LicenseType == 8
-        bmlmcm.isTravelPermitFeatureEnabled = FeatureFlag
+        bmlmcm.isTravelPermitFeatureEnabled = iFlag
     elseIf LicenseType == 9
-        bmlmcm.isCollarExemptionFeatureEnabled = FeatureFlag
+        bmlmcm.isCollarExemptionFeatureEnabled = iFlag
     elseIf LicenseType == 10
-        bmlmcm.isInsuranceFeatureEnabled = FeatureFlag
+        bmlmcm.isInsuranceFeatureEnabled = iFlag
     elseIf LicenseType == 11
-        bmlmcm.isCurfewExemptionFeatureEnabled = FeatureFlag
+        bmlmcm.isCurfewExemptionFeatureEnabled = iFlag
     elseIf LicenseType == 12
-        bmlmcm.isTradingLicenseFeatureEnabled = FeatureFlag
+        bmlmcm.isTradingLicenseFeatureEnabled = iFlag
     elseIf LicenseType == 13
-        bmlmcm.isWhoreLicenseFeatureEnabled = FeatureFlag
+        bmlmcm.isWhoreLicenseFeatureEnabled = iFlag
     else
         return false
     endIf
