@@ -467,42 +467,32 @@ bool Function ToggleLicenseFeature(int LicenseType, bool FeatureFlag, bool Push 
     endIf
     BM_Licenses_MCM bmlmcm = bmlUtility.bmlmcm
 
-    int iFlag = FeatureFlag as int
-
     If LicenseType == 1
-        bmlmcm.isArmorLicenseFeatureEnabled = iFlag
+        bmlmcm.isArmorLicenseFeatureEnabled = (FeatureFlag as int)
     elseIf LicenseType == 2
-        if FeatureFlag
-            bmlmcm.isBikiniLicenseFeatureEnabled = 1
-        else
-            bmlmcm.isBikiniLicenseFeatureEnabled = 0
-        endIf
+        bmlmcm.isBikiniLicenseFeatureEnabled = (FeatureFlag as int)
     elseIf LicenseType == 3
-        if FeatureFlag
-            bmlmcm.isBikiniLicenseFeatureEnabled = 2
-        else
-            bmlmcm.isBikiniLicenseFeatureEnabled = 0
-        endIf
+        bmlmcm.isBikiniLicenseFeatureEnabled = 2 * (FeatureFlag as int)
     elseIf LicenseType == 4
-        bmlmcm.isClothingLicenseFeatureEnabled = iFlag
+        bmlmcm.isClothingLicenseFeatureEnabled = (FeatureFlag as int)
     elseIf LicenseType == 5
-        bmlmcm.isMagicLicenseFeatureEnabled = iFlag
+        bmlmcm.isMagicLicenseFeatureEnabled = (FeatureFlag as int)
     elseIf LicenseType == 6
-        bmlmcm.isWeaponLicenseFeatureEnabled = iFlag
+        bmlmcm.isWeaponLicenseFeatureEnabled = (FeatureFlag as int)
     elseIf LicenseType == 7
-        bmlmcm.isCraftingLicenseFeatureEnabled = iFlag
+        bmlmcm.isCraftingLicenseFeatureEnabled = (FeatureFlag as int)
     elseIf LicenseType == 8
-        bmlmcm.isTravelPermitFeatureEnabled = iFlag
+        bmlmcm.isTravelPermitFeatureEnabled = (FeatureFlag as int)
     elseIf LicenseType == 9
-        bmlmcm.isCollarExemptionFeatureEnabled = iFlag
+        bmlmcm.isCollarExemptionFeatureEnabled = (FeatureFlag as int)
     elseIf LicenseType == 10
-        bmlmcm.isInsuranceFeatureEnabled = iFlag
+        bmlmcm.isInsuranceFeatureEnabled = (FeatureFlag as int)
     elseIf LicenseType == 11
-        bmlmcm.isCurfewExemptionFeatureEnabled = iFlag
+        bmlmcm.isCurfewExemptionFeatureEnabled = (FeatureFlag as int)
     elseIf LicenseType == 12
-        bmlmcm.isTradingLicenseFeatureEnabled = iFlag
+        bmlmcm.isTradingLicenseFeatureEnabled = (FeatureFlag as int)
     elseIf LicenseType == 13
-        bmlmcm.isWhoreLicenseFeatureEnabled = iFlag
+        bmlmcm.isWhoreLicenseFeatureEnabled = (FeatureFlag as int)
     else
         return false
     endIf
