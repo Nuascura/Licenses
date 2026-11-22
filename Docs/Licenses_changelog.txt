@@ -1,8 +1,11 @@
-1.26.7
+1.27.0
 Primary
 - Change: Add Master - Hearthfires.esm.
 - Change: Whitelist CraftingOvenMarker furnitureObj.
 - Change: Relax PurchaseLicense condition checks.
+- Change: Migrate violation props from bool to int.
+- Change: Migrate feature flag props from bool to int.
+- Change: Optimize ToggleLicenseFeature.
 - Fix: Debug log NextStatusCheck retrieval.
 - Fix: Bad enchantment retrieval for non-refs.
 
