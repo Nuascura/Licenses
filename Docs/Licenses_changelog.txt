@@ -1,14 +1,17 @@
 1.27.0
 Primary
 - Add: Hold-based Licenses.
-- Change: Add Master - Hearthfires.esm.
-- Change: Whitelist CraftingOvenMarker furnitureObj.
-- Change: Relax PurchaseLicense condition checks.
-- Change: Migrate violation props from bool to int.
-- Change: Migrate feature flag props from bool to int.
-- Change: Optimize ToggleLicenseFeature.
-- Fix: Debug log NextStatusCheck retrieval.
-- Fix: Bad enchantment retrieval for non-refs.
+
+Secondary
+- refactor: Add Master - Hearthfires.esm.
+- refactor: Whitelist CraftingOvenMarker furnitureObj.
+- refactor: Relax PurchaseLicense condition checks.
+- refactor: Migrate violation props from bool to int.
+- refactor: Migrate feature flag props from bool to int.
+- refactor: Optimize ToggleLicenseFeature.
+- refactor: General optimizations.
+- fix: Debug log NextStatusCheck retrieval.
+- fix: Bad enchantment retrieval for non-refs.
 
 
 
