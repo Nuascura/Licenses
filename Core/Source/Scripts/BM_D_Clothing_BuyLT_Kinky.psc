@@ -6,7 +6,7 @@ Scriptname BM_D_Clothing_BuyLT_Kinky Extends TopicInfo Hidden
 Function Fragment_0(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
-bmlUtility.BM_PurchaseClothingLicense(lifetime = true)
+bmlUtility.BM_PurchaseClothingLicense(lifetime = true, locForms = BM_API.GetFormAsArray(bmlUtility.currLocParent))
 ;END CODE
 EndFunction
 ;END FRAGMENT

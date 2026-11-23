@@ -6,7 +6,7 @@ Scriptname BM_D_WalkAway_Kinky Extends TopicInfo Hidden
 Function Fragment_3(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
-licenses.bmlUtility.SendCustomEvent_SingleForm("BM-LPO_ConfrontationWalkaway", akSpeaker)
+BM_API.SendCustomEvent_SingleForm("BM-LPO_ConfrontationWalkaway", akSpeaker)
 ;END CODE
 EndFunction
 ;END FRAGMENT

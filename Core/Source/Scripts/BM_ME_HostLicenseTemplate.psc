@@ -1,9 +1,12 @@
 Scriptname BM_ME_HostLicenseTemplate extends activemagiceffect  
 
+import BM_API
+
 Actor Property TargetActor Auto
 String Property TargetString Auto
 Int Property TargetInteger Auto
 Book Property TargetBook Auto
+FormList Property TargetHolds Auto
 BM_ME_HostLicenseTemplateBridge TemplateBridge
 
 Event OnEffectStart(Actor akTarget, Actor akCaster)
@@ -14,6 +17,8 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
     TemplateBridge.GoToState("LicenseBridge_" + TargetInteger)
     If TemplateBridge.IsLicenseActive()
         StartLicense(false)
+    Else
+        EndLicense()
     EndIf
 EndEvent
 
@@ -54,21 +59,19 @@ EndEvent
 Function StartLicense(Bool abAddItem = True)
     if TargetActor.getItemCount(TargetBook) == 0
         GoToState("InventoryInactive")
-        if abAddItem
-            Utility.Wait(0.5)
-            TargetActor.addItem(TargetBook, 1)
-        endIf
     else
         GoToState("InventoryActive")
     endIf
 EndFunction
 
 Function EndLicense()
+    SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", TargetInteger)
     if TargetActor.getItemCount(TargetBook) > 0
         TargetActor.removeItem(TargetBook, 1, true)
         Utility.Wait(0.5)
     endIf
     GoToState("")
+    TargetHolds.Revert()
 EndFunction
 
 Function RegisterEvents()
@@ -76,4 +79,3 @@ Function RegisterEvents()
     RegisterForModEvent("BM-LPO_" + TargetString + "_" + TargetActor.GetFormID() + "_Activate", "LPO_OnActivate")
     RegisterForModEvent("BM-LPO_" + TargetString + "_" + TargetActor.GetFormID() + "_Deactivate", "LPO_OnDeactivate")
 EndFunction
-

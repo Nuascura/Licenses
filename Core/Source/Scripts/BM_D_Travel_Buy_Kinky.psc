@@ -6,7 +6,7 @@ Scriptname BM_D_Travel_Buy_Kinky Extends TopicInfo Hidden
 Function Fragment_0(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
-bmlUtility.BM_PurchaseTravelPermit()
+bmlUtility.BM_PurchaseTravelPermit(locForms = BM_API.GetFormAsArray(bmlUtility.currLocParent))
 ;END CODE
 EndFunction
 ;END FRAGMENT

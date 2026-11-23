@@ -38,7 +38,7 @@ EndFunction
 
 ; Get - Config Version
 int Function GetConfigVersion() Global
-	return 21
+	return 22
 EndFunction
 
 ; Get - Script Version
@@ -277,7 +277,7 @@ EndFunction
 ; Parameter 1 asks if you'd like to subtract a corresponding cost from player gold. Note that the function doesn't check whether the player has enough gold on-hand.
 ; Parameter 2 asks if you want the license to never expire.
 ; Parameter 3 asks if you want to skip safety checks. Don't change this boolean from its default unless absolutely necessary.
-bool Function PurchaseLicense(int LicenseType, bool SubtractGold = true, bool Lifetime = false, bool CheckSafety = true, BM_Licenses_Utility bmlUtility = none) Global
+bool Function PurchaseLicense(int LicenseType, bool SubtractGold = true, bool Lifetime = false, Form[] ValidLocs, bool CheckSafety = true, BM_Licenses_Utility bmlUtility = none) Global
     if !bmlUtility
         bmlUtility = GetUtility()
     endIf
@@ -289,31 +289,31 @@ bool Function PurchaseLicense(int LicenseType, bool SubtractGold = true, bool Li
     if LicenseType == 0
         ; Empty
     elseIf LicenseType == 1
-        bmlUtility.BM_PurchaseArmorLicense(SubtractGold, Lifetime)
+        bmlUtility.BM_PurchaseArmorLicense(SubtractGold, Lifetime, ValidLocs)
     elseIf LicenseType == 2
-        bmlUtility.BM_PurchaseBikiniLicense(SubtractGold, Lifetime)
+        bmlUtility.BM_PurchaseBikiniLicense(SubtractGold, Lifetime, ValidLocs)
     elseIf LicenseType == 3
-        bmlUtility.BM_PurchaseBikiniExemption(SubtractGold, Lifetime)
+        bmlUtility.BM_PurchaseBikiniExemption(SubtractGold, Lifetime, ValidLocs)
     elseIf LicenseType == 4
-        bmlUtility.BM_PurchaseClothingLicense(SubtractGold, Lifetime)
+        bmlUtility.BM_PurchaseClothingLicense(SubtractGold, Lifetime, ValidLocs)
     elseIf LicenseType == 5
-        bmlUtility.BM_PurchaseMagicLicense(SubtractGold, Lifetime)
+        bmlUtility.BM_PurchaseMagicLicense(SubtractGold, Lifetime, ValidLocs)
     elseIf LicenseType == 6
-        bmlUtility.BM_PurchaseWeaponLicense(SubtractGold, Lifetime)
+        bmlUtility.BM_PurchaseWeaponLicense(SubtractGold, Lifetime, ValidLocs)
     elseIf LicenseType == 7
-        bmlUtility.BM_PurchaseCraftingLicense(SubtractGold, Lifetime)
+        bmlUtility.BM_PurchaseCraftingLicense(SubtractGold, Lifetime, ValidLocs)
     elseIf LicenseType == 8
-        bmlUtility.BM_PurchaseTravelPermit(SubtractGold, Lifetime)
+        bmlUtility.BM_PurchaseTravelPermit(SubtractGold, Lifetime, ValidLocs)
     elseIf LicenseType == 9
-        bmlUtility.BM_PurchaseCollarExemption(SubtractGold, Lifetime)
+        bmlUtility.BM_PurchaseCollarExemption(SubtractGold, Lifetime, ValidLocs)
     elseIf LicenseType == 10
-        bmlUtility.BM_PurchaseLifeInsurance(SubtractGold, Lifetime)
+        bmlUtility.BM_PurchaseLifeInsurance(SubtractGold, Lifetime, ValidLocs)
     elseIf LicenseType == 11
-        bmlUtility.BM_PurchaseCurfewExemption(SubtractGold, Lifetime)
+        bmlUtility.BM_PurchaseCurfewExemption(SubtractGold, Lifetime, ValidLocs)
     elseIf LicenseType == 12
-        bmlUtility.BM_PurchaseTradingLicense(SubtractGold, Lifetime)
+        bmlUtility.BM_PurchaseTradingLicense(SubtractGold, Lifetime, ValidLocs)
     elseIf LicenseType == 13
-        bmlUtility.BM_PurchaseWhoreLicense(SubtractGold, Lifetime)
+        bmlUtility.BM_PurchaseWhoreLicense(SubtractGold, Lifetime, ValidLocs)
     else
         return false
     endIf
@@ -560,4 +560,26 @@ WorldSpace Function FindWorldFromDoor(ObjectReference[] DoorArray, FormList Worl
         index += 1
     endWhile
     return CachedSpace
+EndFunction
+
+Form[] Function GetFormAsArray(Form akForm) Global
+    Form[] arr = new Form[1]
+    arr[0] = akForm
+    Return arr
+EndFunction
+
+Function SendCustomEvent_SingleInt(string EventName, int aiArg1 = 0) Global
+    int handle = ModEvent.Create(EventName)
+    ModEvent.PushInt(handle, aiArg1)
+    if !ModEvent.Send(handle)
+        ModEvent.Release(handle)
+    endIf
+EndFunction
+
+Function SendCustomEvent_SingleForm(string EventName, form akForm1 = none) Global
+    int handle = ModEvent.Create(EventName)
+    ModEvent.PushForm(handle, akForm1)
+    if !ModEvent.Send(handle)
+        ModEvent.Release(handle)
+    endIf
 EndFunction

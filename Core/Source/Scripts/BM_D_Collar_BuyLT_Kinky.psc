@@ -6,7 +6,7 @@ Scriptname BM_D_Collar_BuyLT_Kinky Extends TopicInfo Hidden
 Function Fragment_0(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
-bmlUtility.BM_PurchaseCollarExemption(lifetime = true)
+bmlUtility.BM_PurchaseCollarExemption(lifetime = true, locForms = BM_API.GetFormAsArray(bmlUtility.currLocParent))
 ;END CODE
 EndFunction
 ;END FRAGMENT

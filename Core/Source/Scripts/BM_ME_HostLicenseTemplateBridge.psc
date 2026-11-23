@@ -1,5 +1,7 @@
 Scriptname BM_ME_HostLicenseTemplateBridge extends activemagiceffect  
 
+import BM_API
+
 BM_Licenses Property licenses Auto
 BM_Licenses_Utility Property bmlUtility Auto
 
@@ -15,9 +17,9 @@ EndFunction
 Function PushStatusUpdate(Bool abHeldState, Int ID)
     InventoryStateChange(abHeldState)
     if abHeldState
-        bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseAdded", ID)
+        SendCustomEvent_SingleInt("BM-LPO_LicenseAdded", ID)
     else
-        bmlUtility.SendCustomEvent_SingleInt("BM-LPO_LicenseRemoved", ID)
+        SendCustomEvent_SingleInt("BM-LPO_LicenseRemoved", ID)
     endIf
     bmlUtility.bmlModeratorAlias.RefreshLicenseValidity()
 EndFunction
@@ -31,7 +33,7 @@ State LicenseBridge_1
         EndIf
     EndFunction
     Bool Function IsLicenseActive()
-        return (licenses.armorLicenseExpirationTime != -1.0)
+        return (licenses.armorLicenseExpirationTime != -1.0) || licenses.hasArmorLicense
     EndFunction
 EndState
 State LicenseBridge_2
@@ -41,7 +43,7 @@ State LicenseBridge_2
         EndIf
     EndFunction
     Bool Function IsLicenseActive()
-        return (licenses.bikiniLicenseExpirationTime != -1.0)
+        return (licenses.bikiniLicenseExpirationTime != -1.0) || licenses.hasBikiniLicense
     EndFunction
 EndState
 State LicenseBridge_3
@@ -51,7 +53,7 @@ State LicenseBridge_3
         EndIf
     EndFunction
     Bool Function IsLicenseActive()
-        return (licenses.bikiniExemptionExpirationTime != -1.0)
+        return (licenses.bikiniExemptionExpirationTime != -1.0) || licenses.hasBikiniExemption
     EndFunction
 EndState
 State LicenseBridge_4
@@ -61,7 +63,7 @@ State LicenseBridge_4
         EndIf
     EndFunction
     Bool Function IsLicenseActive()
-        return (licenses.clothingLicenseExpirationTime != -1.0)
+        return (licenses.clothingLicenseExpirationTime != -1.0) || licenses.hasClothingLicense
     EndFunction
 EndState
 State LicenseBridge_5
@@ -71,7 +73,7 @@ State LicenseBridge_5
         EndIf
     EndFunction
     Bool Function IsLicenseActive()
-        return (licenses.magicLicenseExpirationTime != -1.0)
+        return (licenses.magicLicenseExpirationTime != -1.0) || licenses.hasMagicLicense
     EndFunction
 EndState
 State LicenseBridge_6
@@ -81,7 +83,7 @@ State LicenseBridge_6
         EndIf
     EndFunction
     Bool Function IsLicenseActive()
-        return (licenses.weaponLicenseExpirationTime != -1.0)
+        return (licenses.weaponLicenseExpirationTime != -1.0) || licenses.hasWeaponLicense
     EndFunction
 EndState
 State LicenseBridge_7
@@ -91,7 +93,7 @@ State LicenseBridge_7
         EndIf
     EndFunction
     Bool Function IsLicenseActive()
-        return (licenses.craftingLicenseExpirationTime != -1.0)
+        return (licenses.craftingLicenseExpirationTime != -1.0) || licenses.hasCraftingLicense
     EndFunction
 EndState
 State LicenseBridge_8
@@ -101,7 +103,7 @@ State LicenseBridge_8
         EndIf
     EndFunction
     Bool Function IsLicenseActive()
-        return (licenses.travelPermitExpirationTime != -1.0)
+        return (licenses.travelPermitExpirationTime != -1.0) || licenses.hasTravelPermit
     EndFunction
 EndState
 State LicenseBridge_9
@@ -111,7 +113,7 @@ State LicenseBridge_9
         EndIf
     EndFunction
     Bool Function IsLicenseActive()
-        return (licenses.collarExemptionExpirationTime != -1.0)
+        return (licenses.collarExemptionExpirationTime != -1.0) || licenses.hasCollarExemption
     EndFunction
 EndState
 State LicenseBridge_10
@@ -121,7 +123,7 @@ State LicenseBridge_10
         EndIf
     EndFunction
     Bool Function IsLicenseActive()
-        return (licenses.insuranceExpirationTime != -1.0)
+        return (licenses.insuranceExpirationTime != -1.0) || licenses.hasInsurance
     EndFunction
 EndState
 State LicenseBridge_11
@@ -131,7 +133,7 @@ State LicenseBridge_11
         EndIf
     EndFunction
     Bool Function IsLicenseActive()
-        return (licenses.curfewExemptionExpirationTime != -1.0)
+        return (licenses.curfewExemptionExpirationTime != -1.0) || licenses.hasCurfewExemption
     EndFunction
 EndState
 State LicenseBridge_12
@@ -141,7 +143,7 @@ State LicenseBridge_12
         EndIf
     EndFunction
     Bool Function IsLicenseActive()
-        return (licenses.tradingLicenseExpirationTime != -1.0)
+        return (licenses.tradingLicenseExpirationTime != -1.0) || licenses.hasTradingLicense
     EndFunction
 EndState
 State LicenseBridge_13
@@ -151,6 +153,6 @@ State LicenseBridge_13
         EndIf
     EndFunction
     Bool Function IsLicenseActive()
-        return (licenses.whoreLicenseExpirationTime != -1.0)
+        return (licenses.whoreLicenseExpirationTime != -1.0) || licenses.hasWhoreLicense
     EndFunction
 EndState

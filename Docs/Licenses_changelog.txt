@@ -1,5 +1,6 @@
 1.27.0
 Primary
+- Add: Hold-based Licenses.
 - Change: Add Master - Hearthfires.esm.
 - Change: Whitelist CraftingOvenMarker furnitureObj.
 - Change: Relax PurchaseLicense condition checks.

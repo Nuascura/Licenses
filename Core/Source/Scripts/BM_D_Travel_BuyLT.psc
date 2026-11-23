@@ -6,7 +6,7 @@ Scriptname BM_D_Travel_BuyLT Extends TopicInfo Hidden
 Function Fragment_3(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
-bmlUtility.BM_PurchaseTravelPermit(lifetime = true)
+bmlUtility.BM_PurchaseTravelPermit(lifetime = true, locForms = BM_API.GetFormAsArray(bmlUtility.currLocParent))
 ;END CODE
 EndFunction
 ;END FRAGMENT

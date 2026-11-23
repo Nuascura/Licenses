@@ -42,7 +42,7 @@ EndFunction
 Function FinishConfrontation(Actor akEnforcer, int type = 0)
     ; walkaway = -1, arrest = 0, normal = 1, lenient = 2
     bmlUtility.LogTrace("FinishConfrontation Type: " + type)
-    bmlUtility.SendCustomEvent_SingleInt("BM-LPO_ConfrontationEnd", type)
+    SendCustomEvent_SingleInt("BM-LPO_ConfrontationEnd", type)
     Faction crimeFaction = akEnforcer.GetCrimeFaction()
     if type == -1
         PlayerWalkaway(akEnforcer, crimeFaction)
@@ -192,6 +192,11 @@ Function RemoveDeviousDevicesCollar()
     elseIf bmlmcm.DeviousDevices_State
         RemoveCollar(bmlInit.kzadAPI, PlayerActorRef)
     endIf
+EndFunction
+
+Function ClearSavedLocForms()
+    bmlUtility.savedLoc = None
+    bmlUtility.savedSpace = None
 EndFunction
 
 Function ResetViolations(int type = 0)
@@ -548,6 +553,7 @@ bool Property BikiniLicense
         hasBikiniLicense = ActualizeValue("BikiniLicense", value, bmlmcm.isBikiniLicenseFeatureEnabled == 1)
     EndFunction
 EndProperty
+
 bool Property hasBikiniExemption = true auto conditional
 bool Property BikiniExemption
     bool Function Get()
