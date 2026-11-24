@@ -27,6 +27,7 @@ GlobalVariable Property BM_SellerSteward Auto
 int Property LicenseLimit = 0 auto
 float Property LicenseCooldown = 0.0 auto conditional
 bool Property LicenseRenewal = false auto conditional
+bool Property LicenseTerritories = false auto conditional
 bool Property isWaterDamageEnabled = false auto conditional
 bool Property thaneImmunityUniversal = false auto conditional
 float Property LifetimeMultiplier = 1.0 auto
@@ -440,6 +441,7 @@ Function ShowPage1()
 	AddSliderOptionST("LicenseLimitST", "$LPO_LicenseLimit", LicenseLimit, "{0}")
 	AddSliderOptionST("LicenseCooldownST", "$LPO_LicenseCooldown", LicenseCooldown, "{0} day(s)")
 	AddToggleOptionST("LicenseRenewalST", "$LPO_LicenseRenewal", LicenseRenewal)
+	AddToggleOptionST("LicenseTerritoriesST", "$LPO_LicenseTerritories", LicenseTerritories)
 	AddToggleOptionST("isWaterDamageEnabledST", "$LPO_isWaterDamageEnabled", isWaterDamageEnabled)
 	AddToggleOptionST("thaneImmunityUniversalST", "$LPO_thaneImmunityUniversal", thaneImmunityUniversal)
 	AddToggleOptionST("ValidateEquipmentTradeST", "$LPO_ValidateEquipmentTrade", ValidateEquipmentTrade)
@@ -1109,6 +1111,16 @@ state LicenseRenewalST
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_LicenseRenewalHighlight")
+	endEvent
+endState
+
+state LicenseTerritoriesST
+	event OnSelectST()
+		LicenseTerritories = !LicenseTerritories
+		SetToggleOptionValueST(LicenseTerritories)
+	endEvent
+	event OnHighlightST()
+		SetInfoText("$LPO_LicenseTerritoriesHighlight")
 	endEvent
 endState
 
@@ -2292,6 +2304,7 @@ Bool Function exportConfig()
 	SetIntValue(config, "LicenseLimit", LicenseLimit)
 	SetFloatValue(config, "LicenseCooldown", LicenseCooldown)
 	SetIntValue(config, "LicenseRenewal", LicenseRenewal as int)
+	SetIntValue(config, "LicenseTerritories", LicenseTerritories as int)
 	SetIntValue(config, "isWaterDamageEnabled", isWaterDamageEnabled as int)
 	SetIntValue(config, "thaneImmunityUniversal", thaneImmunityUniversal as int)
 	SetIntValue(config, "ValidateEquipmentTrade", ValidateEquipmentTrade as int)
@@ -2449,6 +2462,7 @@ Bool Function importConfig(Bool abSilent = false)
 	LicenseLimit = GetIntValue(config, "LicenseLimit", LicenseLimit)
 	LicenseCooldown = GetFloatValue(config, "LicenseCooldown", LicenseCooldown)
 	LicenseRenewal = GetIntValue(config, "LicenseRenewal", LicenseRenewal as int) as Bool
+	LicenseTerritories = GetIntValue(config, "LicenseTerritories", LicenseTerritories as int) as Bool
 	isWaterDamageEnabled = GetIntValue(config, "isWaterDamageEnabled", isWaterDamageEnabled as int) as Bool
 	thaneImmunityUniversal = GetIntValue(config, "thaneImmunityUniversal", thaneImmunityUniversal as int) as Bool
 	ValidateEquipmentTrade = GetIntValue(config, "ValidateEquipmentTrade", ValidateEquipmentTrade as int) as Bool

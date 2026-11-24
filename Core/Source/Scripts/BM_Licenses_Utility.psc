@@ -756,7 +756,11 @@ Function BM_PurchaseArmorLicense(bool pay = true, bool lifetime = false, Form[] 
     endIf
 
     licenses.ArmorLicense = True
-    BM_ArmorLicenseLoc.AddForms(locForms)
+    If bmlmcm.LicenseTerritories
+        BM_ArmorLicenseLoc.AddForms(locForms)
+    Else
+        SendModEvent("BM-LPO_ArmorLicense_" + PlayerActorRef.GetFormID() + "_Activate")
+    EndIf
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 1)
 EndFunction
 
@@ -777,7 +781,11 @@ Function BM_PurchaseBikiniLicense(bool pay = true, bool lifetime = false, Form[]
     endIf
 
     licenses.BikiniLicense = True
-    BM_BikiniLicenseLoc.AddForms(locForms)
+    If bmlmcm.LicenseTerritories
+        BM_BikiniLicenseLoc.AddForms(locForms)
+    Else
+        SendModEvent("BM-LPO_BikiniLicense_" + PlayerActorRef.GetFormID() + "_Activate")
+    EndIf
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 2)
 EndFunction
 
@@ -798,7 +806,11 @@ Function BM_PurchaseBikiniExemption(bool pay = true, bool lifetime = false, Form
     endIf
 
     licenses.BikiniExemption = True
-    BM_BikiniExemptionLoc.AddForms(locForms)
+    If bmlmcm.LicenseTerritories
+        BM_BikiniExemptionLoc.AddForms(locForms)
+    Else
+        SendModEvent("BM-LPO_BikiniExemption_" + PlayerActorRef.GetFormID() + "_Activate")
+    EndIf
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 3)
 EndFunction
 
@@ -819,7 +831,11 @@ Function BM_PurchaseClothingLicense(bool pay = true, bool lifetime = false, Form
     endIf
 
     licenses.ClothingLicense = True
-    BM_ClothingLicenseLoc.AddForms(locForms)
+    If bmlmcm.LicenseTerritories
+        BM_ClothingLicenseLoc.AddForms(locForms)
+    Else
+        SendModEvent("BM-LPO_ClothingLicense_" + PlayerActorRef.GetFormID() + "_Activate")
+    EndIf
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 4)
 EndFunction
 
@@ -840,7 +856,11 @@ Function BM_PurchaseMagicLicense(bool pay = true, bool lifetime = false, Form[] 
     endIf
 
     licenses.MagicLicense = True
-    BM_MagicLicenseLoc.AddForms(locForms)
+    If bmlmcm.LicenseTerritories
+        BM_MagicLicenseLoc.AddForms(locForms)
+    Else
+        SendModEvent("BM-LPO_MagicLicense_" + PlayerActorRef.GetFormID() + "_Activate")
+    EndIf
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 5)
     
     If licenses.isInsured
@@ -865,7 +885,11 @@ Function BM_PurchaseWeaponLicense(bool pay = true, bool lifetime = false, Form[]
     endIf
 
     licenses.WeaponLicense = True
-    BM_WeaponLicenseLoc.AddForms(locForms)
+    If bmlmcm.LicenseTerritories
+        BM_WeaponLicenseLoc.AddForms(locForms)
+    Else
+        SendModEvent("BM-LPO_WeaponLicense_" + PlayerActorRef.GetFormID() + "_Activate")
+    EndIf
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 6)
 Endfunction
 
@@ -886,7 +910,11 @@ Function BM_PurchaseCraftingLicense(bool pay = true, bool lifetime = false, Form
     endIf
 
     licenses.CraftingLicense = True
-    BM_CraftingLicenseLoc.AddForms(locForms)
+    If bmlmcm.LicenseTerritories
+        BM_CraftingLicenseLoc.AddForms(locForms)
+    Else
+        SendModEvent("BM-LPO_CraftingLicense_" + PlayerActorRef.GetFormID() + "_Activate")
+    EndIf
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 7)
 EndFunction
 
@@ -907,7 +935,11 @@ Function BM_PurchaseTravelPermit(bool pay = true, bool lifetime = false, Form[] 
     endIf
 
     licenses.TravelPermit = True
-    BM_TravelPermitLoc.AddForms(locForms)
+    If bmlmcm.LicenseTerritories
+        BM_TravelPermitLoc.AddForms(locForms)
+    Else
+        SendModEvent("BM-LPO_TravelPermit_" + PlayerActorRef.GetFormID() + "_Activate")
+    EndIf
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 8)
 
     licenses.ClearSavedLocForms()
@@ -930,7 +962,11 @@ Function BM_PurchaseCollarExemption(bool pay = true, bool lifetime = false, Form
     endIf
 
     licenses.CollarExemption = True
-    BM_CollarExemptionLoc.AddForms(locForms)
+    If bmlmcm.LicenseTerritories
+        BM_CollarExemptionLoc.AddForms(locForms)
+    Else
+        SendModEvent("BM-LPO_CollarExemption_" + PlayerActorRef.GetFormID() + "_Activate")
+    EndIf
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 9)
 
     licenses.RemoveDeviousDevicesCollar()
@@ -953,7 +989,11 @@ Function BM_PurchaseLifeInsurance(bool pay = true, bool lifetime = false, Form[]
     endIf
 
     licenses.Insurance = True
-    BM_InsuranceLoc.AddForms(locForms)
+    If bmlmcm.LicenseTerritories
+        BM_InsuranceLoc.AddForms(locForms)
+    Else
+        SendModEvent("BM-LPO_Insurance_" + PlayerActorRef.GetFormID() + "_Activate")
+    EndIf
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 10)
     
     If licenses.hasMagicLicense
@@ -978,7 +1018,11 @@ Function BM_PurchaseCurfewExemption(bool pay = true, bool lifetime = false, Form
     endIf
 
     licenses.CurfewExemption = True
-    BM_CurfewExemptionLoc.AddForms(locForms)
+    If bmlmcm.LicenseTerritories
+        BM_CurfewExemptionLoc.AddForms(locForms)
+    Else
+        SendModEvent("BM-LPO_CurfewExemption_" + PlayerActorRef.GetFormID() + "_Activate")
+    EndIf
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 11)
 EndFunction
 
@@ -999,7 +1043,11 @@ Function BM_PurchaseTradingLicense(bool pay = true, bool lifetime = false, Form[
     endIf
 
     licenses.TradingLicense = True
-    BM_TradingLicenseLoc.AddForms(locForms)
+    If bmlmcm.LicenseTerritories
+        BM_TradingLicenseLoc.AddForms(locForms)
+    Else
+        SendModEvent("BM-LPO_TradingLicense_" + PlayerActorRef.GetFormID() + "_Activate")
+    EndIf
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 12)
 EndFunction
 
@@ -1020,7 +1068,11 @@ Function BM_PurchaseWhoreLicense(bool pay = true, bool lifetime = false, Form[] 
     endIf
 
     licenses.WhoreLicense = True
-    BM_WhoreLicenseLoc.AddForms(locForms)
+    If bmlmcm.LicenseTerritories
+        BM_WhoreLicenseLoc.AddForms(locForms)
+    Else
+        SendModEvent("BM-LPO_WhoreLicense_" + PlayerActorRef.GetFormID() + "_Activate")
+    EndIf
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 13)
 EndFunction
 ; ------------------------------

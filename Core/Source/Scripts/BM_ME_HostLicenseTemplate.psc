@@ -17,7 +17,7 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
     TemplateBridge.GoToState("LicenseBridge_" + TargetInteger)
     If TemplateBridge.IsLicenseActive()
         StartLicense(false)
-    Else
+    ElseIf !TemplateBridge.IsTerritorySpecific()
         EndLicense()
     EndIf
 EndEvent
