@@ -1094,6 +1094,7 @@ state LifetimeMultiplierST
 		LifetimeMultiplier = value
 		SetSliderOptionValueST(LifetimeMultiplier, "{1}x")
 		recalculateCosts()
+		updateGlobals()
 	endEvent
 	event OnDefaultST()
 		LifetimeMultiplier = 1.0
