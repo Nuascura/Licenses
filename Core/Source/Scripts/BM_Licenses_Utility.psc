@@ -740,6 +740,7 @@ EndFunction
 
 ; ---------- License Purchase Functions ----------
 Function BM_PurchaseArmorLicense(bool pay = true, bool lifetime = false, Form[] locForms)
+    SendModEvent("BM-LPO_ArmorLicense_" + PlayerActorRef.GetFormID() + "_Activate")
     if lifetime
         licenses.armorLicenseExpirationTime = -2
         if pay
@@ -756,15 +757,12 @@ Function BM_PurchaseArmorLicense(bool pay = true, bool lifetime = false, Form[] 
     endIf
 
     licenses.ArmorLicense = True
-    If bmlmcm.LicenseTerritories
-        BM_ArmorLicenseLoc.AddForms(locForms)
-    Else
-        SendModEvent("BM-LPO_ArmorLicense_" + PlayerActorRef.GetFormID() + "_Activate")
-    EndIf
+    BM_ArmorLicenseLoc.AddForms(locForms)
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 1)
 EndFunction
 
 Function BM_PurchaseBikiniLicense(bool pay = true, bool lifetime = false, Form[] locForms)
+    SendModEvent("BM-LPO_BikiniLicense_" + PlayerActorRef.GetFormID() + "_Activate")
     if lifetime
         licenses.bikiniLicenseExpirationTime = -2
         if pay
@@ -781,15 +779,12 @@ Function BM_PurchaseBikiniLicense(bool pay = true, bool lifetime = false, Form[]
     endIf
 
     licenses.BikiniLicense = True
-    If bmlmcm.LicenseTerritories
-        BM_BikiniLicenseLoc.AddForms(locForms)
-    Else
-        SendModEvent("BM-LPO_BikiniLicense_" + PlayerActorRef.GetFormID() + "_Activate")
-    EndIf
+    BM_BikiniLicenseLoc.AddForms(locForms)
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 2)
 EndFunction
 
 Function BM_PurchaseBikiniExemption(bool pay = true, bool lifetime = false, Form[] locForms)
+    SendModEvent("BM-LPO_BikiniExemption_" + PlayerActorRef.GetFormID() + "_Activate")
     if lifetime
         licenses.bikiniExemptionExpirationTime = -2
         if pay
@@ -806,15 +801,12 @@ Function BM_PurchaseBikiniExemption(bool pay = true, bool lifetime = false, Form
     endIf
 
     licenses.BikiniExemption = True
-    If bmlmcm.LicenseTerritories
-        BM_BikiniExemptionLoc.AddForms(locForms)
-    Else
-        SendModEvent("BM-LPO_BikiniExemption_" + PlayerActorRef.GetFormID() + "_Activate")
-    EndIf
+    BM_BikiniExemptionLoc.AddForms(locForms)
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 3)
 EndFunction
 
 Function BM_PurchaseClothingLicense(bool pay = true, bool lifetime = false, Form[] locForms)
+    SendModEvent("BM-LPO_ClothingLicense_" + PlayerActorRef.GetFormID() + "_Activate")
     if lifetime
         licenses.clothingLicenseExpirationTime = -2
         if pay
@@ -831,15 +823,12 @@ Function BM_PurchaseClothingLicense(bool pay = true, bool lifetime = false, Form
     endIf
 
     licenses.ClothingLicense = True
-    If bmlmcm.LicenseTerritories
-        BM_ClothingLicenseLoc.AddForms(locForms)
-    Else
-        SendModEvent("BM-LPO_ClothingLicense_" + PlayerActorRef.GetFormID() + "_Activate")
-    EndIf
+    BM_ClothingLicenseLoc.AddForms(locForms)
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 4)
 EndFunction
 
 Function BM_PurchaseMagicLicense(bool pay = true, bool lifetime = false, Form[] locForms)
+    SendModEvent("BM-LPO_MagicLicense_" + PlayerActorRef.GetFormID() + "_Activate")
     if lifetime
         licenses.magicLicenseExpirationTime = -2
         if pay
@@ -856,11 +845,7 @@ Function BM_PurchaseMagicLicense(bool pay = true, bool lifetime = false, Form[] 
     endIf
 
     licenses.MagicLicense = True
-    If bmlmcm.LicenseTerritories
-        BM_MagicLicenseLoc.AddForms(locForms)
-    Else
-        SendModEvent("BM-LPO_MagicLicense_" + PlayerActorRef.GetFormID() + "_Activate")
-    EndIf
+    BM_MagicLicenseLoc.AddForms(locForms)
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 5)
     
     If licenses.isInsured
@@ -869,6 +854,7 @@ Function BM_PurchaseMagicLicense(bool pay = true, bool lifetime = false, Form[] 
 EndFunction
 
 Function BM_PurchaseWeaponLicense(bool pay = true, bool lifetime = false, Form[] locForms)
+    SendModEvent("BM-LPO_WeaponLicense_" + PlayerActorRef.GetFormID() + "_Activate")
     if lifetime
         licenses.weaponLicenseExpirationTime = -2
         if pay
@@ -885,15 +871,12 @@ Function BM_PurchaseWeaponLicense(bool pay = true, bool lifetime = false, Form[]
     endIf
 
     licenses.WeaponLicense = True
-    If bmlmcm.LicenseTerritories
-        BM_WeaponLicenseLoc.AddForms(locForms)
-    Else
-        SendModEvent("BM-LPO_WeaponLicense_" + PlayerActorRef.GetFormID() + "_Activate")
-    EndIf
+    BM_WeaponLicenseLoc.AddForms(locForms)
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 6)
 Endfunction
 
 Function BM_PurchaseCraftingLicense(bool pay = true, bool lifetime = false, Form[] locForms)
+    SendModEvent("BM-LPO_CraftingLicense_" + PlayerActorRef.GetFormID() + "_Activate")
     if lifetime
         licenses.craftingLicenseExpirationTime = -2
         if pay
@@ -910,15 +893,12 @@ Function BM_PurchaseCraftingLicense(bool pay = true, bool lifetime = false, Form
     endIf
 
     licenses.CraftingLicense = True
-    If bmlmcm.LicenseTerritories
-        BM_CraftingLicenseLoc.AddForms(locForms)
-    Else
-        SendModEvent("BM-LPO_CraftingLicense_" + PlayerActorRef.GetFormID() + "_Activate")
-    EndIf
+    BM_CraftingLicenseLoc.AddForms(locForms)
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 7)
 EndFunction
 
 Function BM_PurchaseTravelPermit(bool pay = true, bool lifetime = false, Form[] locForms)
+    SendModEvent("BM-LPO_TravelPermit_" + PlayerActorRef.GetFormID() + "_Activate")
     if lifetime
         licenses.travelPermitExpirationTime = -2
         if pay
@@ -935,17 +915,14 @@ Function BM_PurchaseTravelPermit(bool pay = true, bool lifetime = false, Form[] 
     endIf
 
     licenses.TravelPermit = True
-    If bmlmcm.LicenseTerritories
-        BM_TravelPermitLoc.AddForms(locForms)
-    Else
-        SendModEvent("BM-LPO_TravelPermit_" + PlayerActorRef.GetFormID() + "_Activate")
-    EndIf
+    BM_TravelPermitLoc.AddForms(locForms)
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 8)
 
     licenses.ClearSavedLocForms()
 EndFunction
 
 Function BM_PurchaseCollarExemption(bool pay = true, bool lifetime = false, Form[] locForms)
+    SendModEvent("BM-LPO_CollarExemption_" + PlayerActorRef.GetFormID() + "_Activate")
     if lifetime
         licenses.collarExemptionExpirationTime = -2
         if pay
@@ -962,17 +939,14 @@ Function BM_PurchaseCollarExemption(bool pay = true, bool lifetime = false, Form
     endIf
 
     licenses.CollarExemption = True
-    If bmlmcm.LicenseTerritories
-        BM_CollarExemptionLoc.AddForms(locForms)
-    Else
-        SendModEvent("BM-LPO_CollarExemption_" + PlayerActorRef.GetFormID() + "_Activate")
-    EndIf
+    BM_CollarExemptionLoc.AddForms(locForms)
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 9)
 
     licenses.RemoveDeviousDevicesCollar()
 EndFunction
 
 Function BM_PurchaseLifeInsurance(bool pay = true, bool lifetime = false, Form[] locForms)
+    SendModEvent("BM-LPO_Insurance_" + PlayerActorRef.GetFormID() + "_Activate")
     if lifetime
         licenses.insuranceExpirationTime = -2
         if pay
@@ -989,11 +963,7 @@ Function BM_PurchaseLifeInsurance(bool pay = true, bool lifetime = false, Form[]
     endIf
 
     licenses.Insurance = True
-    If bmlmcm.LicenseTerritories
-        BM_InsuranceLoc.AddForms(locForms)
-    Else
-        SendModEvent("BM-LPO_Insurance_" + PlayerActorRef.GetFormID() + "_Activate")
-    EndIf
+    BM_InsuranceLoc.AddForms(locForms)
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 10)
     
     If licenses.hasMagicLicense
@@ -1002,6 +972,7 @@ Function BM_PurchaseLifeInsurance(bool pay = true, bool lifetime = false, Form[]
 EndFunction
 
 Function BM_PurchaseCurfewExemption(bool pay = true, bool lifetime = false, Form[] locForms)
+    SendModEvent("BM-LPO_CurfewExemption_" + PlayerActorRef.GetFormID() + "_Activate")
     if lifetime
         licenses.curfewExemptionExpirationTime = -2
         if pay
@@ -1018,15 +989,12 @@ Function BM_PurchaseCurfewExemption(bool pay = true, bool lifetime = false, Form
     endIf
 
     licenses.CurfewExemption = True
-    If bmlmcm.LicenseTerritories
-        BM_CurfewExemptionLoc.AddForms(locForms)
-    Else
-        SendModEvent("BM-LPO_CurfewExemption_" + PlayerActorRef.GetFormID() + "_Activate")
-    EndIf
+    BM_CurfewExemptionLoc.AddForms(locForms)
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 11)
 EndFunction
 
 Function BM_PurchaseTradingLicense(bool pay = true, bool lifetime = false, Form[] locForms)
+    SendModEvent("BM-LPO_TradingLicense_" + PlayerActorRef.GetFormID() + "_Activate")
     if lifetime
         licenses.tradingLicenseExpirationTime = -2
         if pay
@@ -1043,15 +1011,12 @@ Function BM_PurchaseTradingLicense(bool pay = true, bool lifetime = false, Form[
     endIf
 
     licenses.TradingLicense = True
-    If bmlmcm.LicenseTerritories
-        BM_TradingLicenseLoc.AddForms(locForms)
-    Else
-        SendModEvent("BM-LPO_TradingLicense_" + PlayerActorRef.GetFormID() + "_Activate")
-    EndIf
+    BM_TradingLicenseLoc.AddForms(locForms)
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 12)
 EndFunction
 
 Function BM_PurchaseWhoreLicense(bool pay = true, bool lifetime = false, Form[] locForms)
+    SendModEvent("BM-LPO_WhoreLicense_" + PlayerActorRef.GetFormID() + "_Activate")
     if lifetime
         licenses.whoreLicenseExpirationTime = -2
         if pay
@@ -1068,11 +1033,7 @@ Function BM_PurchaseWhoreLicense(bool pay = true, bool lifetime = false, Form[] 
     endIf
 
     licenses.WhoreLicense = True
-    If bmlmcm.LicenseTerritories
-        BM_WhoreLicenseLoc.AddForms(locForms)
-    Else
-        SendModEvent("BM-LPO_WhoreLicense_" + PlayerActorRef.GetFormID() + "_Activate")
-    EndIf
+    BM_WhoreLicenseLoc.AddForms(locForms)
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 13)
 EndFunction
 ; ------------------------------
