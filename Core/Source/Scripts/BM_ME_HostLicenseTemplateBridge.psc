@@ -14,10 +14,6 @@ Bool Function IsLicenseActive()
     return FALSE
 EndFunction
 
-Bool Function IsTerritorySpecific()
-    return bmlUtility.bmlmcm.LicenseTerritories
-EndFunction
-
 Function PushStatusUpdate(Bool abHeldState, Int ID)
     InventoryStateChange(abHeldState)
     if abHeldState

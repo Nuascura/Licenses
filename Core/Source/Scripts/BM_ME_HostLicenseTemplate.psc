@@ -17,7 +17,7 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
     TemplateBridge.GoToState("LicenseBridge_" + TargetInteger)
     If TemplateBridge.IsLicenseActive()
         StartLicense(false)
-    ElseIf !TemplateBridge.IsTerritorySpecific()
+    ElseIf !TargetHolds.GetSize()
         EndLicense()
     EndIf
 EndEvent
@@ -66,12 +66,11 @@ EndFunction
 
 Function EndLicense()
     SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", TargetInteger)
-    if TargetActor.getItemCount(TargetBook) > 0
-        TargetActor.removeItem(TargetBook, 1, true)
-        Utility.Wait(0.5)
-    endIf
     GoToState("")
-    TargetHolds.Revert()
+    if TargetActor.getItemCount(TargetBook) > 0 && TargetHolds.GetSize() == 1
+        TargetActor.removeItem(TargetBook, 1, true)
+    endIf
+    TargetHolds.RemoveAddedForm(TemplateBridge.bmlUtility.currLocParent)
 EndFunction
 
 Function RegisterEvents()

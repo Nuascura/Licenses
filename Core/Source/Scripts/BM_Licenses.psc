@@ -537,130 +537,182 @@ ObjectReference Property ItemConfiscationChest Auto
 bool Property hasArmorLicense = true auto conditional
 bool Property ArmorLicense
     bool Function Get()
-        Return hasArmorLicense
+        armorLicenseExpirationTime = armorLicenseExpirationTimeArr[bmlUtility.currLocParentIndex]
+        armorLicenseCooldownTime = armorLicenseCooldownTimeArr[bmlUtility.currLocParentIndex]
+        Return armorLicenseExpirationTime != -1.0
     EndFunction
     Function Set(bool value)
         hasArmorLicense = ActualizeValue("ArmorLicense", value, bmlmcm.isArmorLicenseFeatureEnabled)
+        armorLicenseExpirationTimeArr[bmlUtility.currLocParentIndex] = armorLicenseExpirationTime
+        armorLicenseCooldownTimeArr[bmlUtility.currLocParentIndex] = armorLicenseCooldownTime
     EndFunction
 EndProperty
 
 bool Property hasBikiniLicense = true auto conditional
 bool Property BikiniLicense
     bool Function Get()
-        Return hasBikiniLicense
+        bikiniLicenseExpirationTime = bikiniLicenseExpirationTimeArr[bmlUtility.currLocParentIndex]
+        bikiniLicenseCooldownTime = bikiniLicenseCooldownTimeArr[bmlUtility.currLocParentIndex]
+        Return bikiniLicenseExpirationTime != -1.0
     EndFunction
     Function Set(bool value)
         hasBikiniLicense = ActualizeValue("BikiniLicense", value, bmlmcm.isBikiniLicenseFeatureEnabled == 1)
+        bikiniLicenseExpirationTimeArr[bmlUtility.currLocParentIndex] = bikiniLicenseExpirationTime
+        bikiniLicenseCooldownTimeArr[bmlUtility.currLocParentIndex] = bikiniLicenseCooldownTime
     EndFunction
 EndProperty
 
 bool Property hasBikiniExemption = true auto conditional
 bool Property BikiniExemption
     bool Function Get()
-        Return hasBikiniExemption
+        bikiniExemptionExpirationTime = bikiniExemptionExpirationTimeArr[bmlUtility.currLocParentIndex]
+        bikiniExemptionCooldownTime = bikiniExemptionCooldownTimeArr[bmlUtility.currLocParentIndex]
+        Return bikiniExemptionExpirationTime != -1.0
     EndFunction
     Function Set(bool value)
         hasBikiniExemption = ActualizeValue("BikiniExemption", value, bmlmcm.isBikiniLicenseFeatureEnabled == 2)
+        bikiniExemptionExpirationTimeArr[bmlUtility.currLocParentIndex] = bikiniExemptionExpirationTime
+        bikiniExemptionCooldownTimeArr[bmlUtility.currLocParentIndex] = bikiniExemptionCooldownTime
     EndFunction
 EndProperty
 
 bool Property hasClothingLicense = true auto conditional
 bool Property ClothingLicense
     bool Function Get()
-        Return hasClothingLicense
+        clothingLicenseExpirationTime = clothingLicenseExpirationTimeArr[bmlUtility.currLocParentIndex]
+        clothingLicenseCooldownTime = clothingLicenseCooldownTimeArr[bmlUtility.currLocParentIndex]
+        Return clothingLicenseExpirationTime != -1.0
     EndFunction
     Function Set(bool value)
         hasClothingLicense = ActualizeValue("ClothingLicense", value, bmlmcm.isClothingLicenseFeatureEnabled)
+        clothingLicenseExpirationTimeArr[bmlUtility.currLocParentIndex] = clothingLicenseExpirationTime
+        clothingLicenseCooldownTimeArr[bmlUtility.currLocParentIndex] = clothingLicenseCooldownTime
     EndFunction
 EndProperty
 
 bool Property hasMagicLicense = true auto conditional
 bool Property MagicLicense
     bool Function Get()
-        Return hasMagicLicense
+        magicLicenseExpirationTime = magicLicenseExpirationTimeArr[bmlUtility.currLocParentIndex]
+        magicLicenseCooldownTime = magicLicenseCooldownTimeArr[bmlUtility.currLocParentIndex]
+        Return magicLicenseExpirationTime != -1.0
     EndFunction
     Function Set(bool value)
         hasMagicLicense = ActualizeValue("MagicLicense", value, bmlmcm.isMagicLicenseFeatureEnabled)
+        magicLicenseExpirationTimeArr[bmlUtility.currLocParentIndex] = magicLicenseExpirationTime
+        magicLicenseCooldownTimeArr[bmlUtility.currLocParentIndex] = magicLicenseCooldownTime
     EndFunction
 EndProperty
 
 bool Property hasWeaponLicense = true auto conditional
 bool Property WeaponLicense
     bool Function Get()
-        Return hasWeaponLicense
+        weaponLicenseExpirationTime = weaponLicenseExpirationTimeArr[bmlUtility.currLocParentIndex]
+        weaponLicenseCooldownTime = weaponLicenseCooldownTimeArr[bmlUtility.currLocParentIndex]
+        Return weaponLicenseExpirationTime != -1.0
     EndFunction
     Function Set(bool value)
         hasWeaponLicense = ActualizeValue("WeaponLicense", value, bmlmcm.isWeaponLicenseFeatureEnabled)
+        weaponLicenseExpirationTimeArr[bmlUtility.currLocParentIndex] = weaponLicenseExpirationTime
+        weaponLicenseCooldownTimeArr[bmlUtility.currLocParentIndex] = weaponLicenseCooldownTime
     EndFunction
 EndProperty
 
 bool Property hasCraftingLicense = true auto conditional
 bool Property CraftingLicense
     bool Function Get()
-        Return hasCraftingLicense
+        craftingLicenseExpirationTime = craftingLicenseExpirationTimeArr[bmlUtility.currLocParentIndex]
+        craftingLicenseCooldownTime = craftingLicenseCooldownTimeArr[bmlUtility.currLocParentIndex]
+        Return craftingLicenseExpirationTime != -1.0
     EndFunction
     Function Set(bool value)
         hasCraftingLicense = ActualizeValue("CraftingLicense", value, bmlmcm.isCraftingLicenseFeatureEnabled)
-    EndFunction
-EndProperty
-
-bool Property hasTradingLicense = true auto conditional
-bool Property TradingLicense
-    bool Function Get()
-        Return hasTradingLicense
-    EndFunction
-    Function Set(bool value)
-        hasTradingLicense = ActualizeValue("TradingLicense", value, bmlmcm.isTradingLicenseFeatureEnabled)
-    EndFunction
-EndProperty
-
-bool Property hasWhoreLicense = true auto conditional
-bool Property WhoreLicense
-    bool Function Get()
-        Return hasWhoreLicense
-    EndFunction
-    Function Set(bool value)
-        hasWhoreLicense = ActualizeValue("WhoreLicense", value, bmlmcm.isWhoreLicenseFeatureEnabled)
+        craftingLicenseExpirationTimeArr[bmlUtility.currLocParentIndex] = craftingLicenseExpirationTime
+        craftingLicenseCooldownTimeArr[bmlUtility.currLocParentIndex] = craftingLicenseCooldownTime
     EndFunction
 EndProperty
 
 bool Property hasTravelPermit = true auto conditional
 bool Property TravelPermit
     bool Function Get()
-        Return hasTravelPermit
+        travelPermitExpirationTime = travelPermitExpirationTimeArr[bmlUtility.currLocParentIndex]
+        travelPermitCooldownTime = travelPermitCooldownTimeArr[bmlUtility.currLocParentIndex]
+        Return travelPermitExpirationTime != -1.0
     EndFunction
     Function Set(bool value)
         hasTravelPermit = ActualizeValue("TravelPermit", value, bmlmcm.isTravelPermitFeatureEnabled)
+        travelPermitExpirationTimeArr[bmlUtility.currLocParentIndex] = travelPermitExpirationTime
+        travelPermitCooldownTimeArr[bmlUtility.currLocParentIndex] = travelPermitCooldownTime
     EndFunction
 EndProperty
 
 bool Property hasCollarExemption = true auto conditional
 bool Property CollarExemption
     bool Function Get()
-        Return hasCollarExemption
+        collarExemptionExpirationTime = collarExemptionExpirationTimeArr[bmlUtility.currLocParentIndex]
+        collarExemptionCooldownTime = collarExemptionCooldownTimeArr[bmlUtility.currLocParentIndex]
+        Return collarExemptionExpirationTime != -1.0
     EndFunction
     Function Set(bool value)
         hasCollarExemption = ActualizeValue("CollarExemption", value, bmlmcm.isCollarExemptionFeatureEnabled)
+        collarExemptionExpirationTimeArr[bmlUtility.currLocParentIndex] = collarExemptionExpirationTime
+        collarExemptionCooldownTimeArr[bmlUtility.currLocParentIndex] = collarExemptionCooldownTime
     EndFunction
 EndProperty
 
 bool Property hasInsurance = true auto conditional
 bool Property Insurance
     bool Function Get()
-        Return hasInsurance
+        insuranceExpirationTime = insuranceExpirationTimeArr[bmlUtility.currLocParentIndex]
+        insuranceCooldownTime = insuranceCooldownTimeArr[bmlUtility.currLocParentIndex]
+        Return insuranceExpirationTime != -1.0
     EndFunction
     Function Set(bool value)
         hasInsurance = ActualizeValue("Insurance", value, bmlmcm.isInsuranceFeatureEnabled)
+        insuranceExpirationTimeArr[bmlUtility.currLocParentIndex] = insuranceExpirationTime
+        insuranceCooldownTimeArr[bmlUtility.currLocParentIndex] = insuranceCooldownTime
     EndFunction
 EndProperty
 
 bool Property hasCurfewExemption = true auto conditional
 bool Property CurfewExemption
     bool Function Get()
-        Return hasCurfewExemption
+        curfewExemptionExpirationTime = curfewExemptionExpirationTimeArr[bmlUtility.currLocParentIndex]
+        curfewExemptionCooldownTime = curfewExemptionCooldownTimeArr[bmlUtility.currLocParentIndex]
+        Return curfewExemptionExpirationTime != -1.0
     EndFunction
     Function Set(bool value)
         hasCurfewExemption = ActualizeValue("CurfewExemption", value, bmlmcm.isCurfewExemptionFeatureEnabled)
+        curfewExemptionExpirationTimeArr[bmlUtility.currLocParentIndex] = curfewExemptionExpirationTime
+        curfewExemptionCooldownTimeArr[bmlUtility.currLocParentIndex] = curfewExemptionCooldownTime
+    EndFunction
+EndProperty
+
+bool Property hasTradingLicense = true auto conditional
+bool Property TradingLicense
+    bool Function Get()
+        tradingLicenseExpirationTime = tradingLicenseExpirationTimeArr[bmlUtility.currLocParentIndex]
+        tradingLicenseCooldownTime = tradingLicenseCooldownTimeArr[bmlUtility.currLocParentIndex]
+        Return tradingLicenseExpirationTime != -1.0
+    EndFunction
+    Function Set(bool value)
+        hasTradingLicense = ActualizeValue("TradingLicense", value, bmlmcm.isTradingLicenseFeatureEnabled)
+        tradingLicenseExpirationTimeArr[bmlUtility.currLocParentIndex] = tradingLicenseExpirationTime
+        tradingLicenseCooldownTimeArr[bmlUtility.currLocParentIndex] = tradingLicenseCooldownTime
+    EndFunction
+EndProperty
+
+bool Property hasWhoreLicense = true auto conditional
+bool Property WhoreLicense
+    bool Function Get()
+        whoreLicenseExpirationTime = whoreLicenseExpirationTimeArr[bmlUtility.currLocParentIndex]
+        whoreLicenseCooldownTime = whoreLicenseCooldownTimeArr[bmlUtility.currLocParentIndex]
+        Return whoreLicenseExpirationTime != -1.0
+    EndFunction
+    Function Set(bool value)
+        hasWhoreLicense = ActualizeValue("WhoreLicense", value, bmlmcm.isWhoreLicenseFeatureEnabled)
+        whoreLicenseExpirationTimeArr[bmlUtility.currLocParentIndex] = whoreLicenseExpirationTime
+        whoreLicenseCooldownTimeArr[bmlUtility.currLocParentIndex] = whoreLicenseCooldownTime
     EndFunction
 EndProperty
 
@@ -690,33 +742,59 @@ EndProperty
 ; if expiration time == -1.0 -> license expired
 ; if expiration time == -2.0 -> license perpetual
 float property armorLicenseExpirationTime = -1.0 auto conditional
+float[] property armorLicenseExpirationTimeArr auto
 float property bikiniLicenseExpirationTime = -1.0 auto conditional
+float[] property bikiniLicenseExpirationTimeArr auto
 float property bikiniExemptionExpirationTime = -1.0 auto conditional
+float[] property bikiniExemptionExpirationTimeArr auto
 float property clothingLicenseExpirationTime = -1.0 auto conditional
+float[] property clothingLicenseExpirationTimeArr auto
 float property magicLicenseExpirationTime = -1.0 auto conditional
+float[] property magicLicenseExpirationTimeArr auto
 float property weaponLicenseExpirationTime = -1.0 auto conditional
+float[] property weaponLicenseExpirationTimeArr auto
 float property craftingLicenseExpirationTime = -1.0 auto conditional
+float[] property craftingLicenseExpirationTimeArr auto
 float property travelPermitExpirationTime = -1.0 auto conditional
+float[] property travelPermitExpirationTimeArr auto
 float property collarExemptionExpirationTime = -1.0 auto conditional
+float[] property collarExemptionExpirationTimeArr auto
 float property insuranceExpirationTime = -1.0 auto conditional
+float[] property insuranceExpirationTimeArr auto
 float property curfewExemptionExpirationTime = -1.0 auto conditional
+float[] property curfewExemptionExpirationTimeArr auto
 float property tradingLicenseExpirationTime = -1.0 auto conditional
+float[] property tradingLicenseExpirationTimeArr auto
 float property whoreLicenseExpirationTime = -1.0 auto conditional
+float[] property whoreLicenseExpirationTimeArr auto
 
 ; if cooldown time == -1.0 -> delay inactive
 float property armorLicenseCooldownTime = -1.0 auto conditional
+float[] property armorLicenseCooldownTimeArr auto
 float property bikiniLicenseCooldownTime = -1.0 auto conditional
+float[] property bikiniLicenseCooldownTimeArr auto
 float property bikiniExemptionCooldownTime = -1.0 auto conditional
+float[] property bikiniExemptionCooldownTimeArr auto
 float property clothingLicenseCooldownTime = -1.0 auto conditional
+float[] property clothingLicenseCooldownTimeArr auto
 float property magicLicenseCooldownTime = -1.0 auto conditional
+float[] property magicLicenseCooldownTimeArr auto
 float property weaponLicenseCooldownTime = -1.0 auto conditional
+float[] property weaponLicenseCooldownTimeArr auto
 float property craftingLicenseCooldownTime = -1.0 auto conditional
+float[] property craftingLicenseCooldownTimeArr auto
 float property travelPermitCooldownTime = -1.0 auto conditional
+float[] property travelPermitCooldownTimeArr auto
 float property collarExemptionCooldownTime = -1.0 auto conditional
+float[] property collarExemptionCooldownTimeArr auto
 float property insuranceCooldownTime = -1.0 auto conditional
+float[] property insuranceCooldownTimeArr auto
 float property curfewExemptionCooldownTime = -1.0 auto conditional
+float[] property curfewExemptionCooldownTimeArr auto
 float property tradingLicenseCooldownTime = -1.0 auto conditional
+float[] property tradingLicenseCooldownTimeArr auto
 float property whoreLicenseCooldownTime = -1.0 auto conditional
+float[] property whoreLicenseCooldownTimeArr auto
 
 float property insuranceMisbehaviourMultiplier = 1.0 auto
 float property insurancePopularityMultiplier = 1.0 auto
