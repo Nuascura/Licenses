@@ -1,17 +1,22 @@
 1.27.0
 Primary
 - Add: Hold-based Licenses.
+- Change: General optimizations.
 
 Secondary
+- feat: Make Per-Hold Licenses opt-in.
+- feat: Per-Hold License Timers.
 - refactor: Add Master - Hearthfires.esm.
 - refactor: Whitelist CraftingOvenMarker furnitureObj.
 - refactor: Relax PurchaseLicense condition checks.
 - refactor: Migrate violation props from bool to int.
 - refactor: Migrate feature flag props from bool to int.
 - refactor: Optimize ToggleLicenseFeature.
-- refactor: General optimizations.
+- refactor: Reorder "Additional Settings" alphabetically.
 - fix: Debug log NextStatusCheck retrieval.
 - fix: Bad enchantment retrieval for non-refs.
+- fix: Armor Violation always flags Uninsured.
+- fix: LT cost not updating with multiplier change.
 
 
 
