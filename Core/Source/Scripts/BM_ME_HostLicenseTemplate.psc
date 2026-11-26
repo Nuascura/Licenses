@@ -67,10 +67,6 @@ EndFunction
 Function EndLicense()
     SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", TargetInteger)
     GoToState("")
-    if TargetActor.getItemCount(TargetBook) > 0 && TargetHolds.GetSize() == 1
-        TargetActor.removeItem(TargetBook, 1, true)
-    endIf
-    TargetHolds.RemoveAddedForm(TemplateBridge.bmlUtility.currLocParent)
 EndFunction
 
 Function RegisterEvents()
