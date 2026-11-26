@@ -71,6 +71,7 @@ EndFunction
 
 Function RegisterEvents()
     AddInventoryEventFilter(TargetBook)
-    RegisterForModEvent("BM-LPO_" + TargetString + "_" + TargetActor.GetFormID() + "_Activate", "LPO_OnActivate")
-    RegisterForModEvent("BM-LPO_" + TargetString + "_" + TargetActor.GetFormID() + "_Deactivate", "LPO_OnDeactivate")
+    Int FID = TargetActor.GetFormID()
+    RegisterForModEvent("BM-LPO_" + TargetString + "_" + FID + "_Activate", "LPO_OnActivate")
+    RegisterForModEvent("BM-LPO_" + TargetString + "_" + FID + "_Deactivate", "LPO_OnDeactivate")
 EndFunction
