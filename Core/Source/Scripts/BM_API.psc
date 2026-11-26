@@ -82,31 +82,31 @@ EndFunction
 int Function GetLicenseID(string LicensePrefix) Global
     if LicensePrefix
         if LicensePrefix == "Armor"
-            return 1
+            return 0
         elseIf LicensePrefix == "Bikini1"
-            return 2
+            return 1
         elseIf LicensePrefix == "Bikini2"
-            return 3
+            return 2
         elseIf LicensePrefix == "Clothing"
-            return 4
+            return 3
         elseIf LicensePrefix == "Magic"
-            return 5
+            return 4
         elseIf LicensePrefix == "Weapon"
-            return 6
+            return 5
         elseIf LicensePrefix == "Crafting"
-            return 7
+            return 6
         elseIf LicensePrefix == "Travel"
-            return 8
+            return 7
         elseIf LicensePrefix == "Collar"
-            return 9
+            return 8
         elseIf LicensePrefix == "Insurance"
-            return 10
+            return 9
         elseIf LicensePrefix == "Curfew"
-            return 11
+            return 10
         elseIf LicensePrefix == "Trading"
-            return 12
+            return 11
         elseIf LicensePrefix == "Whore"
-            return 13
+            return 12
         endIf
     endIf
 
@@ -119,31 +119,31 @@ EndFunction
 ; Whereas prefixes are shorthands for mod authors, SIDs have an internal use.
 string Function GetLicenseSID(string inputID = "") Global
     if inputID
-        if inputID == "Armor" || (inputID as int) == 1
+        if inputID == "Armor" || (inputID as int) == 0
             return "ArmorLicense"
-        elseIf inputID == "Bikini1" || (inputID as int) == 2
+        elseIf inputID == "Bikini1" || (inputID as int) == 1
             return "BikiniLicense"
-        elseIf inputID == "Bikini2" || (inputID as int) == 3
+        elseIf inputID == "Bikini2" || (inputID as int) == 2
             return "BikiniExemption"
-        elseIf inputID == "Clothing" || (inputID as int) == 4
+        elseIf inputID == "Clothing" || (inputID as int) == 3
             return "ClothingLicense"
-        elseIf inputID == "Magic" || (inputID as int) == 5
+        elseIf inputID == "Magic" || (inputID as int) == 4
             return "MagicLicense"
-        elseIf inputID == "Weapon" || (inputID as int) == 6
+        elseIf inputID == "Weapon" || (inputID as int) == 5
             return "WeaponLicense"
-        elseIf inputID == "Crafting" || (inputID as int) == 7
+        elseIf inputID == "Crafting" || (inputID as int) == 6
             return "CraftingLicense"
-        elseIf inputID == "Travel" || (inputID as int) == 8
+        elseIf inputID == "Travel" || (inputID as int) == 7
             return "TravelPermit"
-        elseIf inputID == "Collar" || (inputID as int) == 9
+        elseIf inputID == "Collar" || (inputID as int) == 8
             return "CollarExemption"
-        elseIf inputID == "Insurance" || (inputID as int) == 10
+        elseIf inputID == "Insurance" || (inputID as int) == 9
             return "Insurance"
-        elseIf inputID == "Curfew" || (inputID as int) == 11
+        elseIf inputID == "Curfew" || (inputID as int) == 10
             return "CurfewExemption"
-        elseIf inputID == "Trading" || (inputID as int) == 12
+        elseIf inputID == "Trading" || (inputID as int) == 11
             return "TradingLicense"
-        elseIf inputID == "Whore" || (inputID as int) == 13
+        elseIf inputID == "Whore" || (inputID as int) == 12
             return "WhoreLicense"
         endIf
     endIf
@@ -155,7 +155,7 @@ EndFunction
 ; Parameter 0 asks for a license or violation prefix as string.
 ; This function returns a remaining time per in-game hours.
 ; If function returns a negative value, the subject license cycle is inactive.
-; If function returns 0, either the subject license cycle is waiting for a refresh or function was given an invalid input.
+; If function returns -1.0, either the subject license cycle is waiting for a refresh or function was given an invalid input.
 float Function GetLicenseTimeLeft(int LicenseType, BM_Licenses_Utility bmlUtility = none) Global
     if !bmlUtility
         bmlUtility = GetUtility()
@@ -164,34 +164,34 @@ float Function GetLicenseTimeLeft(int LicenseType, BM_Licenses_Utility bmlUtilit
     
     float currentTime = bmlUtility.GameDaysPassed.GetValue()
 
-    if LicenseType == 1
+    if LicenseType == 0
         return bml.armorLicenseExpirationTime - currentTime
-    elseIf LicenseType == 2
+    elseIf LicenseType == 1
         return bml.bikiniLicenseExpirationTime - currentTime
-    elseIf LicenseType == 3
+    elseIf LicenseType == 2
         return bml.bikiniExemptionExpirationTime - currentTime
-    elseIf LicenseType == 4
+    elseIf LicenseType == 3
         return bml.clothingLicenseExpirationTime - currentTime
-    elseIf LicenseType == 5
+    elseIf LicenseType == 4
         return bml.magicLicenseExpirationTime - currentTime
-    elseIf LicenseType == 6
+    elseIf LicenseType == 5
         return bml.weaponLicenseExpirationTime - currentTime
-    elseIf LicenseType == 7
+    elseIf LicenseType == 6
         return bml.craftingLicenseExpirationTime - currentTime
-    elseIf LicenseType == 8
+    elseIf LicenseType == 7
         return bml.travelPermitExpirationTime - currentTime
-    elseIf LicenseType == 9
+    elseIf LicenseType == 8
         return bml.collarExemptionExpirationTime - currentTime
-    elseIf LicenseType == 10
+    elseIf LicenseType == 9
         return bml.insuranceExpirationTime - currentTime
-    elseIf LicenseType == 11
+    elseIf LicenseType == 10
         return bml.curfewExemptionExpirationTime - currentTime
-    elseIf LicenseType == 12
+    elseIf LicenseType == 11
         return bml.tradingLicenseExpirationTime - currentTime
-    elseIf LicenseType == 13
+    elseIf LicenseType == 12
         return bml.whoreLicenseExpirationTime - currentTime
     else
-        return 0
+        return -1.0
     endIf
 EndFunction
 
@@ -209,33 +209,31 @@ bool Function FlagViolation(int ViolationType, bool Push = true, bool CheckSafet
         return false
     endIf
 
-    if ViolationType == 0
-        ; Empty
-    elseIf ViolationType == 1
+    If ViolationType == 0
         bml.isArmorViolation = 1
-    elseIf ViolationType == 2
+    elseIf ViolationType == 1
         bml.isBikiniViolation = 1
-    elseIf ViolationType == 3
+    elseIf ViolationType == 2
         bml.isBikiniViolation = 2
-    elseIf ViolationType == 4
+    elseIf ViolationType == 3
         bml.isClothingViolation = 1
-    elseIf ViolationType == 5
+    elseIf ViolationType == 4
         bml.isMagicViolation = 1
-    elseIf ViolationType == 6
+    elseIf ViolationType == 5
         bml.isWeaponViolation = 1
-    elseIf ViolationType == 7
+    elseIf ViolationType == 6
         bml.isCraftingViolation = 1
-    elseIf ViolationType == 8
+    elseIf ViolationType == 7
         bml.isTravelViolation = 1
-    elseIf ViolationType == 9
+    elseIf ViolationType == 8
         bml.isCollarViolation = 1
-    elseIf ViolationType == 10
+    elseIf ViolationType == 9
         bml.isUninsuredViolation = 1
-    elseIf ViolationType == 11
+    elseIf ViolationType == 10
         bml.isCurfewViolation = 1
-    elseIf ViolationType == 12
+    elseIf ViolationType == 11
         bml.isTradingViolation = 1
-    elseIf ViolationType == 13
+    elseIf ViolationType == 12
         bml.isWhoreViolation = 1
     else
         return false
@@ -286,33 +284,31 @@ bool Function PurchaseLicense(int LicenseType, bool SubtractGold = true, bool Li
         return false
     endIf
 
-    if LicenseType == 0
-        ; Empty
-    elseIf LicenseType == 1
+    If LicenseType == 0
         bmlUtility.BM_PurchaseArmorLicense(SubtractGold, Lifetime, ValidLocs)
-    elseIf LicenseType == 2
+    elseIf LicenseType == 1
         bmlUtility.BM_PurchaseBikiniLicense(SubtractGold, Lifetime, ValidLocs)
-    elseIf LicenseType == 3
+    elseIf LicenseType == 2
         bmlUtility.BM_PurchaseBikiniExemption(SubtractGold, Lifetime, ValidLocs)
-    elseIf LicenseType == 4
+    elseIf LicenseType == 3
         bmlUtility.BM_PurchaseClothingLicense(SubtractGold, Lifetime, ValidLocs)
-    elseIf LicenseType == 5
+    elseIf LicenseType == 4
         bmlUtility.BM_PurchaseMagicLicense(SubtractGold, Lifetime, ValidLocs)
-    elseIf LicenseType == 6
+    elseIf LicenseType == 5
         bmlUtility.BM_PurchaseWeaponLicense(SubtractGold, Lifetime, ValidLocs)
-    elseIf LicenseType == 7
+    elseIf LicenseType == 6
         bmlUtility.BM_PurchaseCraftingLicense(SubtractGold, Lifetime, ValidLocs)
-    elseIf LicenseType == 8
+    elseIf LicenseType == 7
         bmlUtility.BM_PurchaseTravelPermit(SubtractGold, Lifetime, ValidLocs)
-    elseIf LicenseType == 9
+    elseIf LicenseType == 8
         bmlUtility.BM_PurchaseCollarExemption(SubtractGold, Lifetime, ValidLocs)
-    elseIf LicenseType == 10
+    elseIf LicenseType == 9
         bmlUtility.BM_PurchaseLifeInsurance(SubtractGold, Lifetime, ValidLocs)
-    elseIf LicenseType == 11
+    elseIf LicenseType == 10
         bmlUtility.BM_PurchaseCurfewExemption(SubtractGold, Lifetime, ValidLocs)
-    elseIf LicenseType == 12
+    elseIf LicenseType == 11
         bmlUtility.BM_PurchaseTradingLicense(SubtractGold, Lifetime, ValidLocs)
-    elseIf LicenseType == 13
+    elseIf LicenseType == 12
         bmlUtility.BM_PurchaseWhoreLicense(SubtractGold, Lifetime, ValidLocs)
     else
         return false
@@ -330,33 +326,31 @@ bool Function ExpireLicense(int LicenseType, bool Push = true, BM_Licenses_Utili
         bmlUtility = GetUtility()
     endIf
     
-    if LicenseType == 0
-        ; Empty
-    elseIf LicenseType == 1
+    If LicenseType == 0
         bmlUtility.BM_ExpireArmorLicense()
-    elseIf LicenseType == 2
+    elseIf LicenseType == 1
         bmlUtility.BM_ExpireBikiniLicense()
-    elseIf LicenseType == 3
+    elseIf LicenseType == 2
         bmlUtility.BM_ExpireBikiniExemption()
-    elseIf LicenseType == 4
+    elseIf LicenseType == 3
         bmlUtility.BM_ExpireClothingLicense()
-    elseIf LicenseType == 5
+    elseIf LicenseType == 4
         bmlUtility.BM_ExpireMagicLicense()
-    elseIf LicenseType == 6
+    elseIf LicenseType == 5
         bmlUtility.BM_ExpireWeaponLicense()
-    elseIf LicenseType == 7
+    elseIf LicenseType == 6
         bmlUtility.BM_ExpireCraftingLicense()
-    elseIf LicenseType == 8
+    elseIf LicenseType == 7
         bmlUtility.BM_ExpireTravelPermit()
-    elseIf LicenseType == 9
+    elseIf LicenseType == 8
         bmlUtility.BM_ExpireCollarExemption()
-    elseIf LicenseType == 10
+    elseIf LicenseType == 9
         bmlUtility.BM_ExpireLifeInsurance()
-    elseIf LicenseType == 11
+    elseIf LicenseType == 10
         bmlUtility.BM_ExpireCurfewExemption()
-    elseIf LicenseType == 12
+    elseIf LicenseType == 11
         bmlUtility.BM_ExpireTradingLicense()
-    elseIf LicenseType == 13
+    elseIf LicenseType == 12
         bmlUtility.BM_ExpireWhoreLicense()
     else
         return false
@@ -383,65 +377,7 @@ bool Function RemoveLicense(int LicenseType, int LicenseCount = 0, ObjectReferen
     endIf
     BM_Licenses bml = bmlUtility.licenses
     BM_Licenses_MCM bmlmcm = bmlUtility.bmlmcm
-    Book LicenseToRemove = none
-
-    if LicenseType == 0
-        ; Empty
-    elseIf LicenseType == 1
-        if !CheckSafety || bmlmcm.isArmorLicenseFeatureEnabled
-            LicenseToRemove = bmlUtility.BM_ArmorLicense
-        endIf
-    elseIf LicenseType == 2
-        if !CheckSafety || bmlmcm.isBikiniLicenseFeatureEnabled == 1
-            LicenseToRemove = bmlUtility.BM_BikiniLicense
-        endIf
-    elseIf LicenseType == 3
-        if !CheckSafety || bmlmcm.isBikiniLicenseFeatureEnabled == 2
-            LicenseToRemove = bmlUtility.BM_BikiniExemption
-        endIf
-    elseIf LicenseType == 4
-        if !CheckSafety || bmlmcm.isClothingLicenseFeatureEnabled
-            LicenseToRemove = bmlUtility.BM_ClothingLicense
-        endIf
-    elseIf LicenseType == 5
-        if !CheckSafety || bmlmcm.isMagicLicenseFeatureEnabled
-            LicenseToRemove = bmlUtility.BM_MagicLicense
-        endIf
-    elseIf LicenseType == 6
-        if !CheckSafety || bmlmcm.isWeaponLicenseFeatureEnabled
-            LicenseToRemove = bmlUtility.BM_WeaponLicense
-        endIf
-    elseIf LicenseType == 7
-        if !CheckSafety || bmlmcm.isCraftingLicenseFeatureEnabled
-            LicenseToRemove = bmlUtility.BM_CraftingLicense
-        endIf
-    elseIf LicenseType == 8
-        if !CheckSafety || bmlmcm.isTravelPermitFeatureEnabled
-            LicenseToRemove = bmlUtility.BM_TravelPermit
-        endIf
-    elseIf LicenseType == 9
-        if !CheckSafety || bmlmcm.isCollarExemptionFeatureEnabled
-            LicenseToRemove = bmlUtility.BM_CollarExemption
-        endIf
-    elseIf LicenseType == 10
-        if !CheckSafety || bmlmcm.isInsuranceFeatureEnabled
-            LicenseToRemove = bmlUtility.BM_Insurance
-        endIf
-    elseIf LicenseType == 11
-        if !CheckSafety || bmlmcm.isCurfewExemptionFeatureEnabled
-            LicenseToRemove = bmlUtility.BM_CurfewExemption
-        endIf
-    elseIf LicenseType == 12
-        if !CheckSafety || bmlmcm.isTradingLicenseFeatureEnabled
-            LicenseToRemove = bmlUtility.BM_TradingLicense
-        endIf
-    elseIf LicenseType == 13
-        if !CheckSafety || bmlmcm.isWhoreLicenseFeatureEnabled
-            LicenseToRemove = bmlUtility.BM_WhoreLicense
-        endIf
-    else
-        return false
-    endIf
+    Book LicenseToRemove = bmlUtility.BM_LicenseBooks.GetAt(LicenseType) as Book
 
     if LicenseToRemove
         if LicenseCount < 1
@@ -467,31 +403,31 @@ bool Function ToggleLicenseFeature(int LicenseType, bool FeatureFlag, bool Push 
     endIf
     BM_Licenses_MCM bmlmcm = bmlUtility.bmlmcm
 
-    If LicenseType == 1
+    If LicenseType == 0
         bmlmcm.isArmorLicenseFeatureEnabled = (FeatureFlag as int)
-    elseIf LicenseType == 2
+    elseIf LicenseType == 1
         bmlmcm.isBikiniLicenseFeatureEnabled = (FeatureFlag as int)
-    elseIf LicenseType == 3
+    elseIf LicenseType == 2
         bmlmcm.isBikiniLicenseFeatureEnabled = 2 * (FeatureFlag as int)
-    elseIf LicenseType == 4
+    elseIf LicenseType == 3
         bmlmcm.isClothingLicenseFeatureEnabled = (FeatureFlag as int)
-    elseIf LicenseType == 5
+    elseIf LicenseType == 4
         bmlmcm.isMagicLicenseFeatureEnabled = (FeatureFlag as int)
-    elseIf LicenseType == 6
+    elseIf LicenseType == 5
         bmlmcm.isWeaponLicenseFeatureEnabled = (FeatureFlag as int)
-    elseIf LicenseType == 7
+    elseIf LicenseType == 6
         bmlmcm.isCraftingLicenseFeatureEnabled = (FeatureFlag as int)
-    elseIf LicenseType == 8
+    elseIf LicenseType == 7
         bmlmcm.isTravelPermitFeatureEnabled = (FeatureFlag as int)
-    elseIf LicenseType == 9
+    elseIf LicenseType == 8
         bmlmcm.isCollarExemptionFeatureEnabled = (FeatureFlag as int)
-    elseIf LicenseType == 10
+    elseIf LicenseType == 9
         bmlmcm.isInsuranceFeatureEnabled = (FeatureFlag as int)
-    elseIf LicenseType == 11
+    elseIf LicenseType == 10
         bmlmcm.isCurfewExemptionFeatureEnabled = (FeatureFlag as int)
-    elseIf LicenseType == 12
+    elseIf LicenseType == 11
         bmlmcm.isTradingLicenseFeatureEnabled = (FeatureFlag as int)
-    elseIf LicenseType == 13
+    elseIf LicenseType == 12
         bmlmcm.isWhoreLicenseFeatureEnabled = (FeatureFlag as int)
     else
         return false

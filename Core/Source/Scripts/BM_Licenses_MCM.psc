@@ -31,17 +31,6 @@ bool Property LicenseTerritories = false auto conditional
 bool Property isWaterDamageEnabled = false auto conditional
 bool Property thaneImmunityUniversal = false auto conditional
 float Property LifetimeMultiplier = 1.0 auto
-GlobalVariable Property BM_ALCostLT Auto
-GlobalVariable Property BM_BLCostLT Auto
-GlobalVariable Property BM_CLCostLT Auto
-GlobalVariable Property BM_MLCostLT Auto
-GlobalVariable Property BM_WLCostLT Auto
-GlobalVariable Property BM_CrfLCostLT Auto
-GlobalVariable Property BM_TLCostLT Auto
-GlobalVariable Property BM_WhLCostLT Auto
-GlobalVariable Property BM_TPCostLT Auto
-GlobalVariable Property BM_CECostLT Auto
-GlobalVariable Property BM_CuECostLT Auto
 ; Filters
 bool Property isLimitToCityEnabled = true auto
 bool Property isLimitToCitySpaceEnabled = false auto conditional
@@ -58,25 +47,25 @@ bool Property isConfiscateInventoryFeatureEnabled = false auto
 
 ; Page 2 - Licenses - Primary
 int Property isArmorLicenseFeatureEnabled = 1 auto conditional
-GlobalVariable Property BM_ALCost Auto
-GlobalVariable Property BM_ALDuration Auto
+GlobalVariable Property BM_ArmorCost Auto
+GlobalVariable Property BM_ArmorDuration Auto
 bool Property ALClothingImmunity Auto
 
 int Property isBikiniLicenseFeatureEnabled = 0 auto conditional
 string[] BikiniLicenseFeatureState
-GlobalVariable Property BM_BLCost Auto
-GlobalVariable Property BM_BLDuration Auto
+GlobalVariable[] Property BM_BikiniCost Auto
+GlobalVariable[] Property BM_BikiniDuration Auto
 bool Property isBikiniArmorFeatureEnabled = true auto
 bool Property isBikiniClothingFeatureEnabled = true auto
 String Property bikiniKeywordString = "EroticArmor" auto
 
 int Property isClothingLicenseFeatureEnabled = 0 auto conditional
-GlobalVariable Property BM_CLCost Auto
-GlobalVariable Property BM_CLDuration Auto
+GlobalVariable Property BM_ClothingCost Auto
+GlobalVariable Property BM_ClothingDuration Auto
 
 int Property isMagicLicenseFeatureEnabled = 1 auto conditional
-GlobalVariable Property BM_MLCost Auto
-GlobalVariable Property BM_MLDuration Auto
+GlobalVariable Property BM_MagicCost Auto
+GlobalVariable Property BM_MagicDuration Auto
 bool Property isEnchantedArmorFeatureEnabled = false auto
 bool Property isEnchantedClothingFeatureEnabled = false auto
 bool Property isEnchantedJewelryFeatureEnabled = false auto
@@ -86,46 +75,46 @@ string[] NullifyMagickaSourceList
 bool Property NullifyMagickaEnforce = false auto conditional
 
 int Property isWeaponLicenseFeatureEnabled = 1 auto conditional
-GlobalVariable Property BM_WLCost Auto
-GlobalVariable Property BM_WLDuration Auto
+GlobalVariable Property BM_WeaponCost Auto
+GlobalVariable Property BM_WeaponDuration Auto
 bool Property isWeaponAmmoFeatureEnabled = true auto
 
 ; Page 3 - Licenses - Secondary
 int Property isCraftingLicenseFeatureEnabled = 1 auto conditional
-GlobalVariable Property BM_CrfLCost Auto
-GlobalVariable Property BM_CrfLDuration Auto
+GlobalVariable Property BM_CraftingCost Auto
+GlobalVariable Property BM_CraftingDuration Auto
 
 int Property isTradingLicenseFeatureEnabled = 1 auto conditional
-GlobalVariable Property BM_TLCost Auto
-GlobalVariable Property BM_TLDuration Auto
+GlobalVariable Property BM_TradingCost Auto
+GlobalVariable Property BM_TradingDuration Auto
 
 int Property isCurfewExemptionFeatureEnabled = 0 auto conditional
-GlobalVariable Property BM_CuECost Auto
-GlobalVariable Property BM_CuEDuration Auto
+GlobalVariable Property BM_CurfewCost Auto
+GlobalVariable Property BM_CurfewDuration Auto
 GlobalVariable Property BM_CurfewStart Auto
 GlobalVariable Property BM_CurfewEnd Auto
 
 int Property isTravelPermitFeatureEnabled = 0 auto conditional
-GlobalVariable Property BM_TPCost Auto
-GlobalVariable Property BM_TPDuration Auto
+GlobalVariable Property BM_TravelCost Auto
+GlobalVariable Property BM_TravelDuration Auto
 GlobalVariable Property BM_FollowerMale  Auto
 GlobalVariable Property BM_FollowerFemale  Auto
 
 int Property isInsuranceFeatureEnabled = 0 auto conditional
-GlobalVariable Property BM_InsurCost Auto
-float Property BM_InsurCostBase = 3500.0 Auto
-GlobalVariable Property BM_InsurDuration Auto
+GlobalVariable Property BM_InsuranceCost Auto
+float Property BM_InsuranceCostBase = 3500.0 Auto
+GlobalVariable Property BM_InsuranceDuration Auto
 bool property invertPopularityMultiplier = false auto
 bool property thaneImmunityInsurance = false auto
 
 ; Page 4 - Licenses - Tertiary
 int Property isWhoreLicenseFeatureEnabled = 0 auto conditional
-GlobalVariable Property BM_WhLCost Auto
-GlobalVariable Property BM_WhLDuration Auto
+GlobalVariable Property BM_WhoreCost Auto
+GlobalVariable Property BM_WhoreDuration Auto
 
 int Property isCollarExemptionFeatureEnabled = 0 auto conditional
-GlobalVariable Property BM_CECost Auto
-GlobalVariable Property BM_CEDuration Auto
+GlobalVariable Property BM_CollarCost Auto
+GlobalVariable Property BM_CollarDuration Auto
 
 ; Page 5 - Slot Filtering
 Int[] Property ArmorSlotArray Auto
@@ -466,16 +455,16 @@ Function ShowPage2()
 	SetCursorFillMode(LEFT_TO_RIGHT)
 	AddHeaderOption("$LPO_ArmorLicense")
 	AddTextOptionST("isArmorLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isArmorLicenseFeatureEnabled))
-	AddSliderOptionST("BM_ALCostST", "$LPO_BM_ALCost", BM_ALCost.getValue(), "{0} gold")
-	AddSliderOptionST("BM_ALDurationST", "$LPO_BM_ALDuration", BM_ALDuration.getValue(), "{0} day(s)")
+	AddSliderOptionST("BM_ArmorCostST", "$LPO_BM_ArmorCost", BM_ArmorCost.getValue(), "{0} gold")
+	AddSliderOptionST("BM_ArmorDurationST", "$LPO_BM_ArmorDuration", BM_ArmorDuration.getValue(), "{0} day(s)")
 	AddToggleOptionST("ALClothingImmunityST", "$LPO_ALClothingImmunity", ALClothingImmunity)
 	AddEmptyOption()
 	AddEmptyOption()
 	AddEmptyOption()
 	AddHeaderOption("$LPO_BikiniLicense")
 	AddMenuOptionST("isBikiniLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isBikiniLicenseFeatureEnabled, isBikiniLicenseFeatureEnabled))
-	AddSliderOptionST("BM_BLCostST", "$LPO_BM_BLCost", BM_BLCost.getValue(), "{0} gold")
-	AddSliderOptionST("BM_BLDurationST", "$LPO_BM_BLDuration", BM_BLDuration.getValue(), "{0} day(s)")
+	AddSliderOptionST("BM_BikiniCostST", "$LPO_BM_BikiniCost", BM_BikiniCost[0].getValue(), "{0} gold")
+	AddSliderOptionST("BM_BikiniDurationST", "$LPO_BM_BikiniDuration", BM_BikiniDuration[0].getValue(), "{0} day(s)")
 	AddToggleOptionST("isBikiniArmorFeatureEnabledST", "$LPO_isBikiniArmorFeatureEnabled", isBikiniArmorFeatureEnabled)
 	AddToggleOptionST("isBikiniClothingFeatureEnabledST", "$LPO_isBikiniClothingFeatureEnabled", isBikiniClothingFeatureEnabled)
 	AddInputOptionST("bikiniKeywordStringST", "$LPO_bikiniKeywordString", "$LPO_InputModify")
@@ -484,14 +473,14 @@ Function ShowPage2()
 	AddEmptyOption()
 	AddHeaderOption("$LPO_ClothingLicense")
 	AddTextOptionST("isClothingLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isClothingLicenseFeatureEnabled))
-	AddSliderOptionST("BM_CLCostST", "$LPO_BM_CLCost", BM_CLCost.getValue(), "{0} gold")
-	AddSliderOptionST("BM_CLDurationST", "$LPO_BM_CLDuration", BM_CLDuration.getValue(), "{0} day(s)")
+	AddSliderOptionST("BM_ClothingCostST", "$LPO_BM_ClothingCost", BM_ClothingCost.getValue(), "{0} gold")
+	AddSliderOptionST("BM_ClothingDurationST", "$LPO_BM_ClothingDuration", BM_ClothingDuration.getValue(), "{0} day(s)")
 	AddEmptyOption()
 	AddEmptyOption()
 	AddHeaderOption("$LPO_MagicLicense")
 	AddTextOptionST("isMagicLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isMagicLicenseFeatureEnabled))
-	AddSliderOptionST("BM_MLCostST", "$LPO_BM_MLCost", BM_MLCost.getValue(), "{0} gold")
-	AddSliderOptionST("BM_MLDurationST", "$LPO_BM_MLDuration", BM_MLDuration.getValue(), "{0} day(s)")
+	AddSliderOptionST("BM_MagicCostST", "$LPO_BM_MagicCost", BM_MagicCost.getValue(), "{0} gold")
+	AddSliderOptionST("BM_MagicDurationST", "$LPO_BM_MagicDuration", BM_MagicDuration.getValue(), "{0} day(s)")
 	AddToggleOptionST("isEnchantedArmorFeatureEnabledST", "$LPO_isEnchantedArmorFeatureEnabled", isEnchantedArmorFeatureEnabled)
 	AddToggleOptionST("isEnchantedClothingFeatureEnabledST", "$LPO_isEnchantedClothingFeatureEnabled", isEnchantedClothingFeatureEnabled)
 	AddToggleOptionST("isEnchantedJewelryFeatureEnabledST", "$LPO_isEnchantedJewelryFeatureEnabled", isEnchantedJewelryFeatureEnabled)
@@ -502,36 +491,36 @@ Function ShowPage2()
 	AddEmptyOption()
 	AddHeaderOption("$LPO_WeaponLicense")
 	AddTextOptionST("isWeaponLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isWeaponLicenseFeatureEnabled))
-	AddSliderOptionST("BM_WLCostST", "$LPO_BM_WLCost", BM_WLCost.getValue(), "{0} gold")
-	AddSliderOptionST("BM_WLDurationST", "$LPO_BM_WLDuration", BM_WLDuration.getValue(), "{0} day(s)")
+	AddSliderOptionST("BM_WeaponCostST", "$LPO_BM_WeaponCost", BM_WeaponCost.getValue(), "{0} gold")
+	AddSliderOptionST("BM_WeaponDurationST", "$LPO_BM_WeaponDuration", BM_WeaponDuration.getValue(), "{0} day(s)")
 	AddToggleOptionST("isWeaponAmmoFeatureEnabledST", "$LPO_isWeaponAmmoFeatureEnabled", isWeaponAmmoFeatureEnabled)
 EndFunction
 Function ShowPage3()
 	SetCursorFillMode(LEFT_TO_RIGHT)
 	AddHeaderOption("$LPO_CraftingLicense")
 	AddTextOptionST("isCraftingLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isCraftingLicenseFeatureEnabled))
-	AddSliderOptionST("BM_CrfLCostST", "$LPO_BM_CrfLCost", BM_CrfLCost.getValue(), "{0} gold")
-	AddSliderOptionST("BM_CrfLDurationST", "$LPO_BM_CrfLDuration", BM_CrfLDuration.getValue(), "{0} day(s)")
+	AddSliderOptionST("BM_CraftingCostST", "$LPO_BM_CraftingCost", BM_CraftingCost.getValue(), "{0} gold")
+	AddSliderOptionST("BM_CraftingDurationST", "$LPO_BM_CraftingDuration", BM_CraftingDuration.getValue(), "{0} day(s)")
 	AddEmptyOption()
 	AddEmptyOption()
 	AddHeaderOption("$LPO_TradingLicense")
 	AddTextOptionST("isTradingLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isTradingLicenseFeatureEnabled))
-	AddSliderOptionST("BM_TLCostST", "$LPO_BM_TLCost", BM_TLCost.getValue(), "{0} gold")
-	AddSliderOptionST("BM_TLDurationST", "$LPO_BM_TLDuration", BM_TLDuration.getValue(), "{0} day(s)")
+	AddSliderOptionST("BM_TradingCostST", "$LPO_BM_TradingCost", BM_TradingCost.getValue(), "{0} gold")
+	AddSliderOptionST("BM_TradingDurationST", "$LPO_BM_TradingDuration", BM_TradingDuration.getValue(), "{0} day(s)")
 	AddEmptyOption()
 	AddEmptyOption()
 	AddHeaderOption("$LPO_CurfewExemption")
 	AddTextOptionST("isCurfewExemptionFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isCurfewExemptionFeatureEnabled))
-	AddSliderOptionST("BM_CuECostST", "$LPO_BM_CuECost", BM_CuECost.getValue(), "{0} gold")
-	AddSliderOptionST("BM_CuEDurationST", "$LPO_BM_CuEDuration", BM_CuEDuration.getValue(), "{0} day(s)")
+	AddSliderOptionST("BM_CurfewCostST", "$LPO_BM_CurfewCost", BM_CurfewCost.getValue(), "{0} gold")
+	AddSliderOptionST("BM_CurfewDurationST", "$LPO_BM_CurfewDuration", BM_CurfewDuration.getValue(), "{0} day(s)")
 	AddSliderOptionST("BM_CurfewStartST", "$LPO_BM_CurfewStart", BM_CurfewStart.getValue(), "{0}:00")
 	AddSliderOptionST("BM_CurfewEndST", "$LPO_BM_CurfewEnd", BM_CurfewEnd.getValue(), "{0}:00")
 	AddEmptyOption()
 	AddEmptyOption()
 	AddHeaderOption("$LPO_TravelPermit")
 	AddTextOptionST("isTravelPermitFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isTravelPermitFeatureEnabled))
-	AddSliderOptionST("BM_TPCostST", "$LPO_BM_TPCost", BM_TPCost.getValue(), "{0} gold")
-	AddSliderOptionST("BM_TPDurationST", "$LPO_BM_TPDuration", BM_TPDuration.getValue(), "{0} day(s)")
+	AddSliderOptionST("BM_TravelCostST", "$LPO_BM_TravelCost", BM_TravelCost.getValue(), "{0} gold")
+	AddSliderOptionST("BM_TravelDurationST", "$LPO_BM_TravelDuration", BM_TravelDuration.getValue(), "{0} day(s)")
 	AddToggleOptionST("BM_FollowerMaleST", "$LPO_BM_FollowerMale", BM_FollowerMale.GetValue() as bool)
 	AddEmptyOption()
 	AddToggleOptionST("BM_FollowerFemaleST", "$LPO_BM_FollowerFemale", BM_FollowerFemale.GetValue() as bool)
@@ -540,8 +529,8 @@ Function ShowPage3()
 	AddEmptyOption()
 	AddHeaderOption("$LPO_Insurance")
 	AddTextOptionST("isInsuranceFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isInsuranceFeatureEnabled))
-	AddSliderOptionST("BM_InsurCostBaseST", "$LPO_BM_InsurCostBase", BM_InsurCostBase, "{0} gold")
-	AddSliderOptionST("BM_InsurDurationST", "$LPO_BM_InsurDuration", BM_InsurDuration.getValue(), "{0} day(s)")
+	AddSliderOptionST("BM_InsuranceCostBaseST", "$LPO_BM_InsuranceCostBase", BM_InsuranceCostBase, "{0} gold")
+	AddSliderOptionST("BM_InsuranceDurationST", "$LPO_BM_InsuranceDuration", BM_InsuranceDuration.getValue(), "{0} day(s)")
 	AddTextOptionST("insuranceMisbehaviourMonitorST", "$LPO_MisbehaviourMultiplier", licenses.insuranceMisbehaviourMultiplier + "x")
 	AddEmptyOption()
 	AddTextOptionST("insurancePopularityMonitorST", "$LPO_PopularityMultiplier", licenses.insurancePopularityMultiplier + "x")
@@ -554,14 +543,14 @@ Function ShowPage4()
 	SetCursorFillMode(LEFT_TO_RIGHT)
 	AddHeaderOption("$LPO_WhoreLicense")
 	AddTextOptionST("isWhoreLicenseFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isWhoreLicenseFeatureEnabled))
-	AddSliderOptionST("BM_WhLCostST", "$LPO_BM_WhLCost", BM_WhLCost.getValue(), "{0} gold")
-	AddSliderOptionST("BM_WhLDurationST", "$LPO_BM_WhLDuration", BM_WhLDuration.getValue(), "{0} day(s)")
+	AddSliderOptionST("BM_WhoreCostST", "$LPO_BM_WhoreCost", BM_WhoreCost.getValue(), "{0} gold")
+	AddSliderOptionST("BM_WhoreDurationST", "$LPO_BM_WhoreDuration", BM_WhoreDuration.getValue(), "{0} day(s)")
 	AddEmptyOption()
 	AddEmptyOption()
 	AddHeaderOption("$LPO_CollarExemption")
 	AddTextOptionST("isCollarExemptionFeatureEnabledST", "$LPO_FeatureState", GetBoolString(isCollarExemptionFeatureEnabled), (!DeviousDevices_State) as int)
-	AddSliderOptionST("BM_CECostST", "$LPO_BM_CECost", BM_CECost.getValue(), "{0} gold", (!DeviousDevices_State) as int)
-	AddSliderOptionST("BM_CEDurationST", "$LPO_BM_CEDuration", BM_CEDuration.getValue(), "{0} day(s)", (!DeviousDevices_State) as int)
+	AddSliderOptionST("BM_CollarCostST", "$LPO_BM_CollarCost", BM_CollarCost.getValue(), "{0} gold", (!DeviousDevices_State) as int)
+	AddSliderOptionST("BM_CollarDurationST", "$LPO_BM_CollarDuration", BM_CollarDuration.getValue(), "{0} day(s)", (!DeviousDevices_State) as int)
 EndFunction
 Function ShowPage5()
 	SetCursorFillMode(LEFT_TO_RIGHT)
@@ -719,19 +708,12 @@ Function ShutdownLicenses()
 	Licenses_State.SetValue(-1.0)
 	; Remove currently held license book items
 	Actor ActorRef = licenses.PlayerActorRef
-	ActorRef.removeItem(bmlUtility.BM_ArmorLicense, ActorRef.getItemCount(bmlUtility.BM_ArmorLicense))
-	ActorRef.removeItem(bmlUtility.BM_BikiniLicense, ActorRef.getItemCount(bmlUtility.BM_BikiniLicense))
-	ActorRef.removeItem(bmlUtility.BM_BikiniExemption, ActorRef.getItemCount(bmlUtility.BM_BikiniExemption))
-	ActorRef.removeItem(bmlUtility.BM_ClothingLicense, ActorRef.getItemCount(bmlUtility.BM_ClothingLicense))
-	ActorRef.removeItem(bmlUtility.BM_MagicLicense, ActorRef.getItemCount(bmlUtility.BM_MagicLicense))
-	ActorRef.removeItem(bmlUtility.BM_WeaponLicense, ActorRef.getItemCount(bmlUtility.BM_WeaponLicense))
-	ActorRef.removeItem(bmlUtility.BM_CraftingLicense, ActorRef.getItemCount(bmlUtility.BM_CraftingLicense))
-	ActorRef.removeItem(bmlUtility.BM_TradingLicense, ActorRef.getItemCount(bmlUtility.BM_TradingLicense))
-	ActorRef.removeItem(bmlUtility.BM_WhoreLicense, ActorRef.getItemCount(bmlUtility.BM_WhoreLicense))
-	ActorRef.removeItem(bmlUtility.BM_TravelPermit, ActorRef.getItemCount(bmlUtility.BM_TravelPermit))
-	ActorRef.removeItem(bmlUtility.BM_CollarExemption, ActorRef.getItemCount(bmlUtility.BM_CollarExemption))
-	ActorRef.removeItem(bmlUtility.BM_Insurance, ActorRef.getItemCount(bmlUtility.BM_Insurance))
-	ActorRef.removeItem(bmlUtility.BM_CurfewExemption, ActorRef.getItemCount(bmlUtility.BM_CurfewExemption))
+
+	int i = bmlUtility.BM_LicenseBooks.GetSize()
+	while i
+		i -= 1
+		ActorRef.removeItem(bmlUtility.BM_LicenseBooks.GetAt(i), ActorRef.getItemCount(bmlUtility.BM_LicenseBooks.GetAt(i)))
+	endWhile
 	; Remove Nullify Magicka
 	licenses.RemoveNullifyMagicka(true)
 	; shutdown
@@ -1186,39 +1168,39 @@ state isArmorLicenseFeatureEnabledST
 	endEvent
 endState
 
-state BM_ALCostST
+state BM_ArmorCostST
 	event OnSliderOpenST()
-		SetSliderDialogStartValue(BM_ALCost.getValue())
+		SetSliderDialogStartValue(BM_ArmorCost.getValue())
 		SetSliderDialogDefaultValue(2000.0)
 		SetSliderDialogRange(0.0, 5000.0)
 		SetSliderDialogInterval(25.0)
 	endEvent
 	event OnSliderAcceptST(float value)
-		BM_ALCost.setValue(value)
-		SetSliderOptionValueST(BM_ALCost.getValue(), "{0} gold")
+		BM_ArmorCost.setValue(value)
+		SetSliderOptionValueST(BM_ArmorCost.getValue(), "{0} gold")
 		recalculateCosts()
         updateGlobals()
 	endEvent
 	event OnDefaultST()
-		BM_ALCost.setValue(2000.0)
-		SetSliderOptionValueST(BM_ALCost.getValue(), "{0} gold")
+		BM_ArmorCost.setValue(2000.0)
+		SetSliderOptionValueST(BM_ArmorCost.getValue(), "{0} gold")
 	endEvent
 endState
 
-state BM_ALDurationST
+state BM_ArmorDurationST
 	event OnSliderOpenST()
-		SetSliderDialogStartValue(BM_ALDuration.getValue())
+		SetSliderDialogStartValue(BM_ArmorDuration.getValue())
 		SetSliderDialogDefaultValue(5.0)
 		SetSliderDialogRange(1.0, 60.0)
 		SetSliderDialogInterval(1.0)
 	endEvent
 	event OnSliderAcceptST(float value)
-		BM_ALDuration.SetValue(value)
-		SetSliderOptionValueST(BM_ALDuration.GetValue(), "{0} day(s)")
+		BM_ArmorDuration.SetValue(value)
+		SetSliderOptionValueST(BM_ArmorDuration.GetValue(), "{0} day(s)")
 	endEvent
 	event OnDefaultST()
-		BM_ALDuration.SetValue(5.0)
-		SetSliderOptionValueST(BM_ALDuration.GetValue(), "{0} day(s)")
+		BM_ArmorDuration.SetValue(5.0)
+		SetSliderOptionValueST(BM_ArmorDuration.GetValue(), "{0} day(s)")
 	endEvent
 endState
 
@@ -1251,39 +1233,43 @@ state isBikiniLicenseFeatureEnabledST
 	endEvent
 endState
 
-state BM_BLCostST
+state BM_BikiniCostST
 	event OnSliderOpenST()
-		SetSliderDialogStartValue(BM_BLCost.getValue())
+		SetSliderDialogStartValue(BM_BikiniCost[0].getValue())
 		SetSliderDialogDefaultValue(1250.0)
 		SetSliderDialogRange(0.0, 5000.0)
 		SetSliderDialogInterval(25.0)
 	endEvent
 	event OnSliderAcceptST(float value)
-		BM_BLCost.setValue(value)
-		SetSliderOptionValueST(BM_BLCost.getValue(), "{0} gold")
+		BM_BikiniCost[0].setValue(value)
+		BM_BikiniCost[1].setValue(value)
+		SetSliderOptionValueST(BM_BikiniCost[0].getValue(), "{0} gold")
 		recalculateCosts()
         updateGlobals()
 	endEvent
 	event OnDefaultST()
-		BM_BLCost.setValue(1250.0)
-		SetSliderOptionValueST(BM_BLCost.getValue(), "{0} gold")
+		BM_BikiniCost[0].setValue(1250.0)
+		BM_BikiniCost[1].setValue(1250.0)
+		SetSliderOptionValueST(BM_BikiniCost[0].getValue(), "{0} gold")
 	endEvent
 endState
 
-state BM_BLDurationST
+state BM_BikiniDurationST
 	event OnSliderOpenST()
-		SetSliderDialogStartValue(BM_BLDuration.getValue())
+		SetSliderDialogStartValue(BM_BikiniDuration[0].getValue())
 		SetSliderDialogDefaultValue(5.0)
 		SetSliderDialogRange(1.0, 60.0)
 		SetSliderDialogInterval(1.0)
 	endEvent
 	event OnSliderAcceptST(float value)
-		BM_BLDuration.SetValue(value)
-		SetSliderOptionValueST(BM_BLDuration.GetValue(), "{0} day(s)")
+		BM_BikiniDuration[0].SetValue(value)
+		BM_BikiniDuration[1].SetValue(value)
+		SetSliderOptionValueST(BM_BikiniDuration[0].GetValue(), "{0} day(s)")
 	endEvent
 	event OnDefaultST()
-		BM_BLDuration.SetValue(5.0)
-		SetSliderOptionValueST(BM_BLDuration.GetValue(), "{0} day(s)")
+		BM_BikiniDuration[0].SetValue(5.0)
+		BM_BikiniDuration[1].SetValue(5.0)
+		SetSliderOptionValueST(BM_BikiniDuration[0].GetValue(), "{0} day(s)")
 	endEvent
 endState
 
@@ -1334,39 +1320,39 @@ state isClothingLicenseFeatureEnabledST
 	endEvent
 endState
 
-state BM_CLCostST
+state BM_ClothingCostST
 	event OnSliderOpenST()
-		SetSliderDialogStartValue(BM_CLCost.getValue())
+		SetSliderDialogStartValue(BM_ClothingCost.getValue())
 		SetSliderDialogDefaultValue(650.0)
 		SetSliderDialogRange(0.0, 5000.0)
 		SetSliderDialogInterval(25.0)
 	endEvent
 	event OnSliderAcceptST(float value)
-		BM_CLCost.setValue(value)
-		SetSliderOptionValueST(BM_CLCost.getValue(), "{0} gold")
+		BM_ClothingCost.setValue(value)
+		SetSliderOptionValueST(BM_ClothingCost.getValue(), "{0} gold")
 		recalculateCosts()
         updateGlobals()
 	endEvent
 	event OnDefaultST()
-		BM_CLCost.setValue(650.0)
-		SetSliderOptionValueST(BM_CLCost.getValue(), "{0} gold")
+		BM_ClothingCost.setValue(650.0)
+		SetSliderOptionValueST(BM_ClothingCost.getValue(), "{0} gold")
 	endEvent
 endState
 
-state BM_CLDurationST
+state BM_ClothingDurationST
 	event OnSliderOpenST()
-		SetSliderDialogStartValue(BM_CLDuration.getValue())
+		SetSliderDialogStartValue(BM_ClothingDuration.getValue())
 		SetSliderDialogDefaultValue(5.0)
 		SetSliderDialogRange(1.0, 60.0)
 		SetSliderDialogInterval(1.0)
 	endEvent
 	event OnSliderAcceptST(float value)
-		BM_CLDuration.SetValue(value)
-		SetSliderOptionValueST(BM_CLDuration.GetValue(), "{0} day(s)")
+		BM_ClothingDuration.SetValue(value)
+		SetSliderOptionValueST(BM_ClothingDuration.GetValue(), "{0} day(s)")
 	endEvent
 	event OnDefaultST()
-		BM_CLDuration.SetValue(5.0)
-		SetSliderOptionValueST(BM_CLDuration.GetValue(), "{0} day(s)")
+		BM_ClothingDuration.SetValue(5.0)
+		SetSliderOptionValueST(BM_ClothingDuration.GetValue(), "{0} day(s)")
 	endEvent
 endState
 
@@ -1381,39 +1367,39 @@ state isMagicLicenseFeatureEnabledST
 	endEvent
 endState
 
-state BM_MLCostST
+state BM_MagicCostST
 	event OnSliderOpenST()
-		SetSliderDialogStartValue(BM_MLCost.getValue())
+		SetSliderDialogStartValue(BM_MagicCost.getValue())
 		SetSliderDialogDefaultValue(1500.0)
 		SetSliderDialogRange(0.0, 5000.0)
 		SetSliderDialogInterval(25.0)
 	endEvent
 	event OnSliderAcceptST(float value)
-		BM_MLCost.setValue(value)
-		SetSliderOptionValueST(BM_MLCost.getValue(), "{0} gold")
+		BM_MagicCost.setValue(value)
+		SetSliderOptionValueST(BM_MagicCost.getValue(), "{0} gold")
 		recalculateCosts()
         updateGlobals()
 	endEvent
 	event OnDefaultST()
-		BM_MLCost.setValue(1500.0)
-		SetSliderOptionValueST(BM_MLCost.getValue(), "{0} gold")
+		BM_MagicCost.setValue(1500.0)
+		SetSliderOptionValueST(BM_MagicCost.getValue(), "{0} gold")
 	endEvent
 endState
 
-state BM_MLDurationST
+state BM_MagicDurationST
 	event OnSliderOpenST()
-		SetSliderDialogStartValue(BM_MLDuration.getValue())
+		SetSliderDialogStartValue(BM_MagicDuration.getValue())
 		SetSliderDialogDefaultValue(5.0)
 		SetSliderDialogRange(1.0, 60.0)
 		SetSliderDialogInterval(1.0)
 	endEvent
 	event OnSliderAcceptST(float value)
-		BM_MLDuration.SetValue(value)
-		SetSliderOptionValueST(BM_MLDuration.GetValue(), "{0} day(s)")
+		BM_MagicDuration.SetValue(value)
+		SetSliderOptionValueST(BM_MagicDuration.GetValue(), "{0} day(s)")
 	endEvent
 	event OnDefaultST()
-		BM_MLDuration.SetValue(5.0)
-		SetSliderOptionValueST(BM_MLDuration.GetValue(), "{0} day(s)")
+		BM_MagicDuration.SetValue(5.0)
+		SetSliderOptionValueST(BM_MagicDuration.GetValue(), "{0} day(s)")
 	endEvent
 endState
 
@@ -1498,39 +1484,39 @@ state isWeaponLicenseFeatureEnabledST
 	endEvent
 endState
 
-state BM_WLCostST
+state BM_WeaponCostST
 	event OnSliderOpenST()
-		SetSliderDialogStartValue(BM_WLCost.getValue())
+		SetSliderDialogStartValue(BM_WeaponCost.getValue())
 		SetSliderDialogDefaultValue(1500.0)
 		SetSliderDialogRange(0.0, 5000.0)
 		SetSliderDialogInterval(25.0)
 	endEvent
 	event OnSliderAcceptST(float value)
-		BM_WLCost.setValue(value)
-		SetSliderOptionValueST(BM_WLCost.getValue(), "{0} gold")
+		BM_WeaponCost.setValue(value)
+		SetSliderOptionValueST(BM_WeaponCost.getValue(), "{0} gold")
 		recalculateCosts()
         updateGlobals()
 	endEvent
 	event OnDefaultST()
-		BM_WLCost.setValue(1500.0)
-		SetSliderOptionValueST(BM_WLCost.getValue(), "{0} gold")
+		BM_WeaponCost.setValue(1500.0)
+		SetSliderOptionValueST(BM_WeaponCost.getValue(), "{0} gold")
 	endEvent
 endState
 
-state BM_WLDurationST
+state BM_WeaponDurationST
 	event OnSliderOpenST()
-		SetSliderDialogStartValue(BM_WLDuration.getValue())
+		SetSliderDialogStartValue(BM_WeaponDuration.getValue())
 		SetSliderDialogDefaultValue(5.0)
 		SetSliderDialogRange(1.0, 60.0)
 		SetSliderDialogInterval(1.0)
 	endEvent
 	event OnSliderAcceptST(float value)
-		BM_WLDuration.SetValue(value)
-		SetSliderOptionValueST(BM_WLDuration.GetValue(), "{0} day(s)")
+		BM_WeaponDuration.SetValue(value)
+		SetSliderOptionValueST(BM_WeaponDuration.GetValue(), "{0} day(s)")
 	endEvent
 	event OnDefaultST()
-		BM_WLDuration.SetValue(5.0)
-		SetSliderOptionValueST(BM_WLDuration.GetValue(), "{0} day(s)")
+		BM_WeaponDuration.SetValue(5.0)
+		SetSliderOptionValueST(BM_WeaponDuration.GetValue(), "{0} day(s)")
 	endEvent
 endState
 
@@ -1556,39 +1542,39 @@ state isCraftingLicenseFeatureEnabledST
 	endEvent
 endState
 
-state BM_CrfLCostST
+state BM_CraftingCostST
 	event OnSliderOpenST()
-		SetSliderDialogStartValue(BM_CrfLCost.getValue())
+		SetSliderDialogStartValue(BM_CraftingCost.getValue())
 		SetSliderDialogDefaultValue(1000.0)
 		SetSliderDialogRange(0.0, 5000.0)
 		SetSliderDialogInterval(25.0)
 	endEvent
 	event OnSliderAcceptST(float value)
-		BM_CrfLCost.setValue(value)
-		SetSliderOptionValueST(BM_CrfLCost.getValue(), "{0} gold")
+		BM_CraftingCost.setValue(value)
+		SetSliderOptionValueST(BM_CraftingCost.getValue(), "{0} gold")
 		recalculateCosts()
         updateGlobals()
 	endEvent
 	event OnDefaultST()
-		BM_CrfLCost.setValue(1000.0)
-		SetSliderOptionValueST(BM_CrfLCost.getValue(), "{0} gold")
+		BM_CraftingCost.setValue(1000.0)
+		SetSliderOptionValueST(BM_CraftingCost.getValue(), "{0} gold")
 	endEvent
 endState
 
-state BM_CrfLDurationST
+state BM_CraftingDurationST
 	event OnSliderOpenST()
-		SetSliderDialogStartValue(BM_CrfLDuration.getValue())
+		SetSliderDialogStartValue(BM_CraftingDuration.getValue())
 		SetSliderDialogDefaultValue(5.0)
 		SetSliderDialogRange(1.0, 60.0)
 		SetSliderDialogInterval(1.0)
 	endEvent
 	event OnSliderAcceptST(float value)
-		BM_CrfLDuration.SetValue(value)
-		SetSliderOptionValueST(BM_CrfLDuration.GetValue(), "{0} day(s)")
+		BM_CraftingDuration.SetValue(value)
+		SetSliderOptionValueST(BM_CraftingDuration.GetValue(), "{0} day(s)")
 	endEvent
 	event OnDefaultST()
-		BM_CrfLDuration.SetValue(5.0)
-		SetSliderOptionValueST(BM_CrfLDuration.GetValue(), "{0} day(s)")
+		BM_CraftingDuration.SetValue(5.0)
+		SetSliderOptionValueST(BM_CraftingDuration.GetValue(), "{0} day(s)")
 	endEvent
 endState
 
@@ -1603,39 +1589,39 @@ state isTradingLicenseFeatureEnabledST
 	endEvent
 endState
 
-state BM_TLCostST
+state BM_TradingCostST
 	event OnSliderOpenST()
-		SetSliderDialogStartValue(BM_TLCost.getValue())
+		SetSliderDialogStartValue(BM_TradingCost.getValue())
 		SetSliderDialogDefaultValue(1000.0)
 		SetSliderDialogRange(0.0, 5000.0)
 		SetSliderDialogInterval(25.0)
 	endEvent
 	event OnSliderAcceptST(float value)
-		BM_TLCost.setValue(value)
-		SetSliderOptionValueST(BM_TLCost.getValue(), "{0} gold")
+		BM_TradingCost.setValue(value)
+		SetSliderOptionValueST(BM_TradingCost.getValue(), "{0} gold")
 		recalculateCosts()
         updateGlobals()
 	endEvent
 	event OnDefaultST()
-		BM_TLCost.setValue(1000.0)
-		SetSliderOptionValueST(BM_TLCost.getValue(), "{0} gold")
+		BM_TradingCost.setValue(1000.0)
+		SetSliderOptionValueST(BM_TradingCost.getValue(), "{0} gold")
 	endEvent
 endState
 
-state BM_TLDurationST
+state BM_TradingDurationST
 	event OnSliderOpenST()
-		SetSliderDialogStartValue(BM_TLDuration.getValue())
+		SetSliderDialogStartValue(BM_TradingDuration.getValue())
 		SetSliderDialogDefaultValue(5.0)
 		SetSliderDialogRange(1.0, 60.0)
 		SetSliderDialogInterval(1.0)
 	endEvent
 	event OnSliderAcceptST(float value)
-		BM_TLDuration.SetValue(value)
-		SetSliderOptionValueST(BM_TLDuration.GetValue(), "{0} day(s)")
+		BM_TradingDuration.SetValue(value)
+		SetSliderOptionValueST(BM_TradingDuration.GetValue(), "{0} day(s)")
 	endEvent
 	event OnDefaultST()
-		BM_TLDuration.SetValue(5.0)
-		SetSliderOptionValueST(BM_TLDuration.GetValue(), "{0} day(s)")
+		BM_TradingDuration.SetValue(5.0)
+		SetSliderOptionValueST(BM_TradingDuration.GetValue(), "{0} day(s)")
 	endEvent
 endState
 
@@ -1650,39 +1636,39 @@ state isCurfewExemptionFeatureEnabledST
 	endEvent
 endState
 
-state BM_CuECostST
+state BM_CurfewCostST
 	event OnSliderOpenST()
-		SetSliderDialogStartValue(BM_CuECost.getValue())
+		SetSliderDialogStartValue(BM_CurfewCost.getValue())
 		SetSliderDialogDefaultValue(1000.0)
 		SetSliderDialogRange(0.0, 5000.0)
 		SetSliderDialogInterval(25.0)
 	endEvent
 	event OnSliderAcceptST(float value)
-		BM_CuECost.setValue(value)
-		SetSliderOptionValueST(BM_CuECost.getValue(), "{0} gold")
+		BM_CurfewCost.setValue(value)
+		SetSliderOptionValueST(BM_CurfewCost.getValue(), "{0} gold")
 		recalculateCosts()
         updateGlobals()
 	endEvent
 	event OnDefaultST()
-		BM_CuECost.setValue(1000.0)
-		SetSliderOptionValueST(BM_CuECost.getValue(), "{0} gold")
+		BM_CurfewCost.setValue(1000.0)
+		SetSliderOptionValueST(BM_CurfewCost.getValue(), "{0} gold")
 	endEvent
 endState
 
-state BM_CuEDurationST
+state BM_CurfewDurationST
 	event OnSliderOpenST()
-		SetSliderDialogStartValue(BM_CuEDuration.getValue())
+		SetSliderDialogStartValue(BM_CurfewDuration.getValue())
 		SetSliderDialogDefaultValue(5.0)
 		SetSliderDialogRange(1.0, 60.0)
 		SetSliderDialogInterval(1.0)
 	endEvent
 	event OnSliderAcceptST(float value)
-		BM_CuEDuration.SetValue(value)
-		SetSliderOptionValueST(BM_CuEDuration.GetValue(), "{0} day(s)")
+		BM_CurfewDuration.SetValue(value)
+		SetSliderOptionValueST(BM_CurfewDuration.GetValue(), "{0} day(s)")
 	endEvent
 	event OnDefaultST()
-		BM_CuEDuration.SetValue(5.0)
-		SetSliderOptionValueST(BM_CuEDuration.GetValue(), "{0} day(s)")
+		BM_CurfewDuration.SetValue(5.0)
+		SetSliderOptionValueST(BM_CurfewDuration.GetValue(), "{0} day(s)")
 	endEvent
 endState
 
@@ -1737,39 +1723,39 @@ state isWhoreLicenseFeatureEnabledST
 	endEvent
 endState
 
-state BM_WhLCostST
+state BM_WhoreCostST
 	event OnSliderOpenST()
-		SetSliderDialogStartValue(BM_WhLCost.getValue())
+		SetSliderDialogStartValue(BM_WhoreCost.getValue())
 		SetSliderDialogDefaultValue(500.0)
 		SetSliderDialogRange(0.0, 5000.0)
 		SetSliderDialogInterval(25.0)
 	endEvent
 	event OnSliderAcceptST(float value)
-		BM_WhLCost.setValue(value)
-		SetSliderOptionValueST(BM_WhLCost.getValue(), "{0} gold")
+		BM_WhoreCost.setValue(value)
+		SetSliderOptionValueST(BM_WhoreCost.getValue(), "{0} gold")
 		recalculateCosts()
         updateGlobals()
 	endEvent
 	event OnDefaultST()
-		BM_WhLCost.setValue(500.0)
-		SetSliderOptionValueST(BM_WhLCost.getValue(), "{0} gold")
+		BM_WhoreCost.setValue(500.0)
+		SetSliderOptionValueST(BM_WhoreCost.getValue(), "{0} gold")
 	endEvent
 endState
 
-state BM_WhLDurationST
+state BM_WhoreDurationST
 	event OnSliderOpenST()
-		SetSliderDialogStartValue(BM_WhLDuration.getValue())
+		SetSliderDialogStartValue(BM_WhoreDuration.getValue())
 		SetSliderDialogDefaultValue(5.0)
 		SetSliderDialogRange(1.0, 60.0)
 		SetSliderDialogInterval(1.0)
 	endEvent
 	event OnSliderAcceptST(float value)
-		BM_WhLDuration.SetValue(value)
-		SetSliderOptionValueST(BM_WhLDuration.GetValue(), "{0} day(s)")
+		BM_WhoreDuration.SetValue(value)
+		SetSliderOptionValueST(BM_WhoreDuration.GetValue(), "{0} day(s)")
 	endEvent
 	event OnDefaultST()
-		BM_WhLDuration.SetValue(5.0)
-		SetSliderOptionValueST(BM_WhLDuration.GetValue(), "{0} day(s)")
+		BM_WhoreDuration.SetValue(5.0)
+		SetSliderOptionValueST(BM_WhoreDuration.GetValue(), "{0} day(s)")
 	endEvent
 endState
 
@@ -1789,39 +1775,39 @@ state isTravelPermitFeatureEnabledST
 	endEvent
 endState
 
-state BM_TPCostST
+state BM_TravelCostST
 	event OnSliderOpenST()
-		SetSliderDialogStartValue(BM_TPCost.getValue())
+		SetSliderDialogStartValue(BM_TravelCost.getValue())
 		SetSliderDialogDefaultValue(100.0)
 		SetSliderDialogRange(0.0, 5000.0)
 		SetSliderDialogInterval(25.0)
 	endEvent
 	event OnSliderAcceptST(float value)
-		BM_TPCost.setValue(value)
-		SetSliderOptionValueST(BM_TPCost.getValue(), "{0} gold")
+		BM_TravelCost.setValue(value)
+		SetSliderOptionValueST(BM_TravelCost.getValue(), "{0} gold")
 		recalculateCosts()
         updateGlobals()
 	endEvent
 	event OnDefaultST()
-		BM_TPCost.setValue(100.0)
-		SetSliderOptionValueST(BM_TPCost.getValue(), "{0} gold")
+		BM_TravelCost.setValue(100.0)
+		SetSliderOptionValueST(BM_TravelCost.getValue(), "{0} gold")
 	endEvent
 endState
 
-state BM_TPDurationST
+state BM_TravelDurationST
 	event OnSliderOpenST()
-		SetSliderDialogStartValue(BM_TPDuration.getValue())
+		SetSliderDialogStartValue(BM_TravelDuration.getValue())
 		SetSliderDialogDefaultValue(5.0)
 		SetSliderDialogRange(1.0, 60.0)
 		SetSliderDialogInterval(1.0)
 	endEvent
 	event OnSliderAcceptST(float value)
-		BM_TPDuration.SetValue(value)
-		SetSliderOptionValueST(BM_TPDuration.GetValue(), "{0} day(s)")
+		BM_TravelDuration.SetValue(value)
+		SetSliderOptionValueST(BM_TravelDuration.GetValue(), "{0} day(s)")
 	endEvent
 	event OnDefaultST()
-		BM_TPDuration.SetValue(5.0)
-		SetSliderOptionValueST(BM_TPDuration.GetValue(), "{0} day(s)")
+		BM_TravelDuration.SetValue(5.0)
+		SetSliderOptionValueST(BM_TravelDuration.GetValue(), "{0} day(s)")
 	endEvent
 endState
 
@@ -1858,39 +1844,39 @@ state isCollarExemptionFeatureEnabledST
 	endEvent
 endState
 
-state BM_CECostST
+state BM_CollarCostST
 	event OnSliderOpenST()
-		SetSliderDialogStartValue(BM_CECost.getValue())
+		SetSliderDialogStartValue(BM_CollarCost.getValue())
 		SetSliderDialogDefaultValue(3500.0)
 		SetSliderDialogRange(0.0, 5000.0)
 		SetSliderDialogInterval(25.0)
 	endEvent
 	event OnSliderAcceptST(float value)
-		BM_CECost.setValue(value)
-		SetSliderOptionValueST(BM_CECost.getValue(), "{0} gold")
+		BM_CollarCost.setValue(value)
+		SetSliderOptionValueST(BM_CollarCost.getValue(), "{0} gold")
 		recalculateCosts()
         updateGlobals()
 	endEvent
 	event OnDefaultST()
-		BM_CECost.setValue(3500.0)
-		SetSliderOptionValueST(BM_CECost.getValue(), "{0} gold")
+		BM_CollarCost.setValue(3500.0)
+		SetSliderOptionValueST(BM_CollarCost.getValue(), "{0} gold")
 	endEvent
 endState
 
-state BM_CEDurationST
+state BM_CollarDurationST
 	event OnSliderOpenST()
-		SetSliderDialogStartValue(BM_CEDuration.getValue())
+		SetSliderDialogStartValue(BM_CollarDuration.getValue())
 		SetSliderDialogDefaultValue(5.0)
 		SetSliderDialogRange(1.0, 60.0)
 		SetSliderDialogInterval(1.0)
 	endEvent
 	event OnSliderAcceptST(float value)
-		BM_CEDuration.SetValue(value)
-		SetSliderOptionValueST(BM_CEDuration.GetValue(), "{0} day(s)")
+		BM_CollarDuration.SetValue(value)
+		SetSliderOptionValueST(BM_CollarDuration.GetValue(), "{0} day(s)")
 	endEvent
 	event OnDefaultST()
-		BM_CEDuration.SetValue(5.0)
-		SetSliderOptionValueST(BM_CEDuration.GetValue(), "{0} day(s)")
+		BM_CollarDuration.SetValue(5.0)
+		SetSliderOptionValueST(BM_CollarDuration.GetValue(), "{0} day(s)")
 	endEvent
 endState
 
@@ -1905,43 +1891,43 @@ state isInsuranceFeatureEnabledST
 	endEvent
 endState
 
-state BM_InsurCostBaseST
+state BM_InsuranceCostBaseST
 	event OnSliderOpenST()
-		SetSliderDialogStartValue(BM_InsurCostBase)
+		SetSliderDialogStartValue(BM_InsuranceCostBase)
 		SetSliderDialogDefaultValue(3500.0)
 		SetSliderDialogRange(0.0, 10000.0)
 		SetSliderDialogInterval(25.0)
 	endEvent
 	event OnSliderAcceptST(float value)
-		BM_InsurCostBase = value
-		SetSliderOptionValueST(BM_InsurCostBase, "{0} gold")
-		BM_InsurCost.setValue(BM_InsurCostBase * licenses.insuranceMisbehaviourMultiplier * licenses.insurancePopularityMultiplier)
+		BM_InsuranceCostBase = value
+		SetSliderOptionValueST(BM_InsuranceCostBase, "{0} gold")
+		BM_InsuranceCost.setValue(BM_InsuranceCostBase * licenses.insuranceMisbehaviourMultiplier * licenses.insurancePopularityMultiplier)
         updateGlobals()
 	endEvent
 	event OnDefaultST()
-		BM_InsurCostBase = 3500.0
-		BM_InsurCost.setValue(BM_InsurCostBase)
-		SetSliderOptionValueST(BM_InsurCostBase, "{0} gold")
+		BM_InsuranceCostBase = 3500.0
+		BM_InsuranceCost.setValue(BM_InsuranceCostBase)
+		SetSliderOptionValueST(BM_InsuranceCostBase, "{0} gold")
 	endEvent
 	event OnHighlightST()
-		SetInfoText("$LPO_BM_InsurCostBaseHighlight")
+		SetInfoText("$LPO_BM_InsuranceCostBaseHighlight")
 	endEvent
 endState
 
-state BM_InsurDurationST
+state BM_InsuranceDurationST
 	event OnSliderOpenST()
-		SetSliderDialogStartValue(BM_InsurDuration.getValue())
+		SetSliderDialogStartValue(BM_InsuranceDuration.getValue())
 		SetSliderDialogDefaultValue(5.0)
 		SetSliderDialogRange(1.0, 60.0)
 		SetSliderDialogInterval(1.0)
 	endEvent
 	event OnSliderAcceptST(float value)
-		BM_InsurDuration.SetValue(value)
-		SetSliderOptionValueST(BM_InsurDuration.GetValue(), "{0} day(s)")
+		BM_InsuranceDuration.SetValue(value)
+		SetSliderOptionValueST(BM_InsuranceDuration.GetValue(), "{0} day(s)")
 	endEvent
 	event OnDefaultST()
-		BM_InsurDuration.SetValue(5.0)
-		SetSliderOptionValueST(BM_InsurDuration.GetValue(), "{0} day(s)")
+		BM_InsuranceDuration.SetValue(5.0)
+		SetSliderOptionValueST(BM_InsuranceDuration.GetValue(), "{0} day(s)")
 	endEvent
 endState
 
@@ -2234,43 +2220,22 @@ String Function GetBoolString(Bool varb, String id = "")
 EndFunction
 
 Function recalculateCosts()
-	BM_ALCostLT.SetValue((BM_ALCost.GetValue() * LifetimeMultiplier) as int)
-	BM_BLCostLT.SetValue((BM_BLCost.GetValue() * LifetimeMultiplier) as int)
-	BM_CLCostLT.SetValue((BM_CLCost.GetValue() * LifetimeMultiplier) as int)
-	BM_MLCostLT.SetValue((BM_MLCost.GetValue() * LifetimeMultiplier) as int)
-	BM_WLCostLT.SetValue((BM_WLCost.GetValue() * LifetimeMultiplier) as int)
-	BM_CrfLCostLT.SetValue((BM_CrfLCost.GetValue() * LifetimeMultiplier) as int)
-	BM_TLCostLT.SetValue((BM_TLCost.GetValue() * LifetimeMultiplier) as int)
-	BM_WhLCostLT.SetValue((BM_WhLCost.GetValue() * LifetimeMultiplier) as int)
-	BM_TPCostLT.SetValue((BM_TPCost.GetValue() * LifetimeMultiplier) as int)
-	BM_CuECostLT.SetValue((BM_CuECost.GetValue() * LifetimeMultiplier) as int)
+	int i = bmlUtility.BM_LicenseCostsLT.GetSize()
+
+	while i
+		i -= 1
+		(bmlUtility.BM_LicenseCostsLT.GetAt(i) as GlobalVariable).SetValue(((bmlUtility.BM_LicenseCosts.GetAt(i) as GlobalVariable).GetValue() * LifetimeMultiplier) as int)
+	endWhile
 EndFunction
 
 Function updateGlobals()
-    licenses.UpdateCurrentInstanceGlobal(BM_ALCost)
-    licenses.UpdateCurrentInstanceGlobal(BM_BLCost)
-    licenses.UpdateCurrentInstanceGlobal(BM_CLCost)
-    licenses.UpdateCurrentInstanceGlobal(BM_MLCost)
-    licenses.UpdateCurrentInstanceGlobal(BM_WLCost)
-	licenses.UpdateCurrentInstanceGlobal(BM_CrfLCost)
-	licenses.UpdateCurrentInstanceGlobal(BM_TLCost)
-	licenses.UpdateCurrentInstanceGlobal(BM_WhLCost)
-	licenses.UpdateCurrentInstanceGlobal(BM_TPCost)
-	licenses.UpdateCurrentInstanceGlobal(BM_CECost)
-	licenses.UpdateCurrentInstanceGlobal(BM_InsurCost)
-	licenses.UpdateCurrentInstanceGlobal(BM_CuECost)
+	int i = bmlUtility.BM_LicenseCosts.GetSize()
 
-	licenses.UpdateCurrentInstanceGlobal(BM_ALCostLT)
-    licenses.UpdateCurrentInstanceGlobal(BM_BLCostLT)
-    licenses.UpdateCurrentInstanceGlobal(BM_CLCostLT)
-    licenses.UpdateCurrentInstanceGlobal(BM_MLCostLT)
-    licenses.UpdateCurrentInstanceGlobal(BM_WLCostLT)
-	licenses.UpdateCurrentInstanceGlobal(BM_CrfLCostLT)
-	licenses.UpdateCurrentInstanceGlobal(BM_TLCostLT)
-	licenses.UpdateCurrentInstanceGlobal(BM_WhLCostLT)
-	licenses.UpdateCurrentInstanceGlobal(BM_TPCostLT)
-	licenses.UpdateCurrentInstanceGlobal(BM_CECostLT)
-	licenses.UpdateCurrentInstanceGlobal(BM_CuECostLT)
+	while i
+		i -= 1
+		licenses.UpdateCurrentInstanceGlobal(bmlUtility.BM_LicenseCosts.GetAt(i) as GlobalVariable)
+		licenses.UpdateCurrentInstanceGlobal(bmlUtility.BM_LicenseCostsLT.GetAt(i) as GlobalVariable)
+	endWhile
 EndFunction
 
 Bool Function exportConfig()
@@ -2327,21 +2292,21 @@ Bool Function exportConfig()
 
 	; Primary Licenses
 	SetIntValue(config, "isArmorLicenseFeatureEnabled", isArmorLicenseFeatureEnabled)
-	SetFloatValue(config, "BM_ALCost", BM_ALCost.getValue())
-	SetFloatValue(config, "BM_ALDuration", BM_ALDuration.getValue())
+	SetFloatValue(config, "BM_ArmorCost", BM_ArmorCost.getValue())
+	SetFloatValue(config, "BM_ArmorDuration", BM_ArmorDuration.getValue())
 	SetIntValue(config, "ALClothingImmunity", ALClothingImmunity as int)
 	SetIntValue(config, "isBikiniLicenseFeatureEnabled", isBikiniLicenseFeatureEnabled)
-	SetFloatValue(config, "BM_BLCost", BM_BLCost.getValue())
-	SetFloatValue(config, "BM_BLDuration", BM_BLDuration.getValue())
+	SetFloatValue(config, "BM_BikiniCost", BM_BikiniCost[0].getValue())
+	SetFloatValue(config, "BM_BikiniDuration", BM_BikiniDuration[0].getValue())
 	SetIntValue(config, "isBikiniArmorFeatureEnabled", isBikiniArmorFeatureEnabled as int)
 	SetIntValue(config, "isBikiniClothingFeatureEnabled", isBikiniClothingFeatureEnabled as int)
 	SetStringValue(config, "bikiniKeywordString", bikiniKeywordString)
 	SetIntValue(config, "isClothingLicenseFeatureEnabled", isClothingLicenseFeatureEnabled)
-	SetFloatValue(config, "BM_CLCost", BM_CLCost.getValue())
-	SetFloatValue(config, "BM_CLDuration", BM_CLDuration.getValue())
+	SetFloatValue(config, "BM_ClothingCost", BM_ClothingCost.getValue())
+	SetFloatValue(config, "BM_ClothingDuration", BM_ClothingDuration.getValue())
 	SetIntValue(config, "isMagicLicenseFeatureEnabled", isMagicLicenseFeatureEnabled)
-	SetFloatValue(config, "BM_MLCost", BM_MLCost.getValue())
-	SetFloatValue(config, "BM_MLDuration", BM_MLDuration.getValue())
+	SetFloatValue(config, "BM_MagicCost", BM_MagicCost.getValue())
+	SetFloatValue(config, "BM_MagicDuration", BM_MagicDuration.getValue())
 	SetIntValue(config, "isEnchantedArmorFeatureEnabled", isEnchantedArmorFeatureEnabled as int)
 	SetIntValue(config, "isEnchantedClothingFeatureEnabled", isEnchantedClothingFeatureEnabled as int)
 	SetIntValue(config, "isEnchantedJewelryFeatureEnabled", isEnchantedJewelryFeatureEnabled as int)
@@ -2349,40 +2314,40 @@ Bool Function exportConfig()
 	SetIntValue(config, "NullifyMagickaSource", NullifyMagickaSource)
 	SetIntValue(config, "NullifyMagickaEnforce", NullifyMagickaEnforce as int)
 	SetIntValue(config, "isWeaponLicenseFeatureEnabled", isWeaponLicenseFeatureEnabled)
-	SetFloatValue(config, "BM_WLCost", BM_WLCost.getValue())
-	SetFloatValue(config, "BM_WLDuration", BM_WLDuration.getValue())
+	SetFloatValue(config, "BM_WeaponCost", BM_WeaponCost.getValue())
+	SetFloatValue(config, "BM_WeaponDuration", BM_WeaponDuration.getValue())
 	SetIntValue(config, "isWeaponAmmoFeatureEnabled", isWeaponAmmoFeatureEnabled as int)
 
 	; Secondary Licenses
 	SetIntValue(config, "isCraftingLicenseFeatureEnabled", isCraftingLicenseFeatureEnabled)
-	SetFloatValue(config, "BM_CrfLCost", BM_CrfLCost.getValue())
-	SetFloatValue(config, "BM_CrfLDuration", BM_CrfLDuration.getValue())
+	SetFloatValue(config, "BM_CraftingCost", BM_CraftingCost.getValue())
+	SetFloatValue(config, "BM_CraftingDuration", BM_CraftingDuration.getValue())
 	SetIntValue(config, "isTradingLicenseFeatureEnabled", isTradingLicenseFeatureEnabled)
-	SetFloatValue(config, "BM_TLCost", BM_TLCost.getValue())
-	SetFloatValue(config, "BM_TLDuration", BM_TLDuration.getValue())
+	SetFloatValue(config, "BM_TradingCost", BM_TradingCost.getValue())
+	SetFloatValue(config, "BM_TradingDuration", BM_TradingDuration.getValue())
 	SetIntValue(config, "isCurfewExemptionFeatureEnabled", isCurfewExemptionFeatureEnabled)
-	SetFloatValue(config, "BM_CuECost", BM_CuECost.getValue())
-	SetFloatValue(config, "BM_CuEDuration", BM_CuEDuration.getValue())
+	SetFloatValue(config, "BM_CurfewCost", BM_CurfewCost.getValue())
+	SetFloatValue(config, "BM_CurfewDuration", BM_CurfewDuration.getValue())
 	SetFloatValue(config, "BM_CurfewStart", BM_CurfewStart.getValue())
 	SetFloatValue(config, "BM_CurfewEnd", BM_CurfewEnd.getValue())
 	SetIntValue(config, "isTravelPermitFeatureEnabled", isTravelPermitFeatureEnabled)
-	SetFloatValue(config, "BM_TPCost", BM_TPCost.getValue())
-	SetFloatValue(config, "BM_TPDuration", BM_TPDuration.getValue())
+	SetFloatValue(config, "BM_TravelCost", BM_TravelCost.getValue())
+	SetFloatValue(config, "BM_TravelDuration", BM_TravelDuration.getValue())
 	SetFloatValue(config, "BM_FollowerMale", BM_FollowerMale.GetValue())
 	SetFloatValue(config, "BM_FollowerFemale", BM_FollowerFemale.GetValue())
 	SetIntValue(config, "isInsuranceFeatureEnabled", isInsuranceFeatureEnabled)
-	SetFloatValue(config, "BM_InsurCostBase", BM_InsurCostBase)
-	SetFloatValue(config, "BM_InsurDuration", BM_InsurDuration.getValue())
+	SetFloatValue(config, "BM_InsuranceCostBase", BM_InsuranceCostBase)
+	SetFloatValue(config, "BM_InsuranceDuration", BM_InsuranceDuration.getValue())
 	SetIntValue(config, "invertPopularityMultiplier", invertPopularityMultiplier as int)
 	SetIntValue(config, "thaneImmunityInsurance", thaneImmunityInsurance as int)
 
 	; Tertiary Licenses
 	SetIntValue(config, "isWhoreLicenseFeatureEnabled", isWhoreLicenseFeatureEnabled)
-	SetFloatValue(config, "BM_WhLCost", BM_WhLCost.getValue())
-	SetFloatValue(config, "BM_WhLDuration", BM_WhLDuration.getValue())
+	SetFloatValue(config, "BM_WhoreCost", BM_WhoreCost.getValue())
+	SetFloatValue(config, "BM_WhoreDuration", BM_WhoreDuration.getValue())
 	SetIntValue(config, "isCollarExemptionFeatureEnabled", isCollarExemptionFeatureEnabled)
-	SetFloatValue(config, "BM_CECost", BM_CECost.getValue())
-	SetFloatValue(config, "BM_CEDuration", BM_CEDuration.getValue())
+	SetFloatValue(config, "BM_CollarCost", BM_CollarCost.getValue())
+	SetFloatValue(config, "BM_CollarDuration", BM_CollarDuration.getValue())
 
 	; Slot Filtering
 	IntListCopy(config, "ArmorSlotArray", ArmorSlotArray)
@@ -2485,21 +2450,23 @@ Bool Function importConfig(Bool abSilent = false)
 
 	; Primary Licenses
 	isArmorLicenseFeatureEnabled = GetIntValue(config, "isArmorLicenseFeatureEnabled", isArmorLicenseFeatureEnabled)
-	BM_ALCost.SetValue(GetFloatValue(config, "BM_ALCost", BM_ALCost.getValue()))
-	BM_ALDuration.SetValue(GetFloatValue(config, "BM_ALDuration", BM_ALDuration.getValue()))
+	BM_ArmorCost.SetValue(GetFloatValue(config, "BM_ArmorCost", BM_ArmorCost.getValue()))
+	BM_ArmorDuration.SetValue(GetFloatValue(config, "BM_ArmorDuration", BM_ArmorDuration.getValue()))
 	ALClothingImmunity = GetIntValue(config, "ALClothingImmunity", ALClothingImmunity as int) as Bool
 	isBikiniLicenseFeatureEnabled = GetIntValue(config, "isBikiniLicenseFeatureEnabled", isBikiniLicenseFeatureEnabled)
-	BM_BLCost.SetValue(GetFloatValue(config, "BM_BLCost", BM_BLCost.getValue()))
-	BM_BLDuration.SetValue(GetFloatValue(config, "BM_BLDuration", BM_BLDuration.getValue()))
+	BM_BikiniCost[0].SetValue(GetFloatValue(config, "BM_BikiniCost", BM_BikiniCost[0].getValue()))
+	BM_BikiniCost[1].SetValue(BM_BikiniCost[0].getValue())
+	BM_BikiniDuration[0].SetValue(GetFloatValue(config, "BM_BikiniDuration", BM_BikiniDuration[0].getValue()))
+	BM_BikiniDuration[1].SetValue(BM_BikiniDuration[0].getValue())
 	isBikiniArmorFeatureEnabled = GetFloatValue(config, "isBikiniArmorFeatureEnabled", isBikiniArmorFeatureEnabled as int) as Bool
 	isBikiniClothingFeatureEnabled = GetIntValue(config, "isBikiniClothingFeatureEnabled", isBikiniClothingFeatureEnabled as int) as Bool
 	bikiniKeywordString = GetStringValue(config, "bikiniKeywordString", bikiniKeywordString)
 	isClothingLicenseFeatureEnabled = GetIntValue(config, "isClothingLicenseFeatureEnabled", isClothingLicenseFeatureEnabled)
-	BM_CLCost.SetValue(GetFloatValue(config, "BM_CLCost", BM_CLCost.getValue()))
-	BM_CLDuration.SetValue(GetFloatValue(config, "BM_CLDuration", BM_CLDuration.getValue()))
+	BM_ClothingCost.SetValue(GetFloatValue(config, "BM_ClothingCost", BM_ClothingCost.getValue()))
+	BM_ClothingDuration.SetValue(GetFloatValue(config, "BM_ClothingDuration", BM_ClothingDuration.getValue()))
 	isMagicLicenseFeatureEnabled = GetIntValue(config, "isMagicLicenseFeatureEnabled", isMagicLicenseFeatureEnabled)
-	BM_MLCost.SetValue(GetFloatValue(config, "BM_MLCost", BM_MLCost.getValue()))
-	BM_MLDuration.SetValue(GetFloatValue(config, "BM_MLDuration", BM_MLDuration.getValue()))
+	BM_MagicCost.SetValue(GetFloatValue(config, "BM_MagicCost", BM_MagicCost.getValue()))
+	BM_MagicDuration.SetValue(GetFloatValue(config, "BM_MagicDuration", BM_MagicDuration.getValue()))
 	isEnchantedArmorFeatureEnabled = GetIntValue(config, "isEnchantedArmorFeatureEnabled", isEnchantedArmorFeatureEnabled as int) as Bool
 	isEnchantedClothingFeatureEnabled = GetIntValue(config, "isEnchantedClothingFeatureEnabled", isEnchantedClothingFeatureEnabled as int) as Bool
 	isEnchantedJewelryFeatureEnabled = GetIntValue(config, "isEnchantedJewelryFeatureEnabled", isEnchantedJewelryFeatureEnabled as int) as Bool
@@ -2507,40 +2474,40 @@ Bool Function importConfig(Bool abSilent = false)
 	NullifyMagickaSource = GetIntValue(config, "NullifyMagickaSource", NullifyMagickaSource)
 	NullifyMagickaEnforce = GetIntValue(config, "NullifyMagickaEnforce", NullifyMagickaEnforce as int)
 	isWeaponLicenseFeatureEnabled = GetIntValue(config, "isWeaponLicenseFeatureEnabled", isWeaponLicenseFeatureEnabled)
-	BM_WLCost.SetValue(GetFloatValue(config, "BM_WLCost", BM_WLCost.getValue()))
-	BM_WLDuration.SetValue(GetFloatValue(config, "BM_WLDuration", BM_WLDuration.getValue()))
+	BM_WeaponCost.SetValue(GetFloatValue(config, "BM_WeaponCost", BM_WeaponCost.getValue()))
+	BM_WeaponDuration.SetValue(GetFloatValue(config, "BM_WeaponDuration", BM_WeaponDuration.getValue()))
 	isWeaponAmmoFeatureEnabled = SetIntValue(config, "isWeaponAmmoFeatureEnabled", isWeaponAmmoFeatureEnabled as int) as Bool
 
 	; Secondary Licenses
 	isCraftingLicenseFeatureEnabled = GetIntValue(config, "isCraftingLicenseFeatureEnabled", isCraftingLicenseFeatureEnabled)
-	BM_CrfLCost.SetValue(GetFloatValue(config, "BM_CrfLCost", BM_CrfLCost.getValue()))
-	BM_CrfLDuration.SetValue(GetFloatValue(config, "BM_CrfLDuration", BM_CrfLDuration.getValue()))
+	BM_CraftingCost.SetValue(GetFloatValue(config, "BM_CraftingCost", BM_CraftingCost.getValue()))
+	BM_CraftingDuration.SetValue(GetFloatValue(config, "BM_CraftingDuration", BM_CraftingDuration.getValue()))
 	isTradingLicenseFeatureEnabled = GetIntValue(config, "isTradingLicenseFeatureEnabled", isTradingLicenseFeatureEnabled)
-	BM_TLCost.SetValue(GetFloatValue(config, "BM_TLCost", BM_TLCost.getValue()))
-	BM_TLDuration.SetValue(GetFloatValue(config, "BM_TLDuration", BM_TLDuration.getValue()))
+	BM_TradingCost.SetValue(GetFloatValue(config, "BM_TradingCost", BM_TradingCost.getValue()))
+	BM_TradingDuration.SetValue(GetFloatValue(config, "BM_TradingDuration", BM_TradingDuration.getValue()))
 	isCurfewExemptionFeatureEnabled = GetIntValue(config, "isCurfewExemptionFeatureEnabled", isCurfewExemptionFeatureEnabled)
-	BM_CuECost.SetValue(GetFloatValue(config, "BM_CuECost", BM_CuECost.getValue()))
-	BM_CuEDuration.SetValue(GetFloatValue(config, "BM_CuEDuration", BM_CuEDuration.getValue()))
+	BM_CurfewCost.SetValue(GetFloatValue(config, "BM_CurfewCost", BM_CurfewCost.getValue()))
+	BM_CurfewDuration.SetValue(GetFloatValue(config, "BM_CurfewDuration", BM_CurfewDuration.getValue()))
 	BM_CurfewStart.SetValue(GetFloatValue(config, "BM_CurfewStart", BM_CurfewStart.getValue()))
 	BM_CurfewEnd.SetValue(GetFloatValue(config, "BM_CurfewEnd", BM_CurfewEnd.getValue()))
 	isTravelPermitFeatureEnabled = GetIntValue(config, "isTravelPermitFeatureEnabled", isTravelPermitFeatureEnabled)
-	BM_TPCost.SetValue(GetFloatValue(config, "BM_TPCost", BM_TPCost.getValue()))
-	BM_TPDuration.SetValue(GetFloatValue(config, "BM_TPDuration", BM_TPDuration.getValue()))
+	BM_TravelCost.SetValue(GetFloatValue(config, "BM_TravelCost", BM_TravelCost.getValue()))
+	BM_TravelDuration.SetValue(GetFloatValue(config, "BM_TravelDuration", BM_TravelDuration.getValue()))
 	BM_FollowerMale.SetValue(GetFloatValue(config, "BM_FollowerMale", BM_FollowerMale.GetValue()))
 	BM_FollowerFemale.SetValue(GetFloatValue(config, "BM_FollowerFemale", BM_FollowerFemale.GetValue()))
 	isInsuranceFeatureEnabled = GetIntValue(config, "isInsuranceFeatureEnabled", isInsuranceFeatureEnabled)
-	BM_InsurCostBase = GetFloatValue(config, "BM_InsurCostBase", BM_InsurCostBase)
-	BM_InsurDuration.SetValue(GetFloatValue(config, "BM_InsurDuration", BM_InsurDuration.getValue()))
+	BM_InsuranceCostBase = GetFloatValue(config, "BM_InsuranceCostBase", BM_InsuranceCostBase)
+	BM_InsuranceDuration.SetValue(GetFloatValue(config, "BM_InsuranceDuration", BM_InsuranceDuration.getValue()))
 	invertPopularityMultiplier = GetIntValue(config, "invertPopularityMultiplier", invertPopularityMultiplier as int) as Bool
 	thaneImmunityInsurance = GetIntValue(config, "thaneImmunityInsurance", thaneImmunityInsurance as int) as Bool
 
 	; Tertiary Licenses
 	isWhoreLicenseFeatureEnabled = GetIntValue(config, "isWhoreLicenseFeatureEnabled", isWhoreLicenseFeatureEnabled)
-	BM_WhLCost.SetValue(GetFloatValue(config, "BM_WhLCost", BM_WhLCost.getValue()))
-	BM_WhLDuration.SetValue(GetFloatValue(config, "BM_WhLDuration", BM_WhLDuration.getValue()))
+	BM_WhoreCost.SetValue(GetFloatValue(config, "BM_WhoreCost", BM_WhoreCost.getValue()))
+	BM_WhoreDuration.SetValue(GetFloatValue(config, "BM_WhoreDuration", BM_WhoreDuration.getValue()))
 	isCollarExemptionFeatureEnabled = GetIntValue(config, "isCollarExemptionFeatureEnabled", isCollarExemptionFeatureEnabled)
-	BM_CECost.SetValue(GetFloatValue(config, "BM_CECost", BM_CECost.getValue()))
-	BM_CEDuration.SetValue(GetFloatValue(config, "BM_CEDuration", BM_CEDuration.getValue()))
+	BM_CollarCost.SetValue(GetFloatValue(config, "BM_CollarCost", BM_CollarCost.getValue()))
+	BM_CollarDuration.SetValue(GetFloatValue(config, "BM_CollarDuration", BM_CollarDuration.getValue()))
 
 	; Slot Filtering
 	ArmorSlotArray = IntListToArray(config, "ArmorSlotArray")
