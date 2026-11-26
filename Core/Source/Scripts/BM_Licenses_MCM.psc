@@ -757,9 +757,9 @@ endState
 state isCheckIntervalFeatureEnabledST
 	event OnSelectST()
 		isCheckIntervalFeatureEnabled = !isCheckIntervalFeatureEnabled
+        bmlUtility.refreshIntervalCheckFeature()
 		SetOptionFlagsST((!isCheckIntervalFeatureEnabled) as int, true, "checkIntervalST")
 		SetToggleOptionValueST(isCheckIntervalFeatureEnabled)
-        bmlUtility.refreshIntervalCheckFeature()
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_isCheckIntervalFeatureEnabledHighlight")
@@ -775,8 +775,8 @@ state checkIntervalST
 	endEvent
 	event OnSliderAcceptST(float value)
 		checkInterval = value as int
-		SetSliderOptionValueST(checkInterval, "{0} seconds")
         bmlUtility.refreshIntervalCheckFeature()
+		SetSliderOptionValueST(checkInterval, "{0} seconds")
 	endEvent
 	event OnDefaultST()
 		checkInterval = 45.0
@@ -790,8 +790,8 @@ endState
 state isCheckLOSFeatureEnabledST
 	event OnSelectST()
 		isCheckLOSFeatureEnabled = !isCheckLOSFeatureEnabled
-		SetToggleOptionValueST(isCheckLOSFeatureEnabled)
         bmlUtility.licenseDetectionQuest.stop()
+		SetToggleOptionValueST(isCheckLOSFeatureEnabled)
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_isCheckLOSFeatureEnabledHighlight")
@@ -807,8 +807,8 @@ state LicenseEnforcerCountST
 	endEvent
 	event OnSliderAcceptST(float value)
 		LicenseEnforcerCount = value as int
-		SetSliderOptionValueST(LicenseEnforcerCount)
         bmlUtility.licenseDetectionQuest.stop()
+		SetSliderOptionValueST(LicenseEnforcerCount)
 	endEvent
 	event OnDefaultST()
 		LicenseEnforcerCount = 3.0
@@ -827,8 +827,8 @@ state licenseSellerST
 	endEvent
 	event OnMenuAcceptST(int index)
 		licenseSellerFaction = index
-		SetMenuOptionValueST(sellerList[licenseSellerFaction])
 		bmlUtility.refreshLicenseSeller()
+		SetMenuOptionValueST(sellerList[licenseSellerFaction])
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_licenseSellerHighlight")
@@ -941,8 +941,8 @@ endState
 state isLimitToCityEnabledST
 	event OnSelectST()
 		isLimitToCityEnabled = !isLimitToCityEnabled
-		SetToggleOptionValueST(isLimitToCityEnabled)
 		SessionModified = true
+		SetToggleOptionValueST(isLimitToCityEnabled)
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_isLimitToCityEnabledHighlight")
@@ -952,8 +952,8 @@ endState
 state isLimitToCitySpaceEnabledST
 	event OnSelectST()
 		isLimitToCitySpaceEnabled = !isLimitToCitySpaceEnabled
-		SetToggleOptionValueST(isLimitToCitySpaceEnabled)
 		SessionModified = true
+		SetToggleOptionValueST(isLimitToCitySpaceEnabled)
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_isLimitToCitySpaceEnabledHighlight")
@@ -963,8 +963,8 @@ endState
 state isLimitToTownEnabledST
 	event OnSelectST()
 		isLimitToTownEnabled = !isLimitToTownEnabled
-		SetToggleOptionValueST(isLimitToTownEnabled)
 		SessionModified = true
+		SetToggleOptionValueST(isLimitToTownEnabled)
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_isLimitToTownEnabledHighlight")
@@ -1016,8 +1016,8 @@ endState
 state thaneImmunityUniversalST
 	event OnSelectST()
 		thaneImmunityUniversal = !thaneImmunityUniversal
-		SetToggleOptionValueST(thaneImmunityUniversal)
 		SessionModified = true
+		SetToggleOptionValueST(thaneImmunityUniversal)
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_thaneImmunityUniversalHighlight")
@@ -1033,8 +1033,8 @@ state LicenseLimitST
 	endEvent
 	event OnSliderAcceptST(float value)
 		LicenseLimit = value as int
-		SetSliderOptionValueST(LicenseLimit, "{0}")
 		bmlUtility.refreshActivationLimit()
+		SetSliderOptionValueST(LicenseLimit, "{0}")
 	endEvent
 	event OnDefaultST()
 		LicenseLimit = 0
@@ -1074,9 +1074,9 @@ state LifetimeMultiplierST
 	endEvent
 	event OnSliderAcceptST(float value)
 		LifetimeMultiplier = value
-		SetSliderOptionValueST(LifetimeMultiplier, "{1}x")
 		recalculateCosts()
 		updateGlobals()
+		SetSliderOptionValueST(LifetimeMultiplier, "{1}x")
 	endEvent
 	event OnDefaultST()
 		LifetimeMultiplier = 1.0
@@ -1100,6 +1100,8 @@ endState
 state LicenseTerritoriesST
 	event OnSelectST()
 		LicenseTerritories = !LicenseTerritories
+		reallocateLocs()
+		SessionModified = True
 		SetToggleOptionValueST(LicenseTerritories)
 	endEvent
 	event OnHighlightST()
@@ -1160,8 +1162,8 @@ endState
 state isArmorLicenseFeatureEnabledST
 	event OnSelectST()
 		isArmorLicenseFeatureEnabled = (!isArmorLicenseFeatureEnabled) as int
-		SetTextOptionValueST(GetBoolString(isArmorLicenseFeatureEnabled))
 		SessionModified = true
+		SetTextOptionValueST(GetBoolString(isArmorLicenseFeatureEnabled))
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_isArmorLicenseFeatureEnabledHighlight")
@@ -1177,9 +1179,9 @@ state BM_ArmorCostST
 	endEvent
 	event OnSliderAcceptST(float value)
 		BM_ArmorCost.setValue(value)
-		SetSliderOptionValueST(BM_ArmorCost.getValue(), "{0} gold")
 		recalculateCosts()
         updateGlobals()
+		SetSliderOptionValueST(BM_ArmorCost.getValue(), "{0} gold")
 	endEvent
 	event OnDefaultST()
 		BM_ArmorCost.setValue(2000.0)
@@ -1207,8 +1209,8 @@ endState
 state ALClothingImmunityST
 	event OnSelectST()
 		ALClothingImmunity = !ALClothingImmunity
-		SetToggleOptionValueST(ALClothingImmunity)
 		SessionModified = true
+		SetToggleOptionValueST(ALClothingImmunity)
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_ALClothingImmunityHighlight")
@@ -1243,9 +1245,9 @@ state BM_BikiniCostST
 	event OnSliderAcceptST(float value)
 		BM_BikiniCost[0].setValue(value)
 		BM_BikiniCost[1].setValue(value)
-		SetSliderOptionValueST(BM_BikiniCost[0].getValue(), "{0} gold")
 		recalculateCosts()
         updateGlobals()
+		SetSliderOptionValueST(BM_BikiniCost[0].getValue(), "{0} gold")
 	endEvent
 	event OnDefaultST()
 		BM_BikiniCost[0].setValue(1250.0)
@@ -1276,8 +1278,8 @@ endState
 state isBikiniArmorFeatureEnabledST
 	event OnSelectST()
 		isBikiniArmorFeatureEnabled = !isBikiniArmorFeatureEnabled
-		SetToggleOptionValueST(isBikiniArmorFeatureEnabled)
 		SessionModified = true
+		SetToggleOptionValueST(isBikiniArmorFeatureEnabled)
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_isBikiniArmorFeatureEnabledHighlight")
@@ -1287,8 +1289,8 @@ endState
 state isBikiniClothingFeatureEnabledST
 	event OnSelectST()
 		isBikiniClothingFeatureEnabled = !isBikiniClothingFeatureEnabled
-		SetToggleOptionValueST(isBikiniClothingFeatureEnabled)
 		SessionModified = true
+		SetToggleOptionValueST(isBikiniClothingFeatureEnabled)
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_isBikiniClothingFeatureEnabledHighlight")
@@ -1312,8 +1314,8 @@ endState
 state isClothingLicenseFeatureEnabledST
 	event OnSelectST()
 		isClothingLicenseFeatureEnabled = (!isClothingLicenseFeatureEnabled) as int
-		SetTextOptionValueST(GetBoolString(isClothingLicenseFeatureEnabled))
 		SessionModified = true
+		SetTextOptionValueST(GetBoolString(isClothingLicenseFeatureEnabled))
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_isClothingLicenseFeatureEnabledHighlight")
@@ -1329,9 +1331,9 @@ state BM_ClothingCostST
 	endEvent
 	event OnSliderAcceptST(float value)
 		BM_ClothingCost.setValue(value)
-		SetSliderOptionValueST(BM_ClothingCost.getValue(), "{0} gold")
 		recalculateCosts()
         updateGlobals()
+		SetSliderOptionValueST(BM_ClothingCost.getValue(), "{0} gold")
 	endEvent
 	event OnDefaultST()
 		BM_ClothingCost.setValue(650.0)
@@ -1359,8 +1361,8 @@ endState
 state isMagicLicenseFeatureEnabledST
 	event OnSelectST()
 		isMagicLicenseFeatureEnabled = (!isMagicLicenseFeatureEnabled) as int
-		SetTextOptionValueST(GetBoolString(isMagicLicenseFeatureEnabled))
 		SessionModified = true
+		SetTextOptionValueST(GetBoolString(isMagicLicenseFeatureEnabled))
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_isMagicLicenseFeatureEnabledHighlight")
@@ -1376,9 +1378,9 @@ state BM_MagicCostST
 	endEvent
 	event OnSliderAcceptST(float value)
 		BM_MagicCost.setValue(value)
-		SetSliderOptionValueST(BM_MagicCost.getValue(), "{0} gold")
 		recalculateCosts()
         updateGlobals()
+		SetSliderOptionValueST(BM_MagicCost.getValue(), "{0} gold")
 	endEvent
 	event OnDefaultST()
 		BM_MagicCost.setValue(1500.0)
@@ -1406,8 +1408,8 @@ endState
 state isEnchantedJewelryFeatureEnabledST
 	event OnSelectST()
 		isEnchantedJewelryFeatureEnabled = !isEnchantedJewelryFeatureEnabled
-		SetToggleOptionValueST(isEnchantedJewelryFeatureEnabled)
 		SessionModified = true
+		SetToggleOptionValueST(isEnchantedJewelryFeatureEnabled)
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_isEnchantedJewelryFeatureEnabledHighlight")
@@ -1417,8 +1419,8 @@ endState
 state isEnchantedClothingFeatureEnabledST
 	event OnSelectST()
 		isEnchantedClothingFeatureEnabled = !isEnchantedClothingFeatureEnabled
-		SetToggleOptionValueST(isEnchantedClothingFeatureEnabled)
 		SessionModified = true
+		SetToggleOptionValueST(isEnchantedClothingFeatureEnabled)
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_isEnchantedClothingFeatureEnabledHighlight")
@@ -1428,8 +1430,8 @@ endState
 state isEnchantedArmorFeatureEnabledST
 	event OnSelectST()
 		isEnchantedArmorFeatureEnabled = !isEnchantedArmorFeatureEnabled
-		SetToggleOptionValueST(isEnchantedArmorFeatureEnabled)
 		SessionModified = true
+		SetToggleOptionValueST(isEnchantedArmorFeatureEnabled)
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_isEnchantedArmorFeatureEnabledHighlight")
@@ -1439,8 +1441,8 @@ endState
 state isEnchantedWeaponryFeatureEnabledST
 	event OnSelectST()
 		isEnchantedWeaponryFeatureEnabled = !isEnchantedWeaponryFeatureEnabled
-		SetToggleOptionValueST(isEnchantedWeaponryFeatureEnabled)
 		SessionModified = true
+		SetToggleOptionValueST(isEnchantedWeaponryFeatureEnabled)
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_isEnchantedWeaponryFeatureEnabledHighlight")
@@ -1476,8 +1478,8 @@ endState
 state isWeaponLicenseFeatureEnabledST
 	event OnSelectST()
 		isWeaponLicenseFeatureEnabled = (!isWeaponLicenseFeatureEnabled) as int
-		SetTextOptionValueST(GetBoolString(isWeaponLicenseFeatureEnabled))
 		SessionModified = true
+		SetTextOptionValueST(GetBoolString(isWeaponLicenseFeatureEnabled))
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_isWeaponLicenseFeatureEnabledHighlight")
@@ -1493,9 +1495,9 @@ state BM_WeaponCostST
 	endEvent
 	event OnSliderAcceptST(float value)
 		BM_WeaponCost.setValue(value)
-		SetSliderOptionValueST(BM_WeaponCost.getValue(), "{0} gold")
 		recalculateCosts()
         updateGlobals()
+		SetSliderOptionValueST(BM_WeaponCost.getValue(), "{0} gold")
 	endEvent
 	event OnDefaultST()
 		BM_WeaponCost.setValue(1500.0)
@@ -1523,8 +1525,8 @@ endState
 state isWeaponAmmoFeatureEnabledST
 	event OnSelectST()
 		isWeaponAmmoFeatureEnabled = !isWeaponAmmoFeatureEnabled
-		SetToggleOptionValueST(isWeaponAmmoFeatureEnabled)
 		SessionModified = true
+		SetToggleOptionValueST(isWeaponAmmoFeatureEnabled)
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_isWeaponAmmoFeatureEnabledHighlight")
@@ -1534,8 +1536,8 @@ endState
 state isCraftingLicenseFeatureEnabledST
 	event OnSelectST()
 		isCraftingLicenseFeatureEnabled = (!isCraftingLicenseFeatureEnabled) as int
-		SetTextOptionValueST(GetBoolString(isCraftingLicenseFeatureEnabled))
 		SessionModified = true
+		SetTextOptionValueST(GetBoolString(isCraftingLicenseFeatureEnabled))
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_isCraftingLicenseFeatureEnabledHighlight")
@@ -1551,9 +1553,9 @@ state BM_CraftingCostST
 	endEvent
 	event OnSliderAcceptST(float value)
 		BM_CraftingCost.setValue(value)
-		SetSliderOptionValueST(BM_CraftingCost.getValue(), "{0} gold")
 		recalculateCosts()
         updateGlobals()
+		SetSliderOptionValueST(BM_CraftingCost.getValue(), "{0} gold")
 	endEvent
 	event OnDefaultST()
 		BM_CraftingCost.setValue(1000.0)
@@ -1581,8 +1583,8 @@ endState
 state isTradingLicenseFeatureEnabledST
 	event OnSelectST()
 		isTradingLicenseFeatureEnabled = (!isTradingLicenseFeatureEnabled) as int
-		SetTextOptionValueST(GetBoolString(isTradingLicenseFeatureEnabled))
 		SessionModified = true
+		SetTextOptionValueST(GetBoolString(isTradingLicenseFeatureEnabled))
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_isTradingLicenseFeatureEnabledHighlight")
@@ -1598,9 +1600,9 @@ state BM_TradingCostST
 	endEvent
 	event OnSliderAcceptST(float value)
 		BM_TradingCost.setValue(value)
-		SetSliderOptionValueST(BM_TradingCost.getValue(), "{0} gold")
 		recalculateCosts()
         updateGlobals()
+		SetSliderOptionValueST(BM_TradingCost.getValue(), "{0} gold")
 	endEvent
 	event OnDefaultST()
 		BM_TradingCost.setValue(1000.0)
@@ -1628,8 +1630,8 @@ endState
 state isCurfewExemptionFeatureEnabledST
 	event OnSelectST()
 		isCurfewExemptionFeatureEnabled = (!isCurfewExemptionFeatureEnabled) as int
-		SetTextOptionValueST(GetBoolString(isCurfewExemptionFeatureEnabled))
 		SessionModified = true
+		SetTextOptionValueST(GetBoolString(isCurfewExemptionFeatureEnabled))
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_isCurfewExemptionFeatureEnabledHighlight")
@@ -1645,9 +1647,9 @@ state BM_CurfewCostST
 	endEvent
 	event OnSliderAcceptST(float value)
 		BM_CurfewCost.setValue(value)
-		SetSliderOptionValueST(BM_CurfewCost.getValue(), "{0} gold")
 		recalculateCosts()
         updateGlobals()
+		SetSliderOptionValueST(BM_CurfewCost.getValue(), "{0} gold")
 	endEvent
 	event OnDefaultST()
 		BM_CurfewCost.setValue(1000.0)
@@ -1715,8 +1717,8 @@ endState
 state isWhoreLicenseFeatureEnabledST
 	event OnSelectST()
 		isWhoreLicenseFeatureEnabled = (!isWhoreLicenseFeatureEnabled) as int
-		SetTextOptionValueST(GetBoolString(isWhoreLicenseFeatureEnabled))
 		SessionModified = true
+		SetTextOptionValueST(GetBoolString(isWhoreLicenseFeatureEnabled))
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_isWhoreLicenseFeatureEnabledHighlight")
@@ -1732,9 +1734,9 @@ state BM_WhoreCostST
 	endEvent
 	event OnSliderAcceptST(float value)
 		BM_WhoreCost.setValue(value)
-		SetSliderOptionValueST(BM_WhoreCost.getValue(), "{0} gold")
 		recalculateCosts()
         updateGlobals()
+		SetSliderOptionValueST(BM_WhoreCost.getValue(), "{0} gold")
 	endEvent
 	event OnDefaultST()
 		BM_WhoreCost.setValue(500.0)
@@ -1762,13 +1764,13 @@ endState
 state isTravelPermitFeatureEnabledST
 	event OnSelectST()
 		isTravelPermitFeatureEnabled = (!isTravelPermitFeatureEnabled) as int
-		SetTextOptionValueST(GetBoolString(isTravelPermitFeatureEnabled))
 		if !isTravelPermitFeatureEnabled
 			bmlUtility.savedLoc = None
 			bmlUtility.savedSpace = None
 			licenses.isTravelViolation = 0
 		endIf
 		SessionModified = true
+		SetTextOptionValueST(GetBoolString(isTravelPermitFeatureEnabled))
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_isTravelPermitFeatureEnabledHighlight")
@@ -1784,9 +1786,9 @@ state BM_TravelCostST
 	endEvent
 	event OnSliderAcceptST(float value)
 		BM_TravelCost.setValue(value)
-		SetSliderOptionValueST(BM_TravelCost.getValue(), "{0} gold")
 		recalculateCosts()
         updateGlobals()
+		SetSliderOptionValueST(BM_TravelCost.getValue(), "{0} gold")
 	endEvent
 	event OnDefaultST()
 		BM_TravelCost.setValue(100.0)
@@ -1836,8 +1838,8 @@ endState
 state isCollarExemptionFeatureEnabledST
 	event OnSelectST()
 		isCollarExemptionFeatureEnabled = (!isCollarExemptionFeatureEnabled) as int
-		SetTextOptionValueST(GetBoolString(isCollarExemptionFeatureEnabled))
 		SessionModified = true
+		SetTextOptionValueST(GetBoolString(isCollarExemptionFeatureEnabled))
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_isCollarExemptionFeatureEnabledHighlight")
@@ -1853,9 +1855,9 @@ state BM_CollarCostST
 	endEvent
 	event OnSliderAcceptST(float value)
 		BM_CollarCost.setValue(value)
-		SetSliderOptionValueST(BM_CollarCost.getValue(), "{0} gold")
 		recalculateCosts()
         updateGlobals()
+		SetSliderOptionValueST(BM_CollarCost.getValue(), "{0} gold")
 	endEvent
 	event OnDefaultST()
 		BM_CollarCost.setValue(3500.0)
@@ -1883,8 +1885,8 @@ endState
 state isInsuranceFeatureEnabledST
 	event OnSelectST()
 		isInsuranceFeatureEnabled = (!isInsuranceFeatureEnabled) as int
-		SetTextOptionValueST(GetBoolString(isInsuranceFeatureEnabled))
 		SessionModified = true
+		SetTextOptionValueST(GetBoolString(isInsuranceFeatureEnabled))
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_isInsuranceFeatureEnabledHighlight")
@@ -1900,9 +1902,9 @@ state BM_InsuranceCostBaseST
 	endEvent
 	event OnSliderAcceptST(float value)
 		BM_InsuranceCostBase = value
-		SetSliderOptionValueST(BM_InsuranceCostBase, "{0} gold")
 		BM_InsuranceCost.setValue(BM_InsuranceCostBase * licenses.insuranceMisbehaviourMultiplier * licenses.insurancePopularityMultiplier)
         updateGlobals()
+		SetSliderOptionValueST(BM_InsuranceCostBase, "{0} gold")
 	endEvent
 	event OnDefaultST()
 		BM_InsuranceCostBase = 3500.0
@@ -1946,8 +1948,8 @@ endState
 state invertPopularityMultiplierST
 	event OnSelectST()
 		invertPopularityMultiplier = !invertPopularityMultiplier
-		SetToggleOptionValueST(invertPopularityMultiplier)
 		bmlUtility.refreshPopularityModifier()
+		SetToggleOptionValueST(invertPopularityMultiplier)
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_invertPopularityMultiplierHighlight")
@@ -1957,8 +1959,8 @@ endState
 state thaneImmunityInsuranceST
 	event OnSelectST()
 		thaneImmunityInsurance = !thaneImmunityInsurance
-		SetToggleOptionValueST(thaneImmunityInsurance)
 		SessionModified = true
+		SetToggleOptionValueST(thaneImmunityInsurance)
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_thaneImmunityInsuranceHighlight")
@@ -2156,40 +2158,40 @@ endState
 state Curse_NeckST
 	event OnSelectST()
 		Curse_Neck = !Curse_Neck
-		SetToggleOptionValueST(Curse_Neck)
 		licenses.PopulateCursedTattoosArray()
+		SetToggleOptionValueST(Curse_Neck)
 	endEvent
 endState
 
 state Curse_TorsoST
 	event OnSelectST()
 		Curse_Torso = !Curse_Torso
-		SetToggleOptionValueST(Curse_Torso)
 		licenses.PopulateCursedTattoosArray()
+		SetToggleOptionValueST(Curse_Torso)
 	endEvent
 endState
 
 state Curse_ArmsST
 	event OnSelectST()
 		Curse_Arms = !Curse_Arms
-		SetToggleOptionValueST(Curse_Arms)
 		licenses.PopulateCursedTattoosArray()
+		SetToggleOptionValueST(Curse_Arms)
 	endEvent
 endState
 
 state Curse_LegsST
 	event OnSelectST()
 		Curse_Legs = !Curse_Legs
-		SetToggleOptionValueST(Curse_Legs)
 		licenses.PopulateCursedTattoosArray()
+		SetToggleOptionValueST(Curse_Legs)
 	endEvent
 endState
 
 state Curse_ReduceSlotUsageST
 	event OnSelectST()
 		Curse_ReduceSlotUsage = !Curse_ReduceSlotUsage
-		SetToggleOptionValueST(Curse_ReduceSlotUsage)
 		licenses.PopulateCursedTattoosArray()
+		SetToggleOptionValueST(Curse_ReduceSlotUsage)
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_Curse_ReduceSlotUsageHighlight")
