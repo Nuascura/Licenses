@@ -93,7 +93,7 @@ EndEvent
 
 Event xpo_OnSceneDone(String eventName, String strArg, Float numArg, Form sender)
     bmlUtility.LogTrace("xpo_OnSceneDone")
-    if StorageUtil.GetIntValue(licenses.playerRef.GetActorRef(), "xpoPCArrestStart") == 1 || StorageUtil.GetIntValue(licenses.playerRef.GetActorRef(), "xpoPCArrested")  == 1
+    if StorageUtil.GetIntValue(PlayerRef, "xpoPCArrestStart") == 1 || StorageUtil.GetIntValue(PlayerRef, "xpoPCArrested")  == 1
         bmlUtility.BM_IsInJail.SetValue(1.0)
     else
         bmlUtility.BM_IsInJail.SetValue(0.0)
