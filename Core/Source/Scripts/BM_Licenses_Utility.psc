@@ -649,26 +649,6 @@ EndFunction
 ; ------------------------------
 
 ; ---------- Misc Functions ----------
-Int Function ClampInt(int value, int minValue, int maxValue) Global
-    If value < minValue
-        Return minValue
-    ElseIf value > maxValue
-        Return maxValue
-    Else
-        Return value
-    EndIf
-EndFunction
-
-Float Function ClampFloat(float value, float minValue, float maxValue) Global
-    If value < minValue
-        Return minValue
-    ElseIf value > maxValue
-        Return maxValue
-    Else
-        Return value
-    EndIf
-EndFunction
-
 Function LogTrace(String LogMessage, Bool Force = False)
     if LogMessage
         if Force || bmlmcm.LogTrace
