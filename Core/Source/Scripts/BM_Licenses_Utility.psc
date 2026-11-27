@@ -181,7 +181,7 @@ Function CheckLocation()
     currLoc = PlayerActorRef.GetCurrentLocation()
     if currLoc
         currLocParent = FindLocFromParent(currLoc, BM_Holds, LocTypeHold)
-        currLocParentIndex = BM_Holds.Find(currLocParent)
+
         if PlayerActorRef.IsInInterior()
             currSpace = GetWorldSpaceFromInterior(PlayerActorRef)
         else
@@ -189,6 +189,8 @@ Function CheckLocation()
         endIf
         licenses.isInCity = GetIsInCity()
         licenses.isInTown = GetIsInTown()
+
+        refreshEnforcementLoc()
     endIf
 EndFunction
 
@@ -471,9 +473,9 @@ Function ModeratorMaintanence()
     Location newLocParent = FindLocFromParent(currLoc, BM_Holds, LocTypeHold)
     If currLocParent != newLocParent
         currLocParent = newLocParent
-        currLocParentIndex = BM_Holds.Find(currLocParent)
-        CheckThaneship()
+        refreshEnforcementLoc()
         refreshLicenseFeatures()
+        CheckThaneship()
         CheckLicenseStatus()
     EndIf
 EndFunction
@@ -735,7 +737,7 @@ Function BM_PurchaseArmorLicense(bool pay = true, bool lifetime = false, Form[] 
     endIf
 
     licenses.ArmorLicense = True
-    (BM_LicenseLocs.GetAt(0) as FormList).AddForms(locForms)
+    (BM_LicenseLocs.GetAt(0) as FormList).AddForms(GetFormArrayValidated(locForms, enforcementLoc))
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 1)
 EndFunction
 
@@ -757,7 +759,7 @@ Function BM_PurchaseBikiniLicense(bool pay = true, bool lifetime = false, Form[]
     endIf
 
     licenses.BikiniLicense = True
-    (BM_LicenseLocs.GetAt(1) as FormList).AddForms(locForms)
+    (BM_LicenseLocs.GetAt(1) as FormList).AddForms(GetFormArrayValidated(locForms, enforcementLoc))
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 2)
 EndFunction
 
@@ -779,7 +781,7 @@ Function BM_PurchaseBikiniExemption(bool pay = true, bool lifetime = false, Form
     endIf
 
     licenses.BikiniExemption = True
-    (BM_LicenseLocs.GetAt(2) as FormList).AddForms(locForms)
+    (BM_LicenseLocs.GetAt(2) as FormList).AddForms(GetFormArrayValidated(locForms, enforcementLoc))
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 3)
 EndFunction
 
@@ -801,7 +803,7 @@ Function BM_PurchaseClothingLicense(bool pay = true, bool lifetime = false, Form
     endIf
 
     licenses.ClothingLicense = True
-    (BM_LicenseLocs.GetAt(3) as FormList).AddForms(locForms)
+    (BM_LicenseLocs.GetAt(3) as FormList).AddForms(GetFormArrayValidated(locForms, enforcementLoc))
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 4)
 EndFunction
 
@@ -823,7 +825,7 @@ Function BM_PurchaseMagicLicense(bool pay = true, bool lifetime = false, Form[] 
     endIf
 
     licenses.MagicLicense = True
-    (BM_LicenseLocs.GetAt(4) as FormList).AddForms(locForms)
+    (BM_LicenseLocs.GetAt(4) as FormList).AddForms(GetFormArrayValidated(locForms, enforcementLoc))
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 5)
     
     If licenses.isInsured
@@ -849,7 +851,7 @@ Function BM_PurchaseWeaponLicense(bool pay = true, bool lifetime = false, Form[]
     endIf
 
     licenses.WeaponLicense = True
-    (BM_LicenseLocs.GetAt(5) as FormList).AddForms(locForms)
+    (BM_LicenseLocs.GetAt(5) as FormList).AddForms(GetFormArrayValidated(locForms, enforcementLoc))
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 6)
 Endfunction
 
@@ -871,7 +873,7 @@ Function BM_PurchaseCraftingLicense(bool pay = true, bool lifetime = false, Form
     endIf
 
     licenses.CraftingLicense = True
-    (BM_LicenseLocs.GetAt(6) as FormList).AddForms(locForms)
+    (BM_LicenseLocs.GetAt(6) as FormList).AddForms(GetFormArrayValidated(locForms, enforcementLoc))
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 7)
 EndFunction
 
@@ -893,7 +895,7 @@ Function BM_PurchaseTravelPermit(bool pay = true, bool lifetime = false, Form[] 
     endIf
 
     licenses.TravelPermit = True
-    (BM_LicenseLocs.GetAt(7) as FormList).AddForms(locForms)
+    (BM_LicenseLocs.GetAt(7) as FormList).AddForms(GetFormArrayValidated(locForms, enforcementLoc))
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 8)
 
     licenses.ClearSavedLocForms()
@@ -917,7 +919,7 @@ Function BM_PurchaseCollarExemption(bool pay = true, bool lifetime = false, Form
     endIf
 
     licenses.CollarExemption = True
-    (BM_LicenseLocs.GetAt(8) as FormList).AddForms(locForms)
+    (BM_LicenseLocs.GetAt(8) as FormList).AddForms(GetFormArrayValidated(locForms, enforcementLoc))
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 9)
 
     licenses.RemoveDeviousDevicesCollar()
@@ -941,7 +943,7 @@ Function BM_PurchaseLifeInsurance(bool pay = true, bool lifetime = false, Form[]
     endIf
 
     licenses.Insurance = True
-    (BM_LicenseLocs.GetAt(9) as FormList).AddForms(locForms)
+    (BM_LicenseLocs.GetAt(9) as FormList).AddForms(GetFormArrayValidated(locForms, enforcementLoc))
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 10)
     
     If licenses.hasMagicLicense
@@ -967,7 +969,7 @@ Function BM_PurchaseCurfewExemption(bool pay = true, bool lifetime = false, Form
     endIf
 
     licenses.CurfewExemption = True
-    (BM_LicenseLocs.GetAt(10) as FormList).AddForms(locForms)
+    (BM_LicenseLocs.GetAt(10) as FormList).AddForms(GetFormArrayValidated(locForms, enforcementLoc))
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 11)
 EndFunction
 
@@ -989,7 +991,7 @@ Function BM_PurchaseTradingLicense(bool pay = true, bool lifetime = false, Form[
     endIf
 
     licenses.TradingLicense = True
-    (BM_LicenseLocs.GetAt(11) as FormList).AddForms(locForms)
+    (BM_LicenseLocs.GetAt(11) as FormList).AddForms(GetFormArrayValidated(locForms, enforcementLoc))
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 12)
 EndFunction
 
@@ -1011,7 +1013,7 @@ Function BM_PurchaseWhoreLicense(bool pay = true, bool lifetime = false, Form[] 
     endIf
 
     licenses.WhoreLicense = True
-    (BM_LicenseLocs.GetAt(12) as FormList).AddForms(locForms)
+    (BM_LicenseLocs.GetAt(12) as FormList).AddForms(GetFormArrayValidated(locForms, enforcementLoc))
     SendCustomEvent_SingleInt("BM-LPO_LicensePurchased", 13)
 EndFunction
 ; ------------------------------
@@ -1323,16 +1325,30 @@ Function RefreshFeatures()
 	refreshRoutineCalls()
 	refreshPopularityModifier()
 	refreshLicenseSeller()
+    refreshEnforcementLoc()
     refreshLicenseFeatures()
     refreshActivationLimit()
     refreshArrays()
+EndFunction
+
+Function refreshEnforcementLoc()
+    if !currLocParent
+        return
+    endIf
+
+    if bmlmcm.LicenseTerritories
+        enforcementLoc = currLocParent
+    else
+        enforcementLoc = BM_Holds.GetAt(0) as Location
+    endIf
+    enforcementLocIndex = BM_Holds.Find(enforcementLoc)
 EndFunction
 
 Function refreshLicenseFeatures()
     ; License props decide whether the actor *can* have the license.
     ; Below calculation adds that factor into consideration of whether actor *should* have the license.
 
-    if !currLoc
+    if enforcementLocIndex == -1
         licenses.hasArmorLicense = ActualizeValue("ArmorLicense", licenses.hasArmorLicense, bmlmcm.isArmorLicenseFeatureEnabled)
         licenses.hasBikiniLicense = ActualizeValue("BikiniLicense", licenses.hasBikiniLicense, bmlmcm.isBikiniLicenseFeatureEnabled == 1)
         licenses.hasBikiniExemption = ActualizeValue("BikiniExemption", licenses.hasBikiniExemption, bmlmcm.isBikiniLicenseFeatureEnabled == 2)
@@ -1350,31 +1366,31 @@ Function refreshLicenseFeatures()
     endIf
 
 	licenses.ArmorLicense = licenses.ArmorLicense && \
-    (PlayerActorRef.getItemCount(BM_LicenseBooks.GetAt(0)) > 0 && (BM_LicenseLocs.GetAt(0) as FormList).HasForm(currLocParent))
+    (PlayerActorRef.getItemCount(BM_LicenseBooks.GetAt(0)) > 0 && (BM_LicenseLocs.GetAt(0) as FormList).HasForm(enforcementLoc))
 	licenses.BikiniLicense = licenses.BikiniLicense && \
-    (PlayerActorRef.getItemCount(BM_LicenseBooks.GetAt(1)) > 0 && (BM_LicenseLocs.GetAt(1) as FormList).HasForm(currLocParent))
+    (PlayerActorRef.getItemCount(BM_LicenseBooks.GetAt(1)) > 0 && (BM_LicenseLocs.GetAt(1) as FormList).HasForm(enforcementLoc))
     licenses.BikiniExemption = licenses.BikiniExemption && \
-    (PlayerActorRef.getItemCount(BM_LicenseBooks.GetAt(2)) > 0 && (BM_LicenseLocs.GetAt(2) as FormList).HasForm(currLocParent))
+    (PlayerActorRef.getItemCount(BM_LicenseBooks.GetAt(2)) > 0 && (BM_LicenseLocs.GetAt(2) as FormList).HasForm(enforcementLoc))
 	licenses.ClothingLicense = licenses.ClothingLicense && \
-    (PlayerActorRef.getItemCount(BM_LicenseBooks.GetAt(3)) > 0 && (BM_LicenseLocs.GetAt(3) as FormList).HasForm(currLocParent))
+    (PlayerActorRef.getItemCount(BM_LicenseBooks.GetAt(3)) > 0 && (BM_LicenseLocs.GetAt(3) as FormList).HasForm(enforcementLoc))
 	licenses.MagicLicense = licenses.MagicLicense && \
-    (PlayerActorRef.getItemCount(BM_LicenseBooks.GetAt(4)) > 0 && (BM_LicenseLocs.GetAt(4) as FormList).HasForm(currLocParent))
+    (PlayerActorRef.getItemCount(BM_LicenseBooks.GetAt(4)) > 0 && (BM_LicenseLocs.GetAt(4) as FormList).HasForm(enforcementLoc))
 	licenses.WeaponLicense = licenses.WeaponLicense && \
-    (PlayerActorRef.getItemCount(BM_LicenseBooks.GetAt(5)) > 0 && (BM_LicenseLocs.GetAt(5) as FormList).HasForm(currLocParent))
+    (PlayerActorRef.getItemCount(BM_LicenseBooks.GetAt(5)) > 0 && (BM_LicenseLocs.GetAt(5) as FormList).HasForm(enforcementLoc))
 	licenses.CraftingLicense = licenses.CraftingLicense && \
-    (PlayerActorRef.getItemCount(BM_LicenseBooks.GetAt(6)) > 0 && (BM_LicenseLocs.GetAt(6) as FormList).HasForm(currLocParent))
+    (PlayerActorRef.getItemCount(BM_LicenseBooks.GetAt(6)) > 0 && (BM_LicenseLocs.GetAt(6) as FormList).HasForm(enforcementLoc))
 	licenses.TravelPermit = licenses.TravelPermit && \
-    (PlayerActorRef.getItemCount(BM_LicenseBooks.GetAt(7)) > 0 && (BM_LicenseLocs.GetAt(7) as FormList).HasForm(currLocParent))
+    (PlayerActorRef.getItemCount(BM_LicenseBooks.GetAt(7)) > 0 && (BM_LicenseLocs.GetAt(7) as FormList).HasForm(enforcementLoc))
 	licenses.CollarExemption = licenses.CollarExemption && \
-    (PlayerActorRef.getItemCount(BM_LicenseBooks.GetAt(8)) > 0 && (BM_LicenseLocs.GetAt(8) as FormList).HasForm(currLocParent))
+    (PlayerActorRef.getItemCount(BM_LicenseBooks.GetAt(8)) > 0 && (BM_LicenseLocs.GetAt(8) as FormList).HasForm(enforcementLoc))
 	licenses.Insurance = licenses.Insurance && \
-    (PlayerActorRef.getItemCount(BM_LicenseBooks.GetAt(9)) > 0 && (BM_LicenseLocs.GetAt(9) as FormList).HasForm(currLocParent))
+    (PlayerActorRef.getItemCount(BM_LicenseBooks.GetAt(9)) > 0 && (BM_LicenseLocs.GetAt(9) as FormList).HasForm(enforcementLoc))
 	licenses.CurfewExemption = licenses.CurfewExemption && \
-    (PlayerActorRef.getItemCount(BM_LicenseBooks.GetAt(10)) > 0 && (BM_LicenseLocs.GetAt(10) as FormList).HasForm(currLocParent))
+    (PlayerActorRef.getItemCount(BM_LicenseBooks.GetAt(10)) > 0 && (BM_LicenseLocs.GetAt(10) as FormList).HasForm(enforcementLoc))
     licenses.TradingLicense = licenses.TradingLicense && \
-    (PlayerActorRef.getItemCount(BM_LicenseBooks.GetAt(11)) > 0 && (BM_LicenseLocs.GetAt(11) as FormList).HasForm(currLocParent))
+    (PlayerActorRef.getItemCount(BM_LicenseBooks.GetAt(11)) > 0 && (BM_LicenseLocs.GetAt(11) as FormList).HasForm(enforcementLoc))
 	licenses.WhoreLicense = licenses.WhoreLicense && \
-    (PlayerActorRef.getItemCount(BM_LicenseBooks.GetAt(12)) > 0 && (BM_LicenseLocs.GetAt(12) as FormList).HasForm(currLocParent))
+    (PlayerActorRef.getItemCount(BM_LicenseBooks.GetAt(12)) > 0 && (BM_LicenseLocs.GetAt(12) as FormList).HasForm(enforcementLoc))
 EndFunction
 
 Function refreshActivationLimit()
@@ -1657,8 +1673,9 @@ FormList Property BM_PotentialViolations_Ench  Auto
 FormList Property BM_LicensesIgnoreSpell  Auto
 FormList Property BM_LicensesIgnoreWorldspace  Auto
 Keyword Property BM_LicensesIgnoreLocation Auto
+Int Property enforcementLocIndex = -1 auto hidden
+Location Property enforcementLoc auto hidden
 Location Property currLocParent auto hidden
-Int Property currLocParentIndex auto hidden
 Location Property currLoc auto hidden
 Location Property savedLoc auto hidden
 Location Property lastLoc auto hidden

@@ -6,7 +6,7 @@ Scriptname BM_D_Bikini1_Buy Extends TopicInfo Hidden
 Function Fragment_0(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
-bmlUtility.BM_PurchaseBikiniLicense(locForms = BM_API.GetFormAsArray(bmlUtility.currLocParent))
+bmlUtility.BM_PurchaseBikiniLicense(locForms = new Form[1])
 ;END CODE
 EndFunction
 ;END FRAGMENT

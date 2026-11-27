@@ -2221,6 +2221,59 @@ String Function GetBoolString(Bool varb, String id = "")
 	endIf
 EndFunction
 
+Function reallocateLocs()
+	bmlUtility.refreshEnforcementLoc()
+
+	Location GlobalLoc = bmlUtility.BM_Holds.GetAt(0) as Location
+	if LicenseTerritories
+		int i = bmlUtility.BM_LicenseLocs.GetSize()
+		while i
+			i -= 1
+			(bmlUtility.BM_LicenseLocs.GetAt(i) as FormList).RemoveAddedForm(GlobalLoc)
+		endWhile
+	else
+		if licenses.armorLicenseExpirationTimeArr[0] != -1
+			(bmlUtility.BM_LicenseLocs.GetAt(0) as FormList).AddForm(GlobalLoc)
+		endIf
+		if licenses.bikiniLicenseExpirationTimeArr[0] != -1
+			(bmlUtility.BM_LicenseLocs.GetAt(1) as FormList).AddForm(GlobalLoc)
+		endIf
+		if licenses.bikiniExemptionExpirationTimeArr[0] != -1
+			(bmlUtility.BM_LicenseLocs.GetAt(2) as FormList).AddForm(GlobalLoc)
+		endIf
+		if licenses.clothingLicenseExpirationTimeArr[0] != -1
+			(bmlUtility.BM_LicenseLocs.GetAt(3) as FormList).AddForm(GlobalLoc)
+		endIf
+		if licenses.magicLicenseExpirationTimeArr[0] != -1
+			(bmlUtility.BM_LicenseLocs.GetAt(4) as FormList).AddForm(GlobalLoc)
+		endIf
+		if licenses.weaponLicenseExpirationTimeArr[0] != -1
+			(bmlUtility.BM_LicenseLocs.GetAt(5) as FormList).AddForm(GlobalLoc)
+		endIf
+		if licenses.craftingLicenseExpirationTimeArr[0] != -1
+			(bmlUtility.BM_LicenseLocs.GetAt(6) as FormList).AddForm(GlobalLoc)
+		endIf
+		if licenses.travelPermitExpirationTimeArr[0] != -1
+			(bmlUtility.BM_LicenseLocs.GetAt(7) as FormList).AddForm(GlobalLoc)
+		endIf
+		if licenses.collarExemptionExpirationTimeArr[0] != -1
+			(bmlUtility.BM_LicenseLocs.GetAt(8) as FormList).AddForm(GlobalLoc)
+		endIf
+		if licenses.insuranceExpirationTimeArr[0] != -1
+			(bmlUtility.BM_LicenseLocs.GetAt(9) as FormList).AddForm(GlobalLoc)
+		endIf
+		if licenses.curfewExemptionExpirationTimeArr[0] != -1
+			(bmlUtility.BM_LicenseLocs.GetAt(10) as FormList).AddForm(GlobalLoc)
+		endIf
+		if licenses.tradingLicenseExpirationTimeArr[0] != -1
+			(bmlUtility.BM_LicenseLocs.GetAt(11) as FormList).AddForm(GlobalLoc)
+		endIf
+		if licenses.whoreLicenseExpirationTimeArr[0] != -1
+			(bmlUtility.BM_LicenseLocs.GetAt(12) as FormList).AddForm(GlobalLoc)
+		endIf
+	endIf
+EndFunction
+
 Function recalculateCosts()
 	int i = bmlUtility.BM_LicenseCostsLT.GetSize()
 

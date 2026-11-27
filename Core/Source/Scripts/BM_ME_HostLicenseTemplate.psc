@@ -2,6 +2,9 @@ Scriptname BM_ME_HostLicenseTemplate extends activemagiceffect
 
 import BM_API
 
+BM_Licenses_MCM Property bmlmcm auto
+BM_Licenses_Utility Property bmlUtility Auto
+
 Actor Property TargetActor Auto
 String Property TargetString Auto
 Int Property TargetInteger Auto
@@ -17,7 +20,7 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
     TemplateBridge.GoToState("LicenseBridge_" + TargetInteger)
     If TemplateBridge.IsLicenseActive()
         StartLicense(false)
-    ElseIf !TargetHolds.GetSize()
+    ElseIf !bmlmcm.LicenseTerritories
         EndLicense()
     EndIf
 EndEvent
@@ -67,6 +70,7 @@ EndFunction
 Function EndLicense()
     SendCustomEvent_SingleInt("BM-LPO_LicenseExpired", TargetInteger)
     GoToState("")
+    TargetHolds.RemoveAddedForm(bmlUtility.enforcementLoc)
 EndFunction
 
 Function RegisterEvents()

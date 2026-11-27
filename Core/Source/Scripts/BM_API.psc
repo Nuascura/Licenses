@@ -504,6 +504,18 @@ Form[] Function GetFormAsArray(Form akForm) Global
     Return arr
 EndFunction
 
+Form[] Function GetFormArrayValidated(Form[] akForms, Form akDefault) Global
+    If akForms
+        If akForms[0]
+            Return akForms
+        ElseIf akForms.Length == 1
+            akForms[0] = akDefault
+            Return akForms
+        EndIf
+    EndIf
+    Return GetFormAsArray(akDefault)
+EndFunction
+
 Function SendCustomEvent_SingleInt(string EventName, int aiArg1 = 0) Global
     int handle = ModEvent.Create(EventName)
     ModEvent.PushInt(handle, aiArg1)
