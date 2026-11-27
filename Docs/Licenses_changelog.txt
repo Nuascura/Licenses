@@ -1,22 +1,33 @@
 1.27.0
 Primary
 - Add: Hold-based Licenses.
+- Add: Keyword, BM_LicensesCookItem; whitelist items from Crafting Violations.
+- Change: Disable LicenseBook removal.
 - Change: General optimizations.
+- Breaking Change: (API) Strict enforce license integer ID.
 
 Secondary
 - feat: Make Per-Hold Licenses opt-in.
 - feat: Per-Hold License Timers.
-- refactor: Add Master - Hearthfires.esm.
+- refactor: Remove Update.esm master.
+- refactor: Optimize workbench processes.
+- refactor: Consolidate on-script property referencing.
 - refactor: Whitelist CraftingOvenMarker furnitureObj.
 - refactor: Relax PurchaseLicense condition checks.
 - refactor: Migrate violation props from bool to int.
 - refactor: Migrate feature flag props from bool to int.
 - refactor: Optimize ToggleLicenseFeature.
 - refactor: Reorder "Additional Settings" alphabetically.
+- refactor: Optimize ActorRef referencing.
+- refactor: Optimize FID retrieval.
+- refactor: Remove clamp redundancy.
 - fix: Debug log NextStatusCheck retrieval.
 - fix: Bad enchantment retrieval for non-refs.
 - fix: Armor Violation always flags Uninsured.
 - fix: LT cost not updating with multiplier change.
+- Chore: Update Book Item descriptions.
+- chore: Update Dialogue Patch.
+- chore: Update localization file.
 
 
 
