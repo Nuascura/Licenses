@@ -28,6 +28,7 @@ Secondary
 - fix: LT cost not updating with multiplier change.
 - chore: Update Book Item descriptions.
 - chore: Update Dialogue Patch.
+- chore: Update Bruma Patch.
 - chore: Update localization file.
 
 
