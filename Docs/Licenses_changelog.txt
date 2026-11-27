@@ -3,6 +3,7 @@ Primary
 - Add: Hold-based Licenses.
 - Add: Keyword, BM_LicensesCookItem; whitelist items from Crafting Violations.
 - Change: Disable LicenseBook removal.
+- Change: MCM option states will only change once interaction event processes are complete.
 - Change: General optimizations.
 - Breaking Change: (API) Strict enforce license integer ID.
 
@@ -25,7 +26,7 @@ Secondary
 - fix: Bad enchantment retrieval for non-refs.
 - fix: Armor Violation always flags Uninsured.
 - fix: LT cost not updating with multiplier change.
-- Chore: Update Book Item descriptions.
+- chore: Update Book Item descriptions.
 - chore: Update Dialogue Patch.
 - chore: Update localization file.
 
