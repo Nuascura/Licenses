@@ -19,6 +19,8 @@ Scriptname BM_API Hidden
 ; BM-LPO_ViolationFound
 ; BM-LPO_BountyStart
 ; BM-LPO_BountyEnd
+; BM-LPO_[LicenseString]_[ActorFormID]_Activate
+; BM-LPO_[LicenseString]_[ActorFormID]_Deactivate
 ; --Custom--
 ; BM-LPO_ConfrontationStart
 ; BM-LPO_ConfrontationWalkaway
@@ -273,7 +275,8 @@ EndFunction
 ; Parameter 0 asks for an integer corresponding to a license type.
 ; Parameter 1 asks if you'd like to subtract a corresponding cost from player gold. Note that the function doesn't check whether the player has enough gold on-hand.
 ; Parameter 2 asks if you want the license to never expire.
-; Parameter 3 asks if you want to skip safety checks. Don't change this boolean from its default unless absolutely necessary.
+; Parameter 3 asks for an array of LocTypeHold locations. An empty array "new Form[1]" tells LPO to select the player's current hold.
+; Parameter 4 asks if you want to skip safety checks. Don't change this boolean from its default unless absolutely necessary.
 bool Function PurchaseLicense(int LicenseType, bool SubtractGold = true, bool Lifetime = false, Form[] ValidLocs, bool CheckSafety = true, BM_Licenses_Utility bmlUtility = none) Global
     if !bmlUtility
         bmlUtility = GetUtility()
