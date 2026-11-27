@@ -114,8 +114,7 @@ int Function GetLicenseID(string LicensePrefix) Global
 EndFunction
 
 ; Get - License SID
-; Parameter 0 asks for a license ID as int.
-; Parameter 1 asks for a license prefix as string.
+; Parameter 0 asks for a license ID as string. Can optionally be an integer as string representation; ex. inputID = "2"
 ; Whereas prefixes are shorthands for mod authors, SIDs have an internal use.
 string Function GetLicenseSID(string inputID = "") Global
     if inputID
