@@ -1188,12 +1188,14 @@ state BM_ArmorCostST
 	endEvent
 	event OnSliderAcceptST(float value)
 		BM_ArmorCost.setValue(value)
-		recalculateCosts()
-        updateGlobals()
+		recalculateCosts(0)
+        updateGlobals(0)
 		SetSliderOptionValueST(BM_ArmorCost.getValue(), "{0} gold")
 	endEvent
 	event OnDefaultST()
 		BM_ArmorCost.setValue(2000.0)
+		recalculateCosts(0)
+        updateGlobals(0)
 		SetSliderOptionValueST(BM_ArmorCost.getValue(), "{0} gold")
 	endEvent
 endState
@@ -1254,13 +1256,19 @@ state BM_BikiniCostST
 	event OnSliderAcceptST(float value)
 		BM_BikiniCost[0].setValue(value)
 		BM_BikiniCost[1].setValue(value)
-		recalculateCosts()
-        updateGlobals()
+		recalculateCosts(1)
+        updateGlobals(1)
+		recalculateCosts(2)
+        updateGlobals(2)
 		SetSliderOptionValueST(BM_BikiniCost[0].getValue(), "{0} gold")
 	endEvent
 	event OnDefaultST()
 		BM_BikiniCost[0].setValue(1250.0)
 		BM_BikiniCost[1].setValue(1250.0)
+		recalculateCosts(1)
+        updateGlobals(1)
+		recalculateCosts(2)
+        updateGlobals(2)
 		SetSliderOptionValueST(BM_BikiniCost[0].getValue(), "{0} gold")
 	endEvent
 endState
@@ -1340,12 +1348,14 @@ state BM_ClothingCostST
 	endEvent
 	event OnSliderAcceptST(float value)
 		BM_ClothingCost.setValue(value)
-		recalculateCosts()
-        updateGlobals()
+		recalculateCosts(3)
+        updateGlobals(3)
 		SetSliderOptionValueST(BM_ClothingCost.getValue(), "{0} gold")
 	endEvent
 	event OnDefaultST()
 		BM_ClothingCost.setValue(650.0)
+		recalculateCosts(3)
+        updateGlobals(3)
 		SetSliderOptionValueST(BM_ClothingCost.getValue(), "{0} gold")
 	endEvent
 endState
@@ -1387,12 +1397,14 @@ state BM_MagicCostST
 	endEvent
 	event OnSliderAcceptST(float value)
 		BM_MagicCost.setValue(value)
-		recalculateCosts()
-        updateGlobals()
+		recalculateCosts(4)
+        updateGlobals(4)
 		SetSliderOptionValueST(BM_MagicCost.getValue(), "{0} gold")
 	endEvent
 	event OnDefaultST()
 		BM_MagicCost.setValue(1500.0)
+		recalculateCosts(4)
+        updateGlobals(4)
 		SetSliderOptionValueST(BM_MagicCost.getValue(), "{0} gold")
 	endEvent
 endState
@@ -1504,12 +1516,14 @@ state BM_WeaponCostST
 	endEvent
 	event OnSliderAcceptST(float value)
 		BM_WeaponCost.setValue(value)
-		recalculateCosts()
-        updateGlobals()
+		recalculateCosts(5)
+        updateGlobals(5)
 		SetSliderOptionValueST(BM_WeaponCost.getValue(), "{0} gold")
 	endEvent
 	event OnDefaultST()
 		BM_WeaponCost.setValue(1500.0)
+		recalculateCosts(5)
+        updateGlobals(5)
 		SetSliderOptionValueST(BM_WeaponCost.getValue(), "{0} gold")
 	endEvent
 endState
@@ -1562,12 +1576,14 @@ state BM_CraftingCostST
 	endEvent
 	event OnSliderAcceptST(float value)
 		BM_CraftingCost.setValue(value)
-		recalculateCosts()
-        updateGlobals()
+		recalculateCosts(6)
+        updateGlobals(6)
 		SetSliderOptionValueST(BM_CraftingCost.getValue(), "{0} gold")
 	endEvent
 	event OnDefaultST()
 		BM_CraftingCost.setValue(1000.0)
+		recalculateCosts(6)
+        updateGlobals(6)
 		SetSliderOptionValueST(BM_CraftingCost.getValue(), "{0} gold")
 	endEvent
 endState
@@ -1609,12 +1625,14 @@ state BM_TradingCostST
 	endEvent
 	event OnSliderAcceptST(float value)
 		BM_TradingCost.setValue(value)
-		recalculateCosts()
-        updateGlobals()
+		recalculateCosts(11)
+        updateGlobals(11)
 		SetSliderOptionValueST(BM_TradingCost.getValue(), "{0} gold")
 	endEvent
 	event OnDefaultST()
 		BM_TradingCost.setValue(1000.0)
+		recalculateCosts(11)
+        updateGlobals(11)
 		SetSliderOptionValueST(BM_TradingCost.getValue(), "{0} gold")
 	endEvent
 endState
@@ -1656,12 +1674,14 @@ state BM_CurfewCostST
 	endEvent
 	event OnSliderAcceptST(float value)
 		BM_CurfewCost.setValue(value)
-		recalculateCosts()
-        updateGlobals()
+		recalculateCosts(10)
+        updateGlobals(10)
 		SetSliderOptionValueST(BM_CurfewCost.getValue(), "{0} gold")
 	endEvent
 	event OnDefaultST()
 		BM_CurfewCost.setValue(1000.0)
+		recalculateCosts(10)
+        updateGlobals(10)
 		SetSliderOptionValueST(BM_CurfewCost.getValue(), "{0} gold")
 	endEvent
 endState
@@ -1743,12 +1763,14 @@ state BM_WhoreCostST
 	endEvent
 	event OnSliderAcceptST(float value)
 		BM_WhoreCost.setValue(value)
-		recalculateCosts()
-        updateGlobals()
+		recalculateCosts(12)
+        updateGlobals(12)
 		SetSliderOptionValueST(BM_WhoreCost.getValue(), "{0} gold")
 	endEvent
 	event OnDefaultST()
 		BM_WhoreCost.setValue(500.0)
+		recalculateCosts(12)
+        updateGlobals(12)
 		SetSliderOptionValueST(BM_WhoreCost.getValue(), "{0} gold")
 	endEvent
 endState
@@ -1795,12 +1817,14 @@ state BM_TravelCostST
 	endEvent
 	event OnSliderAcceptST(float value)
 		BM_TravelCost.setValue(value)
-		recalculateCosts()
-        updateGlobals()
+		recalculateCosts(7)
+        updateGlobals(7)
 		SetSliderOptionValueST(BM_TravelCost.getValue(), "{0} gold")
 	endEvent
 	event OnDefaultST()
 		BM_TravelCost.setValue(100.0)
+		recalculateCosts(7)
+        updateGlobals(7)
 		SetSliderOptionValueST(BM_TravelCost.getValue(), "{0} gold")
 	endEvent
 endState
@@ -1864,12 +1888,14 @@ state BM_CollarCostST
 	endEvent
 	event OnSliderAcceptST(float value)
 		BM_CollarCost.setValue(value)
-		recalculateCosts()
-        updateGlobals()
+		recalculateCosts(8)
+        updateGlobals(8)
 		SetSliderOptionValueST(BM_CollarCost.getValue(), "{0} gold")
 	endEvent
 	event OnDefaultST()
 		BM_CollarCost.setValue(3500.0)
+		recalculateCosts(8)
+        updateGlobals(8)
 		SetSliderOptionValueST(BM_CollarCost.getValue(), "{0} gold")
 	endEvent
 endState
@@ -1912,7 +1938,7 @@ state BM_InsuranceCostBaseST
 	event OnSliderAcceptST(float value)
 		BM_InsuranceCostBase = value
 		BM_InsuranceCost.setValue(BM_InsuranceCostBase * licenses.insuranceMisbehaviourMultiplier * licenses.insurancePopularityMultiplier)
-        updateGlobals()
+        updateGlobals(9)
 		SetSliderOptionValueST(BM_InsuranceCostBase, "{0} gold")
 	endEvent
 	event OnDefaultST()
@@ -2283,23 +2309,30 @@ Function reallocateLocs()
 	endIf
 EndFunction
 
-Function recalculateCosts()
-	int i = bmlUtility.BM_LicenseCostsLT.GetSize()
-
-	while i
-		i -= 1
+Function recalculateCosts(int i = -1)
+	if i == -1
+		i = bmlUtility.BM_LicenseCostsLT.GetSize()
+		while i
+			i -= 1
+			(bmlUtility.BM_LicenseCostsLT.GetAt(i) as GlobalVariable).SetValue(((bmlUtility.BM_LicenseCosts.GetAt(i) as GlobalVariable).GetValue() * LifetimeMultiplier) as int)
+		endWhile
+	else
 		(bmlUtility.BM_LicenseCostsLT.GetAt(i) as GlobalVariable).SetValue(((bmlUtility.BM_LicenseCosts.GetAt(i) as GlobalVariable).GetValue() * LifetimeMultiplier) as int)
-	endWhile
+	endIf
 EndFunction
 
-Function updateGlobals()
-	int i = bmlUtility.BM_LicenseCosts.GetSize()
-
-	while i
-		i -= 1
+Function updateGlobals(int i = -1)
+	if i == -1
+		i = bmlUtility.BM_LicenseCosts.GetSize()
+		while i
+			i -= 1
+			licenses.UpdateCurrentInstanceGlobal(bmlUtility.BM_LicenseCosts.GetAt(i) as GlobalVariable)
+			licenses.UpdateCurrentInstanceGlobal(bmlUtility.BM_LicenseCostsLT.GetAt(i) as GlobalVariable)
+		endWhile
+	else
 		licenses.UpdateCurrentInstanceGlobal(bmlUtility.BM_LicenseCosts.GetAt(i) as GlobalVariable)
 		licenses.UpdateCurrentInstanceGlobal(bmlUtility.BM_LicenseCostsLT.GetAt(i) as GlobalVariable)
-	endWhile
+	endIf
 EndFunction
 
 Bool Function exportConfig()
