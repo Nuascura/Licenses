@@ -340,6 +340,13 @@ Event OnPageReset(string page)
     endIf
 EndEvent
 
+String Function GetCurrentTerritoryString()
+	If bmlUtility.enforcementLocIndex == -1
+		Return "$LPO_Unknown"
+	Else
+		Return bmlUtility.BM_Holds.GetAt(bmlUtility.enforcementLocIndex).GetName()
+	EndIf
+EndFunction
 Int Function AddFeatureState(String DisplayName, Bool FeatureFlag, Bool StateFlag, Float ExpirationTime, Float CooldownTime)
 	String DisplayState
 	if FeatureFlag
@@ -372,7 +379,7 @@ Function ShowPageSplash()
 	SetCursorFillMode(LEFT_TO_RIGHT)
 	SetTitleText("$LPO_Monitor")
 	AddHeaderOption("$LPO_LicenseStatuses")
-	AddEmptyOption()
+	AddTextOption("$LPO_Territory", GetCurrentTerritoryString())
 	Int iSplashFlag 
 	iSplashFlag += AddFeatureState("$LPO_ArmorLicense", isArmorLicenseFeatureEnabled == 1, licenses.hasArmorLicense, licenses.armorLicenseExpirationTime, licenses.armorLicenseCooldownTime)
 	iSplashFlag += AddFeatureState("$LPO_BikiniLicense", isBikiniLicenseFeatureEnabled == 1, licenses.hasBikiniLicense, licenses.bikiniLicenseExpirationTime, licenses.bikiniLicenseCooldownTime)
@@ -409,7 +416,9 @@ Function ShowPage0()
 	else
 		AddTextOption("$LPO_DependencyCheck", "$LPO_Failed", OPTION_FLAG_DISABLED)
 	endIf
-	if bmlUtility.IsExceptionState()
+	if Licenses_State.GetValue() != 1
+		AddTextOption("$LPO_ExceptionState", "/", OPTION_FLAG_DISABLED)
+	ElseIf bmlUtility.IsExceptionState()
 		AddTextOption("$LPO_ExceptionState", "$LPO_Active", OPTION_FLAG_DISABLED)
 	else
 		AddTextOption("$LPO_ExceptionState", "$LPO_Inactive", OPTION_FLAG_DISABLED)
