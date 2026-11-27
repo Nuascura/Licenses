@@ -504,6 +504,11 @@ Function PopulateKeywordExclusionArray()
     KeywordBarterItem[2] = VendorItemJewelry
     KeywordBarterItem[3] = VendorItemFood
     KeywordBarterItem[4] = VendorItemFoodRaw
+
+    KeywordCookItem = new Keyword[3]
+    KeywordCookItem[0] = BM_LicensesCookItem
+    KeywordCookItem[1] = VendorItemFood
+    KeywordCookItem[2] = VendorItemFoodRaw
 EndFunction
 
 Function ValidateArmorSlotArray()
@@ -814,6 +819,7 @@ Keyword Property VendorNoSale Auto
 Keyword Property MagicDisallowEnchanting Auto
 Keyword Property BM_LicensesIgnoreItem Auto
 Keyword Property BM_LicensesBarterItem Auto
+Keyword Property BM_LicensesCookItem Auto
 Keyword Property BM_LicensesBikiniItem Auto
 Keyword Property BM_LicensesArmorItem Auto
 Keyword Property BM_LicensesClothingItem Auto
@@ -838,6 +844,7 @@ String[] Property CursedTattoosActive Auto
 Keyword[] Property KeywordQuestItem Auto
 Keyword[] Property KeywordModItem Auto
 Keyword[] Property KeywordBarterItem Auto
+Keyword[] Property KeywordCookItem Auto
 Keyword[] Property KeywordConfiscation Auto
 Keyword[] Property KeywordConfiscationEnch Auto
 
