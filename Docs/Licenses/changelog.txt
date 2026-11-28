@@ -10,7 +10,6 @@ Primary
 Secondary
 - feat: Make Per-Hold Licenses opt-in.
 - feat: Per-Hold License Timers.
-- refactor: Remove Update.esm master.
 - refactor: Optimize workbench processes.
 - refactor: Consolidate on-script property referencing.
 - refactor: Whitelist CraftingOvenMarker furnitureObj.

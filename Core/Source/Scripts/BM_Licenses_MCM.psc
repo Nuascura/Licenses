@@ -347,16 +347,16 @@ String Function GetCurrentTerritoryString()
 		Return bmlUtility.BM_Holds.GetAt(bmlUtility.enforcementLocIndex).GetName()
 	EndIf
 EndFunction
-Int Function AddFeatureState(String DisplayName, Bool FeatureFlag, Bool StateFlag, Float ExpirationTime, Float CooldownTime)
+Int Function AddFeatureState(String DisplayName, int ID, Bool FeatureFlag, Bool StateFlag, Float ExpirationTime, Float CooldownTime)
 	String DisplayState
 	if FeatureFlag
-		if StateFlag
+		if !licenses.LicenseEnforcementLocs[ID].HasForm(bmlUtility.enforcementLoc)
+			DisplayState = "$LPO_Unnecessary"
+		elseIf StateFlag
 			DisplayState = "$LPO_Valid"
 		else
 			DisplayState = "$LPO_Invalid"
 		endIf
-	elseIf (ExpirationTime != -1.0) || (CooldownTime != -1.0)
-		DisplayState = "$LPO_Unnecessary"
 	endIf
 	if DisplayState
 		AddTextOption(DisplayName, DisplayState)
@@ -381,19 +381,19 @@ Function ShowPageSplash()
 	AddHeaderOption("$LPO_LicenseStatuses")
 	AddTextOption("$LPO_Territory", GetCurrentTerritoryString())
 	Int iSplashFlag 
-	iSplashFlag += AddFeatureState("$LPO_ArmorLicense", isArmorLicenseFeatureEnabled == 1, licenses.hasArmorLicense, licenses.armorLicenseExpirationTime, licenses.armorLicenseCooldownTime)
-	iSplashFlag += AddFeatureState("$LPO_BikiniLicense", isBikiniLicenseFeatureEnabled == 1, licenses.hasBikiniLicense, licenses.bikiniLicenseExpirationTime, licenses.bikiniLicenseCooldownTime)
-	iSplashFlag += AddFeatureState("$LPO_BikiniExemption", isBikiniLicenseFeatureEnabled == 2, licenses.hasBikiniExemption, licenses.bikiniExemptionExpirationTime, licenses.bikiniExemptionCooldownTime)
-	iSplashFlag += AddFeatureState("$LPO_ClothingLicense", isClothingLicenseFeatureEnabled == 1, licenses.hasClothingLicense, licenses.clothingLicenseExpirationTime, licenses.clothingLicenseCooldownTime)
-	iSplashFlag += AddFeatureState("$LPO_MagicLicense", isMagicLicenseFeatureEnabled == 1, licenses.hasMagicLicense, licenses.magicLicenseExpirationTime, licenses.magicLicenseCooldownTime)
-	iSplashFlag += AddFeatureState("$LPO_WeaponLicense", isWeaponLicenseFeatureEnabled == 1, licenses.hasWeaponLicense, licenses.weaponLicenseExpirationTime, licenses.weaponLicenseCooldownTime)
-	iSplashFlag += AddFeatureState("$LPO_CraftingLicense", isCraftingLicenseFeatureEnabled == 1, licenses.hasCraftingLicense, licenses.craftingLicenseExpirationTime, licenses.craftingLicenseCooldownTime)
-	iSplashFlag += AddFeatureState("$LPO_TradingLicense", isTradingLicenseFeatureEnabled == 1, licenses.hasTradingLicense, licenses.tradingLicenseExpirationTime, licenses.tradingLicenseCooldownTime)
-	iSplashFlag += AddFeatureState("$LPO_CurfewExemption", isCurfewExemptionFeatureEnabled == 1, licenses.hasCurfewExemption, licenses.curfewExemptionExpirationTime, licenses.curfewExemptionCooldownTime)
-	iSplashFlag += AddFeatureState("$LPO_TravelPermit", isTravelPermitFeatureEnabled == 1, licenses.hasTravelPermit, licenses.travelPermitExpirationTime, licenses.travelPermitCooldownTime)
-	iSplashFlag += AddFeatureState("$LPO_Insurance", isInsuranceFeatureEnabled == 1, licenses.hasInsurance, licenses.insuranceExpirationTime, licenses.insuranceCooldownTime)
-	iSplashFlag += AddFeatureState("$LPO_WhoreLicense", isWhoreLicenseFeatureEnabled == 1, licenses.hasWhoreLicense, licenses.whoreLicenseExpirationTime, licenses.whoreLicenseCooldownTime)
-	iSplashFlag += AddFeatureState("$LPO_CollarExemption", isCollarExemptionFeatureEnabled == 1, licenses.hasCollarExemption, licenses.collarExemptionExpirationTime, licenses.collarExemptionCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_ArmorLicense", 0, isArmorLicenseFeatureEnabled == 1, licenses.hasArmorLicense, licenses.armorLicenseExpirationTime, licenses.armorLicenseCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_BikiniLicense", 1, isBikiniLicenseFeatureEnabled == 1, licenses.hasBikiniLicense, licenses.bikiniLicenseExpirationTime, licenses.bikiniLicenseCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_BikiniExemption", 2, isBikiniLicenseFeatureEnabled == 2, licenses.hasBikiniExemption, licenses.bikiniExemptionExpirationTime, licenses.bikiniExemptionCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_ClothingLicense", 3, isClothingLicenseFeatureEnabled == 1, licenses.hasClothingLicense, licenses.clothingLicenseExpirationTime, licenses.clothingLicenseCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_MagicLicense", 4, isMagicLicenseFeatureEnabled == 1, licenses.hasMagicLicense, licenses.magicLicenseExpirationTime, licenses.magicLicenseCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_WeaponLicense", 5, isWeaponLicenseFeatureEnabled == 1, licenses.hasWeaponLicense, licenses.weaponLicenseExpirationTime, licenses.weaponLicenseCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_CraftingLicense", 6, isCraftingLicenseFeatureEnabled == 1, licenses.hasCraftingLicense, licenses.craftingLicenseExpirationTime, licenses.craftingLicenseCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_TradingLicense", 11, isTradingLicenseFeatureEnabled == 1, licenses.hasTradingLicense, licenses.tradingLicenseExpirationTime, licenses.tradingLicenseCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_CurfewExemption", 10, isCurfewExemptionFeatureEnabled == 1, licenses.hasCurfewExemption, licenses.curfewExemptionExpirationTime, licenses.curfewExemptionCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_TravelPermit", 7, isTravelPermitFeatureEnabled == 1, licenses.hasTravelPermit, licenses.travelPermitExpirationTime, licenses.travelPermitCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_Insurance", 9, isInsuranceFeatureEnabled == 1, licenses.hasInsurance, licenses.insuranceExpirationTime, licenses.insuranceCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_WhoreLicense", 12, isWhoreLicenseFeatureEnabled == 1, licenses.hasWhoreLicense, licenses.whoreLicenseExpirationTime, licenses.whoreLicenseCooldownTime)
+	iSplashFlag += AddFeatureState("$LPO_CollarExemption", 8, isCollarExemptionFeatureEnabled == 1, licenses.hasCollarExemption, licenses.collarExemptionExpirationTime, licenses.collarExemptionCooldownTime)
 	if iSplashFlag == 0
 		AddTextOption("$LPO_Splash_Empty", "", OPTION_FLAG_DISABLED)
 	endIf
@@ -2261,77 +2261,77 @@ Function reallocateLocs()
 
 	Location GlobalLoc = bmlUtility.BM_Holds.GetAt(0) as Location
 	if LicenseTerritories
-		int i = bmlUtility.BM_LicenseLocs.GetSize()
+		int i = licenses.LicenseLocs.Length
 		while i
 			i -= 1
-			(bmlUtility.BM_LicenseLocs.GetAt(i) as FormList).RemoveAddedForm(GlobalLoc)
+			licenses.LicenseLocs[i].RemoveAddedForm(GlobalLoc)
 		endWhile
 	else
 		if licenses.armorLicenseExpirationTimeArr[0] != -1
-			(bmlUtility.BM_LicenseLocs.GetAt(0) as FormList).AddForm(GlobalLoc)
+			licenses.LicenseLocs[0].AddForm(GlobalLoc)
 		endIf
 		if licenses.bikiniLicenseExpirationTimeArr[0] != -1
-			(bmlUtility.BM_LicenseLocs.GetAt(1) as FormList).AddForm(GlobalLoc)
+			licenses.LicenseLocs[1].AddForm(GlobalLoc)
 		endIf
 		if licenses.bikiniExemptionExpirationTimeArr[0] != -1
-			(bmlUtility.BM_LicenseLocs.GetAt(2) as FormList).AddForm(GlobalLoc)
+			licenses.LicenseLocs[2].AddForm(GlobalLoc)
 		endIf
 		if licenses.clothingLicenseExpirationTimeArr[0] != -1
-			(bmlUtility.BM_LicenseLocs.GetAt(3) as FormList).AddForm(GlobalLoc)
+			licenses.LicenseLocs[3].AddForm(GlobalLoc)
 		endIf
 		if licenses.magicLicenseExpirationTimeArr[0] != -1
-			(bmlUtility.BM_LicenseLocs.GetAt(4) as FormList).AddForm(GlobalLoc)
+			licenses.LicenseLocs[4].AddForm(GlobalLoc)
 		endIf
 		if licenses.weaponLicenseExpirationTimeArr[0] != -1
-			(bmlUtility.BM_LicenseLocs.GetAt(5) as FormList).AddForm(GlobalLoc)
+			licenses.LicenseLocs[5].AddForm(GlobalLoc)
 		endIf
 		if licenses.craftingLicenseExpirationTimeArr[0] != -1
-			(bmlUtility.BM_LicenseLocs.GetAt(6) as FormList).AddForm(GlobalLoc)
+			licenses.LicenseLocs[6].AddForm(GlobalLoc)
 		endIf
 		if licenses.travelPermitExpirationTimeArr[0] != -1
-			(bmlUtility.BM_LicenseLocs.GetAt(7) as FormList).AddForm(GlobalLoc)
+			licenses.LicenseLocs[7].AddForm(GlobalLoc)
 		endIf
 		if licenses.collarExemptionExpirationTimeArr[0] != -1
-			(bmlUtility.BM_LicenseLocs.GetAt(8) as FormList).AddForm(GlobalLoc)
+			licenses.LicenseLocs[8].AddForm(GlobalLoc)
 		endIf
 		if licenses.insuranceExpirationTimeArr[0] != -1
-			(bmlUtility.BM_LicenseLocs.GetAt(9) as FormList).AddForm(GlobalLoc)
+			licenses.LicenseLocs[9].AddForm(GlobalLoc)
 		endIf
 		if licenses.curfewExemptionExpirationTimeArr[0] != -1
-			(bmlUtility.BM_LicenseLocs.GetAt(10) as FormList).AddForm(GlobalLoc)
+			licenses.LicenseLocs[10].AddForm(GlobalLoc)
 		endIf
 		if licenses.tradingLicenseExpirationTimeArr[0] != -1
-			(bmlUtility.BM_LicenseLocs.GetAt(11) as FormList).AddForm(GlobalLoc)
+			licenses.LicenseLocs[11].AddForm(GlobalLoc)
 		endIf
 		if licenses.whoreLicenseExpirationTimeArr[0] != -1
-			(bmlUtility.BM_LicenseLocs.GetAt(12) as FormList).AddForm(GlobalLoc)
+			licenses.LicenseLocs[12].AddForm(GlobalLoc)
 		endIf
 	endIf
 EndFunction
 
 Function recalculateCosts(int i = -1)
 	if i == -1
-		i = bmlUtility.BM_LicenseCostsLT.GetSize()
+		i = bmlUtility.LicenseCostsLT.Length
 		while i
 			i -= 1
-			(bmlUtility.BM_LicenseCostsLT.GetAt(i) as GlobalVariable).SetValue(((bmlUtility.BM_LicenseCosts.GetAt(i) as GlobalVariable).GetValue() * LifetimeMultiplier) as int)
+			bmlUtility.LicenseCostsLT[i].SetValue((bmlUtility.LicenseCosts[i].GetValue() * LifetimeMultiplier) as int)
 		endWhile
 	else
-		(bmlUtility.BM_LicenseCostsLT.GetAt(i) as GlobalVariable).SetValue(((bmlUtility.BM_LicenseCosts.GetAt(i) as GlobalVariable).GetValue() * LifetimeMultiplier) as int)
+		bmlUtility.LicenseCostsLT[i].SetValue((bmlUtility.LicenseCosts[i].GetValue() * LifetimeMultiplier) as int)
 	endIf
 EndFunction
 
 Function updateGlobals(int i = -1)
 	if i == -1
-		i = bmlUtility.BM_LicenseCosts.GetSize()
+		i = bmlUtility.LicenseCosts.Length
 		while i
 			i -= 1
-			licenses.UpdateCurrentInstanceGlobal(bmlUtility.BM_LicenseCosts.GetAt(i) as GlobalVariable)
-			licenses.UpdateCurrentInstanceGlobal(bmlUtility.BM_LicenseCostsLT.GetAt(i) as GlobalVariable)
+			licenses.UpdateCurrentInstanceGlobal(bmlUtility.LicenseCosts[i])
+			licenses.UpdateCurrentInstanceGlobal(bmlUtility.LicenseCostsLT[i])
 		endWhile
 	else
-		licenses.UpdateCurrentInstanceGlobal(bmlUtility.BM_LicenseCosts.GetAt(i) as GlobalVariable)
-		licenses.UpdateCurrentInstanceGlobal(bmlUtility.BM_LicenseCostsLT.GetAt(i) as GlobalVariable)
+		licenses.UpdateCurrentInstanceGlobal(bmlUtility.LicenseCosts[i])
+		licenses.UpdateCurrentInstanceGlobal(bmlUtility.LicenseCostsLT[i])
 	endIf
 EndFunction
 

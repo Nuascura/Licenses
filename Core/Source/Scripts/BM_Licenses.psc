@@ -544,10 +544,10 @@ bool Property ArmorLicense
     bool Function Get()
         armorLicenseExpirationTime = armorLicenseExpirationTimeArr[bmlUtility.enforcementLocIndex]
         armorLicenseCooldownTime = armorLicenseCooldownTimeArr[bmlUtility.enforcementLocIndex]
-        Return armorLicenseExpirationTime != -1.0
+        Return armorLicenseExpirationTime != -1.0 && LicenseLocs[0].HasForm(bmlUtility.enforcementLoc)
     EndFunction
     Function Set(bool value)
-        hasArmorLicense = ActualizeValue("ArmorLicense", value, bmlmcm.isArmorLicenseFeatureEnabled)
+        hasArmorLicense = ActualizeValue("ArmorLicense", value, bmlmcm.isArmorLicenseFeatureEnabled && LicenseEnforcementLocs[0].HasForm(bmlUtility.enforcementLoc))
         armorLicenseExpirationTimeArr[bmlUtility.enforcementLocIndex] = armorLicenseExpirationTime
         armorLicenseCooldownTimeArr[bmlUtility.enforcementLocIndex] = armorLicenseCooldownTime
     EndFunction
@@ -558,10 +558,10 @@ bool Property BikiniLicense
     bool Function Get()
         bikiniLicenseExpirationTime = bikiniLicenseExpirationTimeArr[bmlUtility.enforcementLocIndex]
         bikiniLicenseCooldownTime = bikiniLicenseCooldownTimeArr[bmlUtility.enforcementLocIndex]
-        Return bikiniLicenseExpirationTime != -1.0
+        Return bikiniLicenseExpirationTime != -1.0 && LicenseLocs[1].HasForm(bmlUtility.enforcementLoc)
     EndFunction
     Function Set(bool value)
-        hasBikiniLicense = ActualizeValue("BikiniLicense", value, bmlmcm.isBikiniLicenseFeatureEnabled == 1)
+        hasBikiniLicense = ActualizeValue("BikiniLicense", value, bmlmcm.isBikiniLicenseFeatureEnabled == 1 && LicenseEnforcementLocs[1].HasForm(bmlUtility.enforcementLoc))
         bikiniLicenseExpirationTimeArr[bmlUtility.enforcementLocIndex] = bikiniLicenseExpirationTime
         bikiniLicenseCooldownTimeArr[bmlUtility.enforcementLocIndex] = bikiniLicenseCooldownTime
     EndFunction
@@ -572,10 +572,10 @@ bool Property BikiniExemption
     bool Function Get()
         bikiniExemptionExpirationTime = bikiniExemptionExpirationTimeArr[bmlUtility.enforcementLocIndex]
         bikiniExemptionCooldownTime = bikiniExemptionCooldownTimeArr[bmlUtility.enforcementLocIndex]
-        Return bikiniExemptionExpirationTime != -1.0
+        Return bikiniExemptionExpirationTime != -1.0 && LicenseLocs[2].HasForm(bmlUtility.enforcementLoc)
     EndFunction
     Function Set(bool value)
-        hasBikiniExemption = ActualizeValue("BikiniExemption", value, bmlmcm.isBikiniLicenseFeatureEnabled == 2)
+        hasBikiniExemption = ActualizeValue("BikiniExemption", value, bmlmcm.isBikiniLicenseFeatureEnabled == 2 && LicenseEnforcementLocs[2].HasForm(bmlUtility.enforcementLoc))
         bikiniExemptionExpirationTimeArr[bmlUtility.enforcementLocIndex] = bikiniExemptionExpirationTime
         bikiniExemptionCooldownTimeArr[bmlUtility.enforcementLocIndex] = bikiniExemptionCooldownTime
     EndFunction
@@ -586,10 +586,10 @@ bool Property ClothingLicense
     bool Function Get()
         clothingLicenseExpirationTime = clothingLicenseExpirationTimeArr[bmlUtility.enforcementLocIndex]
         clothingLicenseCooldownTime = clothingLicenseCooldownTimeArr[bmlUtility.enforcementLocIndex]
-        Return clothingLicenseExpirationTime != -1.0
+        Return clothingLicenseExpirationTime != -1.0 && LicenseLocs[3].HasForm(bmlUtility.enforcementLoc)
     EndFunction
     Function Set(bool value)
-        hasClothingLicense = ActualizeValue("ClothingLicense", value, bmlmcm.isClothingLicenseFeatureEnabled)
+        hasClothingLicense = ActualizeValue("ClothingLicense", value, bmlmcm.isClothingLicenseFeatureEnabled && LicenseEnforcementLocs[3].HasForm(bmlUtility.enforcementLoc))
         clothingLicenseExpirationTimeArr[bmlUtility.enforcementLocIndex] = clothingLicenseExpirationTime
         clothingLicenseCooldownTimeArr[bmlUtility.enforcementLocIndex] = clothingLicenseCooldownTime
     EndFunction
@@ -600,10 +600,10 @@ bool Property MagicLicense
     bool Function Get()
         magicLicenseExpirationTime = magicLicenseExpirationTimeArr[bmlUtility.enforcementLocIndex]
         magicLicenseCooldownTime = magicLicenseCooldownTimeArr[bmlUtility.enforcementLocIndex]
-        Return magicLicenseExpirationTime != -1.0
+        Return magicLicenseExpirationTime != -1.0 && LicenseLocs[4].HasForm(bmlUtility.enforcementLoc)
     EndFunction
     Function Set(bool value)
-        hasMagicLicense = ActualizeValue("MagicLicense", value, bmlmcm.isMagicLicenseFeatureEnabled)
+        hasMagicLicense = ActualizeValue("MagicLicense", value, bmlmcm.isMagicLicenseFeatureEnabled && LicenseEnforcementLocs[4].HasForm(bmlUtility.enforcementLoc))
         magicLicenseExpirationTimeArr[bmlUtility.enforcementLocIndex] = magicLicenseExpirationTime
         magicLicenseCooldownTimeArr[bmlUtility.enforcementLocIndex] = magicLicenseCooldownTime
     EndFunction
@@ -614,10 +614,10 @@ bool Property WeaponLicense
     bool Function Get()
         weaponLicenseExpirationTime = weaponLicenseExpirationTimeArr[bmlUtility.enforcementLocIndex]
         weaponLicenseCooldownTime = weaponLicenseCooldownTimeArr[bmlUtility.enforcementLocIndex]
-        Return weaponLicenseExpirationTime != -1.0
+        Return weaponLicenseExpirationTime != -1.0 && LicenseLocs[5].HasForm(bmlUtility.enforcementLoc)
     EndFunction
     Function Set(bool value)
-        hasWeaponLicense = ActualizeValue("WeaponLicense", value, bmlmcm.isWeaponLicenseFeatureEnabled)
+        hasWeaponLicense = ActualizeValue("WeaponLicense", value, bmlmcm.isWeaponLicenseFeatureEnabled && LicenseEnforcementLocs[5].HasForm(bmlUtility.enforcementLoc))
         weaponLicenseExpirationTimeArr[bmlUtility.enforcementLocIndex] = weaponLicenseExpirationTime
         weaponLicenseCooldownTimeArr[bmlUtility.enforcementLocIndex] = weaponLicenseCooldownTime
     EndFunction
@@ -628,10 +628,10 @@ bool Property CraftingLicense
     bool Function Get()
         craftingLicenseExpirationTime = craftingLicenseExpirationTimeArr[bmlUtility.enforcementLocIndex]
         craftingLicenseCooldownTime = craftingLicenseCooldownTimeArr[bmlUtility.enforcementLocIndex]
-        Return craftingLicenseExpirationTime != -1.0
+        Return craftingLicenseExpirationTime != -1.0 && LicenseLocs[6].HasForm(bmlUtility.enforcementLoc)
     EndFunction
     Function Set(bool value)
-        hasCraftingLicense = ActualizeValue("CraftingLicense", value, bmlmcm.isCraftingLicenseFeatureEnabled)
+        hasCraftingLicense = ActualizeValue("CraftingLicense", value, bmlmcm.isCraftingLicenseFeatureEnabled && LicenseEnforcementLocs[6].HasForm(bmlUtility.enforcementLoc))
         craftingLicenseExpirationTimeArr[bmlUtility.enforcementLocIndex] = craftingLicenseExpirationTime
         craftingLicenseCooldownTimeArr[bmlUtility.enforcementLocIndex] = craftingLicenseCooldownTime
     EndFunction
@@ -642,10 +642,10 @@ bool Property TravelPermit
     bool Function Get()
         travelPermitExpirationTime = travelPermitExpirationTimeArr[bmlUtility.enforcementLocIndex]
         travelPermitCooldownTime = travelPermitCooldownTimeArr[bmlUtility.enforcementLocIndex]
-        Return travelPermitExpirationTime != -1.0
+        Return travelPermitExpirationTime != -1.0 && LicenseLocs[7].HasForm(bmlUtility.enforcementLoc)
     EndFunction
     Function Set(bool value)
-        hasTravelPermit = ActualizeValue("TravelPermit", value, bmlmcm.isTravelPermitFeatureEnabled)
+        hasTravelPermit = ActualizeValue("TravelPermit", value, bmlmcm.isTravelPermitFeatureEnabled && LicenseEnforcementLocs[7].HasForm(bmlUtility.enforcementLoc))
         travelPermitExpirationTimeArr[bmlUtility.enforcementLocIndex] = travelPermitExpirationTime
         travelPermitCooldownTimeArr[bmlUtility.enforcementLocIndex] = travelPermitCooldownTime
     EndFunction
@@ -656,10 +656,10 @@ bool Property CollarExemption
     bool Function Get()
         collarExemptionExpirationTime = collarExemptionExpirationTimeArr[bmlUtility.enforcementLocIndex]
         collarExemptionCooldownTime = collarExemptionCooldownTimeArr[bmlUtility.enforcementLocIndex]
-        Return collarExemptionExpirationTime != -1.0
+        Return collarExemptionExpirationTime != -1.0 && LicenseLocs[8].HasForm(bmlUtility.enforcementLoc)
     EndFunction
     Function Set(bool value)
-        hasCollarExemption = ActualizeValue("CollarExemption", value, bmlmcm.isCollarExemptionFeatureEnabled)
+        hasCollarExemption = ActualizeValue("CollarExemption", value, bmlmcm.isCollarExemptionFeatureEnabled && LicenseEnforcementLocs[8].HasForm(bmlUtility.enforcementLoc))
         collarExemptionExpirationTimeArr[bmlUtility.enforcementLocIndex] = collarExemptionExpirationTime
         collarExemptionCooldownTimeArr[bmlUtility.enforcementLocIndex] = collarExemptionCooldownTime
     EndFunction
@@ -670,10 +670,10 @@ bool Property Insurance
     bool Function Get()
         insuranceExpirationTime = insuranceExpirationTimeArr[bmlUtility.enforcementLocIndex]
         insuranceCooldownTime = insuranceCooldownTimeArr[bmlUtility.enforcementLocIndex]
-        Return insuranceExpirationTime != -1.0
+        Return insuranceExpirationTime != -1.0 && LicenseLocs[9].HasForm(bmlUtility.enforcementLoc)
     EndFunction
     Function Set(bool value)
-        hasInsurance = ActualizeValue("Insurance", value, bmlmcm.isInsuranceFeatureEnabled)
+        hasInsurance = ActualizeValue("Insurance", value, bmlmcm.isInsuranceFeatureEnabled && LicenseEnforcementLocs[9].HasForm(bmlUtility.enforcementLoc))
         insuranceExpirationTimeArr[bmlUtility.enforcementLocIndex] = insuranceExpirationTime
         insuranceCooldownTimeArr[bmlUtility.enforcementLocIndex] = insuranceCooldownTime
     EndFunction
@@ -684,10 +684,10 @@ bool Property CurfewExemption
     bool Function Get()
         curfewExemptionExpirationTime = curfewExemptionExpirationTimeArr[bmlUtility.enforcementLocIndex]
         curfewExemptionCooldownTime = curfewExemptionCooldownTimeArr[bmlUtility.enforcementLocIndex]
-        Return curfewExemptionExpirationTime != -1.0
+        Return curfewExemptionExpirationTime != -1.0 && LicenseLocs[10].HasForm(bmlUtility.enforcementLoc)
     EndFunction
     Function Set(bool value)
-        hasCurfewExemption = ActualizeValue("CurfewExemption", value, bmlmcm.isCurfewExemptionFeatureEnabled)
+        hasCurfewExemption = ActualizeValue("CurfewExemption", value, bmlmcm.isCurfewExemptionFeatureEnabled && LicenseEnforcementLocs[10].HasForm(bmlUtility.enforcementLoc))
         curfewExemptionExpirationTimeArr[bmlUtility.enforcementLocIndex] = curfewExemptionExpirationTime
         curfewExemptionCooldownTimeArr[bmlUtility.enforcementLocIndex] = curfewExemptionCooldownTime
     EndFunction
@@ -698,10 +698,10 @@ bool Property TradingLicense
     bool Function Get()
         tradingLicenseExpirationTime = tradingLicenseExpirationTimeArr[bmlUtility.enforcementLocIndex]
         tradingLicenseCooldownTime = tradingLicenseCooldownTimeArr[bmlUtility.enforcementLocIndex]
-        Return tradingLicenseExpirationTime != -1.0
+        Return tradingLicenseExpirationTime != -1.0 && LicenseLocs[11].HasForm(bmlUtility.enforcementLoc)
     EndFunction
     Function Set(bool value)
-        hasTradingLicense = ActualizeValue("TradingLicense", value, bmlmcm.isTradingLicenseFeatureEnabled)
+        hasTradingLicense = ActualizeValue("TradingLicense", value, bmlmcm.isTradingLicenseFeatureEnabled && LicenseEnforcementLocs[11].HasForm(bmlUtility.enforcementLoc))
         tradingLicenseExpirationTimeArr[bmlUtility.enforcementLocIndex] = tradingLicenseExpirationTime
         tradingLicenseCooldownTimeArr[bmlUtility.enforcementLocIndex] = tradingLicenseCooldownTime
     EndFunction
@@ -712,10 +712,10 @@ bool Property WhoreLicense
     bool Function Get()
         whoreLicenseExpirationTime = whoreLicenseExpirationTimeArr[bmlUtility.enforcementLocIndex]
         whoreLicenseCooldownTime = whoreLicenseCooldownTimeArr[bmlUtility.enforcementLocIndex]
-        Return whoreLicenseExpirationTime != -1.0
+        Return whoreLicenseExpirationTime != -1.0 && LicenseLocs[12].HasForm(bmlUtility.enforcementLoc)
     EndFunction
     Function Set(bool value)
-        hasWhoreLicense = ActualizeValue("WhoreLicense", value, bmlmcm.isWhoreLicenseFeatureEnabled)
+        hasWhoreLicense = ActualizeValue("WhoreLicense", value, bmlmcm.isWhoreLicenseFeatureEnabled && LicenseEnforcementLocs[12].HasForm(bmlUtility.enforcementLoc))
         whoreLicenseExpirationTimeArr[bmlUtility.enforcementLocIndex] = whoreLicenseExpirationTime
         whoreLicenseCooldownTimeArr[bmlUtility.enforcementLocIndex] = whoreLicenseCooldownTime
     EndFunction
@@ -847,7 +847,8 @@ Keyword[] Property KeywordBarterItem Auto
 Keyword[] Property KeywordCookItem Auto
 Keyword[] Property KeywordConfiscation Auto
 Keyword[] Property KeywordConfiscationEnch Auto
-
 Keyword[] Property ItemTypeArmor Auto
 Keyword[] Property ItemTypeClothing Auto
 Keyword[] Property ItemTypeBikini Auto
+FormList[] Property LicenseEnforcementLocs Auto
+FormList[] Property LicenseLocs Auto
