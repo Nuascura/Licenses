@@ -375,15 +375,18 @@ Function FillItemTypeArrayClothing()
 EndFunction
 
 Function FillItemTypeArrayBikini()
-	String[] BikiniKeyword = StringSplit(bmlmcm.bikiniKeywordString, ",")
-    BikiniKeyword = ClearEmpty(BikiniKeyword)
-    ItemTypeBikini = new Keyword[32] ; limit to 32 for performance
+    ItemTypeBikini = new Keyword[128]
     ItemTypeBikini[0] = BM_LicensesBikiniItem
-    int i = 0
-    while i < BikiniKeyword.length && (i + 1) < ItemTypeBikini.length && BikiniKeyword[i]
-        ItemTypeBikini[i + 1] = Keyword.GetKeyword(BikiniKeyword[i])
-        i += 1
-    EndWhile
+
+    String[] kwArray = bmlmcm.cache_ItemTypeBikini
+    If kwArray && kwArray[0]
+        kwArray = ClearEmpty(kwArray)
+        int i = 1
+        while (i - 1) < kwArray.length && i < ItemTypeBikini.length && kwArray[i]
+            ItemTypeBikini[i] = Keyword.GetKeyword(kwArray[i - 1])
+            i += 1
+        EndWhile
+    EndIf
 EndFunction
 
 Function PopulateKeywordConfiscationArray()

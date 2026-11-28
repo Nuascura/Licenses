@@ -7,6 +7,8 @@ GlobalVariable Property GameDaysPassed auto
 bool Property SessionModified auto
 Message Property MessageConfigWarn  Auto  
 string config = "../../../Interface/Licenses/Settings.json"
+string override_ItemTypeBikini = "../../../Interface/Licenses/override_ItemTypeBikini.json"
+string[] Property cache_ItemTypeBikini Auto Hidden
 string[] ModVersionCache
 GlobalVariable Property Licenses_State auto
 
@@ -57,7 +59,6 @@ GlobalVariable[] Property BM_BikiniCost Auto
 GlobalVariable[] Property BM_BikiniDuration Auto
 bool Property isBikiniArmorFeatureEnabled = true auto
 bool Property isBikiniClothingFeatureEnabled = true auto
-String Property bikiniKeywordString = "EroticArmor" auto
 
 int Property isClothingLicenseFeatureEnabled = 0 auto conditional
 GlobalVariable Property BM_ClothingCost Auto
@@ -476,8 +477,6 @@ Function ShowPage2()
 	AddSliderOptionST("BM_BikiniDurationST", "$LPO_BM_BikiniDuration", BM_BikiniDuration[0].getValue(), "{0} day(s)")
 	AddToggleOptionST("isBikiniArmorFeatureEnabledST", "$LPO_isBikiniArmorFeatureEnabled", isBikiniArmorFeatureEnabled)
 	AddToggleOptionST("isBikiniClothingFeatureEnabledST", "$LPO_isBikiniClothingFeatureEnabled", isBikiniClothingFeatureEnabled)
-	AddInputOptionST("bikiniKeywordStringST", "$LPO_bikiniKeywordString", "$LPO_InputModify")
-	AddEmptyOption()
 	AddEmptyOption()
 	AddEmptyOption()
 	AddHeaderOption("$LPO_ClothingLicense")
@@ -1311,20 +1310,6 @@ state isBikiniClothingFeatureEnabledST
 	endEvent
 	event OnHighlightST()
 		SetInfoText("$LPO_isBikiniClothingFeatureEnabledHighlight")
-	endEvent
-endState
-
-state bikiniKeywordStringST
-	event OnInputOpenST()
-        SetInputDialogStartText(bikiniKeywordString)
-	endEvent
-    event OnInputAcceptST(string value)
-        bikiniKeywordString = value
-		licenses.FillItemTypeArrayBikini()
-		SessionModified = true
-    endEvent
-	event OnHighlightST()
-		SetInfoText("$LPO_bikiniKeywordStringHighlight")
 	endEvent
 endState
 
@@ -2397,7 +2382,6 @@ Bool Function exportConfig()
 	SetFloatValue(config, "BM_BikiniDuration", BM_BikiniDuration[0].getValue())
 	SetIntValue(config, "isBikiniArmorFeatureEnabled", isBikiniArmorFeatureEnabled as int)
 	SetIntValue(config, "isBikiniClothingFeatureEnabled", isBikiniClothingFeatureEnabled as int)
-	SetStringValue(config, "bikiniKeywordString", bikiniKeywordString)
 	SetIntValue(config, "isClothingLicenseFeatureEnabled", isClothingLicenseFeatureEnabled)
 	SetFloatValue(config, "BM_ClothingCost", BM_ClothingCost.getValue())
 	SetFloatValue(config, "BM_ClothingDuration", BM_ClothingDuration.getValue())
@@ -2472,6 +2456,14 @@ Bool Function exportConfig()
 	SetIntValue(config, "ConfigWarn", ConfigWarn as int)
 	SetIntValue(config, "allowJailQuestNodes", allowJailQuestNodes as int)
 	SetFloatValue(config, "standardEventDelay", standardEventDelay)
+
+	; External - Arrays
+	If !JsonExists(override_ItemTypeBikini)
+		string[] strArray = new string[1]
+		strArray[0] = "EroticArmor"
+		StringListCopy(override_ItemTypeBikini, "keyword", strArray)
+		Save(override_ItemTypeBikini)
+	EndIf
 
 	Save(config)
 	ShowMessage("$LPO_ExportConfigMessage3", false)
@@ -2557,7 +2549,6 @@ Bool Function importConfig(Bool abSilent = false)
 	BM_BikiniDuration[1].SetValue(BM_BikiniDuration[0].getValue())
 	isBikiniArmorFeatureEnabled = GetFloatValue(config, "isBikiniArmorFeatureEnabled", isBikiniArmorFeatureEnabled as int) as Bool
 	isBikiniClothingFeatureEnabled = GetIntValue(config, "isBikiniClothingFeatureEnabled", isBikiniClothingFeatureEnabled as int) as Bool
-	bikiniKeywordString = GetStringValue(config, "bikiniKeywordString", bikiniKeywordString)
 	isClothingLicenseFeatureEnabled = GetIntValue(config, "isClothingLicenseFeatureEnabled", isClothingLicenseFeatureEnabled)
 	BM_ClothingCost.SetValue(GetFloatValue(config, "BM_ClothingCost", BM_ClothingCost.getValue()))
 	BM_ClothingDuration.SetValue(GetFloatValue(config, "BM_ClothingDuration", BM_ClothingDuration.getValue()))
@@ -2632,6 +2623,11 @@ Bool Function importConfig(Bool abSilent = false)
 	ConfigWarn = GetIntValue(config, "ConfigWarn", ConfigWarn as int) as Bool
 	allowJailQuestNodes = GetIntValue(config, "allowJailQuestNodes", allowJailQuestNodes as int) as Bool
 	standardEventDelay = GetFloatValue(config, "standardEventDelay", standardEventDelay)
+
+	; External - Arrays
+	If Load(override_ItemTypeBikini) && IsGood(override_ItemTypeBikini)
+		cache_ItemTypeBikini = StringListToArray(override_ItemTypeBikini, "keyword")
+	EndIf
 
 	; Import done
 	; Activate and refresh settings
